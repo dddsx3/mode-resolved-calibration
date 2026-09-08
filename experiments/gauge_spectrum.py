@@ -1,4 +1,4 @@
-"""CI02 · Gauge lifting、绝对信息与 λ⋆（宪法 §4.2 冻结规格，卡 C10）。
+"""CI02 · Gauge lifting、绝对信息与 λ⋆。
 
 主输出（mode-resolved，非 trace）：gauge 绝对信息、non-gauge floor μ_floor、
 闭式曲线（Prop 2，多灯求和 = V1b 块对角恒等式）、扫描 λ⋆、一阶预测 λ⋆^lin；
@@ -7,7 +7,7 @@ retention heatmap 仅 within-scene 解释（固定 log grid，C11 加连续性�
 预注册验收（config 冻结）：
   closed_vs_direct < 1e-8（每场景全网格最大相对误差）；
   λ⋆ log error：median(|log10(pred/scan)|) ≤ 1 decade（H3），线性域分层另行报告；
-  失效处置：保留闭式、降级 crossover claim（宪法 CI02 失败动作），如实执行。
+  失效处置：保留闭式、降级 crossover claim（CI02 失败动作），如实执行。
 """
 
 from __future__ import annotations
@@ -22,7 +22,7 @@ from calibinfo.information.schur import delta_f
 
 
 def _fig4_data(sc, s_med2):
-    """Fig.4 三 panel 数据（宪法 §7）：
+    """Fig.4 三 panel 数据：
 
     1. trace 反例：tr(ΔF(λ))/tr(F∞) 跨 4 个数量级近乎不动，而最弱模式 ρ 大幅移动；
     2. tracked ρ heatmap：bottom-9 模式经 track_modes 连续性追踪（禁索引排序）；
@@ -113,7 +113,7 @@ def run(config, run_dir):
                                              l * np.eye(sc["B_blk"].shape[1]))[0] @ a)
                            for l in lam_grid])
         rel = np.abs(closed - direct) / np.abs(direct)
-        # 阈值分层（宪法 §6.2：按 condition number 分层，禁统一 atol）：
+        # 阈值分层：
         # 直接路线在深未校准端（λ→0，gauge Rayleigh ≈ 0）发生灾难性消减，
         # 相对误差地板 ≈ C·u·saturation/|direct|；良条件区保持 1e-8 gate。
         u = np.finfo(float).eps
@@ -121,7 +121,7 @@ def run(config, run_dir):
         cvd = float(rel.max())
         cvd_layered = float((rel / allow).max())   # <1 为过（含分层预算）
 
-        # μ_floor、λ⋆ 数值求根（闭式单调曲线二分，宪法 §4.2：线性域外用闭式求根）
+        # μ_floor、λ⋆ 数值求根（闭式单调曲线二分， §4.2：线性域外用闭式求根）
         floor, _ev = mu_floor(sc)
 
         def curve(l):
@@ -149,7 +149,7 @@ def run(config, run_dir):
         ratio = float(np.log10(lam_star_pred / lam_star)) if np.isfinite(lam_star) \
             else float("nan")
         in_linear = bool(np.isfinite(lam_star) and lam_star <= lin_band * s_med2)
-        # λ⋆ 适用条件诊断（宪法：λ⋆≪min_{αᵢ≠0}sᵢ²）：逐灯最小有效奇异值
+        # λ⋆ 适用条件诊断（：λ⋆≪min_{αᵢ≠0}sᵢ²）：逐灯最小有效奇异值
         min_e_alpha = float("inf")
         for r_ in resp:
             ia = np.abs(r_["alpha"]) > 1e-12 * max(np.abs(r_["alpha"]).max(), 1e-300)
@@ -220,4 +220,4 @@ def run(config, run_dir):
         lam_star_table=rows,
         retention_dual_rel_max=float(max(dual_rels)) if dual_rels else None,
         fig4=fig4,
-        note="λ⋆ log error 失效处置：保留闭式、降级 crossover claim（宪法 CI02）")
+        note="λ⋆ log error 失效处置：保留闭式、降级 crossover claim（CI02）")

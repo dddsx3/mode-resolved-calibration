@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""make_tables · 论文表一键重建（卡 C04 空壳，Table I–VII 接口冻结）。
+"""make_tables · rebuild paper tables (Table I-VII interface frozen).
 
-宪法 §11：Table 只从 artifacts/frozen/ 重建。C20 前逐表实现。
+Tables are rebuilt only from the machine-readable summaries under results/; remain frozen.
 """
 
 from __future__ import annotations
@@ -14,7 +14,7 @@ TABLES = {f"Table {roman}": i for i, roman in
 
 def make_table(n, out_dir="paper/tables"):
     raise NotImplementedError(
-        f"Table {n} 在卡 C20 实现（接口冻结：--table {n}，输入=artifacts/frozen/）")
+        f"Table {n} not implemented yet (interface frozen: --table {n}, input under results/)")
 
 
 def main():

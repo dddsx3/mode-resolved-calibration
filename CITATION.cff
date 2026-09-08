@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this software in your research, please cite it as below."
+title: "mode-resolved-calibration: mode-resolved calibration-confidence continuum for photometric inverse problems"
+type: software
+authors:
+  - name: "calibinfo authors"
+version: 0.1.0
+date-released: 2026-09-09
+license: MIT
+repository-code: "https://github.com/dddsx3/mode-resolved-calibration"
+abstract: >-
+  Reproducibility package for the mode-resolved calibration-confidence continuum:
+  Schur-complement Delta-Fisher information, calibration-retention spectra, the
+  gauge closed-form spectral response, and the mode-resolved severity analysis on
+  OpenIllumination (11 objects x 6 levels, 20 seeds; RA = 0.90, stratified median
+  0.536 vs 0.418/0.400). Includes frozen results, independent headline recomputation
+  tests (pytest), and figure/table regeneration scripts.
+keywords:
+  - photometric inverse problems
+  - calibration
+  - Fisher information
+  - Schur complement
+  - spectral analysis
+  - OpenIllumination

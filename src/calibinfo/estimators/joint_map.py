@@ -8,7 +8,7 @@ als_init/calibrate/pixel_guard（合格部分：trf + 解析稀疏 Jacobian + AL
 移植约束（迁移原则"公式单源化"）：数值行为与 legacy 逐位一致（同输入同种子同输出），
 接口改为显式数组输入/输出；本模块不知道 DiLiGenT 路径（数据由 datasets 层喂入）。
 
-红线 #11（GT 显式声明）：本模块所有函数只接受数据驱动输入；GT 参数只允许出现在
+多起点初值约束（GT 显式声明）：本模块所有函数只接受数据驱动输入；GT 参数只允许出现在
 调用方的评分环节。init 断言由调用方执行（estimators.gauss_newton 提供辅助）。
 """
 

@@ -3,10 +3,10 @@
 模型：y = A x + B δc + ε，ε~N(0, σ²I)（先白化，见 whitening.whiten_system），
 δc~N(0, Σ_c)，Λ = σ²Σ_c⁻¹。ΔF(Λ) = Aᵀ[I − B(BᵀB+Λ)⁻¹Bᵀ]A。
 
-红线 RL-solve（宪法 §0 + N3-fix）：Λ=0/秩亏路径禁用 np.linalg.solve——
+ solve（N3-fix）：Λ=0/秩亏路径禁用 np.linalg.solve——
 本模块统一走 SVD/lstsq（pinv 极限），并在 delta_f 内显式断言。
-红线 RL-thin-svd：谱性质仅在 thin-SVD 形式下成立（零奇异方向由 I−UUᵀ 项承载）。
-绑定测试：test_information_modules.py + test_rank_deficient_lambda0.py（verification V 系列）。
+thin-SVD 谱性质：谱性质仅在 thin-SVD 形式下成立（零奇异方向由 I−UUᵀ 项承载）。
+绑定测试：test_information_modules.py + test_rank_deficient_lambda0.py（V 系列）。
 """
 
 from __future__ import annotations
@@ -42,8 +42,8 @@ def delta_f(A, B, Lam, rank_policy="pinv"):
     (DeltaF (n,n), M (m,m), diagnostics dict)
     diagnostics: rank（G 的数值秩）、method（实现路径）、g_min/g_max（G 特征值范围）
 
-    红线：本函数任何路径不调用 np.linalg.solve（RL-solve；已知答案测试盯防）。
-    M 为 (m,m) 稠密矩阵——CI 尺度（m≤数千）可用；更大规模走低秩/MatrixFree（卡 CI03 预算）。
+    本函数任何路径不调用 np.linalg.solve（已知答案测试盯防）。
+    M 为 (m,m) 稠密矩阵——CI 尺度（m≤数千）可用；更大规模走低秩/MatrixFree（CI03 预算）。
     """
     A = np.asarray(A, float)
     B = np.asarray(B, float)

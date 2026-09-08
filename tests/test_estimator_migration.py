@@ -4,7 +4,7 @@
   (a) 解析稀疏 Jacobian vs 中心差分 FD 闸（rel<1e-5；legacy 实测 4e-9）；
   (b) 已知答案：合成场景（已知 ρ/α/方向 + 噪声）→ ALS 数据驱动初值 + trf 多起点
       → 方向恢复 LAE 小；cost 达噪声地板量级；
-  (c) 红线 #11：assert_data_driven_init —— GT 初值必须被断言拦截（exp12v3 VOID 教训）。
+  (c) assert_data_driven_init —— GT 初值必须被断言拦截。
 """
 
 import numpy as np
@@ -54,7 +54,7 @@ def test_analytic_jacobian_vs_fd():
         lambda x: jac_r_joint_sparse(x, P, n_gt).toarray(),
         lambda x: joint_residual(x, I_obs, n_gt),
         x0)
-    assert passed, f"FD 闸失败: max rel err = {worst:.2e}（红线：修 J）"
+    assert passed, f"FD 闸失败: max rel err = {worst:.2e}：修 J）"
     assert worst < 1e-5
 
 
@@ -92,8 +92,8 @@ def test_known_answer_recovery():
     assert rel < 0.05
 
 
-def test_redline11_gt_init_blocked():
-    """红线 #11：真值初始化必须被断言拦截（exp12v3 事故的机械防线）。"""
+def test_invariant11_gt_init_blocked():
+    """真值初始化必须被断言拦截。"""
     rng = np.random.default_rng(SEED)
     n_gt, dirs, rho, alphas, I_obs = _synthetic_obs(rng, P=30, N=2)
     with pytest.raises(AssertionError):

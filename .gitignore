@@ -1,9 +1,3 @@
-# ============================================
-# Multi-Illumination Inverse Rendering
-# 入库原则：代码 + 文档 + 指标证据(json/csv/图) 入库；
-#          训练日志 / checkpoint / 运行时状态 / 冒烟产物 仅存本地
-# ============================================
-
 # Python
 __pycache__/
 *.py[cod]
@@ -16,61 +10,19 @@ build/
 # Virtual environments
 venv/
 .venv/
-.venv_a10
-.venv_a10/
-.venv_cpu/
 env/
-precompute/
 
-# Model checkpoints / weights（大文件不入库）
+# Model checkpoints / weights (large files not in repo)
 *.pth
 *.pt
 *.ckpt
 checkpoints/
 
-# TensorBoard / 训练日志目录
+# TensorBoard / training logs
 logs/
 events.out.tfevents.*
 health_reports/
-diagnosis_output/
 diagnostics_report.*
-visualizations/
-
-# 运行日志（_ 前缀 txt = 本地运行证据，审计时按需拷贝）
-_*.txt
-_*.log
-
-# 编排器运行时状态（run_arms.py / run_phase2_all.py 生成）
-progress.json
-arms_progress.json
-arms_plan.json
-_arms_bench.json
-
-# 冒烟产物（D12 物理隔离，禁止入库与进对比矩阵）
-_SMOKE_/
-_SMOKE_*
-smoke_artifacts/
-_smoke_models/
-# archive/ (2026-09-09 收窄: 原规则吞掉 docs/archive/ 历史文档区)
-/archive/
-arms_return_package/
-
-# 本地实验归档（不入库）
-
-# 数据（大文件不入库）
-processed_data/
-data/
-# datasets/  (2026-09-08 收窄: 原规则误伤 src/calibinfo/datasets/ 包代码)
-/datasets/
-
-# IDE / OS
-.idea/
-.vscode/
-*.swp
-*.swo
-.DS_Store
-Thumbs.db
-nul
 
 # Jupyter
 .ipynb_checkpoints/
@@ -83,18 +35,25 @@ nul
 *.tar
 *.gz
 
-# Blender / 渲染中间产物
+# Blender / render intermediates
 *.blend
 *.blend1
 obj_models/
 
-# 资产下载清单（download_objaverse.py 运行时生成）
-models_list.txt
-obj_models_list.txt
-docs/incidents/*_host_monitor.log
-docs/incidents/*_host_monitor*.log
+# IDE / OS
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
 
-# === calibinfo（新宪法结构, 2026-09-07 C01）===
-# results/raw/ 不进 git（宪法 §11）；artifacts/frozen/ 只进可重画图表的 CSV/JSON + manifest
-results/
-*.egg-info/
+# Local experiment output (not part of the paper artifact)
+runs/
+outputs/
+
+# Raw third-party datasets are not placed inside this repository; the repo only
+# carries metadata/manifests under data/manifests/, which are committed.
+
+# Test cache
+.pytest_cache/

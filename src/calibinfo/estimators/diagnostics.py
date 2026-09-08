@@ -4,9 +4,9 @@
 v3.3 已核验为正确代数（两处代数错误的修正版）：
   1. ρ 边缘化 = **逐像素对角** 精确 Schur：F_ρρ 是对角阵（每像素一行），
      S_λλ = F_λλ − F_λρ · diag(1/F_ρρ) · F_ρλ —— **不是**全局标量 (Σx)²/Σd 口径；
-  2. α 强度维 = 全局 3×3 块联合 pinv 边缘化（S_aa 块，docstring 声称=实现一致，红线 #9）。
+  2. α 强度维 = 全局 3×3 块联合 pinv 边缘化（S_aa 块，docstring 声称=实现一致，块边缘化）。
 
-红线 #8：入库时过随机小规模稠密对照（test_diagnostics_dense_contrast.py，rel<1e-10）。
+稠密对照：入库时过随机小规模稠密对照（test_diagnostics_dense_contrast.py，rel<1e-10）。
 下游：CI03/CI04 的诊断层一律 import 本实现，禁止再手写 Schur（公式单源化）。
 """
 

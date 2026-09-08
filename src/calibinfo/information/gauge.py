@@ -1,13 +1,13 @@
 """B1 · gauge：Prop 2 gauge-lifting 精确谱闭式（绝对信息单位）。
 
-来源：verification round V2（Proposition 2）。
+来源：V2（Proposition 2）。
 闭式：aᵀΔF(λ)a = Σᵢ αᵢ² sᵢ² λ/(sᵢ²+λ)，其中 (sᵢ², V) = eig(BᵀB)、α = Vᵀc̄，
 前提 = gauge 恒等式 Aa = Bc̄（调用方保证——诊断场景构造时给出）。
 两端：λ→0 线性抬升（系数 Σαᵢ²）；λ→∞ 饱和 ‖Aa‖² = ‖Bc̄‖²。
 
-R2 修订（verification round 攻击二）：λ⋆ 只存在于绝对信息单位；本模块输出即绝对单位，
+（二）：λ⋆ 只存在于绝对信息单位；本模块输出即绝对单位，
 retention（归一化）读出属 retention.py，两个度量不得混用。
-绑定测试：test_information_modules.py + test_v2_gauge_closed_form.py（verification V 系列）。
+绑定测试：test_information_modules.py + test_v2_gauge_closed_form.py（V 系列）。
 """
 
 from __future__ import annotations
@@ -54,7 +54,7 @@ def mu_floor(scene_callable, tol_rel=1e-12):
     """场景本征弱模式地板的操作性定义（占位接口，CI02 实现）。
 
     去除 gauge 子空间后，uncalibrated/near-uncalibrated 基线中的
-    最小非 gauge Rayleigh/eigen floor。CI02（卡 C10）给出具体实现并绑定预注册阈值；
+    最小非 gauge Rayleigh/eigen floor。CI02（10）给出具体实现并绑定预注册阈值；
     本占位仅声明接口契约，防各实验自行口径漂移。
     """
-    raise NotImplementedError("μ_floor 的操作性定义在卡 C10（CI02）实现")
+    raise NotImplementedError("μ_floor 的操作性定义在10（CI02）实现")

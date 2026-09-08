@@ -1,7 +1,7 @@
 """参考实现（数值基线）— 数值 helper。
 
-用途：tests/unit 下 V1–V6 已知答案单元测试的共享基线（卡 C02，宪法 §6.2 红线 #8 素材）。
-生产单源实现位于 src/calibinfo/information/（卡 C06 落地 delta_f/whiten_system 等）；
+用途：tests/unit 下 V1–V6 已知答案单元测试的共享基线（稠密对照素材）。
+生产单源实现位于 src/calibinfo/information/（落地 delta_f/whiten_system 等）；
 届时生产实现与本参考的互检是 C06 验收的一部分。本模块仅服务测试，不进实验主路径。
 
 种子纪律：统一种子 20260907。
@@ -46,7 +46,7 @@ def make_scene(rng, P, N):
 
 
 def delta_f_reference(s, B, Lam):
-    """ΔF(Λ) lstsq 路径（红线 RL-solve：Λ=0/秩亏禁 solve，统一 lstsq）。
+    """ΔF(Λ) lstsq 路径（solve 约束：Λ=0/秩亏禁 solve，统一 lstsq）。
 
     A = D(s)：ΔF = Aᵀ[I − B(BᵀB+Λ)⁻¹Bᵀ]A。
     """

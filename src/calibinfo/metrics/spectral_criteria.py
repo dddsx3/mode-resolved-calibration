@@ -1,7 +1,7 @@
 """Prediction-side deterministic computation（第五章；唯一合法的 scalar 基线来源）。
 
 全部函数确定性（无 rng）；谱界检查先于 log 保护（T5.5：禁止静默 clip）；
-并联和走 Anderson–Duffin 一般式 S:Λ = S(S+Λ)⁺Λ（T10.2，禁裸 inv/solve）。
+并联和走 Anderson–Duffin 一般式 S:Λ = S(S + Λ)⁺Λ（T10.2，禁裸 inv/solve）。
 """
 from __future__ import annotations
 
@@ -20,21 +20,21 @@ def trace_ratio(F: np.ndarray) -> float:
 
 
 def logdet_deficit(F: np.ndarray, log_eps: float = 1e-12) -> float:
-    """Δlogdet = Σ_i log max(r_i, log_eps)（相对 log det I = 0 的亏量；任务书 P2 口径）。"""
+    """Δlogdet = Σ_i log max(r_i, log_eps)（相对 log det I = 0 的亏量；P2 口径）。"""
     r = np.linalg.eigvalsh(np.asarray(F, float))
     return float(np.log(np.maximum(r, log_eps)).sum())
 
 
 def parallel_sum(S: np.ndarray, Lam: np.ndarray) -> np.ndarray:
-    """Anderson–Duffin 并联和 S:Λ = S(S+Λ)⁺Λ（一般式，允许 S/Λ 半正定秩亏）。
+    """Anderson–Duffin 并联和 S:Λ = S(S + Λ)⁺Λ（一般式，允许 S/Λ 半正定秩亏）。
 
-    实现走对称化 + eigh/pinv 稳定路径；禁裸 inv/solve（RL-solve 红线）。
+    实现走对称化 + eigh/pinv 稳定路径；禁裸 inv/solve（solve 约束）。
     """
     S = np.asarray(S, float)
     Lam = np.asarray(Lam, float)
     S = (S + S.T) / 2
     Lam = (Lam + Lam.T) / 2
-    # S(S+Λ)⁺Λ：对 G = S+Λ 做对称 eigh，构造 G⁺ 的对称伪逆
+    # S(S + Λ)⁺Λ：对 G = S + Λ 做对称 eigh，构造 G⁺ 的对称伪逆
     w, V = np.linalg.eigh(S + Lam)
     tol = max(w.max(), 1.0) * 1e-12
     winv = np.where(w > tol, 1.0 / np.where(w > tol, w, 1.0), 0.0)

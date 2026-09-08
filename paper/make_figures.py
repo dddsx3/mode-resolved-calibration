@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-"""make_figures · 论文图一键重建（卡 C04 空壳，图 1–9 接口冻结）。
+"""make_figures · rebuild paper figures (Fig.1-9, interface frozen).
 
-宪法 §11：Figure/Table 只从 artifacts/frozen/ 的机器可读摘要重建；
-每张图的唯一 recipe = `python scripts/make_figures.py --figure N`。
-C20（图表冻结卡）前逐图实现；当前实现：Fig.1 占位（CI01 双路线误差热图 draft）。
+Figures are rebuilt only from the machine-readable summaries under results/;
+each figure's recipe is `python paper/make_figures.py --figure N`.
 """
 
 from __future__ import annotations
@@ -13,19 +12,19 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-FROZEN = ROOT / "artifacts" / "frozen"
+FROZEN = ROOT / "results"
 FIGS = ROOT / "paper" / "figures"
 
 FIGURES = {f"Fig.{i}" for i in range(1, 10)}
 
 
 def _make_fig6(out_dir):
-    """Fig.6 · 线性化 validity envelope（卡 C13）：mask-flip rate × k 热图，
-    颜色 = 理论误差（弱模式 median |emp/pred − 1|）；10% 边界线。"""
+    """Fig.6 · linearization validity envelope: mask-flip rate × k heatmap,
+    colored by theoretical error (weak-mode median |emp/pred − 1|); 10% boundary line."""
     import numpy as np
-    src = FROZEN / "ci03nl_nl_formal_summary.json"
+    src = FROZEN / "nonlinear" / "ci03nl_nl_formal_summary.json"
     if not src.exists():
-        raise SystemExit(f"[make_figures] 缺 {src}——先跑 run_ci.py --experiment ci03nl")
+        raise SystemExit(f"[make_figures] missing {src} — first run scripts/run_experiments.py --experiment nonlinear")
     data = json.loads(src.read_text(encoding="utf-8"))
     try:
         import matplotlib
@@ -76,10 +75,10 @@ def _provenance(n, out_path):
     sha = subprocess.run(["git", "rev-parse", "HEAD"],
                          cwd=str(FIGS.resolve().parents[2]),
                          capture_output=True, text=True).stdout.strip()
-    src = {"Fig.3": "ci02_formal_summary.json", "Fig.4": "ci02_formal_summary.json",
-           "Fig.5": "ci03_formal_summary.json", "Fig.6": "ci03nl_nl_formal_summary.json",
-           "Fig.7": "ci04_formal_summary.json", "Fig.8": "ci05_formal_summary.json",
-           "Fig.9": "ci05abl_ablation_summary.json"}.get("Fig.%d" % n)
+    src = {"Fig.3": "gauge_spectrum/ci02_formal_summary.json", "Fig.4": "gauge_spectrum/ci02_formal_summary.json",
+           "Fig.5": "monte_carlo/ci03_formal_summary.json", "Fig.6": "nonlinear/ci03nl_nl_formal_summary.json",
+           "Fig.7": "openillumination/ci04_formal_summary.json", "Fig.8": "diligent/ci05_formal_summary.json",
+           "Fig.9": "diligent_ablation/ci05abl_ablation_summary.json"}.get("Fig.%d" % n)
     prov = dict(figure=n, png=str(out_path), git_sha=sha, artifact=src,
                 manifest_hash=None if src is None else
                 hashlib.sha256((FROZEN / src).read_bytes()).hexdigest()[:16])
@@ -93,9 +92,9 @@ def make_figure(n, out_dir=FIGS):
     out_dir.mkdir(parents=True, exist_ok=True)
     if n in _GEN:
         return _GEN[n](out_dir)
-    src = FROZEN / f"ci01_pilot_summary.json"
+    src = FROZEN / "synthetic" / "ci01_formal_summary.json"
     if not src.exists():
-        raise SystemExit(f"[make_figures] 缺 {src}——先跑 run_ci.py（图表只读 frozen）")
+        raise SystemExit(f"[make_figures] missing {src} — first run scripts/run_experiments.py (figures reuse results/ only)")
     data = json.loads(src.read_text(encoding="utf-8"))
     try:
         import matplotlib

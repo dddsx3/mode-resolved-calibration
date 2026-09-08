@@ -1,10 +1,10 @@
-"""Λ=0 rank-deficient erratum + spectral form (known-answer tests; red lines: solve-ban / thin-SVD).
+"""Λ=0 rank-deficient erratum + spectral form (known-answer tests; invariants: solve-ban / thin-SVD).
 
-来源：legacy_redteam/redteam2_exp.py §N3（谱形式，观测 1.4e-16）+ verification round §5 攻击四
+来源：谱形式 §N3（观测 1.4e-16）+ §5
 N3-fix 补测（`solve` 在奇异 BᵀB 上不报错、静默返回垃圾，与 pinv 极限差 8.3e4 相对误差；
 pinv 极限下连续统良定义，M(0) 秩 = m − rank(B)）。
-阈值分层（宪法 §6.2）：identity 类 <1e-10；连续性 <1e-6；静默垃圾为方向性断言（rel err >1e2）。
-实现红线：所有 ΔF(Λ) 实现禁用 solve 于 Λ=0/秩亏路径，统一 lstsq/SVD/pinv。
+阈值分层：identity 类 <1e-10；连续性 <1e-6；静默垃圾为方向性断言（rel err >1e2）。
+实现约束：所有 ΔF(Λ) 实现禁用 solve 于 Λ=0/秩亏路径，统一 lstsq/SVD/pinv。
 """
 
 import numpy as np
@@ -19,7 +19,7 @@ RANK, M_DIM = 4, 600
 def rank_deficient_B():
     """600×9、数值秩恰为 4 的 B：B = X @ R（X 600×4, R 4×9）。
     浮点矩阵乘破坏精确线性相关 → BᵀB 有 ~1e-16 量级伪特征值而非精确零 →
-    LAPACK 不报错、solve 静默返回垃圾 = 红线现象的确定性复现。"""
+    LAPACK 不报错、solve 静默返回垃圾 = 奇异现象的确定性复现。"""
     rng = np.random.default_rng(SEED)
     X = rng.normal(size=(M_DIM, RANK))
     R = rng.normal(size=(RANK, 9))
@@ -28,7 +28,7 @@ def rank_deficient_B():
 
 def test_n3_spectral_form_full_rank():
     """thin-SVD 谱形式 vs 直接构造（观测 1.4e-16）。
-    RL-thin-svd：零奇异方向由 (I−UUᵀ) 项承载，禁 full-SVD 逐项写。"""
+    thin-svd：零奇异方向由 (I−UUᵀ) 项承载，禁 full-SVD 逐项写。"""
     rng = np.random.default_rng(SEED)
     Bf = rng.normal(size=(600, 9))
     for lam in [1e-3, 1.0, 100.0]:
@@ -42,7 +42,7 @@ def test_n3_spectral_form_full_rank():
 
 def test_lambda0_pinv_limit_rank_deficient(rank_deficient_B):
     """Λ=0 秩亏：lstsq 路径 == pinv 极限（identity <1e-10）；
-    M(0) 秩 = m − rank(B)（verification round N3-fix）；
+    M(0) 秩 = m − rank(B)（N3-fix）；
     thin-SVD 谱形式在 λ=0 与 pinv 极限一致。"""
     B = rank_deficient_B
     BTB = B.T @ B
@@ -72,8 +72,8 @@ def test_lambda0_continuity_with_pinv(rank_deficient_B):
     assert rel < 1e-6
 
 
-def test_solve_silent_garbage_redline(rank_deficient_B):
-    """红线 RL-solve 数值复现：solve 在奇异 G 上无任何担保——要么报错、要么静默返回
+def test_solve_silent_garbage_invariant(rank_deficient_B):
+    """solve 数值复现：solve 在奇异 G 上无任何担保——要么报错、要么静默返回
     垃圾（一般 RHS 下与 pinv 相对误差必然天文数字；文献记载 8.3e4 来自内嵌补测的
     具体构造，本测试用一般 RHS 展示同一机制，与 BLAS 行为无关）。
     禁止任何实现依赖 solve 走 Λ=0/秩亏路径。"""
@@ -84,7 +84,7 @@ def test_solve_silent_garbage_redline(rank_deficient_B):
     try:
         w_solve = np.linalg.solve(BTB, C)
     except np.linalg.LinAlgError:
-        return                     # 本环境检测到奇异并报错 —— 同样满足红线（不可依赖）
+        return                     # 本环境检测到奇异并报错 —— 同样满足（不可依赖）
     rel = np.linalg.norm(w_solve - w_pinv) / np.linalg.norm(w_pinv)
     assert rel > 1e2
 

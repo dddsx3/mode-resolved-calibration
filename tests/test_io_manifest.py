@@ -1,6 +1,6 @@
 """C04 绑定测试 · run manifest。
 
-验收（主控计划书卡 C04）：干跑一次生成 manifest.json 字段齐全；
+验收（主控计划书04）：干跑一次生成 manifest.json 字段齐全；
 config hash 对内容差异敏感、对键序/空白不敏感。
 """
 

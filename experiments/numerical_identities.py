@@ -1,12 +1,12 @@
-"""CI01 · 代数正确性、白化、参数化不变性（宪法 §4.1 冻结规格）。
+"""CI01 · 代数正确性、白化、参数化不变性。
 
-Gate A 实验体。本模块实现规格的计算核；正式 run（卡 C07）按正式 config 放大
-（q∈{1,3,9,36}、m/q 三区、Σ_y 两形态、≥5 seeds），pilot（卡 C05 冒烟）小规模跑通端到端。
+A 实验体。本模块实现规格的计算核；正式 run（07）按正式 config 放大
+（q∈{1,3,9,36}、m/q 三区、Σ_y 两形态、≥5 seeds），pilot（05 冒烟）小规模跑通端到端。
 
 主指标（预注册）：所有核心 identity 误差 <1e-10（MC 类除外）；
-任何 identity 失败 → 停止后续实验先修 core（宪法 Gate A 失败动作）。
+任何 identity 失败 → 停止后续实验先修 core（A 失败动作）。
 
-参数化纪律（宪法 §2.1）：δc = Jφ·φ, φ~N(0,Σ_φ)——φ 空间是基本参数化；
+参数化纪律：δc = Jφ·φ, φ~N(0,Σ_φ)——φ 空间是基本参数化；
 Λ=σ²Σ_φ⁻¹ 在 φ 空间恒良定义；Σ_c=JΣ_φJᵀ 在 c 空间可秩亏（此时 c 空间禁 inv）。
 
 六项检查：
@@ -50,7 +50,7 @@ def _build_case(rng, case):
 
     structure:
       - "random"（默认）：A/B 独立随机块（耦合弱 → shift_gate 用非空洞阈值）；
-      - "photometric"：光度立体结构 A=D(s), B=D(aH)Y（verification V5 isomorph，强耦合 + scale gauge，
+      - "photometric"：光度立体结构 A=D(s), B=D(aH)Y（V5 isomorph，强耦合 + scale gauge，
         shift_gate 用 V5 校准的 0.1）。
     """
     m, q, n = case["m"], case["q"], case["n"]
@@ -76,7 +76,7 @@ def _build_case(rng, case):
     B0 = rng.normal(size=(m, r))
     # φ→c 映射取正交列（QR）：随机未归一 J 会把 cond(JᵀJ)≈cond(J)² 人工注入系统，
     # 使 identity 判定退化到 κ·eps 量级——物理参数映射按泛型良尺度构造（首轮正式
-    # run 实测教训，见 CI01 memo）。
+    # run 实测教训，实测）。
     J, _ = np.linalg.qr(rng.normal(size=(q, r)))
     J = J[:, :r]                                       # (q, r) 正交列
     B = B0 @ J.T                                       # c 空间设计矩阵（秩 r）
@@ -112,7 +112,7 @@ def run(config, run_dir):
             DFm, _ = delta_f_marginal(Aw, Bw_phi, Sig_phi, 1.0)
             rel_dual = float(np.linalg.norm(DF - DFm) / np.linalg.norm(DFm))
 
-            # 2 Λ=0 秩亏（c 空间 B 秩 r<q 才触发；BᵀB 奇异 → lstsq/pinv 红线路径）
+            # 2 Λ=0 秩亏（c 空间 B 秩 r<q 才触发；BᵀB 奇异 → lstsq/pinv 路径）
             rel_idem = None
             if r < q:
                 _, Bw_c, _ = whiten_system(A, B, Sigma_y)
@@ -161,4 +161,4 @@ def run(config, run_dir):
     return dict(run_name=config.get("run_name", "run"),
                 seed=config["seed"], gate=GATE, n_checks=len(checks),
                 all_pass=bool(all_pass), checks=checks,
-                note="CI01 预注册：任何 identity 失败 → 停止后续实验先修 core（宪法 Gate A）")
+                note="CI01 预注册：任何 identity 失败 → 停止后续实验先修 core（A）")

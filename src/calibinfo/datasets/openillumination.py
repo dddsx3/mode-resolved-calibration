@@ -1,14 +1,14 @@
 """B3/C14 · OpenIllumination loader（HF `OpenIllumination/OpenIllumination`，CC BY 4.0）。
 
-数据形态（2026-09-08 侦察+降采样裁决，见 manifest）：
+数据形态（2026-09-08 侦察后降采样选择，见 manifest）：
   - 完整单对象 ~41 GB（RAW 传感器转储为主）>> 主控计划书 2GB 触发线；
-  - 裁决 = 取缩略图层：`OLAT/<obj>/Lights/<NNN>/com_masked_thumbnail/<CAM>.png`
+  - 选择 = 取缩略图层：`OLAT/<obj>/Lights/<NNN>/com_masked_thumbnail/<CAM>.png`
     （合成已掩码，200×273 RGBA，背景黑）+ `output/com_masks/<CAM>.png`（对象掩码）；
   - GT 光照 = 数据集根 `light_pos.npy`（142, 3）灯位（全局共享，灯球半径 ~1m，
     对象位于原点）→ 方向 = −pos/‖pos‖（灯指向对象）；
   - 单相机视图 CAM="A1"（多视图按需幂等补下，snapshot_download）。
 
-先写 manifest 再跑实验（宪法 §11）：`make_manifest` 逐文件 sha256 + 降采样裁决 + 对象清单；
+先写 manifest 再跑实验：`make_manifest` 逐文件 sha256 + 降采样选择 + 对象清单；
 development/test 清单冻结后不可改（dev_selection.json，C14 已冻结 8 对象）。
 """
 
@@ -41,7 +41,7 @@ def load_object(data_root, obj_name, camera=CAMERA, data_meta=None):
 
     返回 dict(images (142,H,W,3) float[0,1]、mask (H,W) bool、
     light_positions (142,3)、light_directions (142,3) 单位向量（−pos/‖pos‖）、
-    meta（对象名/相机/裁决）)。
+    meta（对象名/相机/降采样选择）)。
     """
     root = Path(data_root)
     odir = root / "OLAT" / obj_name
@@ -86,7 +86,7 @@ def load_object(data_root, obj_name, camera=CAMERA, data_meta=None):
 
 def make_manifest(data_root, objects, camera=CAMERA, data_meta=None,
                   selection_note=None):
-    """数据合同 manifest（宪法 §11：先写 manifest 再跑实验）。"""
+    """数据合同 manifest（先写 manifest 再跑实验）。"""
     import datetime
     root = Path(data_root)
     lpos_path = root / "light_pos.npy"
@@ -108,7 +108,7 @@ def make_manifest(data_root, objects, camera=CAMERA, data_meta=None,
                          shape=[N_LIGHTS, 3]),
         objects=entries,
         downsampling_verdict="单对象全量 ~41GB >> 2GB 触发线 → 取 com_masked_thumbnail "
-                             "(200x273) + com_masks；RAW 与全分辨率不取（宪法 §11 禁静默换数据，裁决入此 manifest）",
+                             "(200x273) + com_masks；RAW 与全分辨率不取",
         selection_note=selection_note or "",
         created_utc=datetime.datetime.now(datetime.timezone.utc).isoformat(),
     )

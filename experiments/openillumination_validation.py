@@ -1,4 +1,4 @@
-"""CI04 · 受控真实 corruption（宪法 §4.4；卡 C15 pilot / 卡 C16 正式）。
+"""CI04 · 受控真实 corruption。
 
 协议（估计器侧 corruption——真实数据的受控注入形态，跑前预注册）：
   真值 = GT 灯位/强度（OpenIllumination light_pos.npy，校准 GT 齐备——
@@ -216,7 +216,7 @@ def run(config, run_dir):
                 rho_c = sc_b.estimate_albedo(scen.dirs, np.ones(len(scen.dirs)))
                 E0[s_i] = rho_c - scen.rho
             # 模式投影 + 经验退化（相对 δc=0 对照臂方差）
-            # 尺度 gauge 对齐（宪法 CI04：允许一个全局仿射尺度；ρ·gain 双解的已知
+            # 尺度 gauge 对齐（CI04：允许一个全局仿射尺度；ρ·gain 双解的已知
             # 自由度，估计后对齐——不做此步，强度维 corruption 会被 gauge 吸收成
             # "全 1 方向脉冲"假模式。预注册于 C15 pilot 首轮教训）
             for _E in (E, E0):

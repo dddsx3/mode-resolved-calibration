@@ -1,17 +1,17 @@
-"""CI03 · Monte-Carlo 紧性与线性化有效域（宪法 §4.3，卡 C12 线性 oracle 部分）。
+"""CI03 · Monte-Carlo 紧性与线性化有效域。
 
-两臂（R4 修订 + 宪法 §0 禁令）：
-  A. joint ensemble（δc 与 ε 联合抽样）→ Cov(x̂) = σ²ΔF⁻¹（Prop 1 / Gate B 主判据）
+两臂（两组对照）：
+  A. joint ensemble（δc 与 ε 联合抽样）→ Cov(x̂) = σ²ΔF⁻¹（Prop 1 / 主判据）
      + 最弱 5 模式（预测协方差特征基，mode-resolved）的 68%/95% coverage；
   B. fixed-δc 对照诊断 → bias=ΔF⁻¹AᵀMBδc 与条件方差 σ²ΔF⁻¹AᵀM²AΔF⁻¹
      （不用于 tightness 声明；方向性结论：条件方差 < marginal）。
 
-可测性纪律（跑前写死，gate_bias_snr_min）：bias 检查只在
+可测性纪律（跑前写死）：bias 检查只在
 SNR = ‖Fh·bias‖ / sqrt(tr(C_pred_w)/trials) > 10 时判定——Λ 小的随机块场景
-bias 低于 MC 均值噪声地板，比率是噪声（首轮 4.5×/69× 假象的根因），
-此时如实记 not-measurable，不做 gate 判定。
+bias 低于 MC 均值噪声地板，比率是噪声（4.5×/69× 假象的根因），
+此时如实记 not-measurable，不做判定。
 
-实现红线（本卡首轮事故，如实入 memo）：系综循环必须用 trials_c（per-case 扩样），
+实现纪律：系综循环必须用 trials_c（per-case 扩样），
 误用全局 trials 会把未初始化的 np.empty 行混进经验协方差（0.40 紧 IQR 假象）。
 """
 
@@ -148,6 +148,6 @@ def run(config, run_dir):
                            gate_condvar_ratio_median=gate_condvar,
                            gate_bias_snr_min=gate_bias_snr),
                 checks=rows,
-                note="joint ensemble = Gate B 主判据（Prop 1）；fixed-δc 仅诊断"
+                note="joint ensemble = B 主判据（Prop 1）；fixed-δc 仅诊断"
                      "（R4：条件方差 σ²ΔF⁻¹AᵀM²AΔF⁻¹，不用于 tightness 声明；"
                      "bias 检查仅 SNR>gate_bias_snr_min 时判定）")

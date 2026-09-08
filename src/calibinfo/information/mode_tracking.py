@@ -1,9 +1,9 @@
-"""B1 · mode_tracking：跨 λ 的连续性模式追踪（R3 修订）。
+"""B1 · mode_tracking：跨 λ 的连续性模式追踪（）。
 
-红线（宪法 §0 禁令 + verification round 攻击三/R3）：跨 λ 模式识别**必须**用连续性追踪
+（R3）：跨 λ 模式识别**必须**用连续性追踪
 （相邻 λ 特征向量重叠度 assignment），**禁止**"第 j 小特征值"索引排序——
 N=1 时特征基 λ 不变（V6 观测 0.00°），N>1 时可旋转 88°+。
-绑定测试：test_information_modules.py + test_v6_mode_tracking.py（verification V 系列）。
+绑定测试：test_information_modules.py + test_v6_mode_tracking.py（V 系列）。
 """
 
 from __future__ import annotations

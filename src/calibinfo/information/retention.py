@@ -2,9 +2,9 @@
 
 定义：R(Λ) = F∞^{-1/2} ΔF(Λ) F∞^{-1/2}，0 ≼ R ≼ I ⇒ 0 ≤ ρⱼ ≤ 1
 （可识别子空间 range(F∞) 上）。
-红线 RL-retention-whitening：F∞^{-1/2} = 正定平方根
+retention whitening：F∞^{-1/2} = 正定平方根
 （eigh 构造），禁 F∞^{-1/4} 等错误形式；F∞=diag(s²) 时才可写 diag(1/s)。
-R2 修订：ρⱼ 只作 within-scene 归一化读出，禁用于 λ⋆/跨场景逐模式比较。
+ρⱼ 只作 within-scene 归一化读出，禁用于 λ⋆/跨场景逐模式比较。
 绑定测试：test_information_modules.py + test_v3_retention_bounds.py / test_v5_scale.py。
 """
 
@@ -35,9 +35,9 @@ def retention_spectrum_gen_eig(DeltaF, Finf):
 
 
 def retention_spectrum_dual(DeltaF, Finf, tol_rel=1e-12):
-    """双路线交叉验证（宪法 Lemma 2 审计）：白化（正定平方根）vs generalized eig。
+    """双路线交叉验证（Lemma 2 审计）：白化（正定平方根）vs generalized eig。
 
-    F∞ 正定时两路线应逐元素一致 rel<1e-10（CI02/卡 C11 验收）；
+    F∞ 正定时两路线应逐元素一致 rel<1e-10（CI02/11 验收）；
     返回 dict(rho, dual_rel, gen_eig_available)。
     """
     out = retention_spectrum(DeltaF, Finf, tol_rel=tol_rel)

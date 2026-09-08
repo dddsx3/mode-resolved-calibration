@@ -2,7 +2,7 @@
 
 绑定：REPO_MIGRATION B3 行 2 —— 已知对象光照 GT 数值 sanity。
 真数据依赖（D:/data/OpenIllumination，C14 已下载 development 8 对象）：
-不存在时整文件 skip（数据合同由 manifest 冻结，宪法 §11）。
+不存在时整文件 skip（数据合同由 manifest 冻结）。
 """
 
 import json
@@ -47,7 +47,7 @@ def test_images_mask_alignment():
 
 
 def test_manifest_frozen_and_complete():
-    """manifest：8 development 对象逐文件 sha256 + 降采样裁决记录（宪法 §11）。"""
+    """manifest：8 development 对象逐文件 sha256 + 降采样选择记录。"""
     mf = make_manifest(DATA_ROOT, json.loads(
         (Path(META) / "dev_selection.json").read_text(encoding="utf-8"))["selection"],
         data_meta=META)

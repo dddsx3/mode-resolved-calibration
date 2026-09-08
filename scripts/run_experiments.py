@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-"""run_ci · 统一实验入口（卡 C04 骨架）。
+"""Unified experiment entrypoint.
 
-用法：python scripts/run_ci.py --experiment ci01 --config configs/ci01/pilot.yaml
-流程：config 加载 → manifest（git/config/seed/dataset checksum）→ 实验 runner
-（experiments/ci01_algebra.py 等）→ results/raw/ 落盘 → artifacts/frozen/ 摘要。
-图表由 make_figures.py 从 artifacts/frozen/ 重建（宪法 §11）。
+Usage: python scripts/run_experiments.py --experiment synthetic --config configs/synthetic.yaml
+Pipeline: config load -> run manifest (git/config/seed/dataset checksums) -> experiment
+runner -> results/ summaries.
 """
 
 from __future__ import annotations
@@ -24,20 +23,20 @@ sys.path.insert(0, str(ROOT / "src"))
 from calibinfo.io.manifest import write_manifest  # noqa: E402
 
 RUNNERS = {
-    "ci01": "experiments.ci01_algebra",
-    "ci02": "experiments.ci02_gauge",
-    "ci03": "experiments.ci03_mc_validity",
-    "ci03nl": "experiments.ci03_nl_envelope",
-    "ci04": "experiments.ci04_real_corruption",
-    "ci05": "experiments.ci05_sanity_robustness",
-    "ci05abl": "experiments.ci05_ablation",
+    "synthetic": ("experiments.numerical_identities", "run"),
+    "gauge_spectrum": ("experiments.gauge_spectrum", "run"),
+    "monte_carlo": ("experiments.monte_carlo_validation", "run"),
+    "nonlinear": ("experiments.nonlinear_validity", "run"),
+    "openillumination": ("experiments.openillumination_validation", "run"),
+    "diligent": ("experiments.diligent_sanity", "run_sanity"),
+    "diligent_ablation": ("experiments.diligent_sanity", "run_ablation"),
 }
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--experiment", required=True, choices=sorted(RUNNERS))
-    ap.add_argument("--config", required=True, help="configs/ci0X/*.yaml")
+    ap.add_argument("--config", required=True)
     ap.add_argument("--output-root", default=str(ROOT / "results" / "raw"))
     args = ap.parse_args()
 
@@ -50,20 +49,20 @@ def main():
                    experiment=args.experiment, seed=config.get("seed"),
                    repo_root=str(ROOT))
 
-    mod = importlib.import_module(RUNNERS[args.experiment])
-    result = mod.run(config, run_dir)
+    mod_name, fn_name = RUNNERS[args.experiment]
+    result = getattr(importlib.import_module(mod_name), fn_name)(config, run_dir)
 
-    frozen = ROOT / "artifacts" / "frozen"
+    frozen = ROOT / "results" / args.experiment
     frozen.mkdir(parents=True, exist_ok=True)
     stem = f"{args.experiment}_{config.get('run_name', 'run')}"
-    # 宪法 §11：artifacts/frozen 只进摘要 + manifest（provenance 与摘要同放）
+    # results/ holds summaries + manifests only (provenance goes beside the summary)
     (frozen / f"{stem}_manifest.json").write_text(
         (run_dir / "manifest.json").read_text(encoding="utf-8"), encoding="utf-8")
     summary_path = frozen / f"{stem}_summary.json"
     summary_path.write_text(
         json.dumps(result, ensure_ascii=False, indent=1), encoding="utf-8")
-    print(f"[run_ci] {args.experiment} done -> {run_dir}")
-    print(f"[run_ci] frozen summary -> {summary_path}")
+    print(f"[run] {args.experiment} done -> {run_dir}")
+    print(f"[run] summary -> {summary_path}")
 
 
 if __name__ == "__main__":

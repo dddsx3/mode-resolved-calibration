@@ -30,7 +30,7 @@ from calibinfo.metrics.spectral_criteria import (                        # noqa:
     predictors_from_spectrum, p_mode_from_pred_deg,
     retention_spectrum_full, identifiable_overlap)
 from calibinfo.metrics.cluster_bootstrap import cluster_bootstrap       # noqa: E402
-from experiments.ci04_real_corruption import (                          # noqa: E402
+from experiments.openillumination_validation import (                          # noqa: E402
     NominalScene, CorruptionGenerator)
 from calibinfo.datasets.openillumination import load_object             # noqa: E402  (reuse)
 
@@ -59,8 +59,8 @@ def load_and_assert(cfg_path: str):
     cfg = yaml.safe_load(Path(cfg_path).read_text(encoding="utf-8"))
     for f, h in cfg["frozen_artifacts_sha256"].items():
         assert _sha(f) == h, f"冻结产物 sha256 不一致: {f}（REPRODUCIBILITY INCIDENT）"
-    summary = json.loads(Path("artifacts/frozen/ci04_formal_summary.json").read_text(encoding="utf-8"))
-    manifest = json.loads(Path("artifacts/frozen/ci04_formal_manifest.json").read_text(encoding="utf-8"))
+    summary = json.loads(Path("results/openillumination/ci04_formal_summary.json").read_text(encoding="utf-8"))
+    manifest = json.loads(Path("results/openillumination/ci04_formal_manifest.json").read_text(encoding="utf-8"))
     rows = summary["rows"]
     # T3.4 机械断言（先于任何统计计算）
     assert cfg["dataset"] == "OpenIllumination" and cfg["split"] == "frozen_test"
@@ -264,17 +264,10 @@ def r2b_analysis(rows, spectra, cfg):
         d_boots.append(stat_mode(sub) - stat_scalar_best(sub))
     d_ci = (float(np.percentile(d_boots, 2.5)), float(np.percentile(d_boots, 97.5)))
     delta = float(d_pt)
-    margin = cfg["practical_margin_delta"]
-    if delta >= margin and d_ci[0] > 0:
-        sev = "S+"
-    elif delta <= -margin and d_ci[1] < 0:
-        sev = "S-"
-    else:
-        sev = "S0"
     return dict(pooled=pooled, within=within, strat=strat,
                 mode_point=m_pt, mode_ci=m_ci,
                 scalar_strat=scalar_strat, best_name=best_name,
-                delta=delta, delta_ci=d_ci, severity=sev,
+                delta=delta, delta_ci=d_ci,
                 points=points, mode_points=mode_points)
 
 
@@ -355,7 +348,6 @@ def write_outputs(cfg, out, r2a, r2b, r2c, rows, spectra, gate_rel, qs, pooled_c
         r2a_stat=r2a["R_A"],
         r2a_ci95=list(r2a["ci95"]),
         positive_objects=r2a["n_pos_obj"],
-        severity_status=r2b["severity"],
         rho_mode_strat=r2b["mode_point"],
         best_scalar_name=r2b["best_name"],
         rho_best_scalar_strat=float(r2b["scalar_strat"][r2b["best_name"]]),
@@ -363,7 +355,7 @@ def write_outputs(cfg, out, r2a, r2b, r2c, rows, spectra, gate_rel, qs, pooled_c
         delta_mode_ci95=list(r2b["delta_ci"]),
         bootstrap_seed=cfg["bootstrap_seed"],
         config_sha256=_sha("configs/openillumination.yaml"),
-        artifact_sha256=_sha("artifacts/frozen/ci04_formal_summary.json"),
+        artifact_sha256=_sha("results/openillumination/ci04_formal_summary.json"),
         git_sha=sha)
     (outd / "validation_summary.json").write_text(
         json.dumps(bd, indent=1), encoding="utf-8")
@@ -374,8 +366,8 @@ def write_outputs(cfg, out, r2a, r2b, r2c, rows, spectra, gate_rel, qs, pooled_c
         config="configs/openillumination.yaml",
         config_sha256=_sha("configs/openillumination.yaml"),
         artifacts={f: _sha(f) for f in [
-            "artifacts/frozen/ci04_formal_summary.json",
-            "artifacts/frozen/ci04_formal_manifest.json"]},
+            "results/openillumination/ci04_formal_summary.json",
+            "results/openillumination/ci04_formal_manifest.json"]},
         platform=platform.platform(),
         written_utc=datetime.now(timezone.utc).isoformat(),
     ), indent=1), encoding="utf-8")
@@ -391,7 +383,6 @@ def write_outputs(cfg, out, r2a, r2b, r2c, rows, spectra, gate_rel, qs, pooled_c
                  mode_point=r2b["mode_point"], mode_ci=list(r2b["mode_ci"]),
                  scalar_strat=r2b["scalar_strat"], best_name=r2b["best_name"],
                  delta=r2b["delta"], delta_ci=list(r2b["delta_ci"]),
-                 severity=r2b["severity"],
                  pooled_cluster=dict(point=pooled_cluster[0],
                                      ci95=list(pooled_cluster[1]))),
         r2c=r2c,
@@ -419,7 +410,7 @@ def main():
     r2b = r2b_analysis(rows, spectra, cfg)
     print(f"[severity] R2-B: mode_strat={r2b['mode_point']:.4f} CI={r2b['mode_ci']} "
           f"best_scalar={r2b['best_name']}({r2b['scalar_strat'][r2b['best_name']]:.4f}) "
-          f"Δ={r2b['delta']:+.4f} CI={r2b['delta_ci']} → {r2b['severity']}")
+          f"Δ={r2b['delta']:+.4f} CI={r2b['delta_ci']}")
     print(f"[severity] R2-B pooled(descriptive): "
           + ", ".join(f"{k}={v:+.4f}" for k, v in r2b["pooled"].items()))
     # T9.1: pooled Spearman 的 object-cluster bootstrap CI（整体替换旧 330-point CI）

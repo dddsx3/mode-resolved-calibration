@@ -1,9 +1,9 @@
-"""B2 绑定测试 · 诊断参考实现过随机小规模稠密对照（红线 #8 首次正式执行）。
+"""B2 绑定测试 · 诊断参考实现过随机小规模稠密对照（稠密对照 首次正式执行）。
 
 来源：REPO_MIGRATION B2 行 2 —— exp8S 变体 A 代数 → estimators/diagnostics.py。
 对照路线：本测试独立构造全耦合 Jacobian J（Jᵀ·diag(w)·J = 完整 Fisher），走通用
 稠密分块代数（F_ρρ 用稠密逆而非逐像素对角捷径；α 块 pinv 边缘化），与结构化实现
-逐元素比对 rel < 1e-10。该对照正是verification round攻击五要抓的"两处险恶错误"
+逐元素比对 rel < 1e-10。该对照正是五要抓的"两处险恶错误"
 （F_ρρ 形状口径错位 / 边缘化声称≠实现）的机械防线。
 
 覆盖口径：α=1（exp8S 变体 A oracle 口径，direction_fisher_schur）与

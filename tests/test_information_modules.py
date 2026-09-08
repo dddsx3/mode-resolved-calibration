@@ -3,7 +3,7 @@
 来源：REPO_MIGRATION B1 表。逐项绑定：
   (a) delta_f vs delta_f_marginal 双路线逐元素相对误差 <1e-10（全秩 + Λ>0）；
       m/q 欠定、临界、过定三区（C06 验收提前覆盖）；
-  (b) Λ=0 秩亏走通且无 solve 调用（数值红线）；
+  (b) Λ=0 秩亏走通且无 solve 调用（数值约束）；
   (c) whiten_system：对角 + 稠密协方差两路径，异方差场景下白化后最小二乘一致；
   (d) gauge_response 闭式 vs 直接 Rayleigh <1e-10（小规模 identity 类）；
   (e) retention_spectrum：谱界 + 正定平方根口径（F∞ 非对角时 diag(1/s) 不可用）；
@@ -38,7 +38,7 @@ def _system(rng, m, q, n, rank_B=None):
     return A, B, Sig_c, sigma
 
 
-# m/q 三区（宪法 CI01/卡 C06 验收）：欠定 m<q、临界 m=q、过定 m>q（n 覆盖 n<q 与 n≥q）
+# m/q 三区（CI01 验收）：欠定 m<q、临界 m=q、过定 m>q（n 覆盖 n<q 与 n≥q）
 @pytest.mark.parametrize("m,q,n", [(4, 9, 3), (9, 9, 3), (40, 3, 8), (30, 5, 5), (25, 9, 4)])
 def test_dual_route_full_rank(m, q, n):
     """双路线：Schur(ΔF) vs marginal 直接逆——m/q 三区逐元素 rel<1e-10（C06 验收）。"""
@@ -74,7 +74,7 @@ def test_lambda0_rank_deficient_no_solve():
 
 
 def test_solve_never_called():
-    """红线 RL-solve 机械盯防：delta_f 源码不得出现 np.linalg.solve / linalg.solve 调用。"""
+    """solve 机械盯防：delta_f 源码不得出现 np.linalg.solve / linalg.solve 调用。"""
     import inspect
     from calibinfo.information import schur
     src = inspect.getsource(schur.delta_f)
@@ -96,7 +96,7 @@ def test_whiten_system_diag_and_dense():
     Aw2, Bw2, meta2 = whiten_system(A, B, Sy)
     assert meta2["method"] == "eigh_dense"
     assert np.allclose(Aw2, Aw) and np.allclose(Bw2, Bw)
-    # 白化后 Schur 与原始加权 GLS 等价（宪法 §2.1：一切从白化形式开始）：
+    # 白化后 Schur 与原始加权 GLS 等价：
     # Aᵀ(Σ_y + BΣ_cBᵀ)⁻¹A == 白化空间 ΔF(Λw=σ'²Σ_c⁻¹, σ'²=1)
     Sig_c = np.eye(q)
     V_total = np.diag(var) + B @ Sig_c @ B.T
@@ -137,7 +137,7 @@ def test_gauge_response_closed_form_vs_rayleigh():
 
 
 def test_retention_bounds_and_sqrt_convention():
-    """retention：谱界 0≤ρ≤1；F∞ 非对角时正定平方根口径（red line RL-retention-whitening）。"""
+    """retention：谱界 0≤ρ≤1；F∞ 非对角时正定平方根口径（retention whitening）。"""
     rng = np.random.default_rng(SEED)
     m, q, n = 80, 4, 10
     A = rng.normal(size=(m, n))

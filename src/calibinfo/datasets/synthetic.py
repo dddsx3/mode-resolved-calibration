@@ -1,9 +1,9 @@
 """C09 · 分层 scene 工厂（CI02/CI03 的合成场景供给）。
 
-宪法 §4.2：≥30 合成场景分层采样：几何条件数 × albedo spread × 灯数 × B 奇异谱；
+ §4.2：≥30 合成场景分层采样：几何条件数 × albedo spread × 灯数 × B 奇异谱；
 每场景保存真实 gauge (a, c̄) 与 μ_floor 所需基线。
 
-场景模型（verification V 系列/CI01 photometric 同构）：
+场景模型（V 系列/CI01 photometric 同构）：
   法线 n (P,3)（几何分层：球面/起伏/重终止子），SH-9 基 Y = SH(n)，
   反照率 a 对数均匀（spread 分层），N 灯方向 d_k → c_k = SH9(d_k)，
   s_full_k = Y c_k，H_k = [s_full_k>0]，s_k = relu；
@@ -123,7 +123,7 @@ def make_grid(rng, P=300, geometries=("sphere", "bumpy", "terminator_heavy"),
 
 
 def mu_floor(scene, tol_rel=1e-10, lam_eps=1e-12):
-    """μ_floor 操作性定义（宪法 λ⋆ Diagnostic；同口径）：
+    """μ_floor 操作性定义（λ⋆ Diagnostic；同口径）：
 
     Λ→0⁺（lam_eps·I）下联合 ΔF 的最小**正**特征值（> tol_rel·λ_max）——
     即 uncalibrated 基线的场景本征弱模式地板；gauge 方向与结构零模式

@@ -1,16 +1,16 @@
-"""figure_gens · Fig.3–9 生成器（卡 C20；输入一律 artifacts/frozen，禁 notebook 手工导出）。"""
+"""figure_gens · Fig.3-9 generators (input is always the summaries under results/; no notebook-exported assets)."""
 
 import json
 from pathlib import Path
 
-FROZEN = Path(__file__).resolve().parents[1] / "artifacts" / "frozen"
+FROZEN = Path(__file__).resolve().parents[1] / "results"
 FIGS = Path(__file__).resolve().parents[1] / "paper" / "figures"
 
 
 def _load(name):
     p = FROZEN / name
     if not p.exists():
-        raise SystemExit(f"[make_figures] missing {p}; run corresponding run_ci first")
+        raise SystemExit(f"[make_figures] missing {p}; run the corresponding experiment first")
     return json.loads(p.read_text(encoding="utf-8"))
 
 

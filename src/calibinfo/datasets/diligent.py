@@ -2,8 +2,8 @@
 
 来源：REPO_MIGRATION B3 行 1 —— eval_diligent/ + evaluate_diligent.py 收敛。
 口径（与 exp8r 系列逐位一致）：灰度图、light_intensities 归一（禁峰值）、
-mask>128、Normal_gt 截取到 mask 内。CI05 只承担 real sanity（宪法 §4.5）。
-manifest 契约：make_manifest 产出对象清单 + checksum（sha256）——先写 manifest 再跑实验（宪法 §11）。
+mask>128、Normal_gt 截取到 mask 内。CI05 只承担 real sanity。
+manifest 契约：make_manifest 产出对象清单 + checksum（sha256）——先写 manifest 再跑实验。
 """
 
 from __future__ import annotations
@@ -45,7 +45,7 @@ def load_object(d):
 
 
 def make_manifest(data_root, objects=None):
-    """对象清单 manifest（先写 manifest 再跑实验，宪法 §11）。
+    """对象清单 manifest（先写 manifest 再跑实验， §11）。
 
     返回 dict：objects[{name, n_lights, n_pixels, files{key: {sha256, bytes}}}]、
     data_root、created_utc。CI05 使用前把本 dict 落盘并 checksum 冻结。

@@ -1,4 +1,4 @@
-"""io · run_manifest（宪法 §11 可复现性）。
+"""io · run_manifest。
 
 每个 run 生成 manifest：git SHA、dirty flag、Python/NumPy/SciPy 版本、config hash、
 seed、dataset checksum、机器信息、开始/结束时间。

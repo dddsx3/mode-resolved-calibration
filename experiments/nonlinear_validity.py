@@ -1,6 +1,6 @@
 """C13 · CI03 非线性 validity envelope（B 臂：解析非线性 SH+ReLU 管线）。
 
-宪法 §4.3 / R-B 风险：线性理论在真实（非线性）渲染下的有效域显式化。
+ §4.3 / R-B 风险：线性理论在真实（非线性）渲染下的有效域显式化。
 
 协议（每 cell = 场景 × 扰动强度 k）：
   1. 场景工厂出 nominal：法线 n、反照率 a、灯方向 d₀ → 名义 s₀=relu(Yc₀)、H₀；
@@ -114,4 +114,4 @@ def run(config, run_dir):
                                "Gate C 失败动作：论文只留线性理论，不做真实预测主张（如实执行）"),
                 checks=rows,
                 note="B 臂 = 解析非线性 SH+ReLU（同 GT 重渲染）；估计器 = 线性理论"
-                     "估计器（隔离模型失配）；A 臂 BlenderProc 见卡 C13 卡住时条款")
+                     "估计器（隔离模型失配）；A 臂 BlenderProc 见13 卡住时条款")
