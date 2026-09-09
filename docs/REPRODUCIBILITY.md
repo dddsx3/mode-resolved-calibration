@@ -31,6 +31,14 @@ B=10000/seed 20260908, pooled statistics) — it does not import the experiment 
 so it double-checks the frozen numbers rather than re-executing the computation that
 produced them.
 
+## Interpretation of reported intervals
+
+stratified_median_mode_ci95 is the marginal object-cluster bootstrap CI of the mode
+predictor's stratified association. It is not a confidence interval for superiority
+over another predictor. Comparisons against trace/logdet must report
+CI(ρ_mode − ρ_trace) computed within the same bootstrap resamples; comparing two
+marginal CIs is not a valid inference procedure.
+
 ## Determinism record (reruns of 2026-09-09)
 
 Every rerun below was executed in a sandbox output root and diffed against the frozen

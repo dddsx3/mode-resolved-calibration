@@ -33,7 +33,12 @@ BANNED = [
     r"pass rate",
 ]
 
-SCAN_FILES = sorted([REPO / "README.md"] + list((REPO / "docs").glob("*.md")))
+SCAN_FILES = sorted(
+    [REPO / "README.md"]
+    + list((REPO / "docs").rglob("*.md"))
+    + list((REPO / "paper").rglob("*.md"))
+    + list((REPO / "paper").rglob("*.tex"))
+)
 SCAN_FILES = [f for f in SCAN_FILES if f.name != "WORDING.md"]
 
 
