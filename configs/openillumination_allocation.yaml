@@ -1,0 +1,159 @@
+# Preregistration freeze -- allocation experiment on the fixed held-out cohort.
+# This file is committed and tagged (allocation-prereg-frozen) BEFORE any empirical
+# allocation output exists. Content frozen per the final execution task book A1;
+# after this commit no field may change.
+#
+# Positioning (verbatim, frozen):
+#   "preregistered retrospective actionability evaluation on a fixed held-out cohort"
+# The 11 cohort objects did not enter any allocation endpoint before, but they did
+# participate in earlier mode-ranking empirics; they are not an independent
+# confirmation cohort. n=11 and the width of the CIs are reported at first mention.
+
+run_name: allocation
+positioning: >-
+  preregistered retrospective actionability evaluation on a fixed held-out cohort
+data_root: D:/data/OpenIllumination
+data_meta: D:/data/OpenIllumination_meta
+
+# -- 1. cohort: verbatim copy of the frozen held-out list (zero selection freedom) --
+cohort: [obj_03_pumpkin, obj_04_dolphin, obj_07_pumpkin2, obj_09_ball, obj_10_pumpkin3, obj_11_pine, obj_13_mushroom, obj_16_friends_cup, obj_17_pumpkin5, obj_18_fabric_hat, obj_19_cylinder]
+n_objects: 11
+
+# -- 2. light universe --
+K_lights: 142            # selection runs over the full capture light set
+analysis_lights: 48      # frozen per-object analysis subset (seeded); lights outside
+                         # this subset have zero Fisher presence (u_l = 0): selecting
+                         # them changes neither prediction nor reconstruction
+n_pixels: 1200
+n_modes: 5
+
+# -- 3. regimes: selected light's Sigma_phi divided by this factor --
+regimes: [10, 100]
+
+# -- 4. budgets (fractions of K) and pinned light counts, k = round(budget * K) --
+budgets: [0.1, 0.2, 0.4, 0.6, 0.8]
+budget_counts: [14, 28, 57, 85, 114]
+
+# -- 5. policies: identical sequential-selection frame for all five --
+policies: [mode_aware, e_opt, a_opt, d_opt, random]
+
+selection:
+  frame: sequential
+  step: >-
+    l_t = argmax over unselected lights of J_l(Lambda_t); the selected light's
+    calibration precision is updated immediately (Sigma_phi,l divided by the regime
+    factor, i.e. lambda_l -> regime * lambda_l); then the next step
+  ordering: >-
+    each policy yields one full 142-light ordering per (object, level, regime);
+    the five budgets are prefixes of that ordering -- no separate per-budget pick
+  budget_fairness: >-
+    at budget b every policy improves exactly k = round(b*K) calibration blocks
+    (mechanical property of the prefix construction; asserted in tests)
+  tie_break: "ascending light index among objective ties"
+  mode_aware:
+    modes: >-
+      bottom-5 eigenvectors (ascending) of R = Finf^{-1/2} DeltaF Finf^{-1/2},
+      recomputed from the current Lambda_t at every step
+    derivative: >-
+      dDeltaF/dlambda_l = u_l K_l P_l K_l u_l^T with
+      K_l = (B_l^T B_l + Lambda_l)^{-1} and P_l the 3x3 selector of the light's
+      calibration block (frozen analytical form, CI06 T4.2)
+    g_lj: "a_j^T (dDeltaF/dlambda_l) a_j >= 0 for each tracked mode a_j"
+    aggregate: "G_l = (1/m) sum_j g_lj / (sum over unselected l' of g_l'j + eps)"
+    eps: 1.0e-12
+  e_opt:
+    objective: "lambda_min(DeltaF after the candidate's precision update)"
+  a_opt:
+    objective: "trace(pinv(DeltaF after the candidate's precision update))"
+    pinv: "Moore-Penrose; positive subspace = eigenvalues > 1e-12 * max eigenvalue"
+  d_opt:
+    objective: >-
+      logdet of the positive subspace of DeltaF after the candidate's precision
+      update (sum of log eigenvalues above the same relative threshold)
+  random:
+    permutations: 5
+    note: >-
+      the 5 orderings estimate the same-object random-policy expectation; they are
+      averaged into U_o,random and never counted as independent objects
+
+# -- 6. seeds --
+seeds:
+  bootstrap: 20260910
+  scene_subset: "default_rng([20260910, obj_idx]) -> choice(142, 48) then choice(P_full, 1200)"
+  corruption_draw: >-
+    default_rng([20260910, 7777, obj_idx, level_idx, seed_idx]); per light one axis
+    vector (3 draws), one raw angle N(0,1), one raw log-intensity N(0,1); the SAME
+    raw innovations are shared across all policies/budgets/regimes (paired), and the
+    effective corruption applies scale = 1/sqrt(regime) on selected lights, else 1,
+    multiplied by the level's sigma
+  random_permutation: "default_rng([20260911, obj_idx, regime_idx, perm_idx])"
+
+# -- 7. primary endpoint (frozen; lower is better) --
+endpoint:
+  per_run_error: >-
+    gauge-aligned albedo residual e (CI04 convention: e -= (e . rho_hat /
+    (rho_hat . rho_hat)) * rho_hat, applied per run) projected on the object-level
+    bottom-5 modes V_level, computed at base Sigma_phi(level) BEFORE any allocation:
+    E_run = sum_j (v_j^T e)^2
+  E_osb: "mean of E_run over levels x seeds"
+  U_os: >-
+    normalized trapezoidal AUC over the budget grid:
+    U = (1/(0.8-0.1)) * sum_i (E_i + E_{i+1})/2 * (b_{i+1} - b_i)
+  lower_is_better: true
+
+# -- 8. statistics --
+statistics:
+  primary: >-
+    Delta_random = median_o(U_o,mode_aware - U_o,random); Delta < 0 means benefit.
+    Paired object-level bootstrap, B=10000, seed=20260910. Reported per regime.
+  report_all_pairs: true          # all 11 object-level paired differences
+  sign_count: true                # exact 'k/11 objects improved'
+  secondary: >-
+    Delta_e_opt, Delta_a_opt, Delta_d_opt with the same machinery; beating E-opt is
+    NOT a success requirement
+  grade_rule: >-
+    strong: Delta_random benefit-significant AND at least one of Delta_e_opt /
+    Delta_a_opt / Delta_d_opt benefit-significant; neutral: Delta_random
+    benefit-significant, no classical baseline benefit-significant; negative:
+    Delta_random not benefit-significant (CI includes 0)
+
+# -- 9. result-grade wording (verbatim; no rewrite or upgrade permitted) --
+grades:
+  strong:
+    condition: "beats random AND at least one classical baseline (benefit-significant)"
+    wording: null
+    note: >-
+      actionability claim -- wording must be registered in docs/WORDING.md before any
+      use; no strong-grade sentence is pre-approved
+  neutral:
+    condition: "beats random, statistically indistinguishable from E/A/D-opt"
+    wording: >-
+      mode-derived sensitivity supports effective calibration decisions; the mode
+      decomposition's value remains directional interpretation
+  negative:
+    condition: "not stably better than random"
+    wording: >-
+      mode vulnerability is predictive but did not yield measurable allocation gains
+      under the tested policy
+  note: "any grade is written into the paper; a negative outcome triggers no remedial experiment"
+
+# -- 10. constants --
+constants:
+  eps: 1.0e-12
+  tracked_modes: "bottom-5 (ascending eigenvalues of R)"
+  estimator: "CI04 fixed-n_hat whitened per-pixel GLS (estimate_albedo), unchanged"
+  pinv_relative_tol: 1.0e-12
+  failure_policy: >-
+    engineering failures are allowed and logged; the exclusion vocabulary is closed
+    (technical_failure only); no result-driven exclusion or protocol change
+
+outputs:
+  experiment: experiments/openillumination_allocation.py
+  results_dir: results/openillumination/allocation/
+
+gating:
+  prereg_tag: allocation-prereg-frozen
+  prerun_tag: allocation-prerun
+  audit: >-
+    empirical runs are gated on the pre-run audit (code, config, leakage, budget
+    fairness); results are not part of the audit
