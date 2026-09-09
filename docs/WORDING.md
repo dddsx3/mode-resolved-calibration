@@ -27,6 +27,22 @@ Claims about the OpenIllumination benchmark may use exactly these forms:
   report the CI of the *within-resample paired difference*; never argue from two
   marginal CIs both crossing zero.
 
+## 2. Approved result-grade wording (allocation, expert-frozen)
+
+Grade A (strong result) — verbatim, registered before use:
+  "mode-resolved calibration analysis can support allocation decisions that
+  improve reconstruction under a fixed calibration budget."
+
+Grade B (neutral) — verbatim:
+  "mode-derived allocation improves over random allocation, while classical
+  optimal-design criteria achieve comparable aggregate performance; the mode
+  decomposition additionally exposes which vulnerable directions drive the
+  decision."
+
+Grade C (negative) — verbatim:
+  "mode-resolved vulnerability predicts degradation but did not produce a robust
+  downstream allocation advantage under the tested policy."
+
 ## 2. Banned sentence families
 
 - "better than classical criteria such as E-optimality … on every resolution level"

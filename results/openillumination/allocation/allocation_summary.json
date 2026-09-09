@@ -1,0 +1,379 @@
+{
+ "regimes": {
+  "10": {
+   "policy_deltas": {
+    "mode_aware": {
+     "median": -0.14991836138859455,
+     "ci95": [
+      -0.5503848805917048,
+      -0.0770425981954163
+     ],
+     "benefit_significant": true,
+     "per_object": {
+      "obj_03_pumpkin": -0.5503848805917048,
+      "obj_04_dolphin": -0.08996489327132319,
+      "obj_07_pumpkin2": -0.14991836138859455,
+      "obj_09_ball": -0.3682875429542736,
+      "obj_10_pumpkin3": -0.8081016173551407,
+      "obj_11_pine": -0.10031583370354898,
+      "obj_13_mushroom": -0.5119662475763536,
+      "obj_16_friends_cup": -0.630538251745445,
+      "obj_17_pumpkin5": -0.06453107445259562,
+      "obj_18_fabric_hat": -0.05198834656500647,
+      "obj_19_cylinder": -0.0770425981954163
+     },
+     "improved": 11
+    },
+    "e_opt": {
+     "median": -0.17040781991827186,
+     "ci95": [
+      -0.6728936804706069,
+      -0.10386395627494499
+     ],
+     "benefit_significant": true,
+     "per_object": {
+      "obj_03_pumpkin": -0.6728936804706069,
+      "obj_04_dolphin": -0.10033786157855319,
+      "obj_07_pumpkin2": -0.17040781991827186,
+      "obj_09_ball": -0.3696371382819341,
+      "obj_10_pumpkin3": -0.8551326295760766,
+      "obj_11_pine": -0.12928179840330045,
+      "obj_13_mushroom": -0.5164381252636198,
+      "obj_16_friends_cup": -0.942615354798375,
+      "obj_17_pumpkin5": -0.15992087496361085,
+      "obj_18_fabric_hat": -0.0496804679515388,
+      "obj_19_cylinder": -0.10386395627494499
+     },
+     "improved": 11
+    },
+    "a_opt": {
+     "median": -0.16954138690159704,
+     "ci95": [
+      -0.6733342393496327,
+      -0.10232065153997977
+     ],
+     "benefit_significant": true,
+     "per_object": {
+      "obj_03_pumpkin": -0.6733342393496327,
+      "obj_04_dolphin": -0.09987066991045403,
+      "obj_07_pumpkin2": -0.16954138690159704,
+      "obj_09_ball": -0.369384896746643,
+      "obj_10_pumpkin3": -0.8513444964461674,
+      "obj_11_pine": -0.12922090828737012,
+      "obj_13_mushroom": -0.5183087998877225,
+      "obj_16_friends_cup": -0.9252853105853955,
+      "obj_17_pumpkin5": -0.15675774547645682,
+      "obj_18_fabric_hat": -0.04969534580498599,
+      "obj_19_cylinder": -0.10232065153997977
+     },
+     "improved": 11
+    },
+    "d_opt": {
+     "median": -0.1673631041027919,
+     "ci95": [
+      -0.6706070333494956,
+      -0.10402590902297175
+     ],
+     "benefit_significant": true,
+     "per_object": {
+      "obj_03_pumpkin": -0.6706070333494956,
+      "obj_04_dolphin": -0.10402590902297175,
+      "obj_07_pumpkin2": -0.1673631041027919,
+      "obj_09_ball": -0.373377622210632,
+      "obj_10_pumpkin3": -0.8464723581629616,
+      "obj_11_pine": -0.11910030925547928,
+      "obj_13_mushroom": -0.5383755833845608,
+      "obj_16_friends_cup": -0.9141178991347619,
+      "obj_17_pumpkin5": -0.14826413318924597,
+      "obj_18_fabric_hat": -0.05280031697364074,
+      "obj_19_cylinder": -0.09477168678716977
+     },
+     "improved": 11
+    }
+   },
+   "grade": "strong",
+   "objects": [
+    "obj_03_pumpkin",
+    "obj_04_dolphin",
+    "obj_07_pumpkin2",
+    "obj_09_ball",
+    "obj_10_pumpkin3",
+    "obj_11_pine",
+    "obj_13_mushroom",
+    "obj_16_friends_cup",
+    "obj_17_pumpkin5",
+    "obj_18_fabric_hat",
+    "obj_19_cylinder"
+   ],
+   "Uos": {
+    "obj_03_pumpkin": {
+     "mode_aware": 0.41741735230399624,
+     "e_opt": 0.2949085524250941,
+     "a_opt": 0.29446799354606834,
+     "d_opt": 0.29719519954620544,
+     "random": 0.967802232895701
+    },
+    "obj_04_dolphin": {
+     "mode_aware": 0.07881800611449548,
+     "e_opt": 0.06844503780726548,
+     "a_opt": 0.06891222947536464,
+     "d_opt": 0.06475699036284692,
+     "random": 0.16878289938581867
+    },
+    "obj_07_pumpkin2": {
+     "mode_aware": 0.20231121788581696,
+     "e_opt": 0.18182175935613965,
+     "a_opt": 0.18268819237281447,
+     "d_opt": 0.1848664751716196,
+     "random": 0.3522295792744115
+    },
+    "obj_09_ball": {
+     "mode_aware": 0.23225810982666104,
+     "e_opt": 0.23090851449900052,
+     "a_opt": 0.23116075603429168,
+     "d_opt": 0.22716803057030266,
+     "random": 0.6005456527809346
+    },
+    "obj_10_pumpkin3": {
+     "mode_aware": 0.5016859303634429,
+     "e_opt": 0.45465491814250697,
+     "a_opt": 0.45844305127241625,
+     "d_opt": 0.46331518955562195,
+     "random": 1.3097875477185836
+    },
+    "obj_11_pine": {
+     "mode_aware": 0.12302779085462194,
+     "e_opt": 0.09406182615487046,
+     "a_opt": 0.0941227162708008,
+     "d_opt": 0.10424331530269164,
+     "random": 0.22334362455817092
+    },
+    "obj_13_mushroom": {
+     "mode_aware": 0.30530445340342044,
+     "e_opt": 0.3008325757161542,
+     "a_opt": 0.29896190109205145,
+     "d_opt": 0.2788951175952131,
+     "random": 0.817270700979774
+    },
+    "obj_16_friends_cup": {
+     "mode_aware": 0.8620424413975696,
+     "e_opt": 0.5499653383446396,
+     "a_opt": 0.567295382557619,
+     "d_opt": 0.5784627940082526,
+     "random": 1.4925806931430146
+    },
+    "obj_17_pumpkin5": {
+     "mode_aware": 0.19166899853770833,
+     "e_opt": 0.0962791980266931,
+     "a_opt": 0.09944232751384714,
+     "d_opt": 0.10793593980105799,
+     "random": 0.25620007299030395
+    },
+    "obj_18_fabric_hat": {
+     "mode_aware": 0.05879386453646627,
+     "e_opt": 0.06110174314993394,
+     "a_opt": 0.06108686529648675,
+     "d_opt": 0.057981894127832,
+     "random": 0.11078221110147274
+    },
+    "obj_19_cylinder": {
+     "mode_aware": 0.07587031238111301,
+     "e_opt": 0.049048954301584326,
+     "a_opt": 0.050592259036549535,
+     "d_opt": 0.05814122378935954,
+     "random": 0.1529129105765293
+    }
+   },
+   "grade_condition": "mode-aware stably beats random and at least one classical baseline",
+   "grade_wording": "mode-resolved calibration analysis can support allocation decisions that improve reconstruction under a fixed calibration budget."
+  },
+  "100": {
+   "policy_deltas": {
+    "mode_aware": {
+     "median": -0.27913386971453,
+     "ci95": [
+      -0.6842262817395595,
+      -0.10176168306021698
+     ],
+     "benefit_significant": true,
+     "per_object": {
+      "obj_03_pumpkin": -0.6842262817395595,
+      "obj_04_dolphin": -0.10176168306021698,
+      "obj_07_pumpkin2": -0.27913386971453,
+      "obj_09_ball": -0.47334409750252054,
+      "obj_10_pumpkin3": -0.9442508584248451,
+      "obj_11_pine": -0.11199548093748003,
+      "obj_13_mushroom": -0.6301397960194249,
+      "obj_16_friends_cup": -0.7936425770408864,
+      "obj_17_pumpkin5": -0.10387557927136876,
+      "obj_18_fabric_hat": -0.07223467866064884,
+      "obj_19_cylinder": -0.09765412465023639
+     },
+     "improved": 11
+    },
+    "e_opt": {
+     "median": -0.30286543953365097,
+     "ci95": [
+      -0.8829858752756095,
+      -0.12137065678621192
+     ],
+     "benefit_significant": true,
+     "per_object": {
+      "obj_03_pumpkin": -0.8829858752756095,
+      "obj_04_dolphin": -0.10877404039394394,
+      "obj_07_pumpkin2": -0.30286543953365097,
+      "obj_09_ball": -0.5125295621745569,
+      "obj_10_pumpkin3": -0.9557604127741937,
+      "obj_11_pine": -0.14163603998584903,
+      "obj_13_mushroom": -0.653391398116795,
+      "obj_16_friends_cup": -1.1727521330454334,
+      "obj_17_pumpkin5": -0.2061910953417861,
+      "obj_18_fabric_hat": -0.0701257641951345,
+      "obj_19_cylinder": -0.12137065678621192
+     },
+     "improved": 11
+    },
+    "a_opt": {
+     "median": -0.28682064767059273,
+     "ci95": [
+      -0.8786346511625012,
+      -0.11302294951360839
+     ],
+     "benefit_significant": true,
+     "per_object": {
+      "obj_03_pumpkin": -0.8786346511625012,
+      "obj_04_dolphin": -0.11302294951360839,
+      "obj_07_pumpkin2": -0.28682064767059273,
+      "obj_09_ball": -0.5146516828163616,
+      "obj_10_pumpkin3": -1.0169944535844413,
+      "obj_11_pine": -0.138895416682397,
+      "obj_13_mushroom": -0.653391398116795,
+      "obj_16_friends_cup": -1.1736003946956604,
+      "obj_17_pumpkin5": -0.20609046216722277,
+      "obj_18_fabric_hat": -0.07076723539705171,
+      "obj_19_cylinder": -0.10879883999134606
+     },
+     "improved": 11
+    },
+    "d_opt": {
+     "median": -0.2911318499805448,
+     "ci95": [
+      -0.8265638686102766,
+      -0.12358713174210073
+     ],
+     "benefit_significant": true,
+     "per_object": {
+      "obj_03_pumpkin": -0.8265638686102766,
+      "obj_04_dolphin": -0.12358713174210073,
+      "obj_07_pumpkin2": -0.2911318499805448,
+      "obj_09_ball": -0.5339339989690226,
+      "obj_10_pumpkin3": -0.9519052092057334,
+      "obj_11_pine": -0.13877296965953095,
+      "obj_13_mushroom": -0.6533957107965134,
+      "obj_16_friends_cup": -1.167258152099146,
+      "obj_17_pumpkin5": -0.15103473713953033,
+      "obj_18_fabric_hat": -0.06681179388728992,
+      "obj_19_cylinder": -0.11795951824828241
+     },
+     "improved": 11
+    }
+   },
+   "grade": "strong",
+   "objects": [
+    "obj_03_pumpkin",
+    "obj_04_dolphin",
+    "obj_07_pumpkin2",
+    "obj_09_ball",
+    "obj_10_pumpkin3",
+    "obj_11_pine",
+    "obj_13_mushroom",
+    "obj_16_friends_cup",
+    "obj_17_pumpkin5",
+    "obj_18_fabric_hat",
+    "obj_19_cylinder"
+   ],
+   "Uos": {
+    "obj_03_pumpkin": {
+     "mode_aware": 0.38514017565618147,
+     "e_opt": 0.18638058212013148,
+     "a_opt": 0.19073180623323976,
+     "d_opt": 0.24280258878546424,
+     "random": 1.0693664573957409
+    },
+    "obj_04_dolphin": {
+     "mode_aware": 0.07125799282982646,
+     "e_opt": 0.0642456354960995,
+     "a_opt": 0.05999672637643504,
+     "d_opt": 0.0494325441479427,
+     "random": 0.17301967589004344
+    },
+    "obj_07_pumpkin2": {
+     "mode_aware": 0.1771063831733157,
+     "e_opt": 0.15337481335419478,
+     "a_opt": 0.16941960521725302,
+     "d_opt": 0.16510840290730094,
+     "random": 0.45624025288784575
+    },
+    "obj_09_ball": {
+     "mode_aware": 0.22573131237257,
+     "e_opt": 0.18654584770053367,
+     "a_opt": 0.18442372705872886,
+     "d_opt": 0.16514141090606788,
+     "random": 0.6990754098750905
+    },
+    "obj_10_pumpkin3": {
+     "mode_aware": 0.42412036965373334,
+     "e_opt": 0.4126108153043848,
+     "a_opt": 0.3513767744941372,
+     "d_opt": 0.41646601887284507,
+     "random": 1.3683712280785785
+    },
+    "obj_11_pine": {
+     "mode_aware": 0.115939864269452,
+     "e_opt": 0.086299305221083,
+     "a_opt": 0.08903992852453504,
+     "d_opt": 0.08916237554740108,
+     "random": 0.22793534520693204
+    },
+    "obj_13_mushroom": {
+     "mode_aware": 0.2558583452035128,
+     "e_opt": 0.23260674310614274,
+     "a_opt": 0.23260674310614274,
+     "d_opt": 0.23260243042642434,
+     "random": 0.8859981412229377
+    },
+    "obj_16_friends_cup": {
+     "mode_aware": 0.8065374838932966,
+     "e_opt": 0.4274279278887495,
+     "a_opt": 0.4265796662385226,
+     "d_opt": 0.4329219088350368,
+     "random": 1.600180060934183
+    },
+    "obj_17_pumpkin5": {
+     "mode_aware": 0.19301304818755144,
+     "e_opt": 0.09069753211713412,
+     "a_opt": 0.09079816529169742,
+     "d_opt": 0.14585389031938986,
+     "random": 0.2968886274589202
+    },
+    "obj_18_fabric_hat": {
+     "mode_aware": 0.05446931149534099,
+     "e_opt": 0.05657822596085532,
+     "a_opt": 0.055936754758938105,
+     "d_opt": 0.0598921962686999,
+     "random": 0.12670399015598982
+    },
+    "obj_19_cylinder": {
+     "mode_aware": 0.06514136327353988,
+     "e_opt": 0.04142483113756435,
+     "a_opt": 0.05399664793243021,
+     "d_opt": 0.04483596967549385,
+     "random": 0.16279548792377627
+    }
+   },
+   "grade_condition": "mode-aware stably beats random and at least one classical baseline",
+   "grade_wording": "mode-resolved calibration analysis can support allocation decisions that improve reconstruction under a fixed calibration budget."
+  }
+ },
+ "note": "lower E_osb / lower AUC is better; Delta < 0 means the mode-aware policy improved reconstruction"
+}
