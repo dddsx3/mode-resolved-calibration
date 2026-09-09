@@ -1,0 +1,15 @@
+{
+ "head": "ddd44b5332de03337720ad9b1095b4a9d7ecdf6f",
+ "head_is_audited": true,
+ "tag_points_to_head": true,
+ "worktree_clean": true,
+ "f5_manifest_match": true,
+ "f5_files_checked": 7,
+ "f5_mismatches": [],
+ "checksum_failures": 0,
+ "pytest_summary": "90 passed in 25.88s",
+ "results_dir_clean": true,
+ "results_dir_extra": [],
+ "all_pass": true,
+ "timestamp_utc": "2026-09-09T12:11:25.926025+00:00"
+}

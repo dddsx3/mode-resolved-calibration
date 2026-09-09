@@ -51,6 +51,16 @@ levels, 20 seeds per cell, held-out objects):
   (per-level reversals disclosed: at L1, trace 0.455 > mode 0.245; at L3,
   logdet 0.700 > mode 0.673).
 
+On the preregistered allocation evaluation (same held-out cohort, budget grid
+{10%, 20%, 40%, 60%, 80%} of 142 lights, regimes 10×/100×):
+
+- Δ_random = median over objects of the per-object AUC difference (mode-aware −
+  random) = **−0.150** (10×) and **−0.279** (100×); paired object-cluster
+  bootstrap 95% CI [−0.550, −0.077] and [−0.684, −0.102]; 11/11 objects improved;
+- grade **strong**: mode-aware is benefit-significant vs random and at least one
+  classical optimal-design baseline; the classical criteria achieve comparable
+  aggregate performance.
+
 ![fig1](paper/figures/fig1_stratified_median.png)
 
 ![fig2](paper/figures/fig2_pooled.png)
@@ -80,12 +90,14 @@ DiLiGenT (official page) separately; metadata and manifests live in
 ## Repository layout
 
 - `src/calibinfo/` — library: information (Schur, retention, gauge, mode tracking),
-  estimators, datasets, metrics, io
+  estimators, datasets, metrics, allocation, io
 - `experiments/` — one entry-point script per experiment
 - `configs/` — frozen per-experiment protocol YAMLs
 - `tests/` — unit, known-answer, and reproduction tests
-- `results/` — frozen numerical artifacts (per-cell tables, summaries)
-- `docs/` — `EXPERIMENTS.md`, `REPRODUCIBILITY.md`, `DATA.md`
+- `results/` — frozen numerical artifacts (per-cell tables, summaries;
+  `results/openillumination/allocation/` holds the allocation results and
+  their `provenance/` records)
+- `docs/` — `EXPERIMENTS.md`, `REPRODUCIBILITY.md`, `DATA.md`, `WORDING.md`
 - `reproduce_paper.sh` — figures/tables regeneration
 
 ## Citation / License

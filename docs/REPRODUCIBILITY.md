@@ -73,7 +73,35 @@ the key sets match exactly.
 - `diligent_ablation` (→ `run_ablation`): identical to
   `results/diligent_ablation/ci05abl_ablation_summary.json`
 - cleanroom: a fresh virtualenv (`pip install -e .[dev,reproduce]`) runs the full
-  70-test suite green
+  test suite green — 85 passed / 5 skipped on machines without the raw datasets
+  (the 5 data-dependent tests skip), 90 passed on machines with them
+
+## Allocation evaluation (preregistered, run once)
+
+The allocation evaluation (`experiments/openillumination_allocation.py`, config
+`configs/openillumination_allocation.yaml`, frozen at tag
+`allocation-prereg-frozen`, audited state tag `allocation-prerun-audited`) was
+executed once on the cloud: 29,700 reconstructions, 33/33 cells, 0 failures,
+0 exclusions; pre-run seal output in
+`results/openillumination/allocation/provenance/A4_run_manifest.json`.
+
+- Reproducing its **statistics** needs no raw data: `uos_table.csv` +
+  `selection_orders.json` are committed, and `allocation_deltas.csv` /
+  `allocation_object_pairs.csv` / `allocation_summary.json` are re-derived from
+  them by the frozen `_analyze` (verified: cross-level means reproduce exactly).
+- Reproducing the **29,700-run simulation** itself requires the raw 11-object
+  data (see `docs/DATA.md`) and the driver preserved in
+  `results/openillumination/allocation/provenance/a4_cloud_driver.py`; completed
+  cells are skipped on re-run (resumable).
+
+## Provenance
+
+`results/openillumination/allocation/provenance/` records what code produced the
+allocation results and in what environment: the pre-run seal output
+(`A4_run_manifest.json`), the exact run driver (`a4_cloud_driver.py`), the frozen
+analysis script (`a5_analyze.py`), and the run-layer change record
+(`CHANGES_20260909.diff` — audited as grid/seed/statistics-neutral). See the
+`README.md` inside that directory for the full mapping.
 
 ## Checksums
 

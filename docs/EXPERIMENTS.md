@@ -138,6 +138,48 @@ Deterministic checks P1–P5 on d=100 diagonals / rank-deficient parallel sums /
 identities / identificable-overlap contracts. This is the gate any library change must
 re-pass.
 
+## 10. Calibration-allocation evaluation  (`experiments/openillumination_allocation.py`)
+
+Preregistered retrospective actionability evaluation on a fixed held-out cohort.
+Config: `configs/openillumination_allocation.yaml` (frozen at tag
+`allocation-prereg-frozen`, before any empirical allocation output).
+
+- **Dataset**: the 11 held-out OpenIllumination objects (cohort copied verbatim from
+  `configs/openillumination.yaml`; zero selection freedom). Positioning and the n=11
+  disclosure are recorded verbatim in the config's `positioning` field.
+- **Selection universe**: K = 142 lights per object; the frozen 48-light analysis
+  subset is Fisher-active, the remaining 94 lights are inactive placeholders
+  (u = 0) with zero effect on prediction or reconstruction.
+- **Regimes**: {10×, 100×} — the selected light's Σ_φ diagonal is divided by the
+  regime factor (equivalently λ_ℓ × regime).
+- **Budgets**: {0.1, 0.2, 0.4, 0.6, 0.8} of K → k = round(b·K) = {14, 28, 57, 85, 114}.
+- **Policies (five, one shared sequential frame)**: mode-aware (G_ℓ from the
+  per-light sensitivity kernel g_ℓj over the bottom-5 tracked modes, recomputed
+  each step), E-opt (λ_min gain), A-opt (trace(ΔF⁺) decrease), D-opt
+  (positive-subspace logdet gain), random (5 fixed-seed permutations estimating the
+  same-object random-policy expectation). Every policy yields one full 142-light
+  ordering per (object, level, regime); budgets are prefixes; the selected light's
+  precision is updated immediately before the next step; ties break on ascending
+  light index.
+- **Leakage surface**: the selector reads the whitened per-light blocks only
+  (u, M0, Λ₀, F∞, active mask); GT normals and reconstruction errors are not
+  representable in the selection state (asserted by `tests/test_allocation_known_answers.py`).
+- **Estimator / metric**: unchanged fixed-n̂ whitened per-pixel GLS;
+  per-run error = gauge-aligned albedo residual projected on the object's bottom-5
+  modes (V_level frozen at base Σ_φ before any allocation).
+- **Primary endpoint**: normalized trapezoidal AUC of the budget-curve error;
+  lower is better.
+- **Statistics**: Δ_random = median over the 11 objects of (U_mode − U_random);
+  paired object-cluster bootstrap B=10000, seed 20260910, resamples shared across
+  policies; all 11 paired differences + exact sign count reported; Δ_Eopt/Δ_Aopt/
+  Δ_Dopt as secondary; result grades strong/neutral/negative per the preregistered
+  rule (wording in `docs/WORDING.md`).
+- **Provenance**: run manifest, driver, analysis script and the run-layer change
+  record live in `results/openillumination/allocation/provenance/`.
+- **Output**: `results/openillumination/allocation/` — `per_run_errors.csv`,
+  `uos_table.csv`, `selection_orders.json`, `allocation_summary.json`,
+  `allocation_deltas.csv`, `allocation_object_pairs.csv`.
+
 ---
 
 **Reproduction contract**: every experiment script writes only statistical values and
