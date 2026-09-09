@@ -14,7 +14,7 @@ with `pytest tests/test_reproduction.py`.
 | N5 | Old pooled 0.728, cluster CI [0.705, 0.754] | `experiments/openillumination_validation.py` | `results/openillumination/ci04_formal_summary.json` |
 | N6 | Gauge closed form vs direct ≤ 3.9e-8 (25 decades of λ) | `experiments/gauge_spectrum.py` | `results/gauge_spectrum/ci02_formal_summary.json` |
 | N7 | Cov(x̂) vs σ²ΔF⁻¹ median ratio 1.0045 | `experiments/monte_carlo_validation.py` | `results/monte_carlo/ci03_formal_summary.json` |
-| N8 | CI05 taxonomy 55.9–1131.4×, median 273× | `experiments/diligent_sanity.py` (run_sanity) | `results/diligent/ci05_formal_summary.json` |
+| N8 | DiLiGenT taxonomy 55.9–1131.4×, median 273× | `experiments/diligent_sanity.py` (run_sanity) | `results/diligent/ci05_formal_summary.json` |
 | N9 | V1–V6 known-answer suite green | `tests/test_covariance_identity.py`, `test_gauge_closed_form.py`, `test_retention_bounds.py`, `test_parameterization.py`, `test_scale_invariance.py`, `test_mode_tracking.py` | `tests/_reference_impl.py` |
 
 ## Recompute procedure
@@ -45,7 +45,7 @@ the key sets match exactly.
 - `openillumination_severity` (prediction-side recompute, gate rel ≤ 1e-9; measured
   4.4e-12): regenerates `mode_ranking.csv`, `level_severity.csv`,
   `predictor_comparison.csv` bit-identically (byte-equal), and produces
-  `validation_summary.json` / `summary.json` under `results/openillumination/`
+  `validation_summary.json` under `results/openillumination/`
 - `diligent` (runner → `experiments/diligent_sanity.py::run_sanity`): identical to
   `results/diligent/ci05_formal_summary.json`
 - `diligent_ablation` (→ `run_ablation`): identical to
@@ -55,15 +55,22 @@ the key sets match exactly.
 
 ## Checksums
 
-`checksums.sha256` fixes every committed file of this repository (SHA-256, UTF-8 text
-mode). Regenerate after any content change with
+`checksums.sha256` fixes every committed file of this repository. **Basis: LF** —
+`.gitattributes` pins `* text eol=lf`, so working-tree bytes equal blob bytes on every
+platform. Regenerate after any content change with (2026-09-09):
 
 ```bash
-cd "$(dirname "$0")" && git ls-files -z | xargs -0 sha256sum | sort -k2 > checksums.sha256
+git ls-files | grep -v '^checksums.sha256$' | sort | xargs sha256sum > checksums.sha256
 ```
+
+Verify on any machine with `sha256sum -c checksums.sha256` (all lines must report OK).
 
 ## Frozen data contract
 
+- The point-wise CI [0.668, 0.783] embedded in `ci04_formal_summary.json` (flat
+  330-point bootstrap) is superseded by the object-cluster recomputation
+  [0.705, 0.754] (N5); the embedded value is retained only as part of the frozen run
+  record.
 - The per-cell tables under `results/openillumination/` are frozen; a mismatch between
   the manifest checksums and the files on disk means the artifacts were modified and
   the numbers must be treated as unverified.

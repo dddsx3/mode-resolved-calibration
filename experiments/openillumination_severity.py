@@ -343,39 +343,21 @@ def write_outputs(cfg, out, r2a, r2b, r2c, rows, spectra, gate_rel, qs, pooled_c
     sha = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True,
                          text=True, cwd=str(REPO)).stdout.strip()
     bd = dict(
-        r2a_stat=r2a["R_A"],
-        r2a_ci95=list(r2a["ci95"]),
+        RA=r2a["R_A"],
+        RA_ci95=list(r2a["ci95"]),
         positive_objects=r2a["n_pos_obj"],
-        rho_mode_strat=r2b["mode_point"],
+        stratified_median_mode=r2b["mode_point"],
+        stratified_median_mode_ci95=list(r2b["mode_ci"]),
         best_scalar_name=r2b["best_name"],
-        rho_best_scalar_strat=float(r2b["scalar_strat"][r2b["best_name"]]),
-        delta_mode=r2b["delta"],
+        stratified_median_best_scalar=float(r2b["scalar_strat"][r2b["best_name"]]),
+        delta_mode_vs_best_scalar=r2b["delta"],
         delta_mode_ci95=list(r2b["delta_ci"]),
         bootstrap_seed=cfg["bootstrap_seed"],
         config_sha256=_sha("configs/openillumination.yaml"),
-        artifact_sha256=_sha("results/openillumination/ci04_formal_summary.json"),
+        source_artifact_sha256=_sha("results/openillumination/ci04_formal_summary.json"),
         git_sha=sha)
     (outd / "validation_summary.json").write_text(
         json.dumps(bd, indent=1), encoding="utf-8")
-    # summary.json
-    (outd / "summary.json").write_text(json.dumps(dict(
-        r2a=dict(R_A=r2a["R_A"], ci95=list(r2a["ci95"]),
-                 n_pos_cells=r2a["n_pos_cells"], n_pos_obj=r2a["n_pos_obj"],
-                 cell_iqr=r2a["cell_iqr"], undefined_cells=r2a["undefined_cells"],
-                 n_cells=66),
-        r2b=dict(pooled=r2b["pooled"], within={p: {str(k): v for k, v in d.items()}
-                                               for p, d in r2b["within"].items()},
-                 strat={p: d["median"] for p, d in r2b["strat"].items()},
-                 mode_point=r2b["mode_point"], mode_ci=list(r2b["mode_ci"]),
-                 scalar_strat=r2b["scalar_strat"], best_name=r2b["best_name"],
-                 delta=r2b["delta"], delta_ci=list(r2b["delta_ci"]),
-                 pooled_cluster=dict(point=pooled_cluster[0],
-                                     ci95=list(pooled_cluster[1]))),
-        r2c=r2c,
-        recompute_gate_max_rel=gate_rel,
-        note="pooled = descriptive; within-level = co-primary; Δ_mode best-scalar "
-             "在 bootstrap replicate 内重选; R2-C secondary (ĵ_emin≡ĵ_mode 构造性)",
-    ), ensure_ascii=False, indent=1), encoding="utf-8")
     return bd
 
 

@@ -11,10 +11,11 @@ absorb the uncalibrated manifold of the scene, the information content along the
 calibratable subspace shrinks as the nuisance prior weakens (`Λ → 0`).  We study that
 shrinkage through the Schur complement (delta-Fisher information), its normalized
 retention spectrum, and the closed-form response of the gauge direction.  The main
-empirical result is that a *mode-resolved* criterion — the weakest retained mode —
-predicts controlled-corruption degradation on the OpenIllumination benchmark better
-than classical criteria such as E-optimality, trace, and log-determinant, on every
-resolution level measured.
+empirical result, on the OpenIllumination controlled-corruption benchmark:
+mode-resolved coincides with E-optimality on the tracked modes (max diff ≤ 1e-14)
+and improves the stratified median over trace and log-determinant (0.536 vs 0.418 /
+0.400) — object-cluster bootstrap 95% CI [−0.096, 0.858] (n = 11; not significant at
+the object level).
 
 ## Mathematical core
 
@@ -43,11 +44,12 @@ resolution level measured.
 On the OpenIllumination controlled-corruption benchmark (11 objects × 6 corruption
 levels, 20 seeds per cell, held-out objects):
 
-- mode-resolved pass rate RA = 0.90 (object-cluster bootstrap 95% CI [0.90, 0.95]);
-  every object positive (per-object median Spearman > 0);
-- stratified (fixed-level) median Spearman: mode-resolved 0.536 vs. the best
-  competing scalar criterion 0.418 (logdet) and 0.400 (trace) — the mode-resolved
-  criterion equals E-min on the tracked modes (identical to ≤1e-14).
+- median within-cell Spearman $R_A$ = 0.90 (object-cluster bootstrap 95% CI
+  [0.90, 0.95], 66/66 cells, 11/11 objects);
+- stratified (fixed-level) median Spearman 0.536 (mode-resolved) vs 0.418
+  (log-determinant) / 0.400 (trace) — best stratified median across levels
+  (per-level reversals disclosed: at L1, trace 0.455 > mode 0.245; at L3,
+  logdet 0.700 > mode 0.673).
 
 ![fig1](paper/figures/fig1_stratified_median.png)
 

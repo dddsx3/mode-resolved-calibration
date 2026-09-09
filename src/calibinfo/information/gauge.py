@@ -48,13 +48,3 @@ def gauge_response(B, cbar, lam, tol_rel=1e-12):
     out = dict(exact=exact if np.ndim(lam) else float(exact[0]),
                slope=slope, saturation=saturation, alpha=alpha, eigs=eigs)
     return out
-
-
-def mu_floor(scene_callable, tol_rel=1e-12):
-    """场景本征弱模式地板的操作性定义（占位接口，CI02 实现）。
-
-    去除 gauge 子空间后，uncalibrated/near-uncalibrated 基线中的
-    最小非 gauge Rayleigh/eigen floor。CI02（10）给出具体实现并绑定预注册阈值；
-    本占位仅声明接口契约，防各实验自行口径漂移。
-    """
-    raise NotImplementedError("μ_floor 的操作性定义在10（CI02）实现")

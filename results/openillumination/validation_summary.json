@@ -1,20 +1,24 @@
 {
- "r2a_stat": 0.8999999999999998,
- "r2a_ci95": [
+ "RA": 0.8999999999999998,
+ "RA_ci95": [
   0.8999999999999998,
   0.9499999999999998
  ],
  "positive_objects": 11,
- "rho_mode_strat": 0.5363636363636364,
+ "stratified_median_mode": 0.5363636363636364,
  "best_scalar_name": "P_emin",
- "rho_best_scalar_strat": 0.5363636363636364,
- "delta_mode": 0.0,
+ "stratified_median_best_scalar": 0.5363636363636364,
+ "delta_mode_vs_best_scalar": 0.0,
  "delta_mode_ci95": [
   -0.33333333333333326,
   0.0
  ],
  "bootstrap_seed": 20260908,
  "config_sha256": "67bcdea3f7fb0ed149113e5338d4c2f0c6132a61e1ab6732ac617ac3628ae890",
- "artifact_sha256": "0d45991f081cbceff92e5d5289fd9b7c7cd46eee547b9e92e8abd1c2ce3c5d6f",
- "git_sha": "b070f7e831f00bb60f6f533d2020af058e2cc8d4"
+ "source_artifact_sha256": "0d45991f081cbceff92e5d5289fd9b7c7cd46eee547b9e92e8abd1c2ce3c5d6f",
+ "git_sha": "b070f7e831f00bb60f6f533d2020af058e2cc8d4",
+ "stratified_median_mode_ci95": [
+  -0.09570528156054472,
+  0.85781990521327
+ ]
 }
