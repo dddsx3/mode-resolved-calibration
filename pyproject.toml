@@ -31,6 +31,7 @@ classifiers = [
 dependencies = [
     "numpy>=1.24",
     "scipy>=1.10",
+    "pyyaml>=6.0",
 ]
 
 [project.urls]
@@ -39,7 +40,7 @@ Issues = "https://github.com/dddsx3/mode-resolved-calibration/issues"
 
 [project.optional-dependencies]
 dev = ["pytest>=7"]
-reproduce = ["pyyaml>=6.0", "matplotlib>=3.7", "Pillow>=10.0"]
+reproduce = ["matplotlib>=3.7", "Pillow>=10.0"]
 examples = ["matplotlib>=3.7"]
 
 [tool.setuptools.packages.find]
