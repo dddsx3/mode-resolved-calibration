@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .[dev,examples]
+      - name: pytest
+        run: pytest
+      - name: wording / claim gate
+        run: pytest tests/test_wording_gate.py
+
+  frozen-evidence:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: checksums (published artifact integrity)
+        run: sha256sum -c checksums.sha256
+      - name: frozen-zone drift gate (nothing under the frozen paths may change
+          after tag science-closed)
+        run: |
+          BASE=$(git rev-parse science-closed)
+          CHANGED=$(git diff --name-only "$BASE" HEAD \
+            -- results/synthetic results/gauge_spectrum results/monte_carlo \
+               results/nonlinear results/diligent results/diligent_ablation \
+               results/openillumination/ci04_formal_summary.json \
+               results/openillumination/ci04_formal_manifest.json \
+               results/openillumination/mode_ranking.csv \
+               results/openillumination/level_severity.csv \
+               results/openillumination/predictor_comparison.csv \
+               configs/openillumination.yaml tests/test_reproduction.py)
+          if [ -n "$CHANGED" ]; then
+            echo "FROZEN PATHS MODIFIED:"; echo "$CHANGED"; exit 1
+          fi

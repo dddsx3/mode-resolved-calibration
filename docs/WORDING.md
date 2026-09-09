@@ -1,5 +1,11 @@
 # Neutral wording guide
 
+> **Dual role (Repo-First v1.0)**: this file is both (a) the approved wording
+> registry for the frozen benchmark evidence and (b) the **claims table for the
+> whole repository** — README, examples/, tutorials/, and docs pages may only
+> make numeric or comparative claims that are registered here and trace to
+> `results/**` or `examples/**` output. The claim gate scans all of them.
+
 This guide keeps every claim in this repository traceable to the committed data.
 It is a wording contract, not a governance document: the rules below exist so that
 README/docs statements never outrun what the files under `results/` actually contain.

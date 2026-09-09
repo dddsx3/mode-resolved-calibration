@@ -4,17 +4,43 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mode-resolved-calibration"
-version = "0.1.0"
-description = "Calibration-confidence continuum: mode-resolved effective information tools for photometric inverse problems (TCI project)"
+version = "0.2.0"
+description = "Mode-resolved calibration-confidence analysis for photometric and other linearized inverse problems with structured nuisance: Schur-complement delta-Fisher information, retention spectra, gauge response, and information-guided calibration allocation"
 requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "calibinfo authors" }]
+keywords = [
+    "inverse-problems",
+    "calibration",
+    "fisher-information",
+    "schur-complement",
+    "uncertainty-quantification",
+    "optimal-experiment-design",
+    "photometric-stereo",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Scientific/Engineering :: Physics",
+]
 dependencies = [
     "numpy>=1.24",
     "scipy>=1.10",
 ]
 
+[project.urls]
+Homepage = "https://github.com/dddsx3/mode-resolved-calibration"
+Issues = "https://github.com/dddsx3/mode-resolved-calibration/issues"
+
 [project.optional-dependencies]
 dev = ["pytest>=7"]
 reproduce = ["pyyaml>=6.0", "matplotlib>=3.7", "Pillow>=10.0"]
+examples = ["matplotlib>=3.7"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

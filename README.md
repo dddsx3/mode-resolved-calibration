@@ -1,21 +1,53 @@
 # mode-resolved-calibration
 
-Reproducibility package for the mode-resolved calibration-confidence continuum: a
-framework that scores an estimator's calibratability by the *weakest identifiable
-modes* of its Fisher information, rather than by aggregate spectral summaries.
+[![CI](https://github.com/dddsx3/mode-resolved-calibration/actions/workflows/ci.yml/badge.svg)](https://github.com/dddsx3/mode-resolved-calibration/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-## Overview
+**calibinfo** is a Python library for mode-resolved calibration-confidence
+analysis of linearized inverse problems with structured nuisance. Instead of
+compressing an estimator's information content into scalar summaries (trace,
+log-determinant, E-optimality), it tracks the *weakest identifiable modes* of
+the Fisher information — how much usable signal survives in each fragile
+direction as calibration uncertainty grows — and turns that mode-resolved
+sensitivity into actionable decisions, such as which instruments to recalibrate
+under a fixed budget.
 
-For a photometric inverse problem `y = A x + B δc + ε` with nuisance terms `δc` that
-absorb the uncalibrated manifold of the scene, the information content along the
-calibratable subspace shrinks as the nuisance prior weakens (`Λ → 0`).  We study that
-shrinkage through the Schur complement (delta-Fisher information), its normalized
-retention spectrum, and the closed-form response of the gauge direction.  The main
-empirical result, on the OpenIllumination controlled-corruption benchmark:
-mode-resolved coincides with E-optimality on the tracked modes (max diff ≤ 1e-14)
-and improves the stratified median over trace and log-determinant (0.536 vs 0.418 /
-0.400) — object-cluster bootstrap 95% CI [−0.096, 0.858] (n = 11; not significant at
-the object level).
+## Quickstart
+
+```python
+import numpy as np
+from calibinfo.information.schur import delta_f
+from calibinfo.information.retention import retention_spectrum
+
+# linearized model  y = A x + B dc + eps,  dc ~ N(0, Sigma_c)
+A = ...                      # (m, n) design for the parameters of interest
+B = ...                      # (m, q) design for the nuisance block
+Lam = ...                    # nuisance precision  Lambda = sigma^2 * Sigma_c^{-1}
+
+DeltaF, M, diag = delta_f(A, B, Lam)                 # Schur-complement information
+R = retention_spectrum(DeltaF, Finf)                 # normalized per-mode retention
+# the smallest eigenvalues of R are the fragile directions the library tracks
+```
+
+See `examples/` for complete runnable scripts — each generates its own synthetic
+data and figures on the fly, no downloads required.
+
+## Features
+
+- **Schur-complement delta-Fisher information** `ΔF(Λ)` with a single audited
+  implementation (SVD/lstsq paths; no raw solves on rank-deficient systems)
+- **Calibration-retention spectrum** `R(Λ) = F∞^{-1/2} ΔF(Λ) F∞^{-1/2} ∈ [0, I]`
+  with per-mode retention levels and continuous mode tracking across Λ
+- **Closed-form gauge response** `aᵀΔF(λ)a = Σᵢ αᵢ² sᵢ² λ/(sᵢ²+λ)` for gauge
+  directions, with the λ⋆ crossover diagnostic
+- **Known-answer test suite**: LO monotonicity, rank-deficient Λ = 0 routes,
+  gauge identities, per-light allocation sensitivity (analytic vs finite
+  difference), brute-force greedy cross-checks
+- **Information-guided calibration allocation**: per-light sensitivity kernels,
+  sequential selection under a precision budget, compared against E/A/D-optimal
+  greedy and random baselines
+- **Deterministic paired evaluation protocol**: shared raw innovations across
+  policies/budgets, object-level paired bootstrap
 
 ## Mathematical core
 
@@ -31,75 +63,49 @@ the object level).
 
    `R(Λ) = F∞^(−1/2) · ΔF(Λ) · F∞^(−1/2)`,   `0 ≼ R(Λ) ≼ I`
 
-   The eigenvalues `0 ≤ ρ₁ ≤ … ≤ ρ_q ≤ 1` are per-mode retention levels; the weakest
-   (bottom) modes are the smallest eigenvalues of `R(Λ)`, and the mode-resolved
-   criterion tracks those bottom modes across the hyperparameter path.
+   The eigenvalues `0 ≤ ρ₁ ≤ … ≤ ρ_q ≤ 1` are per-mode retention levels; the
+   weakest (bottom) modes are the smallest eigenvalues of `R(Λ)`, and the
+   mode-resolved criterion tracks those bottom modes across the hyperparameter
+   path.
 
 4. Gauge spectral response (closed form):
 
    `aᵀΔF(λ) a = Σᵢ αᵢ² sᵢ² λ / (sᵢ² + λ)`,   `(sᵢ², V) = eig(BᵀB)`,   `α = Vᵀ c̄`
 
-## Key results
+## Examples
 
-On the OpenIllumination controlled-corruption benchmark (11 objects × 6 corruption
-levels, 20 seeds per cell, held-out objects):
+`examples/` contains self-contained scripts that generate their own synthetic
+data and figures — clone-and-run, zero downloads:
 
-- median within-cell Spearman $R_A$ = 0.90 (object-cluster bootstrap 95% CI
-  [0.90, 0.95], 66/66 cells, 11/11 objects);
-- stratified (fixed-level) median Spearman 0.536 (mode-resolved) vs 0.418
-  (log-determinant) / 0.400 (trace) — best stratified median across levels
-  (per-level reversals disclosed: at L1, trace 0.455 > mode 0.245; at L3,
-  logdet 0.700 > mode 0.673).
+- retention spectrum and gauge response on a synthetic scene
+- mode-resolved vs scalar criteria under controlled nuisance corruption
+- a minimal calibration-allocation demo (small grid, runs in minutes)
 
-On the preregistered allocation evaluation (same held-out cohort, budget grid
-{10%, 20%, 40%, 60%, 80%} of 142 lights, regimes 10×/100×):
+## Benchmark reproduction
 
-- Δ_random = median over objects of the per-object AUC difference (mode-aware −
-  random) = **−0.150** (10×) and **−0.279** (100×); paired object-cluster
-  bootstrap 95% CI [−0.550, −0.077] and [−0.684, −0.102]; 11/11 objects improved;
-- grade **strong**: mode-aware is benefit-significant vs random and at least one
-  classical optimal-design baseline; the classical criteria achieve comparable
-  aggregate performance.
+The `results/`, `configs/`, and `experiments/` trees hold a frozen benchmark
+(OpenIllumination controlled-corruption study + DiLiGenT sanity + synthetic
+validity panels) that reproduced a research manuscript; its numbers, protocol,
+and provenance are documented in `docs/REPRODUCIBILITY.md` and
+`docs/EXPERIMENTS.md`, guarded by `tests/test_reproduction.py`. This benchmark
+is separate from the library API — the examples above never touch it.
 
-![fig1](paper/figures/fig1_stratified_median.png)
-
-![fig2](paper/figures/fig2_pooled.png)
-
-See `results/openillumination/` for the frozen per-cell tables and
-`tests/test_reproduction.py` for the independent recomputation of all headline numbers.
-
-## Reproduce
+## Installation
 
 ```bash
-python -m venv .venv && source .venv/bin/activate          # or: .venv\Scripts\activate
-pip install -e .
-pytest
-bash reproduce_paper.sh
+pip install -e .            # core (numpy, scipy)
+pip install -e .[dev]       # + pytest
+pip install -e .[examples]  # + matplotlib (for examples/figures)
 ```
 
-The first command fetches dependencies; the second runs the full test suite including
-the independent recomputation of the nine headline numbers; the third regenerates
-figures and tables from the frozen results.
+Requires Python ≥ 3.10.
 
-## Data
+## Contributing
 
-Raw benchmarks are not included. Download OpenIllumination (Hugging Face) and
-DiLiGenT (official page) separately; metadata and manifests live in
-`data/manifests/`. See `docs/DATA.md`.
-
-## Repository layout
-
-- `src/calibinfo/` — library: information (Schur, retention, gauge, mode tracking),
-  estimators, datasets, metrics, allocation, io
-- `experiments/` — one entry-point script per experiment
-- `configs/` — frozen per-experiment protocol YAMLs
-- `tests/` — unit, known-answer, and reproduction tests
-- `results/` — frozen numerical artifacts (per-cell tables, summaries;
-  `results/openillumination/allocation/` holds the allocation results and
-  their `provenance/` records)
-- `docs/` — `EXPERIMENTS.md`, `REPRODUCIBILITY.md`, `DATA.md`, `WORDING.md`
-- `reproduce_paper.sh` — figures/tables regeneration
+Bug reports and PRs welcome — see `CONTRIBUTING.md`. The known-answer test
+suite and the claim guard (`tests/test_wording_gate.py`) run on every change.
 
 ## Citation / License
 
-Cite via `CITATION.cff`. Licensed under the terms in `LICENSE`.
+Cite via `CITATION.cff` (software citation; research paper forthcoming).
+Licensed under the terms in `LICENSE`.
