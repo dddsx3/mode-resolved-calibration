@@ -74,6 +74,7 @@ def run(config_path=REPO / "configs/openillumination_allocation.yaml",
     U_rows = {}          # (obj, regime, policy) -> {budget: E_osb}
     orderings = {}       # (obj, level, regime, policy) -> full 142-light ordering
     per_run = []         # provenance: one row per reconstruction run
+    wiring_levels = []   # audit F1: base precision blocks per level (wiring gate)
 
     for obj_idx, obj_name in enumerate(cfg["cohort"]):
         obj = load_object(cfg["data_root"], obj_name, data_meta=cfg.get("data_meta"))
@@ -102,12 +103,20 @@ def run(config_path=REPO / "configs/openillumination_allocation.yaml",
             lam0142 = np.stack([np.eye(3)] * K)
             u142[scen.sel] = u_act
             M0142[scen.sel] = M0_act
+            # frozen wiring: base precision Lam0 = Sigma_phi(level)^{-1} on the
+            # analysis lights (preregistered; regime multiplies a selected light's
+            # block). Inactive placeholders keep the identity direction.
+            lam0142[scen.sel] = base_lam0
             active142 = np.zeros(K, bool)
             active142[scen.sel] = True
             state = SelectionState(u=u142, M0=M0142, lam0=lam0142,
                                    finf=finf, active=active142)
             assert state.u.shape[0] == K
+            # wiring gate (audit F1): the selection state must carry the level's
+            # base precision, not a level-independent placeholder
+            assert np.allclose(state.lam0[scen.sel], base_lam0)
             _deg, V_level = scen.predicted_degradation(gen.sigma_phi_diag())
+            wiring_levels.append(base_lam0.copy())
 
             for r_i, regime in enumerate(REGIMES):
                 # ---- selection (prediction side only) ----
@@ -152,6 +161,18 @@ def run(config_path=REPO / "configs/openillumination_allocation.yaml",
             for unit in E_sum[regime]:
                 for b in BUDGETS:
                     E_sum[regime][unit][b] /= n_mean
+        # audit F1 wiring gate (level dependence): with the base precision wired,
+        # per-level mode_aware orderings must not be identical across all levels --
+        # a level-independent triple would mean the wiring was lost again
+        if len(wiring_levels) == len(LEVELS) and len(LEVELS) > 1:
+            same = all(np.allclose(wiring_levels[0], w) for w in wiring_levels[1:])
+            assert not same, "base precision identical across levels: wiring lost"
+            mode_orders = [
+                tuple(orderings[f"{obj_name}|{level}|{REGIMES[0]}|mode_aware"])
+                for level in LEVELS]
+            assert not (mode_orders[0] == mode_orders[1] == mode_orders[2]), \
+                "mode_aware ordering level-independent: wiring lost"
+        del wiring_levels[:]
         for regime in REGIMES:
             for pol in DET_POLICIES:
                 U_rows[(obj_name, regime, pol)] = {b: E_sum[regime][pol][b] for b in BUDGETS}
