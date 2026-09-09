@@ -121,7 +121,6 @@ class NominalScene:
             (n @ t1.T).T * rho[None, :] * self.h,            # ∂I/∂θ  (L,P)
             (n @ t2.T).T * rho[None, :] * self.h,            # ∂I/∂ψ  (L,P)
         ], axis=-1)                                          # (L,P,3)
-        self.Finf = (self.s_hat ** 2 * self.w).sum(0) * 0 + (self.w * self.s_hat ** 2).sum(0) * 0
         # F∞（白化）：Σ_k w_kp·ŝ_kp² → 对角（逐像素）
         self.Finf_diag = (self.w * self.s_hat ** 2).sum(0)   # (P,)
 

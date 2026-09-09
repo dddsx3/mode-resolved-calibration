@@ -1,4 +1,4 @@
-"""Allocation known-answer tests (task book A2, V-B1..V-B6 + two bindings).
+"""Allocation known-answer tests (V-B1..V-B6 + two bindings).
 
 All tests run on small synthetic per-light systems in the CI04 whitened per-light
 form; none require the raw datasets.
@@ -257,3 +257,19 @@ def test_binding_paired_corruption_matches_generator():
         r2, dirs, gen.sig_logI, np.radians(gen.sig_deg), np.ones(6))
     assert np.allclose(d2a, d2b, rtol=0, atol=0)
     assert np.allclose(ga, gb, rtol=0, atol=0)
+
+
+def test_engine_zero_gain_tie_break():
+    """An active light with numerically-null Fisher presence (u ~ 1e-30) gains
+    exactly 0.0: the engine must resolve ties exactly like the full-scan reference
+    -- lowest index among the zero-gain holders, inactive lights included."""
+    u, M0, lam0, finf, active, _w, _s, _B = _random_blocks(seed=9, L=6, P=20)
+    u[2] *= 1e-20                       # active-but-null light at index 2
+    active = np.ones(6, bool)
+    active[:2] = False                  # inactive lights at LOWER indices 0, 1
+    state = SelectionState(u=u, M0=M0, lam0=lam0, finf=finf, active=active)
+    for policy in ("e_opt", "a_opt", "d_opt"):
+        o1, _ = select_ordering(state, policy)
+        o2, _ = _reference_greedy(state, policy)
+        assert o1 == o2
+        assert o1[-3:] == [0, 1, 2]     # zero-gain tail: ascending index

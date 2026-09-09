@@ -1,12 +1,13 @@
-# allocation pre-run frozen manifest (task book A2 T4.3)
+# allocation pre-run frozen manifest (audit-checklist revision)
 # sha256 of every implementation/config artifact; seeds are pinned inside
 # configs/openillumination_allocation.yaml (bootstrap 20260910; paired
 # corruption stream; random permutation stream 20260911).
+# Supersedes the manifest at tag allocation-prerun after the bug-fix round.
 
 88facb4ba7eece39d1f7bcfa16e2d8abbb84433b9b54cc9e4b0165900f29b6d8  configs/openillumination_allocation.yaml
 07df5c7067be78adf22da002bc60f4367b2a1a287fdbcf4f9c429c3fd2a1ba28  src/calibinfo/allocation/__init__.py
-76ab327ebb2c8fc839071056026b7053b798d467ef69180da2566ac1818666e6  src/calibinfo/allocation/blocks.py
-6e82e1df9e4e4c167706f6dfe0a75cc7ff9529ac399a4abbe046b1e805b46fbd  src/calibinfo/allocation/policies.py
+05893e04fced34ef39f6a3a52d1ed2a9f7d4de2324583b4ad2b7a166b21420d2  src/calibinfo/allocation/blocks.py
+4d96ffd8fdff2c047a0e4b8cd7a41f21738d303c1df47b560064f140791de06e  src/calibinfo/allocation/policies.py
 52c49f4e2a0375235b09d985f719f2cd61559e5a22861922d04a4bbc04438496  src/calibinfo/allocation/corruption.py
-9e3286f09c11be21ce60f5e5d84b6c3a994d03ea8cefbee33d887f752071d9cc  experiments/openillumination_allocation.py
-96c5ffa25cd166b4f749ac45bde17fe8235458d25e03c939086d912d3e79cabc  tests/test_allocation_known_answers.py
+dec43ae2b80806278d84e9bb23145fe77b31649442fcc745983025ba66c7c6ec  experiments/openillumination_allocation.py
+88ed4ef07e5c848f8f7b2acd9145c926fda15fc7d4b16e87de9b4111c623b52d  tests/test_allocation_known_answers.py

@@ -1,4 +1,4 @@
-"""Unified sequential selection policies (task book A1, frozen frame).
+"""Unified sequential selection policies (preregistered frame).
 
 Every policy produces one full ordering of the light universe:
 
@@ -84,6 +84,13 @@ def select_ordering(state, policy, regime=10.0, rng=None):
 
     Returns (ordering, steps): ordering is a permutation of range(L); steps records
     per-step {"index", "J"} for the deterministic policies (empty for random).
+
+    Exact-evaluation skip: inactive candidates (u_l = 0) have an identity candidate
+    update, so their gain is exactly 0.0 and never beats a strictly positive active
+    gain. When no active candidate strictly improves, the full-scan argmax with
+    ascending-index tie-break resolves over the zero-gain pool (inactive lights +
+    exactly-zero active gains) -- the branch below reproduces that resolution
+    exactly (V-B6's full-scan reference guards the equivalence).
     """
     L = state.u.shape[0]
     if policy == "random":
@@ -101,18 +108,27 @@ def select_ordering(state, policy, regime=10.0, rng=None):
     unselected = set(range(L))
 
     for _t in range(L):
-        best_idx, best_j = None, None
-        for idx in sorted(unselected):                     # ascending-index tie-break
-            if state.active[idx]:
-                K_old = sym_inv(state.M0[idx] + lam[idx])
-                K_new = sym_inv(state.M0[idx] + regime * lam[idx])
-                upd = (state.u[idx] @ (K_old - K_new)) @ state.u[idx].T
-                cand = objective_of(DF + upd, kind)
-                gain = (cur - cand) if kind == "a" else (cand - cur)
-            else:
-                gain = 0.0                                  # identity update
-            if best_j is None or gain > best_j:
-                best_idx, best_j = idx, gain
+        active_unselected = sorted(i for i in unselected if state.active[i])
+        gains = {}
+        for idx in active_unselected:                      # ascending-index scan
+            K_old = sym_inv(state.M0[idx] + lam[idx])
+            K_new = sym_inv(state.M0[idx] + regime * lam[idx])
+            upd = (state.u[idx] @ (K_old - K_new)) @ state.u[idx].T
+            cand = objective_of(DF + upd, kind)
+            gain = (cur - cand) if kind == "a" else (cand - cur)
+            gains[idx] = gain
+        max_active = max(gains.values(), default=0.0)
+        if max_active > 0.0:
+            best_idx = min(i for i, gv in gains.items() if gv == max_active)
+            best_j = max_active
+        else:
+            zero_pool = [i for i in unselected if not state.active[i]]
+            zero_pool += [i for i, gv in gains.items() if gv == 0.0]
+            if zero_pool:
+                best_idx, best_j = min(zero_pool), 0.0
+            else:                                          # all gains negative
+                best_idx = min(gains, key=lambda i: (-gains[i], i))
+                best_j = gains[best_idx]
         ordering.append(best_idx)
         unselected.remove(best_idx)
         steps.append({"index": best_idx, "J": float(best_j)})

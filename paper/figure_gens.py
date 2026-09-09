@@ -8,12 +8,11 @@ FIGS = Path(__file__).resolve().parents[1] / "paper" / "figures"
 
 
 def _load(name):
-    p = FROZEN / name
-    if not p.exists():
-        raise SystemExit(f"[make_figures] missing {p}; run the corresponding experiment first")
-    return json.loads(p.read_text(encoding="utf-8"))
-
-
+    hits = sorted(FROZEN.rglob(name))
+    if not hits:
+        raise SystemExit(f"[make_figures] missing {FROZEN / name}; "
+                         "run the corresponding experiment first")
+    return json.loads(hits[0].read_text(encoding="utf-8"))
 def fig3(out_dir):
     import numpy as np
     import matplotlib
@@ -42,7 +41,6 @@ def fig3(out_dir):
     plt.close(fig)
     print("[make_figures] Fig.3 ->", out)
     return out
-
 
 def fig4(out_dir):
     import numpy as np
@@ -73,7 +71,6 @@ def fig4(out_dir):
     plt.close(fig)
     print("[make_figures] Fig.4 ->", out)
     return out
-
 
 def fig5(out_dir):
     import numpy as np
@@ -106,7 +103,6 @@ def fig5(out_dir):
     print("[make_figures] Fig.5 ->", out)
     return out
 
-
 def fig7(out_dir):
     import matplotlib
     matplotlib.use("Agg")
@@ -135,7 +131,6 @@ def fig7(out_dir):
     print("[make_figures] Fig.7 ->", out)
     return out
 
-
 def fig8(out_dir):
     import numpy as np
     import matplotlib
@@ -160,7 +155,6 @@ def fig8(out_dir):
     plt.close(fig)
     print("[make_figures] Fig.8 ->", out)
     return out
-
 
 def fig9(out_dir):
     import matplotlib
@@ -196,42 +190,3 @@ def fig9(out_dir):
     print("[make_figures] Fig.9 ->", out)
     return out
 
-
-def fig2(out_dir):
-    """Fig.2 (draft) — theory anatomy：Schur 消元 / ΔF 绝对谱 / R∈[0,1] 三 panel
-    （数据：CI01 pilot summary 的双路线 checks + CI02 固定网格 retention）。"""
-    import numpy as np
-    import matplotlib
-    matplotlib.use("Agg")
-    import matplotlib.pyplot as plt
-    d = _load("ci02_formal_summary.json")["fig3"]
-    lam = np.array(d["lam_grid"])
-    fig, axes = plt.subplots(1, 3, figsize=(11, 3.0))
-    # 左: 块信息结构（示意）
-    axes[0].imshow([[1, 0.6, 0], [0.6, 1, 0.3], [0, 0.3, 1]], cmap="Blues", vmin=0, vmax=1.4)
-    axes[0].set_xticks([0, 1, 2]); axes[0].set_xticklabels(["x", "c", "x-cov"])
-    axes[0].set_yticks([0, 1, 2]); axes[0].set_yticklabels(["x", "c", "x-cov"])
-    axes[0].set_title("joint info H; Schur over c -> DeltaF", fontsize=9)
-    # 中: 绝对信息谱（ΔF 谱随 λ）
-    axes[1].plot(lam, np.array(d["closed"]), label="gauge dir (Prop.2)")
-    axes[1].axhline(d["floor"], color="gray", ls=":", label="mu_floor")
-    axes[1].set_xscale("log"); axes[1].set_yscale("log")
-    axes[1].set_title("absolute information spectrum", fontsize=9)
-    axes[1].legend(fontsize=7)
-    # 右: retention 谱（固定网格，弱 3 模式）
-    grid = np.array(d["fixed_log_grid"])
-    rho = np.array(d["rho_fixed_grid"])[:, :3]
-    for j in range(3):
-        axes[2].plot(10.0 ** grid, rho[:, j], label="mode %d" % j)
-    axes[2].set_xscale("log")
-    axes[2].set_ylim(-0.05, 1.05)
-    axes[2].set_title("retention spectrum R in [0,1]", fontsize=9)
-    axes[2].legend(fontsize=7)
-    fig.suptitle("Fig.2 (draft) - theory anatomy: two readouts, strictly separated",
-                 fontsize=10)
-    out = out_dir / "fig2_anatomy.png"
-    fig.tight_layout()
-    fig.savefig(out, dpi=150)
-    plt.close(fig)
-    print("[make_figures] Fig.2 ->", out)
-    return out
