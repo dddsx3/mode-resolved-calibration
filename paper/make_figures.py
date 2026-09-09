@@ -140,8 +140,6 @@ def _make_fig6(out_dir):
 
 import figure_gens as _g
 
-_GEN = {1: _make_fig1, 2: _make_fig2, 3: _g.fig3, 4: _g.fig4, 5: _g.fig5,
-        6: _make_fig6, 7: _g.fig7, 8: _g.fig8, 9: _g.fig9}
 
 
 def make_figure(n, out_dir=FIGS):
@@ -151,12 +149,58 @@ def make_figure(n, out_dir=FIGS):
     raise SystemExit(f"[make_figures] Fig.{n} recipe not implemented")
 
 
+def fig10_allocation_forest(out_dir):
+    """Fig.10 - allocation forest: per-policy AUC deltas vs random with
+    object-cluster bootstrap CIs, per regime (frozen allocation_deltas.csv)."""
+    import csv
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    path = FROZEN / "openillumination" / "allocation" / "allocation_deltas.csv"
+    if not path.exists():
+        raise SystemExit(f"[make_figures] missing {path}")
+    data = {}
+    for row in csv.DictReader(open(path, newline="", encoding="utf-8")):
+        data.setdefault(row["regime"], {})[row["policy"]] = row
+    order = ["mode_aware", "e_opt", "a_opt", "d_opt"]
+    labels = {"mode_aware": "mode-aware", "e_opt": "E-opt",
+              "a_opt": "A-opt", "d_opt": "D-opt"}
+    colors = {"mode_aware": "#D55E00", "e_opt": "#0072B2",
+              "a_opt": "#009E73", "d_opt": "#CC79A7"}
+    fig, axes = plt.subplots(1, 2, figsize=(9.6, 3.2), sharey=True)
+    ys = list(range(len(order)))[::-1]
+    for ax, regime in zip(axes, ["10", "100"]):
+        for y, pol in zip(ys, order):
+            r = data[regime][pol]
+            med, lo, hi = (float(r["median_delta"]), float(r["ci_lo"]),
+                           float(r["ci_hi"]))
+            ax.errorbar(med, y, xerr=[[med - lo], [hi - med]], fmt="o",
+                        color=colors[pol], ms=6, capsize=3)
+            ax.text(med, y + 0.18, r["improved_of_11"], ha="center", fontsize=7)
+        ax.axvline(0, color="k", lw=0.8, ls="--")
+        ax.set_yticks(ys)
+        ax.set_yticklabels([labels[q] for q in order])
+        ax.set_title(f"regime {regime}x", fontsize=10)
+        ax.set_xlabel("Delta AUC vs random (median, 95% CI)")
+    fig.suptitle("Fig.10 - allocation benefit vs random (per policy, both regimes)",
+                 fontsize=10)
+    fig.tight_layout()
+    out = out_dir / "fig10_allocation_forest.png"
+    fig.savefig(out, dpi=150)
+    print(f"[make_figures] Fig.10 -> {out}")
+    return out
+
+
+_GEN = {1: _make_fig1, 2: _make_fig2, 3: _g.fig3, 4: _g.fig4, 5: _g.fig5,
+        6: _make_fig6, 7: _g.fig7, 8: _g.fig8, 9: _g.fig9, 10: fig10_allocation_forest}
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--figure", type=int, required=True)
     args = ap.parse_args()
-    if args.figure not in range(1, 10):
-        raise SystemExit(f"--figure 须在 1–9（{FIGURES}）")
+    if args.figure not in range(1, 11):
+        raise SystemExit(f"--figure must be in 1-10 ({FIGURES})")
     out = make_figure(args.figure)
     print("[make_figures] done ->", out)
 

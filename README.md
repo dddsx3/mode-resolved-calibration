@@ -12,6 +12,8 @@ direction as calibration uncertainty grows — and turns that mode-resolved
 sensitivity into actionable decisions, such as which instruments to recalibrate
 under a fixed budget.
 
+![how it works](paper/figures/overview_schematic.png)
+
 ## Quickstart
 
 ```python
@@ -89,6 +91,25 @@ validity panels) that reproduced a research manuscript; its numbers, protocol,
 and provenance are documented in `docs/REPRODUCIBILITY.md` and
 `docs/EXPERIMENTS.md`, guarded by `tests/test_reproduction.py`. This benchmark
 is separate from the library API — the examples above never touch it.
+
+Key frozen results (11 held-out OpenIllumination objects, 66/66 cells):
+
+- median within-cell Spearman $R_A$ = 0.90 (object-cluster bootstrap 95% CI
+  [0.90, 0.95]);
+- stratified (fixed-level) median Spearman 0.536 (mode-resolved) vs 0.418
+  (log-determinant) / 0.400 (trace) — per-level reversals disclosed in
+  `docs/WORDING.md`;
+- preregistered allocation evaluation: mode-aware guidance improves
+  reconstruction over random allocation for 11/11 objects (Δ AUC −0.150 at 10×,
+  −0.279 at 100×; bootstrap 95% CI excludes 0; strong grade per the
+  preregistered rule — the classical E/A/D-opt baselines improve similarly,
+  see `allocation_deltas.csv`).
+
+![stratified medians](paper/figures/fig1_stratified_median.png)
+
+![pooled](paper/figures/fig2_pooled.png)
+
+![allocation forest](paper/figures/fig10_allocation_forest.png)
 
 ## Installation
 
