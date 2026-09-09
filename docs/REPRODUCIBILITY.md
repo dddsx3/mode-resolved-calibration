@@ -39,6 +39,20 @@ over another predictor. Comparisons against trace/logdet must report
 CI(ρ_mode − ρ_trace) computed within the same bootstrap resamples; comparing two
 marginal CIs is not a valid inference procedure.
 
+## Official data inventory (factual record, 2026-09-09)
+
+The official OpenIllumination OLAT manifest (`data_olat.json`, the only OLAT source of
+the authors' download script) contains exactly 20 objects (obj_01–obj_20): 11 form the
+frozen held-out cohort of this repository, 8 were consumed by the development manifest,
+and obj_20_greenhead lacks the required thumbnail layer — no further OLAT-eligible
+objects exist upstream. The "64 objects" figure refers to the official `data.json`
+lighting_patterns layer: its 13 lighting patterns are simultaneous groups of the 142
+LEDs, so the physical direction of every single LED is present in the data, but the
+per-LED separable observation structure required by the per-light calibration model is
+not. A 30-object independent cohort is therefore not constructible from the official
+distribution; the preregistered allocation evaluation is run on the fixed held-out
+cohort instead (`configs/openillumination_allocation.yaml`).
+
 ## Determinism record (reruns of 2026-09-09)
 
 Every rerun below was executed in a sandbox output root and diffed against the frozen
