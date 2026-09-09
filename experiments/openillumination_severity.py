@@ -11,10 +11,8 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import platform
 import subprocess
 import sys
-from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
@@ -303,8 +301,8 @@ def write_outputs(cfg, out, r2a, r2b, r2c, rows, spectra, gate_rel, qs, pooled_c
     import csv
     outd = Path(out)
     outd.mkdir(parents=True, exist_ok=True)
-    # cell_mode_scores.csv（330 行）
-    with open(outd / "cell_mode_scores.csv", "w", newline="", encoding="utf-8") as f:
+    # mode_ranking.csv（330 行）
+    with open(outd / "mode_ranking.csv", "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(["object_id", "level", "ctype", "mode_id", "pred_deg", "emp_deg",
                     "rho", "seed_count"])
@@ -313,8 +311,8 @@ def write_outputs(cfg, out, r2a, r2b, r2c, rows, spectra, gate_rel, qs, pooled_c
                 w.writerow([r["object"], r["level"], r["ctype"], j,
                             r["pred_deg"][j], r["emp_deg"][j],
                             1.0 / r["pred_deg"][j], r["n_seeds"]])
-    # level_severity_scores.csv（66 行，含 q 与 scalar predictors）
-    with open(outd / "level_severity_scores.csv", "w", newline="", encoding="utf-8") as f:
+    # level_severity.csv（66 行，含 q 与 scalar predictors）
+    with open(outd / "level_severity.csv", "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(["object_id", "level", "ctype", "q", "T_ol",
                     "P_mode", "P_trace", "P_logdet", "P_emin", "P_corr"])
@@ -326,8 +324,8 @@ def write_outputs(cfg, out, r2a, r2b, r2c, rows, spectra, gate_rel, qs, pooled_c
                         float(np.max(r["emp_deg"])),
                         p_mode_from_pred_deg(np.asarray(r["pred_deg"], float)),
                         ps["P_trace"], ps["P_logdet"], ps["P_emin"], r["level"]])
-    # table_R1.csv（固定布局）
-    with open(outd / "table_R1.csv", "w", newline="", encoding="utf-8") as f:
+    # predictor_comparison.csv（固定布局）
+    with open(outd / "predictor_comparison.csv", "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(["Predictor", "Pooled_rho_descriptive", "L1", "L2", "L3", "L4", "L5", "L6",
                     "Stratified_median_rho", "Cluster95CI"])
@@ -341,10 +339,10 @@ def write_outputs(cfg, out, r2a, r2b, r2c, rows, spectra, gate_rel, qs, pooled_c
             ci = (f"[{r2b['mode_ci'][0]:.3f},{r2b['mode_ci'][1]:.3f}]" if p == "P_mode" else "—")
             w.writerow([label, f"{r2b['pooled'][p]:.4f}"] + lvls
                        + [f"{s['median']:.4f}" if np.isfinite(s['median']) else "insufficient strata", ci])
-    # analysis summary
+    # analysis summary (statistical values only)
     sha = subprocess.run(["git", "rev-parse", "HEAD"], capture_output=True,
                          text=True, cwd=str(REPO)).stdout.strip()
-    summary = dict(
+    bd = dict(
         r2a_stat=r2a["R_A"],
         r2a_ci95=list(r2a["ci95"]),
         positive_objects=r2a["n_pos_obj"],
@@ -359,18 +357,6 @@ def write_outputs(cfg, out, r2a, r2b, r2c, rows, spectra, gate_rel, qs, pooled_c
         git_sha=sha)
     (outd / "validation_summary.json").write_text(
         json.dumps(bd, indent=1), encoding="utf-8")
-    # provenance.json
-    (outd / "provenance.json").write_text(json.dumps(dict(
-        experiment="openillumination_severity",
-        git_sha=sha,
-        config="configs/openillumination.yaml",
-        config_sha256=_sha("configs/openillumination.yaml"),
-        artifacts={f: _sha(f) for f in [
-            "results/openillumination/ci04_formal_summary.json",
-            "results/openillumination/ci04_formal_manifest.json"]},
-        platform=platform.platform(),
-        written_utc=datetime.now(timezone.utc).isoformat(),
-    ), indent=1), encoding="utf-8")
     # summary.json
     (outd / "summary.json").write_text(json.dumps(dict(
         r2a=dict(R_A=r2a["R_A"], ci95=list(r2a["ci95"]),
@@ -413,7 +399,7 @@ def main():
           f"Δ={r2b['delta']:+.4f} CI={r2b['delta_ci']}")
     print(f"[severity] R2-B pooled(descriptive): "
           + ", ".join(f"{k}={v:+.4f}" for k, v in r2b["pooled"].items()))
-    # T9.1: pooled Spearman 的 object-cluster bootstrap CI（整体替换旧 330-point CI）
+    # pooled Spearman object-cluster bootstrap CI (replaces the flat 330-point CI)
     obj_pts = {}
     for r in rows:
         for P, E in zip(r["pred_deg"], r["emp_deg"]):

@@ -52,7 +52,7 @@ def main():
     mod_name, fn_name = RUNNERS[args.experiment]
     result = getattr(importlib.import_module(mod_name), fn_name)(config, run_dir)
 
-    frozen = ROOT / "results" / args.experiment
+    frozen = Path(args.output_root) / args.experiment
     frozen.mkdir(parents=True, exist_ok=True)
     stem = f"{args.experiment}_{config.get('run_name', 'run')}"
     # results/ holds summaries + manifests only (provenance goes beside the summary)

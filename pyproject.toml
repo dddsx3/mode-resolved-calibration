@@ -14,6 +14,7 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=7"]
+reproduce = ["pyyaml>=6.0", "matplotlib>=3.7", "Pillow>=10.0"]
 
 [tool.setuptools.packages.find]
 where = ["src"]

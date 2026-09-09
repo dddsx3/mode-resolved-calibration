@@ -31,5 +31,7 @@ def test_config_hash_sensitivity():
 
 
 def test_git_sha_present_in_repo():
-    mf = run_manifest(config={}, repo_root=".")
+    from pathlib import Path
+    repo_root = str(Path(__file__).resolve().parents[1])
+    mf = run_manifest(config={}, repo_root=repo_root)
     assert mf["git_sha"] and len(mf["git_sha"]) == 40

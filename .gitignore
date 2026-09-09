@@ -57,3 +57,6 @@ outputs/
 
 # Test cache
 .pytest_cache/
+
+# regenerated run outputs (frozen artifacts live in results/)
+results/raw/

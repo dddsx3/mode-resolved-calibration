@@ -49,6 +49,10 @@ levels, 20 seeds per cell, held-out objects):
   competing scalar criterion 0.418 (logdet) and 0.400 (trace) — the mode-resolved
   criterion equals E-min on the tracked modes (identical to ≤1e-14).
 
+![fig1](paper/figures/fig1_stratified_median.png)
+
+![fig2](paper/figures/fig2_pooled.png)
+
 See `results/openillumination/` for the frozen per-cell tables and
 `tests/test_reproduction.py` for the independent recomputation of all headline numbers.
 

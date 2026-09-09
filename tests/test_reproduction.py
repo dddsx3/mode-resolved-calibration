@@ -173,7 +173,7 @@ def test_N8_taxonomy():
 
 # --------------------------------------------------------------- N9 (known-answer V1-V6)
 def test_N9_known_answer_suite_present():
-    """N9: the V1-V6 known-answer tests are part of the suite and green (G2).
+    """N9: the V1-V6 known-answer tests are part of the standard suite.
     They are exercised by the standard pytest run; this guard confirms collection."""
     import subprocess, sys
     out = subprocess.run(

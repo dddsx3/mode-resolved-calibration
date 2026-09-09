@@ -18,6 +18,81 @@ FIGS = ROOT / "paper" / "figures"
 FIGURES = {f"Fig.{i}" for i in range(1, 10)}
 
 
+def _make_fig1(out_dir):
+    """Fig.1 key result: fixed-level (stratified) median Spearman per predictor,
+    rebuilt from results/openillumination/predictor_comparison.csv."""
+    import csv
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    rows = list(csv.DictReader(
+        (FROZEN / "openillumination" / "predictor_comparison.csv").open(
+            newline="", encoding="utf-8")))
+    names, vals = [], []
+    for r in rows:
+        try:
+            vals.append(float(r["Stratified_median_rho"]))
+            names.append(r["Predictor"])
+        except ValueError:
+            pass
+    fig, ax = plt.subplots(figsize=(6, 3.4))
+    bars = ax.bar(names, vals, color="#1f77b4", width=0.6)
+    bars[names.index("mode-resolved")].set_color("#d62728")
+    ax.axhline(0, color="k", lw=0.8)
+    ax.set_ylabel("fixed-level median Spearman")
+    ax.set_ylim(-0.2, 0.8)
+    ax.set_title("Fig.1 · fixed-level severity: mode-resolved vs scalar criteria")
+    fig.tight_layout()
+    out = out_dir / "fig1_stratified_median.png"
+    fig.savefig(out, dpi=150)
+    print(f"[make_figures] Fig.1 -> {out}")
+    return out
+
+
+def _make_fig2(out_dir):
+    """Fig.2 key result: pooled descriptive Spearman per predictor and the
+    mode-resolved pass rate RA, rebuilt from results/openillumination CSVs."""
+    import csv
+    from io import StringIO
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import numpy as np
+    from scipy.stats import spearmanr
+    rows = list(csv.DictReader(
+        (FROZEN / "openillumination" / "level_severity.csv").open(
+            newline="", encoding="utf-8")))
+    T = [float(r["T_ol"]) for r in rows]
+    fig, axes = plt.subplots(1, 2, figsize=(8.5, 3.4))
+    preds = ["P_mode", "P_emin", "P_logdet", "P_trace", "P_corr"]
+    labels = ["mode", "E-min", "logdet", "trace", "corr"]
+    ax = axes[0]
+    for p, lab in zip(preds, labels):
+        ax.scatter([float(r[p]) for r in rows], T, s=10, alpha=0.65, label=lab)
+    ax.set_xlabel("predicted damage")
+    ax.set_ylabel("empirical degradation (log)")
+    ax.set_yscale("log")
+    ax.set_title("Fig.2a · per-cell predictions")
+    ax.legend(fontsize=7)
+    ax = axes[1]
+    pooled = {lab: spearmanr([float(r[p]) for r in rows], T).statistic
+              for p, lab in zip(preds, labels)}
+    pooled["magnitude"] = spearmanr([float(r["level"]) for r in rows], T).statistic
+    ax.bar(pooled.keys(), pooled.values(), color="#1f77b4")
+    ax.axhline(0, color="k", lw=0.8)
+    ax.set_ylim(0, 1.0)
+    ax.set_title("Fig.2b · pooled Spearman")
+    for i, k in enumerate(pooled):
+        ax.text(i, pooled[k] + 0.02, f"{pooled[k]:.3f}", ha="center", fontsize=8)
+    fig.suptitle("Fig.2 · pooled prediction quality (RA = 0.90, CI [0.90, 0.95])",
+                 fontsize=10)
+    fig.tight_layout()
+    out = out_dir / "fig2_pooled.png"
+    fig.savefig(out, dpi=150)
+    print(f"[make_figures] Fig.2 -> {out}")
+    return out
+
+
 def _make_fig6(out_dir):
     """Fig.6 · linearization validity envelope: mask-flip rate × k heatmap,
     colored by theoretical error (weak-mode median |emp/pred − 1|); 10% boundary line."""
@@ -65,58 +140,15 @@ def _make_fig6(out_dir):
 
 import figure_gens as _g
 
-_GEN = {2: _g.fig2, 3: _g.fig3, 4: _g.fig4, 5: _g.fig5, 6: _make_fig6, 7: _g.fig7,
-        8: _g.fig8, 9: _g.fig9}
-
-
-def _provenance(n, out_path):
-    import hashlib
-    import subprocess
-    sha = subprocess.run(["git", "rev-parse", "HEAD"],
-                         cwd=str(FIGS.resolve().parents[2]),
-                         capture_output=True, text=True).stdout.strip()
-    src = {"Fig.3": "gauge_spectrum/ci02_formal_summary.json", "Fig.4": "gauge_spectrum/ci02_formal_summary.json",
-           "Fig.5": "monte_carlo/ci03_formal_summary.json", "Fig.6": "nonlinear/ci03nl_nl_formal_summary.json",
-           "Fig.7": "openillumination/ci04_formal_summary.json", "Fig.8": "diligent/ci05_formal_summary.json",
-           "Fig.9": "diligent_ablation/ci05abl_ablation_summary.json"}.get("Fig.%d" % n)
-    prov = dict(figure=n, png=str(out_path), git_sha=sha, artifact=src,
-                manifest_hash=None if src is None else
-                hashlib.sha256((FROZEN / src).read_bytes()).hexdigest()[:16])
-    pp = FIGS.parent / "provenance" / ("fig%d.json" % n)
-    pp.parent.mkdir(parents=True, exist_ok=True)
-    pp.write_text(json.dumps(prov, indent=1), encoding="utf-8")
-    print("[make_figures] provenance ->", pp)
+_GEN = {1: _make_fig1, 2: _make_fig2, 3: _g.fig3, 4: _g.fig4, 5: _g.fig5,
+        6: _make_fig6, 7: _g.fig7, 8: _g.fig8, 9: _g.fig9}
 
 
 def make_figure(n, out_dir=FIGS):
     out_dir.mkdir(parents=True, exist_ok=True)
     if n in _GEN:
         return _GEN[n](out_dir)
-    src = FROZEN / "synthetic" / "ci01_formal_summary.json"
-    if not src.exists():
-        raise SystemExit(f"[make_figures] missing {src} — first run scripts/run_experiments.py (figures reuse results/ only)")
-    data = json.loads(src.read_text(encoding="utf-8"))
-    try:
-        import matplotlib
-        matplotlib.use("Agg")
-        import matplotlib.pyplot as plt
-    except ImportError:
-        raise SystemExit("[make_figures] 需要 matplotlib（pip install matplotlib）")
-    fig, ax = plt.subplots(figsize=(5, 3.2))
-    cases = [r["case"] for r in data["checks"]]
-    errs = [r["rel_err"] for r in data["checks"]]
-    ax.bar(range(len(errs)), [max(e, 1e-18) for e in errs], log=True)
-    ax.set_xticks(range(len(cases)))
-    ax.set_xticklabels(cases, rotation=20, ha="right", fontsize=7)
-    ax.axhline(1e-10, color="r", ls="--", lw=1, label="1e-10 gate")
-    ax.set_ylabel("dual-route rel err (log)")
-    ax.set_title(f"Fig.{n} (draft) — CI01 dual-route checks, run {data.get('run_name','pilot')}")
-    ax.legend()
-    out = out_dir / f"fig{n}_draft.png"
-    fig.tight_layout()
-    fig.savefig(out, dpi=150)
-    print(f"[make_figures] Fig.{n} -> {out}")
-    return out
+    raise SystemExit(f"[make_figures] Fig.{n} recipe not implemented")
 
 
 def main():
@@ -126,7 +158,7 @@ def main():
     if args.figure not in range(1, 10):
         raise SystemExit(f"--figure 须在 1–9（{FIGURES}）")
     out = make_figure(args.figure)
-    _provenance(args.figure, out)
+    print("[make_figures] done ->", out)
 
 
 if __name__ == "__main__":

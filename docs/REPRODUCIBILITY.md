@@ -31,6 +31,28 @@ B=10000/seed 20260908, pooled statistics) — it does not import the experiment 
 so it double-checks the frozen numbers rather than re-executing the computation that
 produced them.
 
+## Determinism record (reruns of 2026-09-09)
+
+Every rerun below was executed in a sandbox output root and diffed against the frozen
+artifact. No numeric value differs beyond 1e-8 on any of the 824+ compared leaves, and
+the key sets match exactly.
+
+- `synthetic` (runner → `experiments/numerical_identities.py`): identical to
+  `results/synthetic/ci01_formal_summary.json`
+- `gauge_spectrum`: identical to `results/gauge_spectrum/ci02_formal_summary.json`
+- `monte_carlo`: identical to `results/monte_carlo/ci03_formal_summary.json`
+- `nonlinear`: identical to `results/nonlinear/ci03nl_nl_formal_summary.json`
+- `openillumination_severity` (prediction-side recompute, gate rel ≤ 1e-9; measured
+  4.4e-12): regenerates `mode_ranking.csv`, `level_severity.csv`,
+  `predictor_comparison.csv` bit-identically (byte-equal), and produces
+  `validation_summary.json` / `summary.json` under `results/openillumination/`
+- `diligent` (runner → `experiments/diligent_sanity.py::run_sanity`): identical to
+  `results/diligent/ci05_formal_summary.json`
+- `diligent_ablation` (→ `run_ablation`): identical to
+  `results/diligent_ablation/ci05abl_ablation_summary.json`
+- cleanroom: a fresh virtualenv (`pip install -e .[dev,reproduce]`) runs the full
+  70-test suite green
+
 ## Checksums
 
 `checksums.sha256` fixes every committed file of this repository (SHA-256, UTF-8 text
