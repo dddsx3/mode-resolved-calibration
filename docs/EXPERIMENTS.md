@@ -172,13 +172,37 @@ Config: `configs/openillumination_allocation.yaml` (frozen at tag
 - **Statistics**: Δ_random = median over the 11 objects of (U_mode − U_random);
   paired object-cluster bootstrap B=10000, seed 20260910, resamples shared across
   policies; all 11 paired differences + exact sign count reported; Δ_Eopt/Δ_Aopt/
-  Δ_Dopt as secondary; result grades strong/neutral/negative per the preregistered
-  rule (wording in `docs/WORDING.md`).
+  Δ_Dopt as secondary; frozen result grades strong/neutral/negative per the
+  preregistered rule (historical internal labels — see the semantic erratum in
+  `docs/WORDING.md`: the award tested beating random, not superiority over the
+  classical baselines; public text says "actionable outcome vs random").
 - **Provenance**: run manifest, driver, analysis script and the run-layer change
   record live in `results/openillumination/allocation/provenance/`.
 - **Output**: `results/openillumination/allocation/` — `per_run_errors.csv`,
   `uos_table.csv`, `selection_orders.json`, `allocation_summary.json`,
-  `allocation_deltas.csv`, `allocation_object_pairs.csv`.
+  `allocation_deltas.csv`, `allocation_object_pairs.csv`,
+  `allocation_policy_pairwise.csv`, `allocation_random48_per_run.csv`,
+  `allocation_random48_summary.json`.
+
+Post-hoc analyses (2026-09-10, registered in `docs/WORDING.md` §4; no new
+deterministic policy runs):
+
+- **Paired policy comparison** (`provenance/a5_pairwise.py` →
+  `allocation_policy_pairwise.csv`, labelled `posthoc_paired_comparison`):
+  mode-aware vs each classical baseline on paired differences with the identical
+  bootstrap. Classical E/A/D-opt greedy achieve modestly lower AUC than
+  mode-aware (all six paired 95% CIs exclude 0; median paired difference
+  +0.019 to +0.027).
+- **`random_active48` attribution control**
+  (`experiments/openillumination_allocation_random48.py` →
+  `allocation_random48_summary.json`, labelled `posthoc_attribution_control` —
+  the single bounded experiment authorized after science closure): uniform
+  permutations over the 48 Fisher-active lights only, same cohort/levels/seeds/
+  regimes/budgets and paired raw innovations. Restricting random to the active
+  set removes the mode-aware advantage entirely (Δ(mode − random48) = +0.014 at
+  10× / +0.019 at 100×, CIs span 0, 3/11 objects), while
+  random48 − random_full = −0.198 / −0.342 (CIs exclude 0): the measured benefit
+  over full-universe random is an active-set effect, not a mode-ordering effect.
 
 ---
 

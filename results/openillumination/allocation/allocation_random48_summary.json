@@ -1,0 +1,207 @@
+{
+ "analysis_status": "posthoc_attribution_control",
+ "note": "random_active48 replaces the full-universe random baseline with uniform permutations over the 48 Fisher-active analysis lights only; paired raw innovations and identical bootstrap machinery as the frozen benchmark. Delta < 0 = the first-named policy has lower AUC (better).",
+ "protocol": {
+  "cohort": [
+   "obj_03_pumpkin",
+   "obj_04_dolphin",
+   "obj_07_pumpkin2",
+   "obj_09_ball",
+   "obj_10_pumpkin3",
+   "obj_11_pine",
+   "obj_13_mushroom",
+   "obj_16_friends_cup",
+   "obj_17_pumpkin5",
+   "obj_18_fabric_hat",
+   "obj_19_cylinder"
+  ],
+  "levels": [
+   0.2,
+   0.5,
+   1.0
+  ],
+  "seeds_per_level": 10,
+  "regimes": [
+   10,
+   100
+  ],
+  "budgets": [
+   0.1,
+   0.2,
+   0.4,
+   0.6,
+   0.8
+  ],
+  "budget_counts": [
+   14,
+   28,
+   57,
+   85,
+   114
+  ],
+  "n_perms": 5,
+  "perm_seed_space": "[20260912, obj_idx, r_i, p_i]",
+  "paired_innovation_seed_space": "[20260910, 7777, obj_idx, lv_i, s_i]",
+  "bootstrap_seed": 20260910,
+  "B": 10000,
+  "saturation": "k >= 48 covers all 48 active lights; budgets 57/85/114 share the saturated reconstruction"
+ },
+ "regimes": {
+  "10": {
+   "mode_minus_random_full": {
+    "median": -0.14991836138859455,
+    "ci95": [
+     -0.5503848805917048,
+     -0.0770425981954163
+    ],
+    "per_object": {
+     "obj_03_pumpkin": -0.5503848805917048,
+     "obj_04_dolphin": -0.08996489327132319,
+     "obj_07_pumpkin2": -0.14991836138859455,
+     "obj_09_ball": -0.3682875429542736,
+     "obj_10_pumpkin3": -0.8081016173551407,
+     "obj_11_pine": -0.10031583370354898,
+     "obj_13_mushroom": -0.5119662475763536,
+     "obj_16_friends_cup": -0.630538251745445,
+     "obj_17_pumpkin5": -0.06453107445259562,
+     "obj_18_fabric_hat": -0.05198834656500647,
+     "obj_19_cylinder": -0.0770425981954163
+    },
+    "improved_negative": 11
+   },
+   "mode_minus_random_active48": {
+    "median": 0.014106372588517449,
+    "ci95": [
+     -0.024038967080895562,
+     0.04809086620941136
+    ],
+    "per_object": {
+     "obj_03_pumpkin": 0.027958621296225228,
+     "obj_04_dolphin": 0.014106372588517449,
+     "obj_07_pumpkin2": 0.04809086620941136,
+     "obj_09_ball": -0.024038967080895562,
+     "obj_10_pumpkin3": -0.025803597176327853,
+     "obj_11_pine": 0.028464787489628177,
+     "obj_13_mushroom": -0.05513547323055734,
+     "obj_16_friends_cup": 0.15854741170024056,
+     "obj_17_pumpkin5": 0.07701598665276843,
+     "obj_18_fabric_hat": 0.0024528836054259,
+     "obj_19_cylinder": 0.009081203879772543
+    },
+    "improved_negative": 3
+   },
+   "random_active48_minus_random_full": {
+    "median": -0.1980092275980059,
+    "ci95": [
+     -0.5783435018879299,
+     -0.10407126585984064
+    ],
+    "per_object": {
+     "obj_03_pumpkin": -0.5783435018879299,
+     "obj_04_dolphin": -0.10407126585984064,
+     "obj_07_pumpkin2": -0.1980092275980059,
+     "obj_09_ball": -0.34424857587337804,
+     "obj_10_pumpkin3": -0.7822980201788129,
+     "obj_11_pine": -0.12878062119317715,
+     "obj_13_mushroom": -0.45683077434579616,
+     "obj_16_friends_cup": -0.7890856634456855,
+     "obj_17_pumpkin5": -0.14154706110536405,
+     "obj_18_fabric_hat": -0.05444123017043237,
+     "obj_19_cylinder": -0.08612380207518884
+    },
+    "improved_negative": 11
+   },
+   "uos_random_active48": {
+    "obj_03_pumpkin": 0.389458731007771,
+    "obj_04_dolphin": 0.06471163352597803,
+    "obj_07_pumpkin2": 0.1542203516764056,
+    "obj_09_ball": 0.2562970769075566,
+    "obj_10_pumpkin3": 0.5274895275397707,
+    "obj_11_pine": 0.09456300336499376,
+    "obj_13_mushroom": 0.3604399266339778,
+    "obj_16_friends_cup": 0.703495029697329,
+    "obj_17_pumpkin5": 0.1146530118849399,
+    "obj_18_fabric_hat": 0.05634098093104037,
+    "obj_19_cylinder": 0.06678910850134047
+   }
+  },
+  "100": {
+   "mode_minus_random_full": {
+    "median": -0.27913386971453,
+    "ci95": [
+     -0.6842262817395595,
+     -0.10176168306021698
+    ],
+    "per_object": {
+     "obj_03_pumpkin": -0.6842262817395595,
+     "obj_04_dolphin": -0.10176168306021698,
+     "obj_07_pumpkin2": -0.27913386971453,
+     "obj_09_ball": -0.47334409750252054,
+     "obj_10_pumpkin3": -0.9442508584248451,
+     "obj_11_pine": -0.11199548093748003,
+     "obj_13_mushroom": -0.6301397960194249,
+     "obj_16_friends_cup": -0.7936425770408864,
+     "obj_17_pumpkin5": -0.10387557927136876,
+     "obj_18_fabric_hat": -0.07223467866064884,
+     "obj_19_cylinder": -0.09765412465023639
+    },
+    "improved_negative": 11
+   },
+   "mode_minus_random_active48": {
+    "median": 0.018694673426643903,
+    "ci95": [
+     -0.011631723657857806,
+     0.06264430051205702
+    ],
+    "per_object": {
+     "obj_03_pumpkin": -0.023704127010303166,
+     "obj_04_dolphin": 0.018694673426643903,
+     "obj_07_pumpkin2": 0.06264430051205702,
+     "obj_09_ball": 0.03643011734470297,
+     "obj_10_pumpkin3": -0.011631723657857806,
+     "obj_11_pine": 0.0484150029453342,
+     "obj_13_mushroom": -0.052934575835537845,
+     "obj_16_friends_cup": 0.14041485713514668,
+     "obj_17_pumpkin5": 0.09612122124610535,
+     "obj_18_fabric_hat": 0.012396329805041538,
+     "obj_19_cylinder": 0.007261805846355329
+    },
+    "improved_negative": 3
+   },
+   "random_active48_minus_random_full": {
+    "median": -0.3417781702265871,
+    "ci95": [
+     -0.6605221547292562,
+     -0.12045635648686087
+    ],
+    "per_object": {
+     "obj_03_pumpkin": -0.6605221547292562,
+     "obj_04_dolphin": -0.12045635648686087,
+     "obj_07_pumpkin2": -0.3417781702265871,
+     "obj_09_ball": -0.5097742148472235,
+     "obj_10_pumpkin3": -0.9326191347669873,
+     "obj_11_pine": -0.16041048388281423,
+     "obj_13_mushroom": -0.5772052201838871,
+     "obj_16_friends_cup": -0.934057434176033,
+     "obj_17_pumpkin5": -0.1999968005174741,
+     "obj_18_fabric_hat": -0.08463100846569037,
+     "obj_19_cylinder": -0.10491593049659172
+    },
+    "improved_negative": 11
+   },
+   "uos_random_active48": {
+    "obj_03_pumpkin": 0.40884430266648464,
+    "obj_04_dolphin": 0.05256331940318256,
+    "obj_07_pumpkin2": 0.11446208266125868,
+    "obj_09_ball": 0.18930119502786702,
+    "obj_10_pumpkin3": 0.43575209331159115,
+    "obj_11_pine": 0.06752486132411781,
+    "obj_13_mushroom": 0.30879292103905065,
+    "obj_16_friends_cup": 0.6661226267581499,
+    "obj_17_pumpkin5": 0.09689182694144609,
+    "obj_18_fabric_hat": 0.04207298169029945,
+    "obj_19_cylinder": 0.05787955742718455
+   }
+  }
+ }
+}

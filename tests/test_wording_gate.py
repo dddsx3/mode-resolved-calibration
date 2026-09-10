@@ -31,6 +31,10 @@ BANNED = [
     r"better than[^.\n]{0,80}E-optimality",
     r"on every resolution level",
     r"pass rate",
+    # allocation-grade erratum (wording guideline §2/§4): the frozen grade is a
+    # historical internal label; public text says "actionable outcome vs random"
+    r"strong grade",
+    r"strong result",
 ]
 
 SCAN_FILES = sorted(
@@ -99,6 +103,33 @@ def test_readme_numeric_claims_traceable():
     }
     for tok, val in traced.items():
         assert _approx(tok, val, 3), (tok, val)
+
+    # post-hoc paired policy comparison (allocation_policy_pairwise.csv): the
+    # README quotes the range of the six median paired differences
+    with open(REPO / "results/openillumination/allocation/"
+              "allocation_policy_pairwise.csv", newline="",
+              encoding="utf-8") as f:
+        pw = list(csv.DictReader(f))
+    assert len(pw) == 6 and {r["analysis_status"] for r in pw} == \
+        {"posthoc_paired_comparison"}
+    meds = [float(r["median_delta"]) for r in pw]
+    assert _approx("0.019", min(meds), 3) and _approx("0.027", max(meds), 3)
+    assert all(float(r["ci_lo"]) > 0 for r in pw)      # all CIs exclude 0
+
+    # random_active48 attribution control (allocation_random48_summary.json):
+    # README quotes the control deltas +0.014 / +0.019 with CIs spanning 0
+    r48 = json.loads((REPO / "results/openillumination/allocation/"
+                      "allocation_random48_summary.json").read_text(
+                          encoding="utf-8"))
+    assert r48["analysis_status"] == "posthoc_attribution_control"
+    for regime, tok_med, tok_lo, tok_hi in (
+            ("10", "0.014", "-0.024", "0.048"),
+            ("100", "0.019", "-0.012", "0.063")):
+        v = r48["regimes"][regime]["mode_minus_random_active48"]
+        assert _approx(tok_med, v["median"], 3), (tok_med, v["median"])
+        assert _approx(tok_lo, v["ci95"][0], 3), (tok_lo, v["ci95"][0])
+        assert _approx(tok_hi, v["ci95"][1], 3), (tok_hi, v["ci95"][1])
+        assert v["ci95"][0] < 0 < v["ci95"][1]         # CI spans 0
 
     # generic sweep: every other number printed in README must appear verbatim
     # somewhere under results/** (claim-tracing rule, guideline section 3)

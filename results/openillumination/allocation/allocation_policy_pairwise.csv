@@ -1,0 +1,7 @@
+regime,comparison,median_delta,ci_lo,ci_hi,worse_of_11,analysis_status
+10,mode_aware_minus_e_opt,0.0268214,0.00447188,0.0953898,10/11,posthoc_paired_comparison
+10,mode_aware_minus_a_opt,0.0252781,0.00634255,0.0922267,10/11,posthoc_paired_comparison
+10,mode_aware_minus_d_opt,0.0187845,0.014061,0.0837331,11/11,posthoc_paired_comparison
+100,mode_aware_minus_e_opt,0.0237316,0.0115096,0.102316,10/11,posthoc_paired_comparison
+100,mode_aware_minus_a_opt,0.0268999,0.0111447,0.102215,10/11,posthoc_paired_comparison
+100,mode_aware_minus_d_opt,0.0232559,0.011998,0.0605899,10/11,posthoc_paired_comparison

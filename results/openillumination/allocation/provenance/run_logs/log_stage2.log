@@ -1,0 +1,16 @@
+== stage 2: integrity checks (mechanical only) ==
+  [OK] 11 objects x 3 levels = 33 cells -- got 33
+  [OK] per-run rows == 29700 -- got 29700
+  [OK] no duplicate runs -- 0 duplicated keys
+  [OK] no NaN/Inf in E_run -- 0 bad
+  [OK] failure log empty
+  [OK] every deterministic policy uses the same calibration budget per cell -- 0 mixed cells
+  [OK] deterministic prefix carries min(k, 48) analysis lights -- 0 cells off
+  [OK] random permutations stay within the deterministic budget -- 0 cells exceed
+  [OK] random realized as 5 permutation units
+  [OK] selection orders: 33 cells x 2 regimes x 9 units -- got 594, expected 594
+  [OK] every ordering is a full 142-light permutation
+  [OK] selection trace carries no reconstruction-side labels
+  [OK] SelectionState field set == prediction-side five -- ['M0', 'active', 'finf', 'lam0', 'u']
+assembled: per_run_errors.csv / uos_table.csv / selection_orders.json
+STAGE2 = PASS

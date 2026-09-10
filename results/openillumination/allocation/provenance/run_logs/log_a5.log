@@ -1,0 +1,14 @@
+[a5] regime 10x: grade STRONG
+     condition: mode-aware stably beats random and at least one classical baseline
+     Delta_mode_aware: median -0.1499 CI [-0.5504, -0.07704] improved 11/11
+     Delta_e_opt: median -0.1704 CI [-0.6729, -0.1039] improved 11/11
+     Delta_a_opt: median -0.1695 CI [-0.6733, -0.1023] improved 11/11
+     Delta_d_opt: median -0.1674 CI [-0.6706, -0.104] improved 11/11
+[a5] regime 100x: grade STRONG
+     condition: mode-aware stably beats random and at least one classical baseline
+     Delta_mode_aware: median -0.2791 CI [-0.6842, -0.1018] improved 11/11
+     Delta_e_opt: median -0.3029 CI [-0.883, -0.1214] improved 11/11
+     Delta_a_opt: median -0.2868 CI [-0.8786, -0.113] improved 11/11
+     Delta_d_opt: median -0.2911 CI [-0.8266, -0.1236] improved 11/11
+[a5] wrote allocation_summary.json / allocation_deltas.csv / allocation_object_pairs.csv
+A5 = DONE

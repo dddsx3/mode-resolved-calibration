@@ -11,7 +11,7 @@ from which commit, in what environment** — without trusting any verbal claim.
 | Grid | 11 objects × 3 levels {0.2, 0.5, 1.0} × 10 seeds × 2 regimes {10×, 100×} × 9 units × 5 budgets = **29,700 reconstructions** |
 | Seeds | bootstrap 20260910; corruption stream per (obj, level, seed); permutations 20260911 — all pinned in `configs/openillumination_allocation.yaml` |
 | Result rows | 29,700 (0 missing, 0 duplicate, 0 NaN/Inf, 0 exclusion; failure log empty) |
-| Result grade | **strong** (both regimes): mode-aware stably beats random (11/11 objects improved) and at least one classical baseline; grade rule and wording per `docs/WORDING.md` |
+| Result grade | frozen label **strong** (both regimes) — historical internal label of the preregistered rule: it certifies mode-aware stably beating **random** (11/11 objects improved), NOT superiority over the classical E/A/D-opt baselines (the post-hoc paired comparison `allocation_policy_pairwise.csv` shows classical baselines with modestly lower AUC). Public wording: “actionable outcome vs random” — see the semantic erratum in `docs/WORDING.md` §2 |
 
 ## Files in this directory
 
@@ -20,7 +20,9 @@ from which commit, in what environment** — without trusting any verbal claim.
 | `A4_run_manifest.json` | Pre-run seal output: HEAD hash, tag, worktree state, F5 manifest match, checksums, pytest summary, timestamp |
 | `a4_cloud_driver.py` | The exact driver that ran A4 on the cloud instance (BLAS 1-thread budget, forkserver start, heartbeat/watchdog, per-cell progress; resumable). Grid/seeds/policies identical to the frozen config — run-layer enhancements only |
 | `a5_analyze.py` | The exact frozen-statistics script that produced `allocation_summary.json` / `allocation_deltas.csv` |
-| `CHANGES_20260909.diff` | The complete diff of run-layer changes made by the operator after `allocation-prerun` — audited as grid/seed/statistics-neutral |
+| `a5_pairwise.py` | Post-hoc paired policy comparison (mode-aware vs E/A/D, same bootstrap machinery) → `allocation_policy_pairwise.csv`; creates no new simulations |
+| `run_logs/` | Raw cloud run logs (`log_precheck.log`, `log_a4_run.txt`, `log_stage2.log`, `log_a5.log`, `log_full_run.log`) — primary evidence for the run chronology |
+| `CHANGES_20260909.diff` | The complete diff of run-layer changes made by the operator after `allocation-prerun`: BLAS 1-thread budget, forkserver start, heartbeat, and **an implementation bug fix in the stage-2 cross-level accumulation** (the uploaded version overwrote per-level rows instead of averaging them, i.e. it did not compute the preregistered endpoint). Chronology in `docs/REPRODUCIBILITY.md` shows the corrected stage-2 (16:26:45 UTC) pre-dated the run (16:32:57–16:45:56) — the defective version never executed on empirical data |
 
 ## Frozen-value declaration
 

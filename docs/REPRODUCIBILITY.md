@@ -89,6 +89,14 @@ executed once on the cloud: 29,700 reconstructions, 33/33 cells, 0 failures,
   `selection_orders.json` are committed, and `allocation_deltas.csv` /
   `allocation_object_pairs.csv` / `allocation_summary.json` are re-derived from
   them by the frozen `_analyze` (verified: cross-level means reproduce exactly).
+  The post-hoc pairwise CSV is re-derived by `provenance/a5_pairwise.py` from
+  the same table.
+- The **`random_active48` attribution control**
+  (`allocation_random48_per_run.csv`, `allocation_random48_summary.json`) is
+  re-run with `python experiments/openillumination_allocation_random48.py
+  --data <OLAT root> --meta <meta root>`; it needs the raw 11-object data,
+  reuses the paired corruption stream of the benchmark, and anchors its frozen
+  deltas against `allocation_summary.json` (assert < 1e-9).
 - Reproducing the **29,700-run simulation** itself requires the raw 11-object
   data (see `docs/DATA.md`) and the driver preserved in
   `results/openillumination/allocation/provenance/a4_cloud_driver.py`; completed
@@ -99,9 +107,40 @@ executed once on the cloud: 29,700 reconstructions, 33/33 cells, 0 failures,
 `results/openillumination/allocation/provenance/` records what code produced the
 allocation results and in what environment: the pre-run seal output
 (`A4_run_manifest.json`), the exact run driver (`a4_cloud_driver.py`), the frozen
-analysis script (`a5_analyze.py`), and the run-layer change record
-(`CHANGES_20260909.diff` — audited as grid/seed/statistics-neutral). See the
-`README.md` inside that directory for the full mapping.
+analysis script (`a5_analyze.py`), the post-hoc pairwise script (`a5_pairwise.py`),
+and the run-layer change record (`CHANGES_20260909.diff`). See the `README.md`
+inside that directory for the full mapping. The raw cloud run logs are preserved
+in `provenance/run_logs/` (`log_precheck.log`, `log_a4_run.txt`, `log_stage2.log`,
+`log_a5.log`, `log_full_run.log`).
+
+## Run-layer chronology (evidence, 2026-09-09 UTC)
+
+The operator fixed two implementation defects in the cloud run-layer scripts
+(a stage-2 cross-level accumulation that overwrote per-level rows instead of
+averaging them — i.e. it did not compute the preregistered endpoint, and an
+unpacked 6-tuple call) **while the package was being staged**. The five
+timestamped facts below — each verifiable in the committed logs — establish that
+the corrected stage-2 code was in place before any empirical data was generated
+and before any grade or aggregate was computed:
+
+1. `2026-09-09 14:39:50` — original upload of the cloud package files
+   (old-side mtimes recorded in `CHANGES_20260909.diff`).
+2. `2026-09-09 16:26:45` — operator's corrected `a4_stage2_check.py` saved
+   (new-side mtime in `CHANGES_20260909.diff`); corrections to the driver
+   followed at 16:32:26.
+3. `2026-09-09 16:32:57` — pre-run seal PASS on the audited worktree
+   (`provenance/run_logs/log_precheck.log`, `timestamp_utc` field; 85 passed /
+   5 skipped, checksum + F5 manifest clean).
+4. `2026-09-09 16:33–16:45:56` — the 29,700-reconstruction run itself
+   (heartbeats in `provenance/run_logs/log_a4_run.txt`: first 16:32:57 "0/33",
+   last 16:45:27 "5/33 running"; `log_full_run.log` mtime 16:45:56).
+5. `2026-09-09 16:51:10 / 16:51:30` — stage-2 integrity checks PASS (all
+   mechanical checks OK, `log_stage2.log`) and A5 statistics written
+   (`allocation_summary.json`, zip entry mtime 16:51:30).
+
+Conclusion: the defective stage-2 version (14:39:50) never executed against the
+empirical data — the entire reconstruction run and all integrity checks ran
+after the 16:26:45 fix. No frozen number was produced by known-buggy code.
 
 ## Checksums
 

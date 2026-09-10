@@ -3,9 +3,11 @@ message: "If you use this software or its benchmark results in your research, pl
 title: "mode-resolved-calibration: mode-resolved calibration-confidence continuum for photometric inverse problems"
 type: software
 authors:
-  - name: "calibinfo authors"
-version: 0.1.0
-date-released: 2026-09-09
+  - alias: dddsx3
+    name: "GMX"
+    email: "3570239187@qq.com"
+version: 0.2.0
+date-released: 2026-09-10
 license: MIT
 repository-code: "https://github.com/dddsx3/mode-resolved-calibration"
 abstract: >-
@@ -15,8 +17,14 @@ abstract: >-
   Schur-complement Delta-Fisher information, calibration-retention spectra, the
   gauge closed-form spectral response, and the mode-resolved severity analysis on
   OpenIllumination (11 objects x 6 levels, 20 seeds; RA = 0.90, stratified median
-  0.536 vs 0.418/0.400). Includes frozen results, independent headline recomputation
-  tests (pytest), and figure/table regeneration scripts.
+  0.536 vs 0.418/0.400). Includes a preregistered calibration-allocation
+  evaluation on the 11 held-out objects (29,700 reconstructions): mode-derived
+  guidance improves reconstruction over random allocation (an actionable
+  outcome vs random), classical E/A/D-optimal greedy baselines achieve modestly
+  lower AUC in post-hoc paired comparisons, and an active-set random control
+  shows the benefit over full-universe random is an active-set effect rather
+  than a mode-ordering effect. Ships frozen results, independent headline
+  recomputation tests (pytest), and figure/table regeneration scripts.
 keywords:
   - photometric inverse problems
   - calibration

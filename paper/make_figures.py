@@ -162,12 +162,32 @@ def fig10_allocation_forest(out_dir):
     data = {}
     for row in csv.DictReader(open(path, newline="", encoding="utf-8")):
         data.setdefault(row["regime"], {})[row["policy"]] = row
+    # post-hoc rows: paired policy comparison + active-set random control
+    pw = {}
+    pwp = FROZEN / "openillumination" / "allocation" /         "allocation_policy_pairwise.csv"
+    if pwp.exists():
+        for row in csv.DictReader(open(pwp, newline="", encoding="utf-8")):
+            pol = row["comparison"].replace("mode_aware_minus_", "")
+            pw.setdefault(row["regime"], {})[pol] = row
+    r48 = {}
+    r48p = FROZEN / "openillumination" / "allocation" /         "allocation_random48_summary.json"
+    if r48p.exists():
+        import json
+        s48 = json.loads(r48p.read_text(encoding="utf-8"))
+        for regime, d in s48["regimes"].items():
+            v = d["mode_minus_random_active48"]
+            r48[regime] = (v["median"], v["ci95"][0], v["ci95"][1],
+                           f"{v['improved_negative']}/11")
+            vf = d["mode_minus_random_full"]
+            # CSV stores 6 significant digits; compare at that precision
+            assert abs(vf["median"] - float(
+                data[regime]["mode_aware"]["median_delta"])) < 1e-5
     order = ["mode_aware", "e_opt", "a_opt", "d_opt"]
     labels = {"mode_aware": "mode-aware", "e_opt": "E-opt",
               "a_opt": "A-opt", "d_opt": "D-opt"}
     colors = {"mode_aware": "#D55E00", "e_opt": "#0072B2",
               "a_opt": "#009E73", "d_opt": "#CC79A7"}
-    fig, axes = plt.subplots(1, 2, figsize=(9.6, 3.2), sharey=True)
+    fig, axes = plt.subplots(1, 2, figsize=(9.6, 3.6), sharey=True)
     ys = list(range(len(order)))[::-1]
     for ax, regime in zip(axes, ["10", "100"]):
         for y, pol in zip(ys, order):
@@ -177,13 +197,30 @@ def fig10_allocation_forest(out_dir):
             ax.errorbar(med, y, xerr=[[med - lo], [hi - med]], fmt="o",
                         color=colors[pol], ms=6, capsize=3)
             ax.text(med, y + 0.18, r["improved_of_11"], ha="center", fontsize=7)
+        # classical-vs-mode paired comparison (post-hoc): grey squares
+        for y, pol in zip(ys[1:], order[1:]):
+            if pol in pw.get(regime, {}):
+                r = pw[regime][pol]
+                med, lo, hi = (float(r["median_delta"]), float(r["ci_lo"]),
+                               float(r["ci_hi"]))
+                ax.errorbar(med, y - 0.28, xerr=[[med - lo], [hi - med]],
+                            fmt="s", color="0.45", ms=4, capsize=2)
+        if regime in r48:
+            med, lo, hi, tag = r48[regime]
+            y = min(ys) - 1
+            ax.errorbar(med, y, xerr=[[med - lo], [hi - med]], fmt="D",
+                        color="#56B4E9", ms=5, capsize=3)
+            ax.text(med, y + 0.18, tag, ha="center", fontsize=7)
         ax.axvline(0, color="k", lw=0.8, ls="--")
-        ax.set_yticks(ys)
-        ax.set_yticklabels([labels[q] for q in order])
+        ax.set_yticks(ys + ([min(ys) - 1] if regime in r48 else []))
+        ax.set_yticklabels([labels[q] for q in order] +
+                           (["mode vs random-active48"] if regime in r48
+                            else []))
         ax.set_title(f"regime {regime}x", fontsize=10)
         ax.set_xlabel("Delta AUC vs random (median, 95% CI)")
-    fig.suptitle("Fig.10 - allocation benefit vs random (per policy, both regimes)",
-                 fontsize=10)
+    fig.suptitle("Fig.10 - allocation benefit vs random (grey squares: paired "
+                 "classical-minus-mode, post-hoc; diamond: active-set control)",
+                 fontsize=9)
     fig.tight_layout()
     out = out_dir / "fig10_allocation_forest.png"
     fig.savefig(out, dpi=150)

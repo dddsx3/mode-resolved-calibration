@@ -101,9 +101,16 @@ Key frozen results (11 held-out OpenIllumination objects, 66/66 cells):
   `docs/WORDING.md`;
 - preregistered allocation evaluation: mode-aware guidance improves
   reconstruction over random allocation for 11/11 objects (Δ AUC −0.150 at 10×,
-  −0.279 at 100×; bootstrap 95% CI excludes 0; strong grade per the
-  preregistered rule — the classical E/A/D-opt baselines improve similarly,
-  see `allocation_deltas.csv`).
+  −0.279 at 100×; bootstrap 95% CI excludes 0 — an actionable outcome vs
+  random; the classical E/A/D-opt baselines improve similarly). In post-hoc
+  paired comparisons the classical baselines achieved modestly lower AUC than
+  the mode-aware policy (paired bootstrap 95% CIs exclude 0 in both regimes;
+  median paired difference +0.019 to +0.027 AUC). The `random_active48` control
+  — uniform permutations over the 48 Fisher-active lights only — removes the
+  advantage over random entirely (Δ +0.014 / +0.019, CIs spanning 0), so the
+  measured benefit of every informed policy over full-universe random is an
+  active-set effect rather than a mode-ordering effect (see
+  `allocation_policy_pairwise.csv` and `allocation_random48_summary.json`).
 
 ![stratified medians](paper/figures/fig1_stratified_median.png)
 
