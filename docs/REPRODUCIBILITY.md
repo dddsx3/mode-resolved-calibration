@@ -7,9 +7,9 @@ with `pytest tests/test_reproduction.py`.
 
 | # | Paper item | Script | Source data |
 |---|---|---|---|
-| N1 | RA = 0.90 (95% CI [0.90, 0.95], 66 cells, 11 objects) | `experiments/openillumination_validation.py`, `experiments/openillumination_severity.py` | `results/openillumination/mode_ranking.csv` |
-| N2 | Stratified median: mode/E-min 0.536, logdet 0.418, trace 0.400 | `experiments/openillumination_severity.py` | `results/openillumination/level_severity.csv` (per-cell columns P_*) |
-| N3 | Pooled Spearman: 0.871 / 0.871 / 0.859 / 0.733 / 0.867 | `experiments/openillumination_severity.py` | `results/openillumination/level_severity.csv` |
+| N1 | **Frozen arm-A record**: RA = 0.90 (95% CI [0.90, 0.95], 66 cells, 11 objects). Paper-facing corrected-interface headline is arm D (RA = 0.90, 95% CI [0.70, 0.95]) — see N13 | `experiments/openillumination_validation.py`, `experiments/openillumination_severity.py` | `results/openillumination/mode_ranking.csv` |
+| N2 | **Retired (frozen arm-A record)**: stratified median mode/E-min 0.536, logdet 0.418, trace 0.400 — does not survive the corrected interface (arm D −0.495); not paper-facing — see N13 | `experiments/openillumination_severity.py` | `results/openillumination/level_severity.csv` (per-cell columns P_*) |
+| N3 | **Retired (frozen arm-A record)**: pooled Spearman 0.871 / 0.871 / 0.859 / 0.733 / 0.867 — descriptive only under the frozen interface; arm D pooled values in the factorial summary — see N13 | `experiments/openillumination_severity.py` | `results/openillumination/level_severity.csv` |
 | N4 | P_emin ≡ P_mode, max diff ≤ 1e-14 | `experiments/openillumination_severity.py` | `results/openillumination/level_severity.csv` |
 | N5 | Old pooled 0.728, cluster CI [0.705, 0.754] | `experiments/openillumination_validation.py` | `results/openillumination/ci04_formal_summary.json` |
 | N6 | Gauge closed form vs direct ≤ 3.9e-8 (25 decades of λ) | `experiments/gauge_spectrum.py` | `results/gauge_spectrum/ci02_formal_summary.json` |
@@ -19,6 +19,7 @@ with `pytest tests/test_reproduction.py`.
 | N10 | Post-hoc paired policy comparison: mode−E/A/D paired medians +0.019…+0.027, all six 95% CIs > 0 (classical slightly lower AUC) | `results/openillumination/allocation/provenance/a5_pairwise.py` | `results/openillumination/allocation/allocation_policy_pairwise.csv` |
 | N11 | random_active48 control: Δ(mode − random48) = +0.014 / +0.019, CIs span 0, 3/11 improved | `experiments/openillumination_allocation_random48.py` | `results/openillumination/allocation/allocation_random48_summary.json` |
 | N12 | Active-set attribution: random48 − random_full = −0.198 / −0.342, CIs exclude 0, 11/11 improved | `experiments/openillumination_allocation_random48.py` | `results/openillumination/allocation/allocation_random48_summary.json` |
+| N13 | MF-0 factorial: arm A reproduces the frozen benchmark bit-close (max rel diff 0.0 on all 66×5 pred/emp entries and the pooled Spearman); paper-facing arm D (corrected/corrected, fixed a priori): RA = 0.90 (95% CI [0.70, 0.95], 65/66 positive cells, 11/11 positive objects); stratified severity association retires (−0.495 vs +0.536, flip isolated to M0-1); allocation rank invariance: all 594 frozen orderings keep rank 1200 = rank(F∞) | `experiments/openillumination_factorial.py`, `experiments/allocation_rank_check.py` | `results/openillumination/correctness/` |
 
 ## Recompute procedure
 
@@ -40,6 +41,10 @@ the paired policy comparison from `uos_table.csv` and cross-checking the
 post-hoc CSVs/JSONs) and is frozen at tag `manuscript-evidence-v1`:
 so it double-checks the frozen numbers rather than re-executing the computation that
 produced them.
+N13 (the MF-0 factorial and rank-invariance evidence) is guarded by
+`tests/test_mf03_factorial_evidence.py` and `tests/test_math_freeze_gates.py`;
+its paper-facing caliber is arm D of the factorial (see `docs/WORDING.md` §1/§6
+for the two-caliber template rule).
 
 ## Interpretation of reported intervals
 

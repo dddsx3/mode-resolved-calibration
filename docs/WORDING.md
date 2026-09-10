@@ -12,22 +12,23 @@ README/docs statements never outrun what the files under `results/` actually con
 
 ## 1. Approved sentence templates
 
-Claims about the OpenIllumination benchmark may use exactly these forms:
+Two calibers exist since the MF-0 factorial (§6): the **paper-facing caliber**
+(corrected math interface, arm D) and the **frozen-record caliber**
+(pre-correction interface, arm A — provenance only). Use templates from the
+right block and never mix calibers inside one claim; the frozen-record block
+must never be cited as a headline without its provenance label.
 
-- Overview (main empirical result):
-  "mode-resolved coincides with E-optimality on the tracked modes (max diff ≤ 1e-14)
-  and improves the stratified median over trace and log-determinant (0.536 vs 0.418 /
-  0.400)."
-- Per-level honesty clause (required whenever "best stratified median" is claimed):
-  "best stratified median across levels (per-level reversals disclosed: at L1,
-  trace 0.455 > mode 0.245; at L3, logdet 0.700 > mode 0.673)."
+### 1a. Paper-facing (arm D, corrected interface)
+
+- Scope statement (the core empirical proposition):
+  "mode-resolved analysis reliably identifies which identifiable directions
+  are most fragile within a given problem instance (within-cell mode
+  ranking)."
 - Headline statistic:
   "median within-cell Spearman $R_A$ = 0.90 (object-cluster bootstrap 95% CI
-  [0.90, 0.95], 66/66 cells, 11/11 objects)"
-- Stratified-median uncertainty (required at first mention):
-  "object-cluster bootstrap 95% CI [−0.096, 0.858] (n = 11; not significant at the
-  object level)."
-- Structural identity disclosure (always with any E-min/E-optimality comparison):
+  [0.70, 0.95], 65/66 positive cells, 11/11 positive objects)"
+- Structural identity disclosure (always with any E-min/E-optimality
+  comparison):
   "P_emin ≡ P_mode on the tracked modes (max absolute difference ≤ 1e-14)."
 - Structural identity clarification (required whenever the identity is used in an
   argument about allocation): the identity is a **scalarization identity**, not a
@@ -42,6 +43,19 @@ Claims about the OpenIllumination benchmark may use exactly these forms:
 - Paired-difference reporting (any comparison of two predictors):
   report the CI of the *within-resample paired difference*; never argue from two
   marginal CIs both crossing zero.
+
+### 1b. Frozen-record (arm A, pre-correction interface; provenance only)
+
+- Headline (must carry the provenance label):
+  "under the frozen (pre-correction) interface, median within-cell Spearman
+  $R_A$ = 0.90 (object-cluster bootstrap 95% CI [0.90, 0.95], 66/66 cells,
+  11/11 objects)."
+- **Retired claims** (must not be used without the retirement clause): the
+  stratified-median comparison "0.536 (mode-resolved) vs 0.418 (log-det) /
+  0.400 (trace)", its per-level honesty clause, and the stratified-median
+  uncertainty interval "[−0.096, 0.858]". Retirement clause (required at every
+  mention): "retired after the MF-0 correctness rerun — the association does
+  not survive the corrected interface (arm D stratified −0.495); see §6."
 
 ## 2. Approved result-grade wording (allocation, expert-frozen)
 

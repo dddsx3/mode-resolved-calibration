@@ -118,14 +118,16 @@ and provenance are documented in `docs/REPRODUCIBILITY.md` and
 `docs/EXPERIMENTS.md`, guarded by `tests/test_reproduction.py`. This benchmark
 is separate from the library API — the examples above never touch it.
 
-Key frozen results (11 held-out OpenIllumination objects, 66/66 cells):
+Key results (11 held-out OpenIllumination objects). **Paper-facing numbers are
+the corrected-interface arm D of the MF-0 factorial** (see "Math-interface
+correctness" below); the pre-correction record is kept explicitly labeled as
+frozen provenance.
 
-- median within-cell Spearman $R_A$ = 0.90 (object-cluster bootstrap 95% CI
-  [0.90, 0.95]);
-- stratified (fixed-level) median Spearman 0.536 (mode-resolved) vs 0.418
-  (log-determinant) / 0.400 (trace) under the frozen interface — per-level
-  reversals disclosed in `docs/WORDING.md` (see the correctness note below:
-  this scalar-severity association does not survive the corrected interface);
+- **Within-cell mode ranking (primary real-data result, arm D)**: median
+  within-cell Spearman $R_A$ = 0.90 (object-cluster bootstrap 95% CI
+  [0.7, 0.95]; 65/66 cells positive, 11/11 objects positive) — mode-resolved
+  analysis reliably identifies *which identifiable directions are most
+  fragile inside a given problem instance*;
 - preregistered allocation evaluation: mode-aware guidance improves
   reconstruction over random allocation for 11/11 objects (Δ AUC −0.150 at 10×,
   −0.279 at 100×; bootstrap 95% CI excludes 0 — an actionable outcome vs
@@ -138,6 +140,13 @@ Key frozen results (11 held-out OpenIllumination objects, 66/66 cells):
   measured benefit of every informed policy over full-universe random is an
   active-set effect rather than a mode-ordering effect (see
   `allocation_policy_pairwise.csv` and `allocation_random48_summary.json`).
+- **Frozen pre-correction record (arm A; provenance only, not paper-facing)**:
+  $R_A$ = 0.90 (CI [0.90, 0.95]); stratified (fixed-level) median Spearman
+  0.536 (mode-resolved) vs 0.418 (log-determinant) / 0.400 (trace). The
+  stratified severity-comparison claim is **retired** after the MF-0 rerun —
+  it does not survive the corrected interface (arm D stratified −0.495; the
+  flip is isolated to the noise-fit correction) — and must not be cited as a
+  headline.
 
 ![stratified medians](paper/figures/fig1_stratified_median.png)
 

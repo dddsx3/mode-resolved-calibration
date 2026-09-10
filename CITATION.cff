@@ -16,8 +16,9 @@ abstract: >-
   reproducibility package for the associated research manuscript (forthcoming):
   Schur-complement Delta-Fisher information, calibration-retention spectra, the
   gauge closed-form spectral response, and the mode-resolved severity analysis on
-  OpenIllumination (11 objects x 6 levels, 20 seeds; RA = 0.90, stratified median
-  0.536 vs 0.418/0.400). Includes a preregistered calibration-allocation
+  OpenIllumination (11 objects x 6 levels, 20 seeds; paper-facing corrected
+  interface: within-cell mode ranking RA = 0.90, object-cluster bootstrap 95% CI
+  [0.70, 0.95], 65/66 positive cells). Includes a preregistered calibration-allocation
   evaluation on the 11 held-out objects (29,700 reconstructions): mode-derived
   guidance improves reconstruction over random allocation (an actionable
   outcome vs random), classical E/A/D-optimal greedy baselines achieve modestly

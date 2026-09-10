@@ -59,6 +59,11 @@ interface is exercised by a preregistered factorial rerun into
   README; wording gate enforces the new banned families
 - CI03 note: its analysis basis is the whitened coordinate system; the strict
   `R⁻¹` coordinate relation is covered by the MF-0.4 known-answer test
+- Paper-facing caliber sync (math-freeze-v1): README, docs/WORDING.md §1,
+  docs/REPRODUCIBILITY.md (N1–N3 annotated, N13 added) and CITATION.cff now
+  lead with the corrected-interface arm D numbers; the frozen arm-A record
+  (including the retired stratified severity comparison) is kept explicitly
+  labeled as provenance
 
 ## [Unreleased]
 
