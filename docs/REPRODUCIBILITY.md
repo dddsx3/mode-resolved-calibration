@@ -24,15 +24,20 @@ with `pytest tests/test_reproduction.py`.
 
 ```bash
 pip install -e .
-pytest                      # includes tests/test_reproduction.py (N1-N12 independent recomputation)
+pytest                      # N1-N9 in tests/test_reproduction.py (frozen at
+                            # science-closed), N10-N12 in
+                            # tests/test_manuscript_evidence.py (frozen at
+                            # manuscript-evidence-v1)
 bash reproduce_paper.sh     # regenerates figures and tables from results/
 ```
 
-`tests/test_reproduction.py` loads the CSVs/JSONs above and recomputes N1–N12
+`tests/test_reproduction.py` loads the CSVs/JSONs above and recomputes N1–N9
 independently (Spearman, per-level stratified medians, object-cluster bootstrap with
-B=10000/seed 20260908, pooled statistics; N10–N12 re-derive the paired policy
-comparison and the active-set attribution from the committed allocation
-artifacts) — it does not import the experiment pipeline,
+B=10000/seed 20260908, pooled statistics) — it does not import the experiment
+pipeline; it is byte-frozen at tag `science-closed`.
+`tests/test_manuscript_evidence.py` recomputes N10–N12 the same way (re-deriving
+the paired policy comparison from `uos_table.csv` and cross-checking the
+post-hoc CSVs/JSONs) and is frozen at tag `manuscript-evidence-v1`:
 so it double-checks the frozen numbers rather than re-executing the computation that
 produced them.
 

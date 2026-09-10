@@ -207,5 +207,6 @@ deterministic policy runs):
 ---
 
 **Reproduction contract**: every experiment script writes only statistical values and
-manifests to `results/*/`; the twelve headline numbers are independently recomputed from
-the CSVs by `tests/test_reproduction.py`.
+manifests to `results/*/`; N1–N9 are independently recomputed from the CSVs by
+`tests/test_reproduction.py` (frozen at `science-closed`) and N10–N12 by
+`tests/test_manuscript_evidence.py` (frozen at `manuscript-evidence-v1`).

@@ -65,7 +65,8 @@ jobs:
             experiments/openillumination_allocation.py \
             experiments/openillumination_allocation_random48.py \
             tests/test_allocation_known_answers.py \
-            tests/test_allocation_run_smoke.py)
+            tests/test_allocation_run_smoke.py \
+            tests/test_manuscript_evidence.py)
           if [ -n "$CHANGED" ]; then
             echo "MANUSCRIPT EVIDENCE PATHS MODIFIED:"; echo "$CHANGED"; exit 1
           fi
