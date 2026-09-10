@@ -184,7 +184,7 @@ Config: `configs/openillumination_allocation.yaml` (frozen at tag
   `allocation_policy_pairwise.csv`, `allocation_random48_per_run.csv`,
   `allocation_random48_summary.json`.
 
-Post-hoc analyses (2026-09-10, registered in `docs/WORDING.md` §4; no new
+Post-hoc analyses (2026-09-10, registered in `docs/WORDING.md` §5; no new
 deterministic policy runs):
 
 - **Paired policy comparison** (`provenance/a5_pairwise.py` →
@@ -207,5 +207,5 @@ deterministic policy runs):
 ---
 
 **Reproduction contract**: every experiment script writes only statistical values and
-manifests to `results/*/`; the nine headline numbers are independently recomputed from
+manifests to `results/*/`; the twelve headline numbers are independently recomputed from
 the CSVs by `tests/test_reproduction.py`.

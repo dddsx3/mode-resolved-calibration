@@ -8,9 +8,11 @@ analysis of linearized inverse problems with structured nuisance. Instead of
 compressing an estimator's information content into scalar summaries (trace,
 log-determinant, E-optimality), it tracks the *weakest identifiable modes* of
 the Fisher information — how much usable signal survives in each fragile
-direction as calibration uncertainty grows — and turns that mode-resolved
-sensitivity into actionable decisions, such as which instruments to recalibrate
-under a fixed budget.
+direction as calibration uncertainty grows. The framework exposes which
+identifiable directions and calibration components are information-active. A
+downstream allocation stress test shows that identifying the Fisher-active
+substructure has decision value, while no additional performance advantage is
+observed for the tested within-active-set mode ordering.
 
 ![how it works](paper/figures/overview_schematic.png)
 

@@ -31,7 +31,7 @@ BANNED = [
     r"better than[^.\n]{0,80}E-optimality",
     r"on every resolution level",
     r"pass rate",
-    # allocation-grade erratum (wording guideline §2/§4): the frozen grade is a
+    # allocation-grade erratum (wording guideline §2/§5): the frozen grade is a
     # historical internal label; public text says "actionable outcome vs random"
     r"strong grade",
     r"strong result",
@@ -132,7 +132,7 @@ def test_readme_numeric_claims_traceable():
         assert v["ci95"][0] < 0 < v["ci95"][1]         # CI spans 0
 
     # generic sweep: every other number printed in README must appear verbatim
-    # somewhere under results/** (claim-tracing rule, guideline section 3)
+    # somewhere under results/** (claim-tracing rule, guideline section 4)
     readme2 = re.sub(r"\d+e-\d+", " ", readme)
     tokens = set(re.findall(r"\d+\.\d+|\d+", readme2))
     results_text = "\n".join(

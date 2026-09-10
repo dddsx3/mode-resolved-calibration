@@ -51,3 +51,21 @@ jobs:
           if [ -n "$CHANGED" ]; then
             echo "FROZEN PATHS MODIFIED:"; echo "$CHANGED"; exit 1
           fi
+      - name: manuscript-evidence drift gate (allocation evidence + statistics
+          scripts frozen at tag manuscript-evidence-v1)
+        run: |
+          if ! git rev-parse -q --verify refs/tags/manuscript-evidence-v1 >/dev/null; then
+            echo "tag manuscript-evidence-v1 not present yet -- skipping (first run after its introduction)"
+            exit 0
+          fi
+          BASE=$(git rev-parse manuscript-evidence-v1)
+          CHANGED=$(git diff --name-only "$BASE" HEAD -- \
+            results/openillumination/allocation \
+            configs/openillumination_allocation.yaml \
+            experiments/openillumination_allocation.py \
+            experiments/openillumination_allocation_random48.py \
+            tests/test_allocation_known_answers.py \
+            tests/test_allocation_run_smoke.py)
+          if [ -n "$CHANGED" ]; then
+            echo "MANUSCRIPT EVIDENCE PATHS MODIFIED:"; echo "$CHANGED"; exit 1
+          fi

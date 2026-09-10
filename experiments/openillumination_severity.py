@@ -30,7 +30,6 @@ from calibinfo.metrics.spectral_criteria import (                        # noqa:
 from calibinfo.metrics.cluster_bootstrap import cluster_bootstrap       # noqa: E402
 from experiments.openillumination_validation import (                          # noqa: E402
     NominalScene, CorruptionGenerator)
-from calibinfo.datasets.openillumination import load_object             # noqa: E402  (reuse)
 
 
 # --------------------------------------------------------------- helpers

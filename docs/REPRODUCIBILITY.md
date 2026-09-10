@@ -16,18 +16,23 @@ with `pytest tests/test_reproduction.py`.
 | N7 | Cov(x̂) vs σ²ΔF⁻¹ median ratio 1.0045 | `experiments/monte_carlo_validation.py` | `results/monte_carlo/ci03_formal_summary.json` |
 | N8 | DiLiGenT taxonomy 55.9–1131.4×, median 273× | `experiments/diligent_sanity.py` (run_sanity) | `results/diligent/ci05_formal_summary.json` |
 | N9 | V1–V6 known-answer suite green | `tests/test_covariance_identity.py`, `test_gauge_closed_form.py`, `test_retention_bounds.py`, `test_parameterization.py`, `test_scale_invariance.py`, `test_mode_tracking.py` | `tests/_reference_impl.py` |
+| N10 | Post-hoc paired policy comparison: mode−E/A/D paired medians +0.019…+0.027, all six 95% CIs > 0 (classical slightly lower AUC) | `results/openillumination/allocation/provenance/a5_pairwise.py` | `results/openillumination/allocation/allocation_policy_pairwise.csv` |
+| N11 | random_active48 control: Δ(mode − random48) = +0.014 / +0.019, CIs span 0, 3/11 improved | `experiments/openillumination_allocation_random48.py` | `results/openillumination/allocation/allocation_random48_summary.json` |
+| N12 | Active-set attribution: random48 − random_full = −0.198 / −0.342, CIs exclude 0, 11/11 improved | `experiments/openillumination_allocation_random48.py` | `results/openillumination/allocation/allocation_random48_summary.json` |
 
 ## Recompute procedure
 
 ```bash
 pip install -e .
-pytest                      # includes tests/test_reproduction.py (N1-N9 independent recomputation)
+pytest                      # includes tests/test_reproduction.py (N1-N12 independent recomputation)
 bash reproduce_paper.sh     # regenerates figures and tables from results/
 ```
 
-`tests/test_reproduction.py` loads the CSVs/JSONs above and recomputes N1–N9
+`tests/test_reproduction.py` loads the CSVs/JSONs above and recomputes N1–N12
 independently (Spearman, per-level stratified medians, object-cluster bootstrap with
-B=10000/seed 20260908, pooled statistics) — it does not import the experiment pipeline,
+B=10000/seed 20260908, pooled statistics; N10–N12 re-derive the paired policy
+comparison and the active-set attribution from the committed allocation
+artifacts) — it does not import the experiment pipeline,
 so it double-checks the frozen numbers rather than re-executing the computation that
 produced them.
 

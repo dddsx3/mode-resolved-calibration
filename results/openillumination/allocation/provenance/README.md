@@ -26,12 +26,16 @@ from which commit, in what environment** — without trusting any verbal claim.
 
 ## Frozen-value declaration
 
-The diff above touches run-layer concerns only (thread budget, monitoring,
-process start method, path plumbing). It contains **no changes** to the grid,
-seeds, policies, metric, statistics, or any file under the frozen
-`results/` directories. Independent verification: `git diff pre-ci06-gates-passed
-<result-commit> --name-only` shows no frozen-path file, and recomputing the A5
-statistics from `uos_table.csv` reproduces every reported number exactly.
+The diff is run-layer work (thread budget, monitoring, process start method,
+path plumbing) plus **one implementation fix**: the stage-2 cross-level
+accumulation was rewritten to restore the preregistered statistic (averaging
+per-level rows instead of overwriting them). The endpoint *definition* did not
+change; the uploaded implementation simply did not compute it. There are **no
+changes** to the grid, seeds, policies, metric, or any file under the frozen
+`results/` directories. Independent verification: `git diff
+pre-ci06-gates-passed <result-commit> --name-only` shows no frozen-path file,
+and recomputing the A5 statistics from `uos_table.csv` reproduces every
+reported number exactly.
 
 ## Reproducing the statistics (not the 29,700-run simulation)
 

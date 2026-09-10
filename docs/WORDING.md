@@ -71,7 +71,7 @@ Grade C (negative) — verbatim:
   "mode-resolved vulnerability predicts degradation but did not produce a robust
   downstream allocation advantage under the tested policy."
 
-## 2. Banned sentence families
+## 3. Banned sentence families
 
 - "better than classical criteria such as E-optimality … on every resolution level"
 - "on every resolution level measured" (any unqualified universal claim)
@@ -79,7 +79,7 @@ Grade C (negative) — verbatim:
 - Any numeric claim in README/docs that cannot be traced to a specific field of a
   specific file under `results/`.
 
-## 3. Claim tracing rule
+## 4. Claim tracing rule
 
 Every numeric claim in `README.md` or `docs/*.md` must be traceable: a reader must be
 able to point at a file under `results/` and a field/column within it that produces
@@ -87,7 +87,7 @@ the number. `tests/test_wording_gate.py` enforces the banned families above with
 zero-tolerance grep; new numeric claims must be registered here (with their source
 file/field) before they appear in any markdown.
 
-## 4. Registered post-hoc wording (allocation, paired policy comparison)
+## 5. Registered post-hoc wording (allocation, paired policy comparison)
 
 Approved factual sentences for the post-hoc paired comparison
 (`results/openillumination/allocation/allocation_policy_pairwise.csv`, derived from

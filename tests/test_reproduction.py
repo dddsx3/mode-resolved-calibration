@@ -1,6 +1,6 @@
 """Appendix-C reproduction gate (T6.3).
 
-Independently recomputes the nine headline numbers (N1-N9) of the manuscript from the
+Independently recomputes the twelve headline numbers (N1-N12) of the manuscript from the
 frozen artifacts under ``results/`` and ``data/manifests/`` and asserts they agree with
 the values reported in the manuscript appendix, bit-for-bit where the quantity is
 deterministic and within tight tolerance otherwise.
@@ -185,3 +185,93 @@ def test_N9_known_answer_suite_present():
         cwd=REPO, capture_output=True, text=True)
     assert out.returncode == 0
     assert "test" in out.stdout
+
+
+# --------------------------------------------------------------- N10-N12 (allocation, post-hoc)
+def _allocation_uos():
+    """{(object, regime, policy, budget): E_osb} from the frozen uos_table."""
+    import csv
+    out = {}
+    with open(R / "openillumination/allocation/uos_table.csv", newline="",
+              encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            out[(r["object"], int(r["regime"]), r["policy"],
+                 float(r["budget"]))] = float(r["E_osb"])
+    return out
+
+
+def _auc95(table, obj, regime, policy, budgets=(0.1, 0.2, 0.4, 0.6, 0.8)):
+    """Normalized trapezoidal AUC of the budget curve (preregistered endpoint)."""
+    es = np.array([table[(obj, regime, policy, b)] for b in budgets])
+    bs = np.array(budgets)
+    return float(np.sum((es[:-1] + es[1:]) / 2.0 * np.diff(bs)) / (0.8 - 0.1))
+
+
+def _paired_boot(d, seed=20260910, n_boot=10000):
+    """Median + percentile CI of a paired object-level difference with the
+    frozen bootstrap (shared resamples, same draw order as a5_analyze)."""
+    objs = list(d)
+    diffs = np.array([d[o] for o in objs])
+    rng = np.random.default_rng(seed)
+    n = len(objs)
+    boots = [float(np.median(diffs[rng.integers(0, n, n)]))
+             for _ in range(n_boot)]
+    lo, hi = np.percentile(boots, [2.5, 97.5])
+    return float(np.median(diffs)), float(lo), float(hi)
+
+
+def test_N10_pairwise_classical_lower_auc():
+    """N10: post-hoc paired comparison — mode-aware minus each classical
+    baseline has positive median (+0.019..+0.027) and CI excluding 0, in both
+    regimes (classical E/A/D-opt slightly lower AUC). Recomputed from
+    uos_table.csv and cross-checked against the committed pairwise CSV."""
+    import csv
+    table = _allocation_uos()
+    objs = sorted({o for (o, r, _p, _b) in table})
+    assert len(objs) == 11
+    med_all = []
+    for regime in (10, 100):
+        for pol in ("e_opt", "a_opt", "d_opt"):
+            d = {o: _auc95(table, o, regime, "mode_aware")
+                 - _auc95(table, o, regime, pol) for o in objs}
+            med, lo, hi = _paired_boot(d)
+            assert med > 0 and lo > 0            # classical better, stable
+            med_all.append(med)
+        # cross-check the committed pairwise CSV rows for this regime
+        with open(R / "openillumination/allocation/"
+                  "allocation_policy_pairwise.csv", newline="",
+                  encoding="utf-8") as f:
+            rows = [r for r in csv.DictReader(f) if r["regime"] == str(regime)]
+        assert len(rows) == 3
+        assert all(r["analysis_status"] == "posthoc_paired_comparison"
+                   for r in rows)
+    assert 0.0185 <= min(med_all) <= max(med_all) <= 0.0275
+
+
+def test_N11_random48_control_ci_spans_zero():
+    """N11: with random restricted to the 48 Fisher-active lights, the
+    mode-aware advantage disappears (Delta ~ +0.014/+0.019, CI spanning 0)."""
+    import json
+    s = json.loads((R / "openillumination/allocation/"
+                    "allocation_random48_summary.json").read_text(
+                        encoding="utf-8"))
+    assert s["analysis_status"] == "posthoc_attribution_control"
+    for regime, med_ref in (("10", 0.0141), ("100", 0.0187)):
+        v = s["regimes"][regime]["mode_minus_random_active48"]
+        assert v["median"] == pytest.approx(med_ref, abs=5e-4)
+        assert v["ci95"][0] < 0 < v["ci95"][1]
+        assert v["improved_negative"] == 3
+
+
+def test_N12_active_set_attribution():
+    """N12: the active-set effect itself (random48 - random_full) is large and
+    significant: medians -0.198 / -0.342, CIs excluding 0, 11/11 improved."""
+    import json
+    s = json.loads((R / "openillumination/allocation/"
+                    "allocation_random48_summary.json").read_text(
+                        encoding="utf-8"))
+    for regime, med_ref in (("10", -0.198), ("100", -0.342)):
+        v = s["regimes"][regime]["random_active48_minus_random_full"]
+        assert v["median"] == pytest.approx(med_ref, abs=5e-4)
+        assert v["ci95"][1] < 0
+        assert v["improved_negative"] == 11
