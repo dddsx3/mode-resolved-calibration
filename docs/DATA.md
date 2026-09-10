@@ -30,7 +30,7 @@ raw downloads must be obtained upstream.
 
 ## Corruption protocol (OpenIllumination, joint)
 
-- Corruption: jointly re-scale intensity and the direction-position coodinates.
+- Corruption: jointly re-scale intensity and the direction-position coordinates.
 - Levels: `[0.1, 0.2, 0.35, 0.5, 0.75, 1.0]` (0.1 = smallest). Seeds: 20 per
   (object, level) cell. Every run adds the corrupted render to the empirical column;
   predicted damage is computed deterministically from the retained spectrum.

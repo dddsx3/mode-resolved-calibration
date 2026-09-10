@@ -152,6 +152,68 @@ Conclusion: the defective stage-2 version (14:39:50) never executed against the
 empirical data — the entire reconstruction run and all integrity checks ran
 after the 16:26:45 fix. No frozen number was produced by known-buggy code.
 
+## Math-freeze correctness gate (MF-0, 2026-09-10)
+
+The math-method freeze v1.0 required two correctness gates on the
+theory-to-empirical interface before headline numbers are locked, plus four
+smaller gates. Status and repo mapping:
+
+- **M0-1 (noise-fit coefficient order)**: `noise_fit`
+  (`experiments/openillumination_validation.py`) and `calibrate`
+  (`src/calibinfo/estimators/joint_map.py`) consumed the `np.polyfit` return
+  order `[slope, intercept]` into the model `Var ≈ a + b·I` swapped (a←slope).
+  Both now expose `convention="legacy"|"corrected"`; legacy (default) keeps the
+  frozen artifacts bit-reproducible, corrected is the documented model.
+  Known-answer tests: `tests/test_math_freeze_gates.py` (MF-0.1).
+- **M0-2 (mode-projection coordinate)**: the empirical error projection is now
+  available as `E @ F∞^{1/2} U` (normalized dual coordinate of the strict 1/ρ_j
+  theorem) beside the frozen `E @ U`; selected by
+  `predicted_degradation(mode_coordinate=...)`. Known-answer algebra + MC:
+  MF-0.2 within `tests/test_math_freeze_gates.py` (MF-0.4 identity).
+- **M0-3 (factorial rerun)**: `experiments/openillumination_factorial.py` reruns
+  the controlled-corruption protocol as the preregistered A/B/C/D factorial
+  (A = legacy/legacy reproduces the frozen benchmark bit-close and anchors the
+  machinery; D = corrected/corrected is the paper-facing arm, fixed a priori).
+  Outputs: `results/openillumination/correctness/` — protocol in
+  `docs/EXPERIMENTS.md` §11, registered wording in `docs/WORDING.md` §6.
+  Outcome (2026-09-10): arm A reproduces the frozen benchmark bit-close (max
+  relative difference 0.0 on all 66×5 pred/emp entries and on the pooled
+  Spearman); the primary within-cell mode-ranking result is unchanged under
+  arm D (R_A = 0.90, CI [0.7, 0.95], 65/66 positive cells, 11/11 positive
+  objects), while the fixed-level scalar-severity association flips with the
+  corrected noise fit (stratified −0.495 vs +0.536; arm B −0.577, arm C
+  +0.509 isolates the flip to M0-1). Arm D is the paper-facing record per the
+  preregistered rule.
+- **M0-4 (covariance theorem known-answer)**: `F∞^{1/2} Cov(x̂) F∞^{1/2}/σ² =
+  R⁻¹` (matched GLS ensemble) + the forbidden `F∞^{-1/2}` form as a
+  documentational contrast — MF-0.4 tests. `retention_spectrum` now also
+  returns R's eigenvectors (`modes`).
+- **M0-5 (singular covariance)**: B=[1,1], Σ_c=diag(1,0), σ=1, A=[1] →
+  covariance-factor/marginal routes = 0.5; the unconstrained
+  pseudoinverse-precision shortcut = 0 (never equivalent; API/doc gate in
+  `schur.py` + wording guideline §3). New routes: `delta_f_marginal_factor`,
+  `nuisance_factor`. MF-0.5 tests.
+- **EOL pitfall in the frozen-artifact hash gate (found & fixed 2026-09-10)**:
+  the `frozen_artifacts_sha256` values recorded in `configs/openillumination.yaml`
+  were computed on a CRLF working tree, while `.gitattributes` pins `* text
+  eol=lf` — so the bare-sha assertion in `openillumination_severity.py` could
+  never pass on a conforming LF checkout (broken on a fresh clone).
+  `load_and_assert` now compares EOL-robustly (LF- and CRLF-normalized
+  candidates; tampered content matches neither — zero tolerance unchanged) and
+  a regression test pins the fix (`test_frozen_artifact_sha_eol_robust`).
+  The committed artifacts themselves are untouched and bit-identical to their
+  blobs; `checksums.sha256` (LF basis) was never affected.
+- **M0-6 (allocation rank invariance)**: ΔF numerical rank across
+  candidates/budgets is checked by
+  `calibinfo.allocation.rank_invariance.rank_invariance_report`
+  (`tests/test_math_freeze_gates.py` MF-0.6). Executed on the frozen states
+  (`experiments/allocation_rank_check.py` →
+  `results/openillumination/correctness/allocation_rank_check.json`): all 594
+  frozen orderings (11 objects × 3 levels × 2 regimes × 9 policies) keep
+  numerical rank 1200 = rank(F∞) at every budget prefix — the working subspace
+  is common and the E/A/D-optimal naming is licensed (the positive-subspace
+  A/D implementation coincides with the full working subspace).
+
 ## Checksums
 
 `checksums.sha256` fixes every committed file of this repository. **Basis: LF** —

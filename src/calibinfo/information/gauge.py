@@ -5,8 +5,12 @@
 前提 = gauge 恒等式 Aa = Bc̄（调用方保证——诊断场景构造时给出）。
 两端：λ→0 线性抬升（系数 Σαᵢ²）；λ→∞ 饱和 ‖Aa‖² = ‖Bc̄‖²。
 
-（二）：λ⋆ 只存在于绝对信息单位；本模块输出即绝对单位，
-retention（归一化）读出属 retention.py，两个度量不得混用。
+（二）：λ⋆ 的正式名称是 **directional crossover precision**（数学冻结 v1.0 §29）：
+"某固定 gauge direction 的 Rayleigh information 达到给定参考 floor μ 所需的
+calibration precision"，存在条件 0 < μ < T（T = ‖Aa‖²）。只作 within-scene
+绝对信息读出，禁止解释为普遍阈值 / 最小特征交接点 / real-world validated
+predictor / 跨场景绝对可比阈值。λ⋆ 只存在于绝对信息单位；本模块输出即绝对
+单位，retention（归一化）读出属 retention.py，两个度量不得混用。
 绑定测试：test_information_modules.py + test_v2_gauge_closed_form.py（V 系列）。
 """
 

@@ -26,11 +26,15 @@ from calibinfo.information.retention import retention_spectrum
 # linearized model  y = A x + B dc + eps,  dc ~ N(0, Sigma_c)
 A = ...                      # (m, n) design for the parameters of interest
 B = ...                      # (m, q) design for the nuisance block
-Lam = ...                    # nuisance precision  Lambda = sigma^2 * Sigma_c^{-1}
+Lam = ...                    # profiling precision  Lambda = sigma^2 * Sigma_c^{-1}
+                             # (requires Sigma_c > 0; for singular Sigma_c use
+                             #  delta_f_marginal / the factor path C = B L)
 
 DeltaF, M, diag = delta_f(A, B, Lam)                 # Schur-complement information
-R = retention_spectrum(DeltaF, Finf)                 # normalized per-mode retention
-# the smallest eigenvalues of R are the fragile directions the library tracks
+spec = retention_spectrum(DeltaF, A.T @ A)           # normalized per-mode retention
+# spec["rho"] (ascending) are the generalized retention eigenvalues on the
+# identifiable subspace range(F_inf); spec["modes"] are the corresponding
+# eigenvectors — the fragile directions the library tracks
 ```
 
 See `examples/` for complete runnable scripts — each generates its own synthetic
@@ -41,15 +45,23 @@ data and figures on the fly, no downloads required.
 - **Schur-complement delta-Fisher information** `ΔF(Λ)` with a single audited
   implementation (SVD/lstsq paths; no raw solves on rank-deficient systems)
 - **Calibration-retention spectrum** `R(Λ) = F∞^{-1/2} ΔF(Λ) F∞^{-1/2} ∈ [0, I]`
-  with per-mode retention levels and continuous mode tracking across Λ
+  on the identifiable subspace `range(F∞)` — dimension `r = rank(F∞)` (not the
+  nuisance dimension `q`) — with per-mode retention levels and continuous mode
+  tracking across Λ
 - **Closed-form gauge response** `aᵀΔF(λ)a = Σᵢ αᵢ² sᵢ² λ/(sᵢ²+λ)` for gauge
-  directions, with the λ⋆ crossover diagnostic
+  directions, with the λ⋆ directional crossover precision diagnostic
+  (existence condition `0 < μ < ‖Aa‖²`; within-scene interpretation only)
+- **Singular-covariance-safe marginal routes**: `delta_f_marginal` and the
+  covariance-factor path `Σ_c = LLᵀ, C = BL` handle any proper `Σ_c ⪰ 0`
 - **Known-answer test suite**: LO monotonicity, rank-deficient Λ = 0 routes,
   gauge identities, per-light allocation sensitivity (analytic vs finite
-  difference), brute-force greedy cross-checks
+  difference), brute-force greedy cross-checks, retention-covariance theorem,
+  allocation rank invariance
 - **Information-guided calibration allocation**: per-light sensitivity kernels,
   sequential selection under a precision budget, compared against E/A/D-optimal
-  greedy and random baselines
+  greedy (A/D on the positive subspace as implemented) and random baselines.
+  The tested mode-aware ordering is an adaptive normalized weak-Fisher-mode
+  sensitivity heuristic, not an exact retention-gradient optimization
 - **Deterministic paired evaluation protocol**: shared raw innovations across
   policies/budgets, object-level paired bootstrap
 
@@ -57,20 +69,32 @@ data and figures on the fly, no downloads required.
 
 1. Model and nuisance priors:
 
-   `y = A x + B δc + ε`,   `δc ~ N(0, Σ_c)`,   `Λ = σ² Σ_c⁻¹`
+   `y = A x + B δc + ε`,   `δc ~ N(0, Σ_c)`,   `Λ = σ² Σ_c⁻¹` (Σ_c ≻ 0)
+
+   `Λ` is a **profiling precision** (the PSD penalty matrix of the quadratic
+   `cᵀΛc`; its null directions are flat/unpenalized). For a *singular* proper
+   Gaussian covariance — whose null directions mean "almost surely zero", the
+   opposite semantics — use the covariance-factor marginalization
+   `Σ_c = LLᵀ, c = Lz, C = BL` (`delta_f_marginal`, `nuisance_factor`), never a
+   pseudoinverse-precision substitution.
 
 2. Delta-Fisher (Schur complement, the `calibratable` residual information):
 
    `ΔF(Λ) = Aᵀ [ I − B (BᵀB + Λ)⁻¹ Bᵀ ] A`
 
-3. Calibration-retention spectrum:
+3. Calibration-retention spectrum (generalized eigenvalue problem
+   `ΔF v = ρ F∞ v`, restricted to `𝒳 = range(F∞)`):
 
    `R(Λ) = F∞^(−1/2) · ΔF(Λ) · F∞^(−1/2)`,   `0 ≼ R(Λ) ≼ I`
 
-   The eigenvalues `0 ≤ ρ₁ ≤ … ≤ ρ_q ≤ 1` are per-mode retention levels; the
-   weakest (bottom) modes are the smallest eigenvalues of `R(Λ)`, and the
-   mode-resolved criterion tracks those bottom modes across the hyperparameter
-   path.
+   The eigenvalues `0 ≤ ρ₁ ≤ … ≤ ρ_r ≤ 1`, `r = rank(F∞)`, are per-mode
+   retention levels; the weakest (bottom) modes are the smallest eigenvalues of
+   `R(Λ)`, and the mode-resolved criterion tracks those bottom modes across the
+   hyperparameter path. ρ_j is a generalized Rayleigh quantity `v_jᵀΔFv_j /
+   v_jᵀF∞v_j` — not a ratio of ordinary eigenvalues of the two matrices. Under
+   the matched linear-Gaussian GLS ensemble, `1/ρ_j` is exactly the variance
+   inflation of the normalized dual error coordinate
+   `z_j = u_jᵀ F∞^{1/2}(x̂ − x)` (`F∞^{1/2} Cov(x̂) F∞^{1/2} / σ² = R⁻¹`).
 
 4. Gauge spectral response (closed form):
 
@@ -99,8 +123,9 @@ Key frozen results (11 held-out OpenIllumination objects, 66/66 cells):
 - median within-cell Spearman $R_A$ = 0.90 (object-cluster bootstrap 95% CI
   [0.90, 0.95]);
 - stratified (fixed-level) median Spearman 0.536 (mode-resolved) vs 0.418
-  (log-determinant) / 0.400 (trace) — per-level reversals disclosed in
-  `docs/WORDING.md`;
+  (log-determinant) / 0.400 (trace) under the frozen interface — per-level
+  reversals disclosed in `docs/WORDING.md` (see the correctness note below:
+  this scalar-severity association does not survive the corrected interface);
 - preregistered allocation evaluation: mode-aware guidance improves
   reconstruction over random allocation for 11/11 objects (Δ AUC −0.150 at 10×,
   −0.279 at 100×; bootstrap 95% CI excludes 0 — an actionable outcome vs
@@ -119,6 +144,30 @@ Key frozen results (11 held-out OpenIllumination objects, 66/66 cells):
 ![pooled](paper/figures/fig2_pooled.png)
 
 ![allocation forest](paper/figures/fig10_allocation_forest.png)
+
+### Math-interface correctness (MF-0)
+
+The math-method freeze required two interface corrections to be rerun on the
+identical frozen protocol (same objects, pixel subsets, levels, seeds): the
+heteroscedastic noise-fit coefficient order (M0-1) and the normalized
+dual-coordinate mode projection (M0-2). The preregistered A/B/C/D factorial
+(`experiments/openillumination_factorial.py`,
+`results/openillumination/correctness/mf0_factorial_summary.json`) shows that
+arm A (legacy/legacy) reproduces the frozen benchmark bit-close (max relative
+difference 0.0 on every pred/emp entry and on the pooled Spearman), and
+reports the corrected paper-facing arm D (corrected/corrected, fixed a
+priori):
+
+- the primary within-cell mode-ranking result is unchanged: median within-cell
+  Spearman $R_A$ = 0.90 (bootstrap 95% CI [0.7, 0.95], 65/66 cells positive,
+  11/11 objects positive);
+- the fixed-level scalar-severity association does not survive the corrected
+  noise fit: stratified median −0.495 (arm D) vs 0.536 (arm A); the flip is
+  driven by the noise-fit correction (arm B −0.577 with the legacy projection,
+  arm C 0.509 with the corrected projection). Per the preregistered decision
+  rule the corrected arm D is the reported result regardless of direction, and
+  the stratified severity-comparison claim is downgraded accordingly
+  (`docs/WORDING.md` §6).
 
 ## Installation
 

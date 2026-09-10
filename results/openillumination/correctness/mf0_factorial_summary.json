@@ -1,0 +1,213 @@
+{
+ "gate": "MF-0.3 factorial correctness rerun (math freeze v1.0 section 57)",
+ "paper_variant": "D",
+ "machinery_check": {
+  "pred_deg_max_rel": 0.0,
+  "emp_deg_max_rel": 0.0,
+  "pooled_spearman_abs_diff": 0.0,
+  "tolerance": 1e-07,
+  "pass_": true
+ },
+ "protocol": {
+  "config_sha256": "f94c829b7a466708c3584fa501e772784a9e79d1ca94771cde03b05310054527",
+  "frozen_reference_sha256": "6f294c9f03c1f2c60bb2b809efca5120231cf859270c68815b4272f4dad104b2",
+  "seed": 20260907,
+  "levels": [
+   0.1,
+   0.2,
+   0.35,
+   0.5,
+   0.75,
+   1.0
+  ],
+  "seeds_per_level": 20,
+  "ctype": "joint",
+  "objects": [
+   "obj_03_pumpkin",
+   "obj_04_dolphin",
+   "obj_07_pumpkin2",
+   "obj_09_ball",
+   "obj_10_pumpkin3",
+   "obj_11_pine",
+   "obj_13_mushroom",
+   "obj_16_friends_cup",
+   "obj_17_pumpkin5",
+   "obj_18_fabric_hat",
+   "obj_19_cylinder"
+  ],
+  "n_cells": 66,
+  "n_modes": 5,
+  "bootstrap": {
+   "reps": 10000,
+   "seed": 20260908,
+   "unit": "object"
+  },
+  "variants": {
+   "A": {
+    "noise_fit_convention": "legacy",
+    "mode_coordinate": "legacy"
+   },
+   "B": {
+    "noise_fit_convention": "corrected",
+    "mode_coordinate": "legacy"
+   },
+   "C": {
+    "noise_fit_convention": "legacy",
+    "mode_coordinate": "dual"
+   },
+   "D": {
+    "noise_fit_convention": "corrected",
+    "mode_coordinate": "dual"
+   }
+  }
+ },
+ "variants": {
+  "A": {
+   "noise_fit_convention": "legacy",
+   "mode_coordinate": "legacy",
+   "RA": 0.8999999999999998,
+   "RA_ci95": [
+    0.8999999999999998,
+    0.9499999999999998
+   ],
+   "n_pos_cells": 66,
+   "n_pos_objects": 11,
+   "undefined_cells": 0,
+   "n_objects": 11,
+   "pooled_spearman": 0.8705771840100199,
+   "stratified_median_mode": 0.5363636363636364,
+   "stratified_valid_levels": 1,
+   "stratified_scalar_medians": {
+    "P_trace": 0.4,
+    "P_logdet": 0.4181818181818182,
+    "P_emin": 0.5363636363636364
+   },
+   "best_scalar_name": "P_emin",
+   "delta_mode_vs_best_scalar": 0.0,
+   "delta_mode_ci95": [
+    -0.33333333333333326,
+    0.0
+   ]
+  },
+  "B": {
+   "noise_fit_convention": "corrected",
+   "mode_coordinate": "legacy",
+   "RA": 0.8999999999999998,
+   "RA_ci95": [
+    0.7999999999999999,
+    0.8999999999999998
+   ],
+   "n_pos_cells": 66,
+   "n_pos_objects": 11,
+   "undefined_cells": 0,
+   "n_objects": 11,
+   "pooled_spearman": -0.1489406116271788,
+   "stratified_median_mode": -0.5772727272727274,
+   "stratified_valid_levels": 1,
+   "stratified_scalar_medians": {
+    "P_trace": -0.7227272727272728,
+    "P_logdet": -0.6045454545454546,
+    "P_emin": -0.5772727272727274
+   },
+   "best_scalar_name": "P_emin",
+   "delta_mode_vs_best_scalar": 0.0,
+   "delta_mode_ci95": [
+    -0.18224299065420557,
+    0.0
+   ]
+  },
+  "C": {
+   "noise_fit_convention": "legacy",
+   "mode_coordinate": "dual",
+   "RA": 0.8999999999999998,
+   "RA_ci95": [
+    0.8999999999999998,
+    0.9499999999999998
+   ],
+   "n_pos_cells": 66,
+   "n_pos_objects": 11,
+   "undefined_cells": 0,
+   "n_objects": 11,
+   "pooled_spearman": 0.8718296628744391,
+   "stratified_median_mode": 0.509090909090909,
+   "stratified_valid_levels": 1,
+   "stratified_scalar_medians": {
+    "P_trace": 0.3772727272727273,
+    "P_logdet": 0.390909090909091,
+    "P_emin": 0.509090909090909
+   },
+   "best_scalar_name": "P_emin",
+   "delta_mode_vs_best_scalar": 0.0,
+   "delta_mode_ci95": [
+    -0.3809696342305038,
+    0.0
+   ]
+  },
+  "D": {
+   "noise_fit_convention": "corrected",
+   "mode_coordinate": "dual",
+   "RA": 0.8999999999999998,
+   "RA_ci95": [
+    0.7,
+    0.9499999999999998
+   ],
+   "n_pos_cells": 65,
+   "n_pos_objects": 11,
+   "undefined_cells": 0,
+   "n_objects": 11,
+   "pooled_spearman": -0.058302891138712044,
+   "stratified_median_mode": -0.4954545454545455,
+   "stratified_valid_levels": 1,
+   "stratified_scalar_medians": {
+    "P_trace": -0.7181818181818183,
+    "P_logdet": -0.5590909090909092,
+    "P_emin": -0.4954545454545455
+   },
+   "best_scalar_name": "P_emin",
+   "delta_mode_vs_best_scalar": 0.0,
+   "delta_mode_ci95": [
+    -0.1515187419215856,
+    0.0
+   ]
+  }
+ },
+ "display": {
+  "A": {
+   "RA": 0.9,
+   "RA_ci95": [
+    0.9,
+    0.95
+   ],
+   "stratified_median_mode": 0.536,
+   "delta_mode_vs_best_scalar": 0.0
+  },
+  "B": {
+   "RA": 0.9,
+   "RA_ci95": [
+    0.8,
+    0.9
+   ],
+   "stratified_median_mode": -0.577,
+   "delta_mode_vs_best_scalar": 0.0
+  },
+  "C": {
+   "RA": 0.9,
+   "RA_ci95": [
+    0.9,
+    0.95
+   ],
+   "stratified_median_mode": 0.509,
+   "delta_mode_vs_best_scalar": 0.0
+  },
+  "D": {
+   "RA": 0.9,
+   "RA_ci95": [
+    0.7,
+    0.95
+   ],
+   "stratified_median_mode": -0.495,
+   "delta_mode_vs_best_scalar": 0.0
+  }
+ },
+ "note": "A=legacy/legacy (== frozen benchmark, machinery anchor); B=corrected/legacy; C=legacy/dual; D=corrected/dual (paper-facing variant, fixed a priori). R_A = median within-cell Spearman of S=1-1/rho vs empirical degradation; object-cluster bootstrap B=10000 seed 20260908; stratified median = median over the six fixed-level Spearman; delta = mode minus best scalar (within-replicate re-selection)."
+}

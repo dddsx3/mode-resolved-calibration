@@ -13,7 +13,7 @@ SUBPACKAGES = [
 
 
 def test_calibinfo_import():
-    assert calibinfo.__version__ == "0.2.0"
+    assert calibinfo.__version__ == "0.3.0"
 
 
 def test_subpackages_present():

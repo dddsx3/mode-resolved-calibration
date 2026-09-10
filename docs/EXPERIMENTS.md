@@ -36,6 +36,10 @@ to reproduce the frozen artifacts.
 - **Seed**: `20260907`
 - **Output**: `results/gauge_spectrum/ci02_formal_summary.json`
 - **Headline bound**: closed-vs-direct max = 2.55e-8 (bound 3.9e-8) over the 25 decades
+- **λ⋆ naming lock**: λ⋆ is the **directional crossover precision** — the
+  calibration precision at which a fixed gauge direction's Rayleigh information
+  reaches a pre-specified reference floor (existence condition `0 < μ < ‖Aa‖²`);
+  within-scene interpretation only (math freeze v1.0 §29)
 
 ## 3. Monte-Carlo tightness and linearization validity  (`experiments/monte_carlo_validation.py`)
 
@@ -82,6 +86,11 @@ to reproduce the frozen artifacts.
 - **Seed**: experiment seed `20260907`
 - **Output**: `results/openillumination/ci04_formal_summary.json`,
   `results/openillumination/mode_ranking.csv`, `level_severity.csv`
+- **Math-interface conventions (math freeze v1.0 M0-1/M0-2)**: the noise fit and
+  the empirical mode projection each have a `legacy` (frozen-benchmark
+  bit-reproducible, default) and a `corrected` convention
+  (`noise_fit_convention` / `mode_coordinate`); the corrected arms are exercised
+  by the factorial rerun (§11)
 
 ## 6. Fixed-level severity: mode-resolved vs scalar criteria  (`experiments/openillumination_severity.py`)
 
@@ -153,11 +162,14 @@ Config: `configs/openillumination_allocation.yaml` (frozen at tag
 - **Regimes**: {10×, 100×} — the selected light's Σ_φ diagonal is divided by the
   regime factor (equivalently λ_ℓ × regime).
 - **Budgets**: {0.1, 0.2, 0.4, 0.6, 0.8} of K → k = round(b·K) = {14, 28, 57, 85, 114}.
-- **Policies (five, one shared sequential frame)**: mode-aware (G_ℓ from the
-  per-light sensitivity kernel g_ℓj over the bottom-5 tracked modes, recomputed
-  each step), E-opt (λ_min gain), A-opt (trace(ΔF⁺) decrease), D-opt
-  (positive-subspace logdet gain), random (5 fixed-seed permutations estimating the
-  same-object random-policy expectation). Every policy yields one full 142-light
+- **Policies (five, one shared sequential frame)**: mode-aware — the **adaptive
+  normalized weak-Fisher-mode sensitivity heuristic** (G_ℓ from the per-light
+  sensitivity kernel g_ℓj over the bottom-5 tracked modes, recomputed each
+  step; a heuristic aggregate, not an exact retention-gradient optimization,
+  math freeze v1.0 §33), E-opt (λ_min gain), A-opt (trace(ΔF⁺) decrease,
+  positive-subspace pseudo-A as implemented), D-opt (positive-subspace logdet
+  gain), random (5 fixed-seed permutations estimating the same-object
+  random-policy expectation). Every policy yields one full 142-light
   ordering per (object, level, regime); budgets are prefixes; the selected light's
   precision is updated immediately before the next step; ties break on ascending
   light index.
@@ -203,6 +215,36 @@ deterministic policy runs):
   10× / +0.019 at 100×, CIs span 0, 3/11 objects), while
   random48 − random_full = −0.198 / −0.342 (CIs exclude 0): the measured benefit
   over full-universe random is an active-set effect, not a mode-ordering effect.
+
+## 11. Math-freeze correctness rerun (MF-0.3 factorial, `experiments/openillumination_factorial.py`)
+
+Preregistered four-arm rerun of the §5 controlled-corruption protocol after the
+two math-interface corrections of the math-method freeze v1.0 (M0-1 noise-fit
+coefficient order; M0-2 normalized dual-coordinate mode projection). Same
+objects, pixel subsets, levels, seeds and statistics across all arms; the arm
+labels were fixed before the rerun:
+
+| arm | noise fit (M0-1) | mode coordinate (M0-2) | role |
+|-----|------------------|------------------------|------|
+| A | legacy | legacy | == frozen benchmark (machinery anchor) |
+| B | corrected | legacy | |
+| C | legacy | dual | |
+| D | corrected | dual | **paper-facing (fixed a priori)** |
+
+- **Sampling**: one shared rng stream; the corrected scenes reuse the legacy
+  scenes' frozen (light, pixel) subsets; corruption draws are shared.
+- **Machinery check**: arm A vs the frozen §5 summary — max relative difference
+  over all pred/emp entries plus the pooled Spearman; tolerance 1e-7
+  (expected ~1e-12), hard error on breach.
+- **Reported per arm**: R_A (median within-cell Spearman of S = 1 − 1/ρ vs
+  empirical degradation), object-cluster bootstrap 95% CI (B=10000, seed
+  20260908), positive cells / positive objects, stratified (fixed-level)
+  median for P_mode and each scalar predictor, and the paired
+  Δ(mode − best scalar) with within-replicate re-selection.
+- **Seed**: experiment seed `20260907` (frozen §5 config, unchanged)
+- **Output**: `results/openillumination/correctness/` —
+  `mf0_factorial_summary.json` (+ `mf0_factorial_rows_<arm>.json`); no frozen
+  artifact is modified.
 
 ---
 

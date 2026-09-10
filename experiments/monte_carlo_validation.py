@@ -61,7 +61,12 @@ def run(config, run_dir):
             G = B_blk.T @ B_blk + Lam
             Ginv_Bt = np.linalg.lstsq(G, B_blk.T, rcond=None)[0]
 
-            # 分析基：F∞^{-1/2} 白化（range 限制）+ 预测协方差特征基（mode-resolved）
+            # 分析基：F∞^{-1/2} 白化（range 限制）+ 预测协方差特征基（mode-resolved）。
+            # 口径注意（数学冻结 v1.0 §47）：C_pred_w = F∞^{-1/2}(σ²ΔF⁻¹)F∞^{-1/2}
+            # 是**白化坐标**的预测协方差；严格 R⁻¹ 的坐标关系
+            # F∞^{1/2}Cov(x̂)F∞^{1/2}/σ² = R⁻¹ 由 MF-0.4 known-answer 测试
+            # （tests/test_math_freeze_gates.py）单独盯防——本 MC 的 mode basis
+            # 不必（也不应）被解读为 retention modes。
             Finf = A_st.T @ A_st
             wv, Vv = np.linalg.eigh(Finf)
             kp = wv > 1e-12 * max(wv.max(), 1e-300)

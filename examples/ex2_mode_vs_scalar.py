@@ -10,7 +10,6 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
-from calibinfo.allocation.blocks import sym_inv
 from calibinfo.metrics.spectral_criteria import (
     logdet_deficit,
     trace_ratio,

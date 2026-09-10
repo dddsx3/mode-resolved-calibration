@@ -18,10 +18,15 @@ import numpy as np
 from scipy.optimize import least_squares
 
 
-def calibrate(n_gt, dirs, I_norm):
+def calibrate(n_gt, dirs, I_norm, convention="legacy"):
     """全 96 光朗伯拟合 → ρ, 噪声模型 (a,b), 朗伯残差。
 
     来源：exp8r v3 calibrate（逐位一致移植）。
+
+    convention（数学冻结 v1.0 M0-1）：np.polyfit(x, y, 1) 返回 [slope, intercept]，
+    legacy（默认）保留历史错位顺序（a←slope、b←intercept；exp8r 移植逐位一致
+    契约），corrected 返回 a=intercept、b=slope（与模型 Var ≈ a + b·I 一致）。
+    退化守卫判定同一对象（slope < 0 → 回退 (1, 0)）。
     """
     nl = np.clip(n_gt @ dirs.T, 0, None)
     rho = (I_norm.T * nl).sum(1) / np.maximum((nl * nl).sum(1), 1e-12)
@@ -31,9 +36,14 @@ def calibrate(n_gt, dirs, I_norm):
     if sel.sum() < 100:
         a_, b_ = 1.0, 0.0
     else:
-        a_, b_ = np.polyfit(I_hat.ravel()[sel], (resid.ravel() ** 2)[sel], 1)
-        if a_ < 0:
+        slope, intercept = np.polyfit(I_hat.ravel()[sel],
+                                      (resid.ravel() ** 2)[sel], 1)
+        if slope < 0:
             a_, b_ = 1.0, 0.0
+        elif convention == "legacy":
+            a_, b_ = float(slope), float(intercept)     # 历史错位顺序（a←slope）
+        else:
+            a_, b_ = float(intercept), float(slope)     # corrected：(a, b) 按模型定义
     return rho, float(a_), float(b_), float(np.linalg.norm(resid) / np.linalg.norm(I_norm))
 
 

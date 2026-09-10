@@ -65,6 +65,9 @@ def retention_spectrum(DeltaF, Finf, tol_rel=1e-12):
     dict(
       rho             : (k,) R 的特征值（升序），k = rank(F∞)；名义 ∈ [0,1]
       basis           : (n, k) 可识别子空间正交基（eigh(F∞) 的正特征向量）
+      modes           : (n, k) R 的特征向量（与 rho 升序一一对应；dual 坐标
+                        z_j = u_jᵀ F∞^{1/2} e 用列 u_j——注意 basis 与 modes
+                        是两组不同的向量，禁止混配）
       n_identifiable  : k
       cond_Finf       : F∞ 可识别部分的谱条件数
       bounds_ok       : rho ∈ [−tol, 1+tol] 的布尔自检（不抛错，由调用方决定处置）
@@ -80,8 +83,8 @@ def retention_spectrum(DeltaF, Finf, tol_rel=1e-12):
     wk = w[keep]
     Fh = Vk @ np.diag(1.0 / np.sqrt(wk)) @ Vk.T        # 正定平方根（限制到 range）
     R = Fh @ DeltaF @ Fh
-    rho = np.linalg.eigvalsh(R)
+    rho, U = np.linalg.eigh(0.5 * (R + R.T))           # 升序；U 列 = retention modes
     tol = 1e-9
-    return dict(rho=rho, basis=Vk, n_identifiable=int(keep.sum()),
+    return dict(rho=rho, basis=Vk, modes=U, n_identifiable=int(keep.sum()),
                 cond_Finf=float(wk.max() / wk.min()),
                 bounds_ok=bool(rho.min() > -tol and rho.max() < 1.0 + tol))

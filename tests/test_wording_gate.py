@@ -31,6 +31,17 @@ BANNED = [
     r"better than[^.\n]{0,80}E-optimality",
     r"on every resolution level",
     r"pass rate",
+    # math-freeze v1.0 additions (wording guideline §3):
+    # ordinary-eigenvalue-ratio claim for retention (generalized form only)
+    r"\\rho_j\s*=\s*\\lambda_j",
+    r"rho_j\s*=\s*lambda_j\(",
+    # pseudoinverse-precision notation for singular covariance (factor path
+    # must be stated positively instead; quotable only inside WORDING.md)
+    r"Σ_c⁺",
+    r"Sigma_c\^\+",
+    r"\\Sigma_c\^\+",
+    # λ⋆ overclaim (registered name: directional crossover precision)
+    r"validated real-world crossover",
     # allocation-grade erratum (wording guideline §2/§5): the frozen grade is a
     # historical internal label; public text says "actionable outcome vs random"
     r"strong grade",

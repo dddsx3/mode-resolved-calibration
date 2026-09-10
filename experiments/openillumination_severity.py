@@ -37,6 +37,24 @@ def _sha(p: str) -> str:
     return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 
 
+def _eol_robust_sha_matches(p: str, recorded: str) -> bool:
+    """冻结产物完整性断言的 EOL-鲁棒实现（2026-09-10 修复）。
+
+    背景：configs/openillumination.yaml 记录的 frozen_artifacts_sha256 是在
+    CRLF 工作树上计算的，而 .gitattributes 钉死 `* text eol=lf`——任何符合
+    规范的 LF 检出上，裸 sha256 永不匹配（脚本在新鲜 clone 上必然炸）。
+    修复：把字节内容归一到 LF 后，同时接受 LF 与 CRLF 两个候选哈希。
+    内容被篡改时两个候选都不匹配——零容忍语义不变。
+    """
+    raw = Path(p).read_bytes()
+    lf = raw.replace(b"\r\n", b"\n")
+    candidates = {
+        hashlib.sha256(lf).hexdigest(),
+        hashlib.sha256(lf.replace(b"\n", b"\r\n")).hexdigest(),
+    }
+    return recorded in candidates
+
+
 def spearman_safe(x, y):
     """Spearman；全并列 → nan（调用方按 T7.4 记 undefined，不改 0）。"""
     r = spearmanr(x, y).statistic
@@ -55,7 +73,8 @@ def median_valid(vals):
 def load_and_assert(cfg_path: str):
     cfg = yaml.safe_load(Path(cfg_path).read_text(encoding="utf-8"))
     for f, h in cfg["frozen_artifacts_sha256"].items():
-        assert _sha(f) == h, f"冻结产物 sha256 不一致: {f}（REPRODUCIBILITY INCIDENT）"
+        assert _eol_robust_sha_matches(f, h), \
+            f"冻结产物 sha256 不一致: {f}（REPRODUCIBILITY INCIDENT）"
     summary = json.loads(Path("results/openillumination/ci04_formal_summary.json").read_text(encoding="utf-8"))
     manifest = json.loads(Path("results/openillumination/ci04_formal_manifest.json").read_text(encoding="utf-8"))
     rows = summary["rows"]

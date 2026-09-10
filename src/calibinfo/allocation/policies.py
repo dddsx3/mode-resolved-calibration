@@ -9,10 +9,16 @@ with an immediate precision update of the selected light
 before the next step. Budgets are prefixes of the ordering.
 
 Policies:
-  mode_aware : J = G_l, the pre-frozen multi-mode aggregation of the per-light
-               sensitivity kernel g_lj (mode basis recomputed at every step)
+  mode_aware : J = G_l — the **adaptive normalized weak-Fisher-mode sensitivity
+               heuristic** (the frozen name for the current implementation, per
+               the math freeze v1.0 §33): bottom-5 Euclidean eigenvectors of the
+               plain DeltaF, recomputed at every step, per-mode sensitivities
+               normalized across lights, then averaged into G_l. This is a
+               heuristic aggregate, NOT an exact retention-gradient allocation
+               (that would require F_inf-normalized generalized eigenvectors).
   e_opt      : J = lambda_min gain of the candidate-updated DeltaF
   a_opt      : J = trace(pinv(DeltaF)) decrease of the candidate update
+               (positive-subspace pseudo-A as implemented)
   d_opt      : J = positive-subspace logdet increase of the candidate update
   random     : uniform permutation (paired raw-draw expectation estimator)
 

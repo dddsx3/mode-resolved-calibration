@@ -78,6 +78,21 @@ Grade C (negative) — verbatim:
 - "pass rate" (as a name for $R_A$; use "median within-cell Spearman")
 - Any numeric claim in README/docs that cannot be traced to a specific field of a
   specific file under `results/`.
+- Math-freeze v1.0 additions (§17/§29/§5/§33/§54):
+  - the ordinary-eigenvalue-ratio claim `ρ_j = λ_j(ΔF)/λ_j(F∞)` in any form
+    (retention eigenvalues are generalized Rayleigh quantities; the two
+    matrices need not share eigenvectors). Public text states the generalized
+    form instead; the claim itself is quotable only in this guardhouse file.
+  - the notation `Sigma_c^+` (ASCII or Unicode) in public-facing files: the
+    pseudoinverse-precision substitution for singular covariance is semantically
+    wrong (support vs flat directions) and must never be advertised as
+    equivalent. Public text states the factor path (`Sigma_c = L L^T, C = B L`)
+    positively.
+  - "validated real-world crossover predictor" for λ⋆ (its registered name is
+    "directional crossover precision", within-scene interpretation only).
+  - "exact retention-gradient allocation" as a description of the current
+    mode-aware policy (registered name: "adaptive normalized weak-Fisher-mode
+    sensitivity heuristic").
 
 ## 4. Claim tracing rule
 
@@ -115,3 +130,38 @@ labelled `posthoc_paired_comparison`):
   policy's advantage over full-universe random allocation reflects selecting any
   active light rather than the specific ordering — bounded by the
   `random_active48` control (`allocation_random48_summary.json`)."
+
+## 6. Registered wording (math-freeze MF-0 correctness rerun)
+
+Source file: `results/openillumination/correctness/mf0_factorial_summary.json`
+(fields `variants.*`, `display.*`, `machinery_check.*`; produced by
+`experiments/openillumination_factorial.py`, registered 2026-09-10). The
+factorial rerun tests the two math-interface corrections of the math-method
+freeze v1.0 (noise-fit coefficient order M0-1; empirical mode-projection
+coordinate M0-2) on the identical frozen protocol (same objects, pixel subsets,
+levels, seeds, statistics). Arm A reproduces the frozen benchmark and is the
+machinery anchor; the paper-facing arm is D (corrected/corrected), fixed a
+priori — not selected by outcome.
+
+- Corrected headline (registered 2026-09-10): "under the corrected math
+  interface (arm D), the median within-cell Spearman $R_A$ = 0.90
+  (object-cluster bootstrap 95% CI [0.7, 0.95], 65/66 positive cells, 11/11
+  positive objects), versus 0.90 (CI [0.9, 0.95]) under the frozen
+  (pre-correction) interface (arm A)."
+- Stratified downgrade (required whenever the frozen stratified median 0.536
+  is mentioned): "the fixed-level scalar-severity association does not survive
+  the corrected noise fit: stratified median −0.495 (arm D) vs 0.536 (arm A);
+  the flip is driven by the noise-fit correction (arm B −0.577 with the legacy
+  projection, arm C 0.509 with the corrected projection). The corrected arm D
+  is the reported result regardless of direction (the arm was fixed before the
+  rerun)."
+- Machinery anchor (required at first mention): "arm A reproduces the frozen
+  benchmark bit-close (max relative difference 0.0 on every pred/emp entry and
+  on the pooled Spearman), validating the rerun machinery."
+- Naming (required for the two corrections): "noise-fit coefficient order"
+  (M0-1) and "normalized dual-coordinate mode projection" (M0-2). The four arms
+  are A = legacy/legacy, B = corrected/legacy, C = legacy/dual,
+  D = corrected/dual.
+- Boundary sentence (if D degrades vs A): "the corrected interface is used
+  regardless of the direction of the change (the arm was fixed before the
+  rerun); the paper reports the corrected numbers."
