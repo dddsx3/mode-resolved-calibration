@@ -123,6 +123,17 @@ interface is exercised by a preregistered factorial rerun into
   adversarial near-collinear family clean. Harness tests pin a reproducible
   counterexample and the detector sensitivity/specificity
 
+### Added
+
+- P-ALLOC2 preregistration (`configs/allocation_mode_tail.yaml`) + driver
+  (`experiments/allocation_mode_tail.py`): mode-tail targeted calibration
+  intervention - targeted arm = the frozen weak-Fisher-mode heuristic vs
+  random_active48, paired-by-seed, endpoint = bottom-5 tracked-mode energy in
+  the normalized dual coordinate (M0-2 corrected); outcome-independent
+- `experiments/lowrank_fullres.py` v1.1: per-object checkpoint resume +
+  multiprocessing driver (cloud migration package mirrors it in
+  Multi-Illumination-Inverse-Rendering branch cloud-mode-tail)
+
 ### Added (planned, on this branch)
 
 ### Added

@@ -8,6 +8,13 @@
   - nominal 朗伯 PS 用批量正规方程版（calibrated_ps_fullres，语义同
     calibrated_ps：数据驱动初值 + 交替最小二乘 + n 归一 + 奇异回退 +z）。
 
+**云/并行/断点**（v1.1，云迁徙版）：
+  - 逐对象 checkpoint（`--checkpoint-dir` 下 partial_<obj>.json）：已完成
+    对象跳过（断点续传）；对象间零耦合（rng 按对象确定性），可任意重排/并行；
+  - `--workers N`：按对象多进程（spawn）；BLAS 线程数由调用方以
+    OMP_NUM_THREADS=核数/N 预设（云启动脚本负责）；
+  - 对象顺序无关 → 汇总按 cohort 顺序重排，结果与串行逐位一致。
+
 协议预注册于 configs/lowrank_fullres.yaml（run 前提交）。输出：
   results/certification/lowrank_fullres.json
 """
@@ -142,48 +149,53 @@ def _greedy_steepest_prefix(prob, kappa, k_max):
     return out
 
 
-def run(config_path=REPO / "configs/lowrank_fullres.yaml",
-        out_path=REPO / "results/certification/lowrank_fullres.json"):
-    cfg = yaml.safe_load(Path(config_path).read_text(encoding="utf-8"))
+def run_object(obj_idx: int, obj_name: str, cfg: dict):
+    """单对象全量（rows + scene_meta）；对象间零耦合，可并行/重排。"""
     kappa = float(cfg["kappa"])
     budgets_k = list(cfg["budgets_k"])
     k_max = max(budgets_k)
-    out = Path(out_path)
-    out.parent.mkdir(parents=True, exist_ok=True)
+    obj = load_object(cfg["data_root"], obj_name, data_meta=cfg.get("data_meta"))
+    # 全分辨率协议无子采样：scene_rng_spec 的 rng 在此协议下不消耗
+    #（nominal PS 是确定性的批量交替最小二乘）
+    prob, meta = build_fullres_state(obj, cfg)
+    active = list(range(prob.blocks.L))                      # 全 142 灯 active
+    J_none = prob.J_A(np.ones(prob.blocks.L))
+    J_all = prob.J_A(np.full(prob.blocks.L, kappa))
+    greedy = _greedy_steepest_prefix(prob, kappa, k_max)
+    rng = np.random.default_rng(int(cfg["random_seed"]) + obj_idx)
+    rows = []
+    for k in budgets_k:
+        B = budget_for_k(k, kappa)
+        fw = prob.frank_wolfe(B, iters=int(cfg["fw_iters"]))
+        g_lights, J_greedy = greedy[k]
+        rand_J = [prob.J_A(_apply_t(
+            prob, list(rng.choice(active, size=k, replace=False)), kappa))
+            for _ in range(int(cfg["n_random"]))]
+        rows.append(dict(
+            object=obj_name, k=k, B=B, P=meta["P"], L=meta["L"],
+            J_none=J_none, J_all=J_all,
+            fw_J_A=fw["J_A"], fw_gap=fw["gap"],
+            fw_lower_bound=fw["J_A"] - fw["gap"],
+            greedy_J_A=J_greedy, greedy_lights=g_lights,
+            random_mean=float(np.mean(rand_J)),
+            random_min=float(np.min(rand_J)),
+        ))
+    print(f"[fullres] {obj_name} (P={meta['P']}): dynamic range "
+          f"{(J_none - J_all) / abs(J_none) * 100:.2f}%", flush=True)
+    return obj_name, rows, meta
 
-    rows, scene_meta = [], {}
-    t_start = time.time()
-    for obj_idx, obj_name in enumerate(cfg["cohort"]):
-        obj = load_object(cfg["data_root"], obj_name, data_meta=cfg.get("data_meta"))
-        # 全分辨率协议无子采样：scene_rng_spec 的 rng 在此协议下不消耗
-        #（nominal PS 是确定性的批量交替最小二乘）
-        prob, meta = build_fullres_state(obj, cfg)
-        scene_meta[obj_name] = meta
-        active = list(range(prob.blocks.L))                  # 全 142 灯 active
-        J_none = prob.J_A(np.ones(prob.blocks.L))
-        J_all = prob.J_A(np.full(prob.blocks.L, kappa))
-        greedy = _greedy_steepest_prefix(prob, kappa, k_max)
-        rng = np.random.default_rng(int(cfg["random_seed"]) + obj_idx)
-        for k in budgets_k:
-            B = budget_for_k(k, kappa)
-            fw = prob.frank_wolfe(B, iters=int(cfg["fw_iters"]))
-            g_lights, J_greedy = greedy[k]
-            rand_J = [prob.J_A(_apply_t(
-                prob, list(rng.choice(active, size=k, replace=False)), kappa))
-                for _ in range(int(cfg["n_random"]))]
-            rows.append(dict(
-                object=obj_name, k=k, B=B, P=meta["P"], L=meta["L"],
-                J_none=J_none, J_all=J_all,
-                fw_J_A=fw["J_A"], fw_gap=fw["gap"],
-                fw_lower_bound=fw["J_A"] - fw["gap"],
-                greedy_J_A=J_greedy, greedy_lights=g_lights,
-                random_mean=float(np.mean(rand_J)),
-                random_min=float(np.min(rand_J)),
-            ))
-        print(f"[fullres] {obj_name} (P={meta['P']}): dynamic range "
-              f"{(J_none - J_all) / abs(J_none) * 100:.2f}% "
-              f"elapsed={time.time() - t_start:.0f}s", flush=True)
 
+def _task(payload):
+    obj_idx, obj_name, cfg = payload
+    t0 = time.time()
+    obj_name, rows, meta = run_object(obj_idx, obj_name, cfg)
+    return obj_name, rows, meta, time.time() - t0
+
+
+def _assemble(cfg, rows, scene_meta, t_start, config_path):
+    kappa = float(cfg["kappa"])
+    budgets_k = list(cfg["budgets_k"])
+    rows = sorted(rows, key=lambda r: (cfg["cohort"].index(r["object"]), r["k"]))
     by_k = {}
     for k in budgets_k:
         rs = [r for r in rows if r["k"] == k]
@@ -206,8 +218,7 @@ def run(config_path=REPO / "configs/lowrank_fullres.yaml",
         random_mean_above_lower_median_pct=round(
             by_k[k]["random_mean_above_lower_pct"]["median"], 3),
     ) for k in budgets_k}
-
-    summary = dict(
+    return dict(
         gate="P-LOWRANK-FULLRES v1: certified gaps at full resolution",
         analysis_status="lowrank_fullres_v1",
         objective=cfg["objective"], route="woodbury",
@@ -222,19 +233,79 @@ def run(config_path=REPO / "configs/lowrank_fullres.yaml",
         note="Full-resolution (no pixel subsampling) / full-142-light "
              "certified gap table via the exact low-rank Woodbury route. "
              "No sign-based gate; every row reported.")
+
+
+def run(config_path=REPO / "configs/lowrank_fullres.yaml",
+        out_path=REPO / "results/certification/lowrank_fullres.json",
+        objects=None, workers: int = 1, checkpoint_dir=None):
+    cfg = yaml.safe_load(Path(config_path).read_text(encoding="utf-8"))
+    cohort = list(cfg["cohort"])
+    if objects:
+        cohort = [o for o in cohort if o in set(objects)]
+    out = Path(out_path)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    ckpt = Path(checkpoint_dir) if checkpoint_dir else out.parent / "checkpoints_fullres"
+    ckpt.mkdir(parents=True, exist_ok=True)
+
+    rows, scene_meta = [], {}
+    t_start = time.time()
+    done = {}
+    for obj_name in cohort:                              # 断点续传：载入已完成对象
+        pf = ckpt / f"partial_{obj_name}.json"
+        if pf.exists():
+            d = json.loads(pf.read_text(encoding="utf-8"))
+            done[obj_name] = d
+            rows.extend(d["rows"])
+            scene_meta[obj_name] = d["meta"]
+            print(f"[fullres] {obj_name}: checkpoint loaded (skip)", flush=True)
+    todo = [(cohort.index(o), o) for o in cohort if o not in done]
+    print(f"[fullres] cohort {len(cohort)} | checkpointed {len(done)} "
+          f"| to run {len(todo)} | workers {workers}", flush=True)
+
+    payloads = [(i, o, cfg) for i, o in todo]
+    if workers > 1 and len(payloads) > 1:
+        import multiprocessing as mp
+        ctx = mp.get_context("spawn")
+        with ctx.Pool(processes=min(workers, len(payloads))) as pool:
+            for obj_name, rws, meta, dt in pool.imap_unordered(_task, payloads):
+                rows.extend(rws)
+                scene_meta[obj_name] = meta
+                (ckpt / f"partial_{obj_name}.json").write_bytes(
+                    json.dumps(dict(rows=rws, meta=meta), ensure_ascii=False)
+                    .encode("utf-8"))
+                print(f"[fullres] {obj_name} done in {dt:.0f}s "
+                      f"(elapsed {time.time() - t_start:.0f}s)", flush=True)
+    else:
+        for i, o in todo:
+            obj_name, rws, meta, dt = _task((i, o, cfg))
+            rows.extend(rws)
+            scene_meta[o] = meta
+            (ckpt / f"partial_{o}.json").write_bytes(
+                json.dumps(dict(rows=rws, meta=meta), ensure_ascii=False)
+                .encode("utf-8"))
+            print(f"[fullres] {o} done in {dt:.0f}s "
+                  f"(elapsed {time.time() - t_start:.0f}s)", flush=True)
+
+    summary = _assemble(cfg, rows, scene_meta, t_start, config_path)
     out.write_bytes(json.dumps(summary, ensure_ascii=False, indent=1)
                     .encode("utf-8"))
-    for k in budgets_k:
+    for k in summary["by_k"]:
         print(f"[fullres] k={k}: dyn median "
-              f"{by_k[k]['dynamic_range_pct']['median']:.2f}% | "
+              f"{summary['by_k'][k]['dynamic_range_pct']['median']:.2f}% | "
               f"greedy-above-lower median "
-              f"{by_k[k]['greedy_above_lower_pct']['median']:.4f}%")
+              f"{summary['by_k'][k]['greedy_above_lower_pct']['median']:.4f}%")
     print(f"[fullres] wrote {out}")
+    return summary
 
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--config", default=str(REPO / "configs/lowrank_fullres.yaml"))
     ap.add_argument("--out", default=str(REPO / "results/certification/lowrank_fullres.json"))
+    ap.add_argument("--objects", default="", help="comma list; default = full cohort")
+    ap.add_argument("--workers", type=int, default=1)
+    ap.add_argument("--checkpoint-dir", default=None)
     args = ap.parse_args()
-    run(args.config, args.out)
+    objects = [o.strip() for o in args.objects.split(",") if o.strip()] or None
+    run(args.config, args.out, objects=objects, workers=args.workers,
+        checkpoint_dir=args.checkpoint_dir)
