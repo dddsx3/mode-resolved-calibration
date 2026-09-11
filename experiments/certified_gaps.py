@@ -176,6 +176,11 @@ def run(config_path=REPO / "configs/certified_gaps.yaml",
             fw_self_gap_rel=dict(median=float(np.median(fw_close)),
                                  max=float(np.max(fw_close))))
 
+    display = {str(k): dict(
+        dynamic_range_median_pct=round(by_k[k]["dynamic_range_rel"]["median"] * 100, 2),
+        greedy_above_lower_median_pct=round(by_k[k]["greedy_minus_lower_rel"]["median"] * 100, 3),
+        random_above_lower_median_pct=round(by_k[k]["random_mean_minus_lower_rel"]["median"] * 100, 3),
+    ) for k in budgets_k}
     summary = dict(
         gate="P-CERT v1: certified optimality gaps (preregistered)",
         analysis_status="certified_gaps_v1",
@@ -189,6 +194,7 @@ def run(config_path=REPO / "configs/certified_gaps.yaml",
                                     for r in rows if r["k"] == budgets_k[-1]])),
             note="t=1 vs t=kappa on every active light, at the largest k row"),
         by_k=by_k,
+        display=display,
         rows=rows,
         manifest=dict(
             config_sha256=_sha(Path(config_path)),

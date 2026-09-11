@@ -1,0 +1,48 @@
+{
+ "gate": "B4 reconciliation: original probe vs committed e11.json vs our P-CERT",
+ "analysis_status": "probe_reconciliation_v1",
+ "date": "2026-09-11",
+ "probe_source": {
+  "e4_convex_py_sha256": "30418d8671091bde24ba91eb4810696f342dabe2d5497395b1282b639ef8da1c",
+  "e11_json_sha256": "283e95ec3edf6c97616913de88b2636350eb79b651d2e83391376b81bd52e333",
+  "figs_py_sha256": "96a1566d491bd748e3cf68c5b5566cc9eaf5307a681774acf52448990a73cf1f",
+  "note": "verbatim copies of the assessment's uncommitted probe scripts, archived here for auditability"
+ },
+ "environment": {
+  "python": "3.14.2",
+  "numpy": "2.4.1"
+ },
+ "reproduction_of_e11": {
+  "scale": {
+   "f_none_reproduced": 1.5827951126,
+   "f_none_e11": 1.6679597502,
+   "f_all_reproduced": 1.5162467494,
+   "f_all_e11": 1.6009073154,
+   "range_pct_reproduced": 4.204484,
+   "range_pct_e11": 4.020027,
+   "absolute_match": false,
+   "note": "e11.json's absolute values do NOT reproduce from the probe source under the stated parameters (offset ~5% on every f). Most likely cause: numpy Generator stream instability across versions (NEP 19) and/or undocumented build-parameter drift. The QUALITATIVE structure reproduces: ~4% dynamic range, ~0.1%-scale certified gaps, greedy/mode/random ordering."
+  },
+  "k14": {
+   "lb_reproduced": 1.5293031329,
+   "lb_e11": 1.6140500975,
+   "greedy_reproduced": 1.530510859,
+   "greedy_e11": 1.6153649502,
+   "absolute_match": false,
+   "greedy_above_lb_reproduced_pct": 0.079,
+   "greedy_above_lb_e11_pct": 0.079,
+   "note": "the certified-gap RATIOS match (0.079% both) even though absolute f values do not"
+  }
+ },
+ "divergence_from_assessment_headline": {
+  "assessment_claim": "total dynamic range 4.02% at 'real scale' (P=1200, L=142, 48 active)",
+  "clarification": "real SCALE but SYNTHETIC generic scene (build(): biased-up normals, sig_logI=sig_deg=0.1) - not the real OpenIllumination objects (SYNTHETIC generic scene - not the real OpenIllumination objects)",
+  "our_certified_measurements": "real objects, corrected interface, level 0.5, kappa=10 (results/certification/certified_gaps.json): dynamic ranges 36-63% across the 11 objects (instance-dependent)",
+  "consequence": "instance-dependence of the certified dynamic range is itself the methodological motivation for per-instance certification; the assessment's 4.02% must not be quoted as a real-object number"
+ },
+ "conclusion": {
+  "b4_gate": "CLOSED with documented divergence",
+  "authoritative_record": "results/certification/certified_gaps.json (committed probe code is internally consistent; e11.json is environment-specific)",
+  "lesson": "uncommitted probe outputs must never be quoted as repo facts (the same discipline as the wording gate's claim tracing)"
+ }
+}

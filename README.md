@@ -228,15 +228,20 @@ Three structural findings anchor it (foundations locked by
 
    ![midpoint convexity](docs/img/convexity_midpoint.png)
 
-3. **Honest negatives, certified** — the real-scale certification table
-   (preregistered protocol `P-CERT`, in progress on this branch) measures the
-   total dynamic range of the allocation problem and every policy's distance
-   to the certified optimum. The earlier null results are thereby *upgraded*
-   from "experiment failed" to whatever the certificate says — including
-   "the problem provably has almost no room". Adversarial searches for
-   submodularity (with a reproducible counterexample harness) are reported as
-   negative results, and the amplitude layer quantifies where the linearized
-   theory leaves the real data.
+3. **Certified optimality gaps on the real objects** — under the
+   preregistered protocol `P-CERT`
+   (`results/certification/certified_gaps.json`, 11 real objects × 5 budget
+   levels): the certified dynamic range of `J_A = tr ΔF⁻¹` between no
+   allocation and refining all 48 Fisher-active lights is **36–89% per
+   object (median 62.87%)** — allocating the calibration budget genuinely
+   matters, and the answer is instance-dependent enough that per-instance
+   certification is the right tool. The J_A-greedy prefix is certified
+   within **0.011–0.028%** of the convex lower bound at every budget
+   (essentially optimal), while seeded random subsets sit 0.25–0.64% above
+   it. The earlier benchmark's policy-comparison nulls live entirely inside
+   that remaining epsilon. Adversarial searches for submodularity (with a
+   reproducible counterexample harness) and the amplitude validity envelope
+   complete the picture as reported negatives/diagnostics.
 
 Work on this direction proceeds on the `mode-tail-design` branch under
 preregistered protocols (`configs/`, committed before each run); the frozen
