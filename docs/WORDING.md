@@ -24,9 +24,17 @@ must never be cited as a headline without its provenance label.
   "mode-resolved analysis reliably identifies which identifiable directions
   are most fragile within a given problem instance (within-cell mode
   ranking)."
-- Headline statistic:
+- Directional-validation headline (required construction disclosure inline):
   "median within-cell Spearman $R_A$ = 0.90 (object-cluster bootstrap 95% CI
-  [0.70, 0.95], 65/66 positive cells, 11/11 positive objects)"
+  [0.70, 0.95], 65/66 positive cells, 11/11 positive objects). By construction
+  this statistic is rank-equivalent to the mode-index baseline (per-cell
+  deviation exactly 0.0, 66/66 cells — results/magnitude/
+  directional_amplitude_summary.json): it validates the *directions* the
+  retention operator flags as weakest, not the magnitudes 1/rho_j."
+- Amplitude validity envelope (the magnitude-layer statement):
+  "on real data the empirical/predicted degradation ratio has median 201.1
+  (5-95% [7.3, 1525.8]; frozen arm-A caliber), against 1.0045 on synthetic
+  matched Monte-Carlo - the validity envelope of the linearized theory."
 - Structural identity disclosure (always with any E-min/E-optimality
   comparison):
   "P_emin ≡ P_mode on the tracked modes (max absolute difference ≤ 1e-14)."
@@ -157,11 +165,20 @@ levels, seeds, statistics). Arm A reproduces the frozen benchmark and is the
 machinery anchor; the paper-facing arm is D (corrected/corrected), fixed a
 priori — not selected by outcome.
 
-- Corrected headline (registered 2026-09-10): "under the corrected math
-  interface (arm D), the median within-cell Spearman $R_A$ = 0.90
-  (object-cluster bootstrap 95% CI [0.7, 0.95], 65/66 positive cells, 11/11
-  positive objects), versus 0.90 (CI [0.9, 0.95]) under the frozen
-  (pre-correction) interface (arm A)."
+- Corrected headline (registered 2026-09-10; reframed 2026-09-11 as
+  directional validation): "under the corrected math interface (arm D), the
+  within-cell directional-validation statistic is $R_A$ = 0.90 (object-cluster
+  bootstrap 95% CI [0.7, 0.95], 65/66 positive cells, 11/11 positive objects),
+  versus 0.90 (CI [0.9, 0.95]) under the frozen (pre-correction) interface
+  (arm A). The statistic is rank-equivalent to the mode-index baseline by
+  construction (deviation exactly 0.0, 66/66 cells); it carries no magnitude
+  information."
+- Stratified disclosure correction (2026-09-11): the earlier claim "only 1 of
+  6 levels valid" was an artifact of a field-semantics bug (a boolean stored
+  in a count field); all six levels have finite within-level Spearman. The
+  stratified branch is retired on the remaining grounds (arm-D flip isolated
+  to M0-1; P_mode == P_emin scalarization; within-scene normalization
+  contract), not on level validity."
 - Stratified downgrade (required whenever the frozen stratified median 0.536
   is mentioned): "the fixed-level scalar-severity association does not survive
   the corrected noise fit: stratified median −0.495 (arm D) vs 0.536 (arm A);

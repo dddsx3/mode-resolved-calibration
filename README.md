@@ -14,6 +14,13 @@ downstream allocation stress test shows that identifying the Fisher-active
 substructure has decision value, while no additional performance advantage is
 observed for the tested within-active-set mode ordering.
 
+The current research direction is a **certified analysis of
+calibration-precision allocation**: the budget-allocation problem is an exact
+convex program in the per-light precision multipliers, the retention spectrum
+has an exact low-rank structure that removes the sampling bottleneck, and the
+optimization landscape itself — not any particular policy — is certified
+(see [Research direction](#research-direction-certified-bounds-on-calibration-precision-allocation)).
+
 ![how it works](paper/figures/overview_schematic.png)
 
 ## Quickstart
@@ -123,11 +130,22 @@ the corrected-interface arm D of the MF-0 factorial** (see "Math-interface
 correctness" below); the pre-correction record is kept explicitly labeled as
 frozen provenance.
 
-- **Within-cell mode ranking (primary real-data result, arm D)**: median
-  within-cell Spearman $R_A$ = 0.90 (object-cluster bootstrap 95% CI
-  [0.7, 0.95]; 65/66 cells positive, 11/11 objects positive) — mode-resolved
-  analysis reliably identifies *which identifiable directions are most
-  fragile inside a given problem instance*;
+- **Directional validation (arm D; the strongest honest statement of the
+  within-cell result)**: median within-cell Spearman $R_A$ = 0.90
+  (object-cluster bootstrap 95% CI [0.7, 0.95]; 65/66 cells positive, 11/11
+  objects positive). **Construction disclosure**: within a cell this statistic
+  is rank-equivalent to the trivial mode-index baseline
+  (`Spearman(−j, ·)`; per-cell deviation exactly 0.0 on 66/66 cells, both
+  calibers — `results/magnitude/directional_amplitude_summary.json`). What it
+  validates is *directional*: the retention operator's bottom tracked
+  directions are the empirically more fragile directions inside a given
+  problem instance. It does **not** validate the predicted magnitudes
+  `1/ρ_j`;
+- **Amplitude validity envelope**: on real data the empirical/predicted
+  degradation ratio has median 201.1 (5–95% [7.3, 1525.8]), against 1.0045 on
+  synthetic matched Monte-Carlo — the matched-GLS variance theorem holds where
+  its assumptions hold, and the real-data deviation is reported as a positive,
+  falsifiable validity envelope of the linearized theory;
 - preregistered allocation evaluation: mode-aware guidance improves
   reconstruction over random allocation for 11/11 objects (Δ AUC −0.150 at 10×,
   −0.279 at 100×; bootstrap 95% CI excludes 0 — an actionable outcome vs
@@ -167,9 +185,9 @@ difference 0.0 on every pred/emp entry and on the pooled Spearman), and
 reports the corrected paper-facing arm D (corrected/corrected, fixed a
 priori):
 
-- the primary within-cell mode-ranking result is unchanged: median within-cell
-  Spearman $R_A$ = 0.90 (bootstrap 95% CI [0.7, 0.95], 65/66 cells positive,
-  11/11 objects positive);
+- the within-cell directional-validation result is unchanged: median
+  within-cell Spearman $R_A$ = 0.90 (bootstrap 95% CI [0.7, 0.95], 65/66
+  cells positive, 11/11 objects positive);
 - the fixed-level scalar-severity association does not survive the corrected
   noise fit: stratified median −0.495 (arm D) vs 0.536 (arm A); the flip is
   driven by the noise-fit correction (arm B −0.577 with the legacy projection,
@@ -177,6 +195,53 @@ priori):
   rule the corrected arm D is the reported result regardless of direction, and
   the stratified severity-comparison claim is downgraded accordingly
   (`docs/WORDING.md` §6).
+
+## Research direction: certified bounds on calibration-precision allocation
+
+The active research program repositions the project from "mode-resolved beats
+scalar summaries" (three times falsified, and explained by the results below)
+to a statement that is harder to overturn and more broadly useful:
+
+> **How much can calibration-precision allocation buy at all?** The
+> budget-allocation problem is reformulated as an exact convex program in the
+> per-light precision multipliers, and the *optimization landscape itself* is
+> certified — with Frank–Wolfe duality-gap certificates and exact dynamic-range
+> bounds, independent of any particular selection policy.
+
+Three structural findings anchor it (foundations locked by
+`tests/test_math_foundations.py`, no raw data required):
+
+1. **Exact low-rank structure** — with per-light block-diagonal nuisance, the
+   retention spectrum consists of exactly `P − 3L` modes pinned at ρ = 1 plus
+   the eigenvalues of `I − VᵀV` for a `P × 3L` skinny factor: the full
+   spectrum is computable from a `3L × 3L` eigenproblem, which removes the
+   pixel-subsampling bottleneck entirely (full resolution, all 142 lights, on
+   a laptop).
+
+   ![retention spectrum low-rank structure](docs/img/retention_lowrank_structure.png)
+
+2. **Convex certificate functional** — the E-optimal certificate functional
+   `J_E = −λ_min(ΔF(t))` is convex in the precision multipliers on the boxed
+   design region (midpoint convexity: 400/400 random pairs), so Frank–Wolfe
+   duality gaps provide genuine global optimality certificates for the
+   allocation problem.
+
+   ![midpoint convexity](docs/img/convexity_midpoint.png)
+
+3. **Honest negatives, certified** — the real-scale certification table
+   (preregistered protocol `P-CERT`, in progress on this branch) measures the
+   total dynamic range of the allocation problem and every policy's distance
+   to the certified optimum. The earlier null results are thereby *upgraded*
+   from "experiment failed" to whatever the certificate says — including
+   "the problem provably has almost no room". Adversarial searches for
+   submodularity (with a reproducible counterexample harness) are reported as
+   negative results, and the amplitude layer quantifies where the linearized
+   theory leaves the real data.
+
+Work on this direction proceeds on the `mode-tail-design` branch under
+preregistered protocols (`configs/`, committed before each run); the frozen
+benchmark above stays untouched and remains the reproducibility record of the
+previous-generation manuscript.
 
 ## Installation
 

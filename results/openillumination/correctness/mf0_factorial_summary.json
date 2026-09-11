@@ -76,7 +76,7 @@
    "n_objects": 11,
    "pooled_spearman": 0.8705771840100199,
    "stratified_median_mode": 0.5363636363636364,
-   "stratified_valid_levels": 1,
+   "stratified_valid_levels": 6,
    "stratified_scalar_medians": {
     "P_trace": 0.4,
     "P_logdet": 0.4181818181818182,
@@ -103,7 +103,7 @@
    "n_objects": 11,
    "pooled_spearman": -0.1489406116271788,
    "stratified_median_mode": -0.5772727272727274,
-   "stratified_valid_levels": 1,
+   "stratified_valid_levels": 6,
    "stratified_scalar_medians": {
     "P_trace": -0.7227272727272728,
     "P_logdet": -0.6045454545454546,
@@ -130,7 +130,7 @@
    "n_objects": 11,
    "pooled_spearman": 0.8718296628744391,
    "stratified_median_mode": 0.509090909090909,
-   "stratified_valid_levels": 1,
+   "stratified_valid_levels": 6,
    "stratified_scalar_medians": {
     "P_trace": 0.3772727272727273,
     "P_logdet": 0.390909090909091,
@@ -157,7 +157,7 @@
    "n_objects": 11,
    "pooled_spearman": -0.058302891138712044,
    "stratified_median_mode": -0.4954545454545455,
-   "stratified_valid_levels": 1,
+   "stratified_valid_levels": 6,
    "stratified_scalar_medians": {
     "P_trace": -0.7181818181818183,
     "P_logdet": -0.5590909090909092,

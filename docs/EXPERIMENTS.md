@@ -96,9 +96,13 @@ to reproduce the frozen artifacts.
 
 Criterion definitions used throughout:
 
-- **Mode-resolved (P_mode)**: damage predicted by the bottom tracked modes,
-  `P_mode = 1/(1 − ρ_mode)` where `ρ_mode` derives from the inverse of the weakest
-  tracked retention eigenvalue; 5 tracked modes along λ.
+- **Mode-resolved (P_mode)**: `P_mode = 1 − ρ_min` (code:
+  `1 − 1/max_j pred_deg_j`; identical to `P_emin` on the tracked modes — the
+  scalarization identity). ρ_min is the weakest tracked retention eigenvalue.
+  **Definition freeze (L8)**: `pred_deg_j = 1/ρ_j` is a *different, unbounded*
+  quantity used for within-cell ranking; the two calibers coincide in rank but
+  not in magnitude — never substitute one for the other in magnitude claims.
+  5 tracked modes along λ.
 - **E-min (P_emin)**: operand = the same weakest-mode datum (theoretically equal to
   P_mode on the tracked modes).
 - **Trace (P_trace)**: residual trace of the retention spectrum.

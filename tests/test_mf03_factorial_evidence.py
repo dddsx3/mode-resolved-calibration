@@ -40,6 +40,9 @@ def test_factorial_structure(factorial):
         for field in ("RA", "RA_ci95", "n_pos_cells", "n_pos_objects",
                       "stratified_median_mode", "pooled_spearman"):
             assert field in v
+        # v1.1 字段语义修正：stratified_valid_levels 必须是**有限层数计数**
+        # （v1 误存布尔值，曾使审计误读为"6 层只有 1 层有效"）
+        assert v["stratified_valid_levels"] == 6
     assert factorial["paper_variant"] == "D"
     assert factorial["protocol"]["n_cells"] == 66
     assert factorial["protocol"]["n_modes"] == 5

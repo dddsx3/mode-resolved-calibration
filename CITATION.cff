@@ -17,8 +17,10 @@ abstract: >-
   Schur-complement Delta-Fisher information, calibration-retention spectra, the
   gauge closed-form spectral response, and the mode-resolved severity analysis on
   OpenIllumination (11 objects x 6 levels, 20 seeds; paper-facing corrected
-  interface: within-cell mode ranking RA = 0.90, object-cluster bootstrap 95% CI
-  [0.70, 0.95], 65/66 positive cells). Includes a preregistered calibration-allocation
+  interface: directional validation of the retention ordering, within-cell
+  Spearman RA = 0.90, CI [0.70, 0.95] — rank-equivalent to the mode-index
+  baseline by construction — plus a quantified real-data amplitude validity
+  envelope for the linearized theory). Includes a preregistered calibration-allocation
   evaluation on the 11 held-out objects (29,700 reconstructions): mode-derived
   guidance improves reconstruction over random allocation (an actionable
   outcome vs random), classical E/A/D-optimal greedy baselines achieve modestly
@@ -28,9 +30,12 @@ abstract: >-
   (noise-fit coefficient order, normalized dual-coordinate mode projection,
   singular-covariance routes, retention-covariance theorem, allocation rank
   invariance) with a preregistered A/B/C/D factorial rerun: the within-cell
-  mode-ranking result is unchanged under the corrected interface (arm D is the
-  paper-facing record). Ships frozen results, independent headline
-  recomputation tests (pytest), and figure/table regeneration scripts.
+  directional-validation result is unchanged under the corrected interface
+  (arm D is the paper-facing record). The active research direction is a
+  certified analysis of calibration-precision allocation (exact convex
+  reformulation, low-rank retention structure, Frank-Wolfe certificates).
+  Ships frozen results, independent headline recomputation tests (pytest),
+  and figure/table regeneration scripts.
 keywords:
   - photometric inverse problems
   - calibration

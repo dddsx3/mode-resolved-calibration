@@ -67,6 +67,37 @@ interface is exercised by a preregistered factorial rerun into
 
 ## [Unreleased]
 
+### Fixed
+
+- `stratified_valid_levels` in the MF-0 factorial summary stored a boolean
+  instead of the finite-level count (an external audit read it as "only 1 of
+  6 levels valid"); all six levels are finite - field corrected, summary
+  regenerated from the committed per-arm rows, evidence test pins the count
+- `docs/EXPERIMENTS.md` section 6 `P_mode` formula did not match the code
+  (`P_mode = 1 - rho_min`, not `1/(1 - rho_mode)`); definition freeze (L8)
+  added distinguishing `P_mode` from the unbounded `pred_deg = 1/rho_j`
+
+### Changed
+
+- Caliber downgrade (potential-assessment adjudication): the within-cell
+  statistic `R_A` is directional validation only - by construction it is
+  rank-equivalent to the mode-index baseline (66/66 cells, deviation exactly
+  0.0, both calibers; `experiments/directional_amplitude.py` ->
+  `results/magnitude/directional_amplitude_summary.json`). README/WORDING/
+  REPRODUCIBILITY/CITATION reframed accordingly; the amplitude layer
+  (emp/pred ratio distribution, median 201.1 on the frozen record) is the
+  magnitude-level finding
+- New math-foundations lock (`tests/test_math_foundations.py`): direction
+  parameterization known-answer, per-light Loewner monotonicity, midpoint
+  convexity of J_A/J_E/J_D on the PD region (400/400), joint operator
+  concavity, low-rank retention identity (spectral deviation <=1e-10, P-3L
+  count exact), J_A gradient vs finite differences (<=1e-6, assembled dF)
+- README: research-direction section for the certified allocation-analysis
+  program with generated showcase figures
+  (`scripts/make_direction_figures.py` -> `docs/img/`)
+
+### Added (planned, on this branch)
+
 ### Added
 
 - `examples/` — three self-contained scripts (retention/gauge visualization,

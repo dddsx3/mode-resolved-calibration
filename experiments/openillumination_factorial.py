@@ -69,11 +69,14 @@ def spearman_safe(x, y):
 
 
 def median_valid(vals, min_valid=4):
-    """median 忽略 nan；有效 < min_valid → (nan, False)（T7.4 口径）。"""
+    """median 忽略 nan；有效 < min_valid → (nan, 计数)。
+
+    返回 (median, n_finite)：第二返回值是**有限条目计数**（v1.1 修正——
+    v1 把布尔值误存进 stratified_valid_levels 字段，导致审计误读为
+    "6 层只有 1 层有效"；实际六层全部有限，0.536 是六层中位数）。
+    """
     v = [x for x in vals if np.isfinite(x)]
-    if len(v) < min_valid:
-        return float("nan"), False
-    return float(np.median(v)), True
+    return (float(np.median(v)) if len(v) >= min_valid else float("nan")), len(v)
 
 
 # --------------------------------------------------------------- 单对象资产

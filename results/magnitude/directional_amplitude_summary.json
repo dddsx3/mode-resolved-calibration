@@ -1,0 +1,446 @@
+{
+ "gate": "P-MAG core: directional validation + amplitude validity envelope",
+ "analysis_status": "directional_amplitude_v1",
+ "directional_validation": "Within a cell, S_j = 1 - 1/pred_deg_j is strictly monotone in the mode index (rho ascending by construction), so the within-cell Spearman is rank-equivalent to the mode-index baseline. It validates DIRECTIONS (the retention operator's bottom tracked directions are the empirically more fragile ones), not the predicted magnitudes 1/rho_j.",
+ "amplitude_interpretation": "The matched-GLS theorem predicts emp/pred ~ 1 (synthetic MC: 1.0045). The real-data distribution below is the validity envelope of the linearized theory on real photometric data - a positive, falsifiable finding, not a theorem failure.",
+ "arm_D_corrected": {
+  "analysis_of": "corrected interface (arm D)",
+  "n_cells": 66,
+  "max_abs_deviation_from_mode_index_baseline": 0.0,
+  "n_cells_exactly_equal_to_baseline": 66,
+  "ratio_stats": {
+   "median": 15.975062209835617,
+   "p5": 0.004671273192167978,
+   "p95": 714.2002367645034,
+   "per_mode_median": {
+    "0": 1.0890251745323931,
+    "1": 51.46626643916739,
+    "2": 68.91962487504841,
+    "3": 60.14664177978591,
+    "4": 47.24239901501272
+   }
+  }
+ },
+ "arm_A_frozen": {
+  "analysis_of": "frozen pre-correction record (arm A)",
+  "n_cells": 66,
+  "max_abs_deviation_from_mode_index_baseline": 0.0,
+  "n_cells_exactly_equal_to_baseline": 66,
+  "ratio_stats": {
+   "median": 201.1000934896747,
+   "p5": 7.2676885568468235,
+   "p95": 1525.8203599747435,
+   "per_mode_median": {
+    "0": 19.304495038040507,
+    "1": 404.33667394901,
+    "2": 431.3985360243166,
+    "3": 285.0218547843207,
+    "4": 216.614372310791
+   }
+  }
+ },
+ "provenance": {
+  "rows_sha256": "2c270d8d61d3a9a500e43ac44143e76e84ec6ed10ffd33585d0d12236b738c8a",
+  "frozen_sha256": "66c1bb02f7441cfb5e3513aa182634724ec805b54c9c94e862c9c4c87bb14b5a",
+  "row_count": 66
+ },
+ "cells_arm_D": [
+  {
+   "object": "obj_03_pumpkin",
+   "level": 0.1,
+   "spearman_directional": 0.9999999999999999,
+   "spearman_mode_index_baseline": 0.9999999999999999
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "level": 0.2,
+   "spearman_directional": 0.9999999999999999,
+   "spearman_mode_index_baseline": 0.9999999999999999
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "level": 0.35,
+   "spearman_directional": 0.9999999999999999,
+   "spearman_mode_index_baseline": 0.9999999999999999
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "level": 0.5,
+   "spearman_directional": 0.9999999999999999,
+   "spearman_mode_index_baseline": 0.9999999999999999
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "level": 0.75,
+   "spearman_directional": 0.9999999999999999,
+   "spearman_mode_index_baseline": 0.9999999999999999
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "level": 1.0,
+   "spearman_directional": 0.9999999999999999,
+   "spearman_mode_index_baseline": 0.9999999999999999
+  },
+  {
+   "object": "obj_04_dolphin",
+   "level": 0.1,
+   "spearman_directional": 0.19999999999999998,
+   "spearman_mode_index_baseline": 0.19999999999999998
+  },
+  {
+   "object": "obj_04_dolphin",
+   "level": 0.2,
+   "spearman_directional": 0.39999999999999997,
+   "spearman_mode_index_baseline": 0.39999999999999997
+  },
+  {
+   "object": "obj_04_dolphin",
+   "level": 0.35,
+   "spearman_directional": -0.09999999999999999,
+   "spearman_mode_index_baseline": -0.09999999999999999
+  },
+  {
+   "object": "obj_04_dolphin",
+   "level": 0.5,
+   "spearman_directional": 0.8999999999999998,
+   "spearman_mode_index_baseline": 0.8999999999999998
+  },
+  {
+   "object": "obj_04_dolphin",
+   "level": 0.75,
+   "spearman_directional": 0.7,
+   "spearman_mode_index_baseline": 0.7
+  },
+  {
+   "object": "obj_04_dolphin",
+   "level": 1.0,
+   "spearman_directional": 0.7,
+   "spearman_mode_index_baseline": 0.7
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "level": 0.1,
+   "spearman_directional": 0.8999999999999998,
+   "spearman_mode_index_baseline": 0.8999999999999998
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "level": 0.2,
+   "spearman_directional": 0.7,
+   "spearman_mode_index_baseline": 0.7
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "level": 0.35,
+   "spearman_directional": 0.9999999999999999,
+   "spearman_mode_index_baseline": 0.9999999999999999
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "level": 0.5,
+   "spearman_directional": 0.7,
+   "spearman_mode_index_baseline": 0.7
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "level": 0.75,
+   "spearman_directional": 0.7,
+   "spearman_mode_index_baseline": 0.7
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "level": 1.0,
+   "spearman_directional": 0.7,
+   "spearman_mode_index_baseline": 0.7
+  },
+  {
+   "object": "obj_09_ball",
+   "level": 0.1,
+   "spearman_directional": 0.8999999999999998,
+   "spearman_mode_index_baseline": 0.8999999999999998
+  },
+  {
+   "object": "obj_09_ball",
+   "level": 0.2,
+   "spearman_directional": 0.9999999999999999,
+   "spearman_mode_index_baseline": 0.9999999999999999
+  },
+  {
+   "object": "obj_09_ball",
+   "level": 0.35,
+   "spearman_directional": 0.8999999999999998,
+   "spearman_mode_index_baseline": 0.8999999999999998
+  },
+  {
+   "object": "obj_09_ball",
+   "level": 0.5,
+   "spearman_directional": 0.7,
+   "spearman_mode_index_baseline": 0.7
+  },
+  {
+   "object": "obj_09_ball",
+   "level": 0.75,
+   "spearman_directional": 0.9999999999999999,
+   "spearman_mode_index_baseline": 0.9999999999999999
+  },
+  {
+   "object": "obj_09_ball",
+   "level": 1.0,
+   "spearman_directional": 0.9999999999999999,
+   "spearman_mode_index_baseline": 0.9999999999999999
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "level": 0.1,
+   "spearman_directional": 0.7999999999999999,
+   "spearman_mode_index_baseline": 0.7999999999999999
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "level": 0.2,
+   "spearman_directional": 0.8999999999999998,
+   "spearman_mode_index_baseline": 0.8999999999999998
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "level": 0.35,
+   "spearman_directional": 0.7999999999999999,
+   "spearman_mode_index_baseline": 0.7999999999999999
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "level": 0.5,
+   "spearman_directional": 0.8999999999999998,
+   "spearman_mode_index_baseline": 0.8999999999999998
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "level": 0.75,
+   "spearman_directional": 0.9999999999999999,
+   "spearman_mode_index_baseline": 0.9999999999999999
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "level": 1.0,
+   "spearman_directional": 0.8999999999999998,
+   "spearman_mode_index_baseline": 0.8999999999999998
+  },
+  {
+   "object": "obj_11_pine",
+   "level": 0.1,
+   "spearman_directional": 0.7999999999999999,
+   "spearman_mode_index_baseline": 0.7999999999999999
+  },
+  {
+   "object": "obj_11_pine",
+   "level": 0.2,
+   "spearman_directional": 0.7,
+   "spearman_mode_index_baseline": 0.7
+  },
+  {
+   "object": "obj_11_pine",
+   "level": 0.35,
+   "spearman_directional": 0.8999999999999998,
+   "spearman_mode_index_baseline": 0.8999999999999998
+  },
+  {
+   "object": "obj_11_pine",
+   "level": 0.5,
+   "spearman_directional": 0.9999999999999999,
+   "spearman_mode_index_baseline": 0.9999999999999999
+  },
+  {
+   "object": "obj_11_pine",
+   "level": 0.75,
+   "spearman_directional": 0.8999999999999998,
+   "spearman_mode_index_baseline": 0.8999999999999998
+  },
+  {
+   "object": "obj_11_pine",
+   "level": 1.0,
+   "spearman_directional": 0.39999999999999997,
+   "spearman_mode_index_baseline": 0.39999999999999997
+  },
+  {
+   "object": "obj_13_mushroom",
+   "level": 0.1,
+   "spearman_directional": 0.39999999999999997,
+   "spearman_mode_index_baseline": 0.39999999999999997
+  },
+  {
+   "object": "obj_13_mushroom",
+   "level": 0.2,
+   "spearman_directional": 0.6,
+   "spearman_mode_index_baseline": 0.6
+  },
+  {
+   "object": "obj_13_mushroom",
+   "level": 0.35,
+   "spearman_directional": 0.8999999999999998,
+   "spearman_mode_index_baseline": 0.8999999999999998
+  },
+  {
+   "object": "obj_13_mushroom",
+   "level": 0.5,
+   "spearman_directional": 0.8999999999999998,
+   "spearman_mode_index_baseline": 0.8999999999999998
+  },
+  {
+   "object": "obj_13_mushroom",
+   "level": 0.75,
+   "spearman_directional": 0.9999999999999999,
+   "spearman_mode_index_baseline": 0.9999999999999999
+  },
+  {
+   "object": "obj_13_mushroom",
+   "level": 1.0,
+   "spearman_directional": 0.9999999999999999,
+   "spearman_mode_index_baseline": 0.9999999999999999
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "level": 0.1,
+   "spearman_directional": 0.8999999999999998,
+   "spearman_mode_index_baseline": 0.8999999999999998
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "level": 0.2,
+   "spearman_directional": 0.6,
+   "spearman_mode_index_baseline": 0.6
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "level": 0.35,
+   "spearman_directional": 0.9999999999999999,
+   "spearman_mode_index_baseline": 0.9999999999999999
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "level": 0.5,
+   "spearman_directional": 0.8999999999999998,
+   "spearman_mode_index_baseline": 0.8999999999999998
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "level": 0.75,
+   "spearman_directional": 0.7999999999999999,
+   "spearman_mode_index_baseline": 0.7999999999999999
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "level": 1.0,
+   "spearman_directional": 0.9999999999999999,
+   "spearman_mode_index_baseline": 0.9999999999999999
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "level": 0.1,
+   "spearman_directional": 0.8999999999999998,
+   "spearman_mode_index_baseline": 0.8999999999999998
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "level": 0.2,
+   "spearman_directional": 0.8999999999999998,
+   "spearman_mode_index_baseline": 0.8999999999999998
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "level": 0.35,
+   "spearman_directional": 0.9999999999999999,
+   "spearman_mode_index_baseline": 0.9999999999999999
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "level": 0.5,
+   "spearman_directional": 0.9999999999999999,
+   "spearman_mode_index_baseline": 0.9999999999999999
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "level": 0.75,
+   "spearman_directional": 0.8999999999999998,
+   "spearman_mode_index_baseline": 0.8999999999999998
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "level": 1.0,
+   "spearman_directional": 0.9999999999999999,
+   "spearman_mode_index_baseline": 0.9999999999999999
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "level": 0.1,
+   "spearman_directional": 0.8999999999999998,
+   "spearman_mode_index_baseline": 0.8999999999999998
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "level": 0.2,
+   "spearman_directional": 0.8999999999999998,
+   "spearman_mode_index_baseline": 0.8999999999999998
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "level": 0.35,
+   "spearman_directional": 0.8999999999999998,
+   "spearman_mode_index_baseline": 0.8999999999999998
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "level": 0.5,
+   "spearman_directional": 0.8999999999999998,
+   "spearman_mode_index_baseline": 0.8999999999999998
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "level": 0.75,
+   "spearman_directional": 0.8999999999999998,
+   "spearman_mode_index_baseline": 0.8999999999999998
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "level": 1.0,
+   "spearman_directional": 0.8999999999999998,
+   "spearman_mode_index_baseline": 0.8999999999999998
+  },
+  {
+   "object": "obj_19_cylinder",
+   "level": 0.1,
+   "spearman_directional": 0.8999999999999998,
+   "spearman_mode_index_baseline": 0.8999999999999998
+  },
+  {
+   "object": "obj_19_cylinder",
+   "level": 0.2,
+   "spearman_directional": 0.49999999999999994,
+   "spearman_mode_index_baseline": 0.49999999999999994
+  },
+  {
+   "object": "obj_19_cylinder",
+   "level": 0.35,
+   "spearman_directional": 0.3,
+   "spearman_mode_index_baseline": 0.3
+  },
+  {
+   "object": "obj_19_cylinder",
+   "level": 0.5,
+   "spearman_directional": 0.6,
+   "spearman_mode_index_baseline": 0.6
+  },
+  {
+   "object": "obj_19_cylinder",
+   "level": 0.75,
+   "spearman_directional": 0.49999999999999994,
+   "spearman_mode_index_baseline": 0.49999999999999994
+  },
+  {
+   "object": "obj_19_cylinder",
+   "level": 1.0,
+   "spearman_directional": 0.8999999999999998,
+   "spearman_mode_index_baseline": 0.8999999999999998
+  }
+ ],
+ "note": "66/66 cells exactly equal to the mode-index baseline (both calibers) is a construction identity, not a numerical accident."
+}
