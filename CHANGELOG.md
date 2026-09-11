@@ -112,6 +112,17 @@ interface is exercised by a preregistered factorial rerun into
   certified gap table via the Woodbury low-rank route (batched full-res
   Lambertian PS, no pixel subsampling)
 
+### Added
+
+- P-SUBMOD negative-result pack (`experiments/submodularity_search.py` →
+  `results/submodularity/submodularity_search.json`): adversarial submodularity
+  search with correct refinement-set semantics, degeneracy guard, and a
+  detector self-check. Findings: E-opt (1/lambda_min) has genuine submodularity
+  violations (1518 triples over 10 instances, gamma_min = 0.704); A-opt is at
+  most marginally non-submodular (gamma_min = 0.99989); D-opt clean;
+  adversarial near-collinear family clean. Harness tests pin a reproducible
+  counterexample and the detector sensitivity/specificity
+
 ### Added (planned, on this branch)
 
 ### Added

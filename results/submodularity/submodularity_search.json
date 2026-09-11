@@ -1,0 +1,683 @@
+{
+ "gate": "P-SUBMOD: adversarial submodularity search (negative-result pack)",
+ "analysis_status": "submodularity_search_v1",
+ "L": 5,
+ "P": 40,
+ "seeds": [
+  20260918,
+  20260919,
+  20260920,
+  20260921,
+  20260922,
+  20260923,
+  20260924,
+  20260925,
+  20260926,
+  20260927
+ ],
+ "detector_selfcheck": {
+  "toy_supermodular_violations": 325,
+  "note": "G=|S|^2+|S| toy supermodular must trigger on every A<B triple"
+ },
+ "families": {
+  "random/A": {
+   "n_seeds": 10,
+   "n_valid": 10,
+   "n_degenerate": 0,
+   "submodular_violations_total": 36,
+   "nonmonotone_triples_total": 0,
+   "gamma_min": 0.9998895877851349,
+   "first_pinned": {
+    "A": [],
+    "B": [
+     2
+    ],
+    "x": 3,
+    "dA": 0.02085090886867036,
+    "dB": 0.02085140068794189
+   },
+   "entries": [
+    {
+     "seed": 20260918,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260919,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260920,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260921,
+     "violations_submodular": 16,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 0.9999568707293808,
+     "first_violation": {
+      "A": [],
+      "B": [
+       2
+      ],
+      "x": 3,
+      "dA": 0.02085090886867036,
+      "dB": 0.02085140068794189
+     }
+    },
+    {
+     "seed": 20260922,
+     "violations_submodular": 20,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 0.9998895877851349,
+     "first_violation": {
+      "A": [],
+      "B": [
+       0
+      ],
+      "x": 1,
+      "dA": 0.012385827374565395,
+      "dB": 0.01238718016005258
+     }
+    },
+    {
+     "seed": 20260923,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260924,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260925,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260926,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260927,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    }
+   ]
+  },
+  "random/E": {
+   "n_seeds": 10,
+   "n_valid": 10,
+   "n_degenerate": 0,
+   "submodular_violations_total": 1518,
+   "nonmonotone_triples_total": 0,
+   "gamma_min": 0.7044152387965913,
+   "first_pinned": {
+    "A": [],
+    "B": [
+     1
+    ],
+    "x": 2,
+    "dA": 0.0006934360672450346,
+    "dB": 0.0006989027891742827
+   },
+   "entries": [
+    {
+     "seed": 20260918,
+     "violations_submodular": 56,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 0.9367856126931658,
+     "first_violation": {
+      "A": [],
+      "B": [
+       1
+      ],
+      "x": 2,
+      "dA": 0.0006934360672450346,
+      "dB": 0.0006989027891742827
+     }
+    },
+    {
+     "seed": 20260919,
+     "violations_submodular": 73,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 0.9769361620655407,
+     "first_violation": {
+      "A": [],
+      "B": [
+       0
+      ],
+      "x": 1,
+      "dA": 9.557546095617653e-05,
+      "dB": 9.590446293694654e-05
+     }
+    },
+    {
+     "seed": 20260920,
+     "violations_submodular": 170,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 0.8893475152837512,
+     "first_violation": {
+      "A": [],
+      "B": [
+       0
+      ],
+      "x": 1,
+      "dA": 0.001299127300762093,
+      "dB": 0.0013113713669639093
+     }
+    },
+    {
+     "seed": 20260921,
+     "violations_submodular": 186,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 0.7960509694801567,
+     "first_violation": {
+      "A": [],
+      "B": [
+       0
+      ],
+      "x": 1,
+      "dA": 0.0003480912127434843,
+      "dB": 0.0003569146738834905
+     }
+    },
+    {
+     "seed": 20260922,
+     "violations_submodular": 196,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 0.9106974611064479,
+     "first_violation": {
+      "A": [],
+      "B": [
+       0
+      ],
+      "x": 1,
+      "dA": 0.0012564518570749028,
+      "dB": 0.0012576704233647762
+     }
+    },
+    {
+     "seed": 20260923,
+     "violations_submodular": 165,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 0.7044152387965913,
+     "first_violation": {
+      "A": [],
+      "B": [
+       0
+      ],
+      "x": 2,
+      "dA": 3.2830521022986225e-05,
+      "dB": 3.3692480897573596e-05
+     }
+    },
+    {
+     "seed": 20260924,
+     "violations_submodular": 231,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 0.8772135783326543,
+     "first_violation": {
+      "A": [],
+      "B": [
+       0
+      ],
+      "x": 2,
+      "dA": 6.782045624209587e-05,
+      "dB": 6.889676720533977e-05
+     }
+    },
+    {
+     "seed": 20260925,
+     "violations_submodular": 130,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 0.8697863562126913,
+     "first_violation": {
+      "A": [],
+      "B": [
+       0
+      ],
+      "x": 2,
+      "dA": 0.0011232346647799263,
+      "dB": 0.0011699968944274275
+     }
+    },
+    {
+     "seed": 20260926,
+     "violations_submodular": 133,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 0.9172806154650158,
+     "first_violation": {
+      "A": [],
+      "B": [
+       0
+      ],
+      "x": 2,
+      "dA": 4.3572523360513316e-06,
+      "dB": 4.446839812932701e-06
+     }
+    },
+    {
+     "seed": 20260927,
+     "violations_submodular": 178,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 0.7449394809757018,
+     "first_violation": {
+      "A": [],
+      "B": [
+       0
+      ],
+      "x": 1,
+      "dA": 3.839394364985038e-05,
+      "dB": 3.8501413006097884e-05
+     }
+    }
+   ]
+  },
+  "random/D": {
+   "n_seeds": 10,
+   "n_valid": 10,
+   "n_degenerate": 0,
+   "submodular_violations_total": 0,
+   "nonmonotone_triples_total": 0,
+   "gamma_min": 1.0,
+   "first_pinned": null,
+   "entries": [
+    {
+     "seed": 20260918,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260919,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260920,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260921,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260922,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260923,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260924,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260925,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260926,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260927,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    }
+   ]
+  },
+  "adversarial/A": {
+   "n_seeds": 10,
+   "n_valid": 10,
+   "n_degenerate": 0,
+   "submodular_violations_total": 0,
+   "nonmonotone_triples_total": 0,
+   "gamma_min": 1.0,
+   "first_pinned": null,
+   "entries": [
+    {
+     "seed": 20260918,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260919,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260920,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260921,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260922,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260923,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260924,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260925,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260926,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260927,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    }
+   ]
+  },
+  "adversarial/E": {
+   "n_seeds": 10,
+   "n_valid": 10,
+   "n_degenerate": 0,
+   "submodular_violations_total": 0,
+   "nonmonotone_triples_total": 0,
+   "gamma_min": 1.0,
+   "first_pinned": null,
+   "entries": [
+    {
+     "seed": 20260918,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260919,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260920,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260921,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260922,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260923,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260924,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260925,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260926,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260927,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    }
+   ]
+  },
+  "adversarial/D": {
+   "n_seeds": 10,
+   "n_valid": 10,
+   "n_degenerate": 0,
+   "submodular_violations_total": 0,
+   "nonmonotone_triples_total": 0,
+   "gamma_min": 1.0,
+   "first_pinned": null,
+   "entries": [
+    {
+     "seed": 20260918,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260919,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260920,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260921,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260922,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260923,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260924,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260925,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260926,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    },
+    {
+     "seed": 20260927,
+     "violations_submodular": 0,
+     "nonmonotone_triples": 0,
+     "triples": 400,
+     "gamma": 1.0,
+     "first_violation": null
+    }
+   ]
+  }
+ },
+ "note": "Classification: submodular violations = positive-marginal diminishing-returns failures (dB > 0, dA < dB); non-monotone triples counted separately (strictly negative marginals). Degenerate instances discarded by the guard. No theorem claims: counts + gamma + pinned counterexamples, reported as-is."
+}
