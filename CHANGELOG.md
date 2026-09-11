@@ -105,6 +105,13 @@ interface is exercised by a preregistered factorial rerun into
   global certificates, on the 11 real OpenIllumination objects
   (corrected-interface scenes, frozen allocation rng spec)
 
+### Added
+
+- P-LOWRANK-FULLRES preregistration (`configs/lowrank_fullres.yaml`) +
+  driver (`experiments/lowrank_fullres.py`): full-resolution / full-142-light
+  certified gap table via the Woodbury low-rank route (batched full-res
+  Lambertian PS, no pixel subsampling)
+
 ### Added (planned, on this branch)
 
 ### Added

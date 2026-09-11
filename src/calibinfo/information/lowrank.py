@@ -99,7 +99,7 @@ def woodbury_trace_inv_grad(finf_diag, u, M0, lam, active, t):
     U = np.concatenate([u[k] for k in idx], axis=1)      # (P, 3L)
     Aall = Dinv[:, None] * U
     Yall = Aall + Z @ (Ginv @ (Z.T @ U))                 # ΔF⁻¹ U 的列块
-    grad = np.zeros(len(finf_diag))
+    grad = np.zeros(u.shape[0])                        # 每灯一个分量（v1.1：原误用 P）
     for j, k in enumerate(idx):
         K = sym_inv(M0[k] + t[k] * lam[k])
         Y = Yall[:, 3 * j:3 * j + 3]

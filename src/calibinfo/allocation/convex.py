@@ -32,10 +32,16 @@ from calibinfo.allocation.blocks import LightBlocks, sym_inv
 
 @dataclass
 class CertificateProblem:
-    """预算约束凸程序（预测侧泄露面 = SelectionState 同款字段）。"""
+    """预算约束凸程序（预测侧泄露面 = SelectionState 同款字段）。
+
+    route="dense"：装配 P×P ΔF + inv（P ≤ ~2000）；
+    route="woodbury"：低秩 push-through（information.lowrank，P ≫ 2000 的
+    全分辨率路线；要求 F∞ > 0）。两路线的 J_A/grad 在 PD 域上等价
+    （tests/test_convex_certificates.py 的等价性测试）。"""
 
     blocks: LightBlocks
     kappa: float = 10.0
+    route: str = "dense"
     _cache_key: tuple = None                     # 单槽缓存（P×P 矩阵 11.5MB/个
     _cache_df: np.ndarray = None                 # @P=1200——无界缓存会 OOM）
 
@@ -50,11 +56,25 @@ class CertificateProblem:
         return self._cache_df
 
     def J_A(self, t) -> float:
+        if self.route == "woodbury":
+            from calibinfo.information.lowrank import woodbury_trace_inv
+            blk = self.blocks
+            return woodbury_trace_inv(blk.finf, blk.u, blk.M0, blk.lam0,
+                                      blk.active, np.asarray(t, float))
         return float(np.trace(np.linalg.inv(self.delta_f(t))))
 
     def J_A_with_inv(self, t):
         DFinv = np.linalg.inv(self.delta_f(t))
         return float(np.trace(DFinv)), DFinv
+
+    def J_and_grad(self, t):
+        t = np.asarray(t, float)
+        if self.route == "woodbury":
+            from calibinfo.information.lowrank import woodbury_trace_inv_grad
+            blk = self.blocks
+            return woodbury_trace_inv_grad(blk.finf, blk.u, blk.M0, blk.lam0,
+                                           blk.active, t)
+        return self.J_A(t), self.grad_J_A(t)
 
     def grad_J_A(self, t) -> np.ndarray:
         """∇_k J_A = −tr(ΔF⁻¹ u_k K Λ0 K u_kᵀ ΔF⁻¹) ≤ 0（解析，FD 对拍 ≤1e-6）。"""
@@ -99,8 +119,7 @@ class CertificateProblem:
         assert np.sum(t - 1.0) <= B + 1e-9
         hist = []
         for it in range(iters):
-            J = self.J_A(t)
-            g = self.grad_J_A(t)
+            J, g = self.J_and_grad(t)
             s = self.lmo(g, B)
             gap = float(g @ (t - s))
             hist.append(dict(iter=it, J_A=J, gap=gap))
@@ -110,8 +129,7 @@ class CertificateProblem:
             if gamma == 0.0:
                 break
             t = (1.0 - gamma) * t + gamma * s
-        J = self.J_A(t)
-        g = self.grad_J_A(t)
+        J, g = self.J_and_grad(t)
         s = self.lmo(g, B)
         gap = float(g @ (t - s))
         return dict(t=t, J_A=float(J), gap=gap, s_lmo=s, history=hist)

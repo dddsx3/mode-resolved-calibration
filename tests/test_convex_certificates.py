@@ -82,3 +82,27 @@ def test_frank_wolfe_gap_decreases_and_small():
     gaps = [h["gap"] for h in out["history"]]
     assert gaps[-1] <= gaps[0]                       # 总体下降
     assert gaps[-1] <= 0.05 * max(1.0, abs(out["J_A"]))
+
+
+# ------------------------------------------------------- woodbury 路线等价
+def test_woodbury_route_equals_dense_route():
+    """woodbury 低秩路线与 dense 路线的 J_A/梯度/FW 结果在 PD 域上等价。"""
+    from calibinfo.information.lowrank import woodbury_trace_inv_grad
+    prob_d = _problem(seed=11)
+    prob_w = _problem(seed=11)
+    prob_w.route = "woodbury"
+    rng = np.random.default_rng(20260916)
+    for _ in range(20):
+        t = rng.uniform(1.0, 5.0, size=prob_d.blocks.L)
+        f_d = prob_d.J_A(t)
+        f_w, g_w = woodbury_trace_inv_grad(
+            prob_w.blocks.finf, prob_w.blocks.u, prob_w.blocks.M0,
+            prob_w.blocks.lam0, prob_w.blocks.active, t)
+        assert abs(f_d - f_w) <= 1e-9 * max(1.0, abs(f_d))
+        g_d = prob_d.grad_J_A(t)
+        assert np.max(np.abs(g_d - g_w)) <= 1e-8 * max(1.0, float(np.max(np.abs(g_d))))
+    # FW 终点一致（同一证书程序）
+    B = budget_for_k(2, prob_d.kappa)
+    out_d = prob_d.frank_wolfe(B, iters=30)
+    out_w = prob_w.frank_wolfe(B, iters=30)
+    assert abs(out_d["J_A"] - out_w["J_A"]) <= 1e-8 * max(1.0, abs(out_d["J_A"]))
