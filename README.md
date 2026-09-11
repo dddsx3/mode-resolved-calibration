@@ -242,6 +242,13 @@ Three structural findings anchor it (foundations locked by
    that remaining epsilon. Adversarial searches for submodularity (with a
    reproducible counterexample harness) and the amplitude validity envelope
    complete the picture as reported negatives/diagnostics.
+4. **Mode-tail targeted intervention works** — under the preregistered
+   protocol `P-ALLOC2` (`results/mode_tail/allocation_mode_tail.json`),
+   targeting the budget on the lights the theory flags as hurting the weakest
+   tracked modes (the frozen weak-Fisher-mode heuristic) reduces those modes'
+   dual-coordinate energy in **all 10 (regime, budget) cells on 11/11
+   objects**, paired-bootstrap 95% CIs excluding 0 — the mode-resolved
+   signal is real where it applies: at the mode level.
 
 Work on this direction proceeds on the `mode-tail-design` branch under
 preregistered protocols (`configs/`, committed before each run); the frozen

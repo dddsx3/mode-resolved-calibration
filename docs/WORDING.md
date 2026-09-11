@@ -153,6 +153,36 @@ labelled `posthoc_paired_comparison`):
   active light rather than the specific ordering — bounded by the
   `random_active48` control (`allocation_random48_summary.json`)."
 
+## 5a. Registered wording (certified-allocation research direction)
+
+Source files: `results/certification/certified_gaps.json` (P-CERT v1),
+`results/certification/lowrank_fullres.json` (P-LOWRANK-FULLRES),
+`results/submodularity/submodularity_search.json` (P-SUBMOD),
+`results/mode_tail/allocation_mode_tail.json` (P-ALLOC2), and
+`results/magnitude/directional_amplitude_summary.json`.
+
+- Certified dynamic range (real objects, corrected interface): "the certified
+  dynamic range of J_A = tr DeltaF^{-1} between no allocation and refining all
+  48 Fisher-active lights is 36-89% per object (median 62.87% over the 11
+  objects) - instance-dependent, which is why per-instance certification is
+  the tool." The potential-assessment's 4.02% is a synthetic-scene instance
+  number and must not be quoted for real objects.
+- Certified greedy optimality: "the J_A-greedy prefix is certified within
+  0.011-0.028% of the convex lower bound at every budget."
+- Mode-tail targeted intervention (registered 2026-09-12): "targeting the
+  calibration budget on the lights the theory flags as hurting the weakest
+  tracked modes reduces those modes' dual-coordinate energy in all 10
+  (regime, budget) cells on 11/11 objects, with paired-bootstrap 95% CIs
+  excluding 0." Scope: mode-specific endpoint; the overall-reconstruction
+  boundary of the frozen benchmark is unchanged.
+- Submodularity (honest negative): "E-optimal gains violate submodularity on
+  random instances (1518 triples over 10 instances, gamma_min = 0.704);
+  A-optimal is at most marginally non-submodular (gamma_min >= 0.99989);
+  D-optimal showed no violations." Position: limitation, not contribution.
+- Rank-degeneracy disclosure (required with any R_A mention): the within-cell
+  statistic is rank-equivalent to the mode-index baseline (66/66 cells,
+  deviation exactly 0.0) - directional validation, not magnitude prediction.
+
 ## 6. Registered wording (math-freeze MF-0 correctness rerun)
 
 Source file: `results/openillumination/correctness/mf0_factorial_summary.json`

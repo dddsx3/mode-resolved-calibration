@@ -277,6 +277,39 @@ no sign-based gate, every computed row reported).
 - **Output**: `results/certification/certified_gaps.json` (rows + per-k
   summary + manifest). No frozen artifact is touched.
 
+## 13. Mode-tail targeted calibration intervention（P-ALLOC2, `experiments/allocation_mode_tail.py`）
+
+Preregistered protocol (config committed before the run; outcome-independent).
+The question only a mode-resolved analysis naturally poses: if the theory says
+certain calibration components hurt the weakest tracked modes most, does a
+targeted intervention on those components reduce the TARGETED modes' empirical
+error, versus the same budget on random Fisher-active lights?
+
+- **Arms**: targeted = the frozen adaptive normalized weak-Fisher-mode
+  sensitivity heuristic (per-object full 142-light ordering, budgets are
+  prefixes); random_active48 = uniform permutations over the 48 Fisher-active
+  analysis lights (6 permutations averaged per seed). No other policy: this is
+  an intervention study, not a policy competition (P-CERT v1 owns the
+  optimality landscape).
+- **Grid**: 11 objects × levels {0.2, 0.5, 1.0} × regimes {10, 100} ×
+  budgets k ∈ {5, 10, 14, 28, 48} × 10 seeds; scene rng identical to the
+  frozen allocation; corrected interface.
+- **Endpoint**: per-run energy of the bottom-5 tracked modes in the
+  normalized dual coordinate `W = F∞^{1/2} V_bottom5` (M0-2 corrected) of the
+  gauge-aligned residual, paired by seed across arms.
+- **Statistics**: Δ(targeted − random_active48) per (regime, budget), median
+  over objects, object-level paired bootstrap (B=10000, seed 20260916), all 11
+  paired differences + sign count, per-mode breakdown.
+- **Output**: `results/mode_tail/allocation_mode_tail.json`.
+- **Outcome (2026-09-12, preregistered protocol)**: targeted intervention
+  reduces the targeted modes' dual-coordinate energy at **all 10
+  (regime, budget) cells, 11/11 objects per cell**, with all paired-bootstrap
+  95% CIs excluding 0 (e.g. 10x/k=5: Δ median −1.06e5, CI [−2.67e6,
+  −5.31e4]). This validates the mode-targeted chain (vulnerability →
+  attribution → targeted intervention → mode-specific improvement) while the
+  overall-reconstruction boundary of the frozen benchmark stands unchanged
+  (different endpoint; P-CERT v1 owns the policy landscape).
+
 ---
 
 **Reproduction contract**: every experiment script writes only statistical values and
