@@ -277,6 +277,27 @@ no sign-based gate, every computed row reported).
 - **Output**: `results/certification/certified_gaps.json` (rows + per-k
   summary + manifest). No frozen artifact is touched.
 
+## 12a. Full-resolution certification（P-LOWRANK-FULLRES, `experiments/lowrank_fullres.py`）
+
+Preregistered protocol (`configs/lowrank_fullres.yaml`, committed before the
+run; v1.1 driver adds per-object checkpoint resume + multiprocessing).
+Removes the "only 1200 subsampled pixels" surface of §12:
+
+- **Resolution**: ALL masked pixels per object (P = 3559–10252 across the 11
+  objects), ALL 142 lights Fisher-active (no analysis subset).
+- **Route**: exact low-rank Woodbury (`src/calibinfo/information/lowrank.py`,
+  L5 identity; `route="woodbury"`), O(P(3L)²) — dense is infeasible here.
+- **Nominal PS**: batched normal-equation Lambertian alternating least squares
+  (semantics of `calibrated_ps`; det-based singularity fallback), corrected
+  noise-fit convention.
+- **Grid**: 11 objects × k ∈ {5, 14, 48}; level 0.5; κ = 10; FW 40 iters /
+  10-eval line search; 6 seeded random k-subsets.
+- **Output**: `results/certification/lowrank_fullres.json`.
+- **Outcome (2026-09-12)**: dynamic range 27.3–89.4% per object (median
+  60.06% at every budget), greedy within 0.002–0.005% of the certified lower
+  bound — consistent with the P=1200 subsample table (36–89%, median
+  62.87%): subsampling did not distort the certified landscape.
+
 ## 13. Mode-tail targeted calibration intervention（P-ALLOC2, `experiments/allocation_mode_tail.py`）
 
 Preregistered protocol (config committed before the run; outcome-independent).

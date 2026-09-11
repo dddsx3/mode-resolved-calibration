@@ -241,7 +241,12 @@ Three structural findings anchor it (foundations locked by
    it. The earlier benchmark's policy-comparison nulls live entirely inside
    that remaining epsilon. Adversarial searches for submodularity (with a
    reproducible counterexample harness) and the amplitude validity envelope
-   complete the picture as reported negatives/diagnostics.
+   complete the picture as reported negatives/diagnostics. **Full-resolution
+   confirmation** (`results/certification/lowrank_fullres.json`): recomputing
+   the certified table on ALL masked pixels (P = 3559–10252) with all 142
+   lights via the exact low-rank route gives dynamic range 27.3–89.4%
+   (median 60.06%) and greedy within 0.002–0.005% of the lower bound — the
+   subsampled table was not a sampling artifact.
 4. **Mode-tail targeted intervention works** — under the preregistered
    protocol `P-ALLOC2` (`results/mode_tail/allocation_mode_tail.json`),
    targeting the budget on the lights the theory flags as hurting the weakest
