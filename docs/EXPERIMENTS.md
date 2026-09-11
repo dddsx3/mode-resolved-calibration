@@ -250,6 +250,33 @@ labels were fixed before the rerun:
   `mf0_factorial_summary.json` (+ `mf0_factorial_rows_<arm>.json`); no frozen
   artifact is modified.
 
+## 12. Certified optimality gaps（P-CERT, `experiments/certified_gaps.py`）
+
+Preregistered protocol (config committed before any run; outcome-independent —
+no sign-based gate, every computed row reported).
+
+- **Question**: how much can calibration-precision allocation buy at all?
+  Certified answer via the budget-constrained convex program
+  `min J_A(t) = tr ΔF(t)^{-1} s.t. Σ_k (t_k − 1) ≤ B, t ∈ [1,κ]^L`.
+- **Parameterization (pinned)**: `t` multiplies `Λ0k` — larger t = higher
+  precision (machine-locked by `tests/test_math_foundations.py`; the inverted
+  reading supports no certificate).
+- **Objective (pinned)**: `J_A = tr ΔF⁻¹` — smooth and convex on the feasible
+  region (ΔF jointly operator concave + PD; midpoint-verified). `J_E = −λmin`
+  is convex too but nonsmooth at eigenvalue crossings and is report-only.
+- **Certificates**: Frank–Wolfe duality gaps on the convex program are global
+  optimality certificates; with `B = k(κ−1)` the feasible set contains every
+  "exactly k refined lights" allocation, so each per-k bound is valid for that
+  discrete family.
+- **Candidates on the same functional**: J_A-greedy prefix (exact trace
+  kernel), 10 seeded random k-subsets of the 48 Fisher-active lights,
+  all-refined, none.
+- **Grid**: 11 held-out objects × k ∈ {5, 10, 14, 28, 48}; level 0.5; κ = 10;
+  corrected noise-fit convention; scene rng identical to the frozen
+  allocation experiment.
+- **Output**: `results/certification/certified_gaps.json` (rows + per-k
+  summary + manifest). No frozen artifact is touched.
+
 ---
 
 **Reproduction contract**: every experiment script writes only statistical values and
