@@ -179,3 +179,46 @@ def test_ja_gradient_on_assembled_delta_f_matches_fd():
                  - _J_A(_assemble(u, M0, lam0, finf, tm))) / (2 * h)
     assert np.max(np.abs(grad - fd)) <= 1e-6 * max(1.0, float(np.max(np.abs(fd))))
     assert np.all(grad <= 1e-12)                         # J_A 关于 t 递减
+
+
+# ------------------------------------------------------- 6 R 口径 mode-tail 筛查
+def test_mode_tail_functionals_convexity_screening():
+    """R 口径 mode-tail 泛函（Σ_{j≤5}1/ρj、1/ρmin）的凸性**既未证明也未证伪**：
+    本测试在两个随机实例上做快速中点筛查（CI 快路径）；
+    更大规模筛查（24 实例 × 1500 对 = 72,000 对，t∈[1,50]）同样 0 违例
+    （2026-09-11，M1a）。策略定位因此是 report-only：证书只使用 J_E，
+    mode-tail 泛函既不声称凸、也不声称非凸——"预期可找到违例"的
+    预测已被随机搜索证伪。"""
+    from calibinfo.allocation.blocks import sym_inv as _si
+
+    def build(seed, L, P):
+        rng = np.random.default_rng(seed)
+        w = rng.uniform(0.5, 2.0, size=(L, P))
+        s = rng.uniform(0.2, 1.5, size=(L, P))
+        B = rng.normal(0.0, 0.5, size=(L, P, 3))
+        u = (w * s)[:, :, None] * B
+        M0 = np.einsum("kpi,kpj->kij", B, w[:, :, None] * B)
+        lam0 = np.stack([np.diag([30.0, 800.0, 800.0])] * L)
+        finf = (w * s ** 2).sum(0)
+        return u, M0, lam0, finf
+
+    def J_tail(u, M0, lam0, finf, t, m=5):
+        Fh = np.diag(1.0 / np.sqrt(finf))
+        DF = np.diag(finf)
+        for k in range(len(t)):
+            K = _si(M0[k] + t[k] * lam0[k])
+            DF = DF - (u[k] @ K) @ u[k].T
+        R = 0.5 * ((Fh @ DF @ Fh) + (Fh @ DF @ Fh).T)
+        rho = np.linalg.eigvalsh(R)
+        return float(np.sum(1.0 / rho[:min(m, len(rho))]))
+
+    for seed in (20260920, 20260921):
+        u, M0, lam0, finf = build(seed, 4, 40)
+        rng = np.random.default_rng(seed + 7)
+        for _ in range(500):
+            t1 = rng.uniform(1, 50, 4)
+            t2 = rng.uniform(1, 50, 4)
+            rhs = 0.5 * (J_tail(u, M0, lam0, finf, t1)
+                         + J_tail(u, M0, lam0, finf, t2))
+            lhs = J_tail(u, M0, lam0, finf, 0.5 * (t1 + t2))
+            assert lhs <= rhs + 1e-9 * max(1.0, abs(rhs))

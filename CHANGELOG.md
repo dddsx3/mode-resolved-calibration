@@ -96,6 +96,15 @@ interface is exercised by a preregistered factorial rerun into
   program with generated showcase figures
   (`scripts/make_direction_figures.py` -> `docs/img/`)
 
+### Added
+
+- P-CERT preregistration (`configs/certified_gaps.yaml`, committed before the
+  run) + certificate machinery (`src/calibinfo/allocation/convex.py`) +
+  driver (`experiments/certified_gaps.py`): budget-constrained convex program
+  `min tr DeltaF(t)^{-1} s.t. sum(t_k-1) <= B` with Frank-Wolfe duality-gap
+  global certificates, on the 11 real OpenIllumination objects
+  (corrected-interface scenes, frozen allocation rng spec)
+
 ### Added (planned, on this branch)
 
 ### Added

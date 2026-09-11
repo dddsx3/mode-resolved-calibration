@@ -1,0 +1,65 @@
+# P-CERT v1 -- certified optimality gaps for calibration-precision allocation.
+# PREREGISTERED: this file is committed BEFORE the run (allocation-prereg
+# discipline). After the first committed run it is frozen.
+#
+# Question answered: how much can calibration-precision allocation buy at all?
+# The certified layer: convex lower bounds (Frank-Wolfe duality gaps) on the
+# budget-constrained problem
+#     min J_A(t) = tr DeltaF(t)^{-1}
+#     s.t.  sum_k (t_k - 1) <= B,  t in [1, kappa]^L
+# over the 11 real OpenIllumination objects, plus discrete candidate
+# allocations (J_A-greedy prefixes, seeded random subsets, all/none).
+
+gate: P-CERT
+analysis_status: preregistered_v1
+run_name: certified_gaps_v1
+
+# -- parameterization (pinned by tests/test_math_foundations.py) --
+parameterization: >
+  DeltaF(t) = diag(Finf) - sum_k u_k (M0k + t_k Lam0k)^{-1} u_k^T on
+  t in [1, kappa]^L; larger t = higher precision = more information
+  (same direction as the frozen allocation protocol's lambda_l -> regime*lambda_l)
+objective: J_A = tr DeltaF^{-1}
+objective_convexity: >
+  DeltaF(t) jointly operator concave (L2, machine-checked midpoint residual
+  ~1e-15) and positive definite on the feasible region (Lambda0k > 0);
+  tr X^{-1} convex and Loewner-decreasing on PD => J_A convex and smooth.
+  Certificate functional chosen for smoothness: J_E = -lambda_min is convex
+  too but nonsmooth at eigenvalue crossings (single-eigenvector subgradients
+  stall there) and is REPORT-ONLY here. R-caliber mode-tail functionals:
+  convexity unproven (72k random midpoint pairs, 0 violations; neither claimed
+  nor relied on) - report-only.
+
+# -- data & lineage --
+data_root: D:/data/OpenIllumination
+data_meta: D:/data/OpenIllumination_meta
+cohort: [obj_03_pumpkin, obj_04_dolphin, obj_07_pumpkin2, obj_09_ball, obj_10_pumpkin3, obj_11_pine, obj_13_mushroom, obj_16_friends_cup, obj_17_pumpkin5, obj_18_fabric_hat, obj_19_cylinder]
+n_objects: 11
+noise_fit_convention: corrected
+scene_rng_spec: "default_rng([20260910, obj_idx])  # identical to the frozen allocation experiment"
+
+# -- allocation problem grid --
+level: 0.5                 # base Sigma_phi = diag(CorruptionGenerator("joint", level).sigma_phi_diag())
+K_lights: 142              # selection universe = full capture light set
+kappa: 10.0                # refined lights carry t_k = kappa
+budgets_k: [5, 10, 14, 28, 48]   # per-k budget B = k * (kappa - 1)
+candidate_lights: "the 48 Fisher-active analysis lights (u_l = 0 elsewhere; refining inactive lights is a no-op and excluded)"
+
+# -- policies --
+fw_iters: 60
+fw_line_search_evals: 14
+policies:
+  certified_lower_bound: FW dual-gap lower bound J_A(t*) - gap(t*) per k
+  greedy_J_A: sequential argmax of the exact J_A gain (trace kernel; 48-step prefix)
+  random_subsets: 10 seeded uniform k-subsets of the 48 active lights
+  all_refined: t = kappa on every active light
+  none: t = 1 everywhere
+random_seed: 20260916
+n_random: 10
+
+# -- reporting discipline --
+outcome_independence: >
+  This table is descriptive/certifying: there is NO sign-based gate and no
+  "success" criterion on the gaps. Every computed row is reported regardless
+  of outcome. The only hard gates are numerical (gradient FD <= 1e-6,
+  convexity midpoint tests, FW gap >= 0, feasibility invariants).
