@@ -20,9 +20,9 @@ version: open an issue first for anything semantic; keep PRs small; make sure
    claim-to-evidence registry. New numeric claims must trace to a file under
    `results/` and be registered there.
 4. **Experimental code is quarantined.** New analysis capabilities go into
-   `src/calibinfo/experimental/` with a header
+   `experiments/` with a header
    `# status: experimental — NOT part of the published results`, and never
-   into the benchmark path.
+   into `src/calibinfo/` (the published library path).
 
 ## Development setup
 

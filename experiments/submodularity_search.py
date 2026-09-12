@@ -201,4 +201,9 @@ def run(out_path="results/submodularity/submodularity_search.json",
 
 
 if __name__ == "__main__":
-    run()
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--out", default=None,
+                    help="output JSON path; default: committed artifact path")
+    a = ap.parse_args()
+    run(out_path=a.out) if a.out else run()

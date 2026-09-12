@@ -155,6 +155,8 @@ its own, independent of any manuscript.
 - `docs/EXPERIMENTS.md` section 6 `P_mode` formula did not match the code
   (`P_mode = 1 - rho_min`, not `1/(1 - rho_mode)`); definition freeze (L8)
   added distinguishing `P_mode` from the unbounded `pred_deg = 1/rho_j`
+- MF-0 known-answer gates moved from `tests/test_math_freeze_gates.py`
+  (v0.3.0) to `tests/test_math_gates.py` + `tests/test_factorial_evidence.py`
 
 ### Added
 

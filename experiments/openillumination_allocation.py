@@ -22,10 +22,15 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import sys
 from pathlib import Path
 
 import numpy as np
 import yaml
+
+_REPO = Path(__file__).resolve().parents[1]
+if str(_REPO) not in sys.path:
+    sys.path.insert(0, str(_REPO))          # direct `python experiments/...` invocation
 
 from calibinfo.allocation.corruption import raw_innovations, apply_scaled_corruption
 from calibinfo.allocation.policies import (

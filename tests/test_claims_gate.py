@@ -40,7 +40,7 @@ BANNED = [
 ]
 
 SCAN_FILES = sorted(
-    [REPO / "README.md"]
+    [REPO / "README.md", REPO / "README.zh-CN.md"]
     + list((REPO / "docs").rglob("*.md"))
     + list((REPO / "examples").rglob("*.md"))
     + list((REPO / "tutorials").rglob("*.md"))
