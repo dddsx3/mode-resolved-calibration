@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mode-resolved-calibration"
-version = "0.4.0"
+version = "0.4.1"
 description = "Mode-resolved calibration-confidence analysis for photometric and other linearized inverse problems with structured nuisance: Schur-complement delta-Fisher information, retention spectra, gauge response, and information-guided calibration allocation"
 requires-python = ">=3.10"
 license = { text = "MIT" }
