@@ -222,3 +222,30 @@ def test_mode_tail_functionals_convexity_screening():
                          + J_tail(u, M0, lam0, finf, t2))
             lhs = J_tail(u, M0, lam0, finf, 0.5 * (t1 + t2))
             assert lhs <= rhs + 1e-9 * max(1.0, abs(rhs))
+
+
+# ------------------------------------------------------- H2 普适上界天花板
+def test_calibration_value_ceiling():
+    """H2 · Universal ceiling on the calibration-budget value (F0 = D ≤ 1−1/κ).
+
+    Uniform multiplier t = κ·1: J_A(κ·1) ≥ J_A(1)/κ by the Loewner-monotone
+    inverse bound (U_k(t) ⪯ t·U_k(1)), hence the certified dynamic range
+    D = 1 − J_A(κ·1)/J_A(1) ≤ 1 − 1/κ on EVERY instance/admissible level.
+    The '90.0% at kappa=10' headline is this ceiling attained, not an
+    empirical saturation artifact. Verified on synthetic instances with
+    widely different precision scales (lam0 scaled 1e-3 .. 1e3) and across
+    kappa ∈ {2..100}; the level-64 real-object table in the docs pins the
+    tight case (see docs/methods.md §7)."""
+    kappas = [2, 3, 5, 10, 20, 50, 100]
+    for seed in (20260911, 20260918, 20260920):
+        u, M0, lam0, finf = _blocks(seed=seed, L=5, P=40)
+        for scale in (1e-3, 1.0, 1e3):
+            lam0s = lam0 * scale
+            for kap in kappas:
+                t1 = np.ones(u.shape[0])
+                tK = np.full(u.shape[0], float(kap))
+                J1 = _J_A(_assemble(u, M0, lam0s, finf, t1))
+                JK = _J_A(_assemble(u, M0, lam0s, finf, tK))
+                D = 1.0 - JK / J1
+                assert D <= 1.0 - 1.0 / kap + 1e-9, (seed, scale, kap, D)
+

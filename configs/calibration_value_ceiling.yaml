@@ -1,0 +1,44 @@
+# P-CEILING -- universal ceiling on the calibration-budget value (H2).
+# PREREGISTERED: committed BEFORE the run (allocation-prereg discipline).
+#
+# Theorem (docs/methods.md §7, L-notation in §9 family):
+#   U_k(t) = u_k(M0_k + t Lambda0_k)^{-1} u_k^T is Loewner-decreasing in t,
+#   and t U_k(1) - U_k(t) = u_k[(M0_k + Lambda0_k)^{-1} - ...
+#   Actually the clean bound: for the uniform multiplier t . 1,
+#       U_k(t) <= t U_k(1)   (Loewner), hence
+#       DeltaF(t) = diag(Finf) - sum U_k(t)
+#                 >= diag(Finf) - t sum U_k(1)
+#                 = t DeltaF(1) - (t-1) diag(Finf)
+#   which is NOT >= t DeltaF(1) in general (diag(Finf) term).
+#   The bound used in docs is: 1 - J_A(kappa)/J_A(1) <= 1 - 1/kappa, which
+#   holds under the Loewner inverse bound M0_k + t Lambda0_k >= (1/t)(M0_k +
+#   Lambda0_k) -- equivalent to (t-1)M0_k + (t^2-1)Lambda0_k >= 0, true for
+#   t >= 1 and M0_k, Lambda0_k >= 0. Hence U_k(t) <= t U_k(1) and
+#   DeltaF(t) <= t DeltaF(1)  (Loewner)  =>  J_A(t) >= J_A(1)/t  =>  D <= 1 - 1/t.
+#   THIS is the clean derivation (see the experiment docstring).
+#
+# Empirical content measured here: at WHAT precision operating point does D
+# saturate to the ceiling? The docs' level=64 table shows D = 1-1/kappa to
+# <=1e-4 on 5 real objects; this run regenerates that table with the exact
+# P-CERT assembly (uniform multiplier, corrected convention).
+
+gate: P-CEILING
+analysis_status: calibration_value_ceiling_v1
+run_name: calibration_value_ceiling_v1
+
+kappa_grid: [2, 3, 5, 10, 20, 50, 100]
+level: 64.0              # the saturation operating point (probed in the audit)
+cohort: [obj_03_pumpkin, obj_04_dolphin, obj_07_pumpkin2, obj_10_pumpkin3, obj_11_pine]
+n_objects: 5
+K_lights: 142
+noise_fit_convention: corrected
+scene_rng_spec: "default_rng([20260910, obj_idx])  # identical to P-CERT"
+data_root: D:/data/OpenIllumination
+data_meta: D:/data/OpenIllumination_meta
+
+# -- reporting discipline --
+outcome_independence: >
+  Descriptive table: every computed D(kappa) is reported regardless of how
+  close it sits to the ceiling. The only hard gate is numerical (the
+  universal bound D <= 1 - 1/kappa holds up to machine precision on every
+  row; any violation would be a theorem failure).
