@@ -47,8 +47,7 @@ SCAN_FILES = sorted(
     # community-facing .py files carry user-visible text too (docstrings)
     + list((REPO / "examples").rglob("*.py"))
 )
-SCAN_FILES = [f for f in SCAN_FILES
-              if f.name != "claims.md" and "__pycache__" not in f.parts]
+SCAN_FILES = [f for f in SCAN_FILES if "__pycache__" not in f.parts]
 
 
 def test_banned_families_absent():
@@ -71,8 +70,13 @@ def test_readme_numeric_claims_traceable():
     benchmark claims via summary JSON fields, allocation claims via
     allocation_summary.json, structural/count claims via the artifacts."""
     readme = (REPO / "README.md").read_text(encoding="utf-8")
-    vs = json.loads((REPO / "results/openillumination/validation_summary.json")
-                    .read_text(encoding="utf-8"))
+    # use the paper-facing arm D as the R_A anchor, not the frozen legacy
+    # record (validation_summary.json is a frozen legacy artifact; the README
+    # CI [0.7, 0.95] is arm D's)
+    fd = json.loads((REPO / "results/openillumination/correctness/"
+                     "mf0_factorial_summary.json").read_text(encoding="utf-8"))
+    D = fd["variants"]["D"]
+    assert D["noise_fit_convention"] == "corrected", "anchor must be paper-facing arm D"
     al = json.loads((REPO / "results/openillumination/allocation/"
                      "allocation_summary.json").read_text(encoding="utf-8"))
 
@@ -98,11 +102,22 @@ def test_readme_numeric_claims_traceable():
         "-0.077": _m(10, "mode_aware")["ci95"][1],
         "-0.684": _m(100, "mode_aware")["ci95"][0],
         "-0.102": _m(100, "mode_aware")["ci95"][1],
-        "0.90": vs["RA"],
-        "0.95": vs["RA_ci95"][1],
+        "0.90": D["RA"],
+        "0.7":  D["RA_ci95"][0],      # CI lower bound, previously untraced
+        "0.95": D["RA_ci95"][1],
     }
     for tok, val in traced.items():
         assert _approx(tok, val, 3), (tok, val)
+
+    # the R_A CI pair printed in the README is the paper-facing anchor: it must
+    # numerically match the arm-D field, not merely recur verbatim somewhere
+    # under results/** (a plain lexical token like "0.6" can coincidentally
+    # occur in a results file and slip past the generic sweep below).
+    ci_m = re.search(r"CI\s*\[\s*([0-9.]+)\s*,\s*([0-9.]+)\s*\]", readme)
+    assert ci_m, "README must print the R_A CI pair (e.g. 'CI [0.7, 0.95]')"
+    lo, hi = ci_m.group(1), ci_m.group(2)
+    assert _approx(lo, D["RA_ci95"][0], 3), (lo, D["RA_ci95"][0])
+    assert _approx(hi, D["RA_ci95"][1], 3), (hi, D["RA_ci95"][1])
 
     # post-hoc paired policy comparison (allocation_policy_pairwise.csv): the
     # README quotes the range of the six median paired differences
