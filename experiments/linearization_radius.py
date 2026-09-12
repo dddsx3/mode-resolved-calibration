@@ -133,9 +133,9 @@ def run(config_path=REPO / "configs/linearization_radius.yaml",
                    if r["excess_over_scaling"] > thr]
             radius[f"cross_{thr:g}x"] = (min(hit) if hit else None)
         objects[obj_name] = dict(rows=rows_obj, radius=radius, E_ref=E_ref)
-        print(f"[radius] {obj_name}: dev@1.0={rows_obj[5]['dev_from_ref']:.2f} "
+        print(f"[radius] {obj_name}: dev@0.75={rows_obj[5]['dev_from_ref']:.2f} "
               f"(scaling {rows_obj[5]['first_order_scaling']:.0f}) "
-              f"q@1.0={rows_obj[5]['excess_over_scaling']:.2f}; "
+              f"q@0.75={rows_obj[5]['excess_over_scaling']:.2f}; "
               f"radius2x={radius['cross_2x']}, radius10x={radius['cross_10x']} "
               f"elapsed={time.time() - t_start:.0f}s", flush=True)
 

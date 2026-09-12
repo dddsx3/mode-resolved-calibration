@@ -342,9 +342,9 @@ error, versus the same budget on random Fisher-active lights?
   (Δ = targeted − comparator in bottom-5 dual energy; positive = targeted
   worse; the k=48 cells are degenerate — every ordering selects all 48
   active lights, Δ ≡ 0):
-  J1 — targeted vs random_active48 is **significantly worse in 6/8
-  informative cells** (all CIs entirely positive) and spans 0 in the other
-  2; in no cell is targeted better. J2 — scalar_targeted is significantly
+  J1 — targeted vs random_active48 is **significantly worse in 5/8
+  informative cells** (CIs entirely positive) and spans 0 in the other 3;
+  in no cell is targeted better. J2 — scalar_targeted is significantly
   worse in 2/8 cells and indistinguishable in the rest. J3 — targeted shows
   no increment over the scalar arm (1/8 cells significantly different, in
   the worse direction). Honest negative result: after the caliber repair,
@@ -389,9 +389,15 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
 - **Bootstrap/seed**: none beyond the 20 corruption seeds per (object,
   level); descriptive protocol, no sign-based gate.
 - **Output**: `results/magnitude/linearization_radius.json`.
-- **Outcome (v2, 2026-09-13)**: small-ℓ log-log slope recovered to +2.007
-  on the smoke object (obj_09_ball, protocol requires +2); per-object
-  radii and the summary table are in the committed artifact.
+- **Outcome (v2, 2026-09-13)**: the first-order quadratic law is recovered
+  on all 11 objects — small-level (ℓ ≤ 0.5) log-log slope +2.02 to +2.19
+  (v1 measured −1.9 with a 6-order collapse). The linearized prediction
+  tracks the empirical second moment within a factor 2 up to a median level
+  ℓ = 1.0 (`radius_2x`: 11/11 objects crossed, per-object 0.5–1.5) and
+  within a factor 10 up to a median ℓ = 1.5 (`radius_10x`: 11/11,
+  per-object 1.5–2.0). Beyond those levels the full nonlinear forward
+  (backface flips, exponential gains) diverges from the nominal-Jacobian
+  prediction — that is the honest linearization validity radius.
 
 ## 15. Certificate concentration（P-CONC, `experiments/certificate_concentration.py`）
 
@@ -415,10 +421,14 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
 - **Bootstrap/seed**: none; deterministic given the seeds; no sign-based
   gate.
 - **Output**: `results/certification/certificate_concentration.json`.
-- **Outcome (v2, 2026-09-13)**: see the committed artifact
-  (`rel_spread_median`, `clean_vs_mean_ratio.median/min/max`); the
-  clean-vs-mean systematic offset dominates the within-family IQR spread
-  by design of the two metrics.
+- **Outcome (v2, 2026-09-13)**: `rel_spread_median` = 1.08% (within-family
+  IQR dispersion). `clean_vs_mean_ratio`: median 1.42 (min 1.17, max 3.08) —
+  the systematic offset between the noiseless and noisy calibration sources
+  is +16.8% to +208.2% (median +42.2%) across the 11 objects, an order of
+  magnitude larger than the within-family IQR dispersion: the two quantities
+  answer different questions and are reported separately. The v2 fields are
+  computed post-hoc from the committed v1 `range_clean`/`range_mean` (no
+  metric recomputed; `revision` block in the artifact documents this).
 
 ---
 

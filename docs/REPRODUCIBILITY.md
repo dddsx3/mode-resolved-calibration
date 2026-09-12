@@ -27,8 +27,10 @@ is a known, documented state — not an omission:
 - `fa54404…` — `results/certification/lowrank_fullres.json` and
   `results/certification/certificate_concentration.json` (v1). The former
   carries an explicit `provenance_unknown: true` +
-  `sha_unreachable_reason` block; the latter has been re-run (v2) and
-  records a reachable SHA. The invalid v1
+  `sha_unreachable_reason` block; the latter keeps the v1 manifest and its
+  v2 fields (`clean_vs_mean_ratio`) were added post-hoc from committed v1
+  fields, documented by an in-file `revision` block (the full-resolution
+  rerun is a cloud-scale job). The invalid v1
   `results/magnitude/linearization_radius.json` (same SHA) was replaced by
   the metric-domain-corrected v2 rerun.
 - `bd67897…` — the seven frozen science-closed manifests (all with
@@ -85,9 +87,9 @@ protocol (same objects, pixel subsets, levels, seeds).
 | Certified dynamic range (P = 1200 subsample) | 36–89% per object, median 62.87% | `python experiments/certified_gaps.py` | `results/certification/certified_gaps.json` | `tests/test_certified_gaps_evidence.py` |
 | Certified greedy optimality | 0.011–0.028% above the convex lower bound | same | same | same |
 | Full-resolution confirmation (all masked pixels, all 142 lights) | 27.3–89.4%, median 60.06%; greedy 0.002–0.005% | `python experiments/lowrank_fullres.py` | `results/certification/lowrank_fullres.json` | `tests/test_m2_m3_evidence.py::test_fullres_structure` |
-| Mode-tail targeted intervention (three-arm, corrected calibers) | honest null: targeted worse than random in 6/8 informative cells, never better; no increment over the scalar arm | `python experiments/allocation_mode_tail.py` | `results/mode_tail/allocation_mode_tail.json` | `tests/test_m2_m3_evidence.py::test_alloc2_structure` |
-| Linearization validity radius (P-RADIUS v2) | see `results/magnitude/linearization_radius.json` (`radius_2x`, `radius_10x`) | `python experiments/linearization_radius.py` | `results/magnitude/linearization_radius.json` | `tests/test_pradius_pconc_artifacts.py` |
-| Certificate concentration (P-CONC) | see `results/certification/certificate_concentration.json` (`rel_spread_median`, `clean_vs_mean_ratio`) | `python experiments/certificate_concentration.py` | `results/certification/certificate_concentration.json` | `tests/test_pradius_pconc_artifacts.py` |
+| Mode-tail targeted intervention (three-arm, corrected calibers) | honest null: targeted worse than random in 5/8 informative cells, never better; no increment over the scalar arm | `python experiments/allocation_mode_tail.py` | `results/mode_tail/allocation_mode_tail.json` | `tests/test_m2_m3_evidence.py::test_alloc2_structure` |
+| Linearization validity radius (P-RADIUS v2) | median radius_2x = 1.0, radius_10x = 1.5 (11/11 objects); small-level slope +2.02–2.19 | `python experiments/linearization_radius.py` | `results/magnitude/linearization_radius.json` | `tests/test_pradius_pconc_artifacts.py` |
+| Certificate concentration (P-CONC) | rel_spread_median 1.08%; clean_vs_mean_ratio median 1.42 (1.17–3.08) | `python experiments/certificate_concentration.py` | `results/certification/certificate_concentration.json` | `tests/test_pradius_pconc_artifacts.py` |
 | Submodularity negative result | E-opt: 1518 violating triples over 10 instances, γ_min = 0.704; A-opt marginal; D-opt clean | `python experiments/submodularity_search.py` | `results/submodularity/submodularity_search.json` | `tests/test_submodularity_harness.py` |
 | Amplitude validity envelope | emp/pred median 201.1 (original pipeline), 1.0045 synthetic MC | `python experiments/directional_amplitude.py` | `results/magnitude/directional_amplitude_summary.json` | `tests/test_math_gates.py` |
 | Certified allocation rank invariance | 594 frozen orderings, rank 1200 = rank(F∞) everywhere | `python experiments/allocation_rank_check.py` | `results/openillumination/correctness/allocation_rank_check.json` | `tests/test_math_gates.py` |

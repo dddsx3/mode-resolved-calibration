@@ -122,19 +122,22 @@ its own, independent of any manuscript.
 - **Ghost git SHAs (P1-1)**: two `git_sha` values recorded in result
   manifests are unreachable in history (commits replaced by the 2026-09-09
   reorganization). Disposition: v1 `linearization_radius.json` replaced by
-  the v2 rerun; `certificate_concentration.json` re-run (v2) with a
-  reachable SHA; `lowrank_fullres.json` carries an explicit
+  the v2 rerun; `certificate_concentration.json` gains its v2 fields
+  post-hoc from committed v1 fields (no metric recomputed; `revision`
+  block documents this) since the full-resolution rerun is a cloud-scale
+  job; `lowrank_fullres.json` carries an explicit
   `provenance_unknown` + `sha_unreachable_reason` block; the seven frozen
   science-closed manifests are kept byte-for-byte and documented in
   `docs/REPRODUCIBILITY.md` section 1.1
 - **P-CONC metric semantics (P2-6)**: `clean_vs_mean_ratio` added
   (per object + summary) to expose the systematic noiseless-vs-noisy
-  calibration-source offset that the IQR `rel_spread` does not capture;
-  config `metric_definition` synced; note forbids conflating the two
+  calibration-source offset that the IQR `rel_spread` does not capture
+  (measured: +16.8% to +208.2%, median +42.2%, vs 1.08% IQR); config
+  `metric_definition` synced; note forbids conflating the two
 - **Stale retracted outcome text (P2-3)**: `docs/EXPERIMENTS.md` section 13
   and `docs/REPRODUCIBILITY.md` still carried the withdrawn v1.0
   "significant in all 10 cells" claim; replaced with the RETRACTED marker +
-  the precise v1.1 three-arm outcome (targeted significantly worse in 6/8
+  the precise v1.1 three-arm outcome (targeted significantly worse in 5/8
   informative cells, never better; no increment over the scalar arm)
 - **B4 quantification (P2-4)**: the "policy nulls are structural" claim now
   cites the per-k certified-epsilon-to-policy-gap ratios (125x/98x/127x/

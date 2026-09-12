@@ -1,6 +1,6 @@
 {
  "gate": "P-CONC: certificate concentration (instance-wise bound uncertainty)",
- "analysis_status": "certificate_concentration_v1",
+ "analysis_status": "certificate_concentration_v2",
  "kappa": 10.0,
  "budget_k": 14,
  "realizations": 10,
@@ -29,7 +29,8 @@
    "fw_lower_bound_mean": 1.0643583162507977,
    "df_norm_diff_median": 65585.05026282661,
    "J_none_mean": 1.3512297059826825,
-   "J_all_mean": 0.7701930370088761
+   "J_all_mean": 0.7701930370088761,
+   "clean_vs_mean_ratio": 1.254239487994688
   },
   "obj_04_dolphin": {
    "P": 1200,
@@ -47,7 +48,8 @@
    "fw_lower_bound_mean": 0.09863858889398752,
    "df_norm_diff_median": 101349764.7856985,
    "J_none_mean": 0.2698228004157401,
-   "J_all_mean": 0.1774607046640903
+   "J_all_mean": 0.1774607046640903,
+   "clean_vs_mean_ratio": 2.563867676586125
   },
   "obj_07_pumpkin2": {
    "P": 1200,
@@ -65,7 +67,8 @@
    "fw_lower_bound_mean": 0.24690939390009753,
    "df_norm_diff_median": 43981234.122823745,
    "J_none_mean": 0.4488247330468248,
-   "J_all_mean": 0.22252023281340053
+   "J_all_mean": 0.22252023281340053,
+   "clean_vs_mean_ratio": 1.7127980700536771
   },
   "obj_09_ball": {
    "P": 1200,
@@ -83,7 +86,8 @@
    "fw_lower_bound_mean": 0.58186599088579,
    "df_norm_diff_median": 202946.2220392648,
    "J_none_mean": 0.8450526302072265,
-   "J_all_mean": 0.47148937686655
+   "J_all_mean": 0.47148937686655,
+   "clean_vs_mean_ratio": 1.4221135448252422
   },
   "obj_10_pumpkin3": {
    "P": 1200,
@@ -101,7 +105,8 @@
    "fw_lower_bound_mean": 1.2071045325858543,
    "df_norm_diff_median": 3388602.537259781,
    "J_none_mean": 1.5852912541714186,
-   "J_all_mean": 0.8115787775389893
+   "J_all_mean": 0.8115787775389893,
+   "clean_vs_mean_ratio": 1.2933314216687417
   },
   "obj_11_pine": {
    "P": 1200,
@@ -119,7 +124,8 @@
    "fw_lower_bound_mean": 0.3263372032123125,
    "df_norm_diff_median": 125096.4406513559,
    "J_none_mean": 0.4485694596189046,
-   "J_all_mean": 0.3275825181083123
+   "J_all_mean": 0.3275825181083123,
+   "clean_vs_mean_ratio": 1.3344715956072675
   },
   "obj_13_mushroom": {
    "P": 1200,
@@ -137,7 +143,8 @@
    "fw_lower_bound_mean": 0.6844705973465515,
    "df_norm_diff_median": 157226.28873248748,
    "J_none_mean": 0.9511504926977741,
-   "J_all_mean": 0.5152602230829137
+   "J_all_mean": 0.5152602230829137,
+   "clean_vs_mean_ratio": 1.3726865434663962
   },
   "obj_16_friends_cup": {
    "P": 1200,
@@ -155,7 +162,8 @@
    "fw_lower_bound_mean": 1.7737596713750134,
    "df_norm_diff_median": 20629.926326052846,
    "J_none_mean": 2.084144333478897,
-   "J_all_mean": 1.1459481318337115
+   "J_all_mean": 1.1459481318337115,
+   "clean_vs_mean_ratio": 1.1675412092213777
   },
   "obj_17_pumpkin5": {
    "P": 1200,
@@ -173,7 +181,8 @@
    "fw_lower_bound_mean": 0.37957021556051906,
    "df_norm_diff_median": 712815.3215403766,
    "J_none_mean": 0.5803383123598931,
-   "J_all_mean": 0.36372213692090577
+   "J_all_mean": 0.36372213692090577,
+   "clean_vs_mean_ratio": 1.5017733102923614
   },
   "obj_18_fabric_hat": {
    "P": 1200,
@@ -191,7 +200,8 @@
    "fw_lower_bound_mean": 0.17432883950962935,
    "df_norm_diff_median": 553889.4860385491,
    "J_none_mean": 0.29385156839630966,
-   "J_all_mean": 0.19102019635975898
+   "J_all_mean": 0.19102019635975898,
+   "clean_vs_mean_ratio": 1.571991157810757
   },
   "obj_19_cylinder": {
    "P": 1200,
@@ -209,7 +219,8 @@
    "fw_lower_bound_mean": 0.06773414786411898,
    "df_norm_diff_median": 80107787.33442119,
    "J_none_mean": 0.22000567547648794,
-   "J_all_mean": 0.15668308353159238
+   "J_all_mean": 0.15668308353159238,
+   "clean_vs_mean_ratio": 3.0821025936146342
   }
  },
  "manifest": {
@@ -218,5 +229,11 @@
   "realizations": 10,
   "elapsed_s": 1097.8
  },
- "note": "The certified bounds are computed from the ESTIMATED nominal calibration; this experiment measures how much they move across noise realizations of that calibration. The relative IQR spread is the honest 'certified bound uncertainty' — reported as-is, no sign-based gate."
+ "note": "The certified bounds are computed from the ESTIMATED nominal calibration; this experiment measures how much they move across noise realizations of that calibration. The relative IQR spread is the honest 'certified bound uncertainty' — reported as-is, no sign-based gate. clean_vs_mean_ratio = range_clean/range_mean exposes the SYSTEMATIC offset between the noiseless calibration source and noisy-realization calibration sources; the IQR rel_spread measures only within-family random dispersion and is meaningful only within one calibration family - it must not be read as the total bound accuracy (audit P2-6).",
+ "clean_vs_mean_ratio": {
+  "median": 1.4221135448252422,
+  "min": 1.1675412092213777,
+  "max": 3.0821025936146342
+ },
+ "revision": "v2 (2026-09-13, audit P2-6) adds the clean_vs_mean_ratio fields, computed post-hoc as range_clean/range_mean from the committed v1 fields — no metric was recomputed. The manifest git_sha remains the v1 run's (unreachable; see docs/REPRODUCIBILITY.md section 1.1); integrity is pinned by checksums.sha256. A future rerun of experiments/certificate_concentration.py emits the same fields natively."
 }
