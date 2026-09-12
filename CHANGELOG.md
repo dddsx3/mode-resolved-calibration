@@ -211,7 +211,7 @@ its own, independent of any manuscript.
   statistic `R_A` is directional validation only - by construction it is
   rank-equivalent to the mode-index baseline (66/66 cells, deviation exactly
   0.0, both calibers; `experiments/directional_amplitude.py` ->
-  `results/magnitude/directional_amplitude_summary.json`). README/WORDING/
+  `results/magnitude/directional_amplitude_summary.json`). README/claims.md/
   REPRODUCIBILITY/CITATION reframed accordingly; the amplitude layer
   (emp/pred ratio distribution, median 201.1 on the frozen record) is the
   magnitude-level finding
@@ -225,7 +225,7 @@ its own, independent of any manuscript.
   (`scripts/make_direction_figures.py` -> `docs/img/`)
 - README rewritten library-first (was: reproducibility-package framing);
   the published benchmark is now a separate "Benchmark reproduction" section
-- `pyproject.toml`: version 0.2.0, license/urls/authors/keywords/classifiers
+- `pyproject.toml`: version 0.4.1, license/urls/authors/keywords/classifiers
   metadata, `examples` extra
 
 ## [0.1.0] - 2026-09-09

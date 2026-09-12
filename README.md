@@ -160,7 +160,7 @@ reference record.
   For the by-construction rank-equivalence of the within-cell statistic see
   [docs/methods.md](docs/methods.md);
 - **Amplitude validity envelope**: on real data the empirical/predicted
-  degradation ratio has median 201.1 (5–95% [7.3, 1525.8]), against 1.0045 on
+  degradation ratio has median 15.98 (5–95% [0.005, 714.2]), against 1.0045 on
   synthetic matched Monte-Carlo — the matched-GLS variance theorem holds where
   its assumptions hold, and the real-data deviation is reported as a positive,
   falsifiable validity envelope of the linearized theory;
@@ -260,9 +260,11 @@ Three structural findings anchor it (verified by
    targeting** — the preregistered three-arm comparison (`P-ALLOC2 v1.1`,
    `results/mode_tail/allocation_mode_tail.json`) finds that the
    mode-resolved targeted arm and the scalar-OED targeted arm are
-   statistically indistinguishable (all distinctive CIs span 0). The mode
-   decomposition adds diagnostic insight (which directions are fragile) but
-   not incremental allocation value over simple scalar criteria.
+   statistically indistinguishable (7 of 8 informative cells span 0; the
+   100/14 cell is significantly positive, i.e. the targeted arm is worse).
+   The mode decomposition adds diagnostic insight (which directions are
+   fragile) but not incremental allocation value over simple scalar
+   criteria.
 
    **Figure 6. Registered negative results.** Left: E-optimal gains violate
    submodularity (adversarial search with a reproducible harness). Middle:

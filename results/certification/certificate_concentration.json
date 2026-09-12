@@ -227,7 +227,9 @@
   "config_sha256": "0cef02895e128657a0d7d231cc180d15554ea06fc8b58f41bc5ce55d6d7ceaf8",
   "git_sha": "fa5440410dcbfc9338653d076a5f62729b2d275c",
   "realizations": 10,
-  "elapsed_s": 1097.8
+  "elapsed_s": 1097.8,
+  "config_sha256_at_run": "0cef02895e128657a0d7d231cc180d15554ea06fc8b58f41bc5ce55d6d7ceaf8",
+  "config_drift_note": "config edited after the run; the committed config is no longer the run-time one (its sha256 now differs from config_sha256). config_sha256_at_run preserves the run-time value; no metric was recomputed (drift registered per audit A7)."
  },
  "note": "The certified bounds are computed from the ESTIMATED nominal calibration; this experiment measures how much they move across noise realizations of that calibration. The relative IQR spread is the honest 'certified bound uncertainty' — reported as-is, no sign-based gate. clean_vs_mean_ratio = range_clean/range_mean exposes the SYSTEMATIC offset between the noiseless calibration source and noisy-realization calibration sources; the IQR rel_spread measures only within-family random dispersion and is meaningful only within one calibration family - it must not be read as the total bound accuracy (audit P2-6).",
  "clean_vs_mean_ratio": {

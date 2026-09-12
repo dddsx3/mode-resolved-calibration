@@ -17,15 +17,28 @@ re-derives the value. The binding table (claim → evidence file → field) is
 - Raw datasets are external (see `docs/DATA.md`); the repository carries only
   manifests and derived evidence.
 
-### 1.1 Provenance note: unreachable git SHAs in early manifests
+### 1.1 Provenance note: git SHAs recorded in result manifests
 
-Two `git_sha` values recorded inside committed result manifests are not
-reachable in the current history: the original commits were replaced during
-the 2026-09-09 repository reorganization. The affected artifacts are pinned
-by `checksums.sha256` and remain byte-for-byte as committed
-(`lowrank_fullres.json` and `certificate_concentration.json` carry an
-explicit in-file note); the invalid v1 `linearization_radius.json` was
-replaced by the metric-domain-corrected v2 rerun.
+Six distinct `git_sha` values are recorded across the committed result
+manifests. They are not all the current HEAD: results are produced from an
+earlier working-tree state, and two of the recorded commits were replaced
+during the 2026-09-09 repository reorganization. The complete ledger:
+
+| git_sha (12-char) | Results | Reachable from HEAD | Note |
+|---|---|---|---|
+| `bd67897193c9` | the seven frozen science-closed manifests (`diligent/ci05`, `diligent_ablation/ci05abl`, `gauge_spectrum/ci02`, `monte_carlo/ci03`, `nonlinear/ci03nl`, `openillumination/ci04`, `synthetic/ci01`) | no | commit replaced in the 2026-09-09 reorganization; artifacts pinned by `checksums.sha256` |
+| `fa5440410dcb` | `certification/certificate_concentration.json`, `certification/lowrank_fullres.json` | no | commit replaced in the 2026-09-09 reorganization; both carry an in-file provenance note (`provenance_unknown` + `sha_unreachable_reason`) |
+| `da28fef4d11e` | `certification/certified_gaps.json` | yes (ancestor of HEAD) | earlier certified-gap run |
+| `b070f7e831f0` | `openillumination/validation_summary.json` | yes (ancestor of HEAD) | frozen benchmark record |
+| `f54d6308b3c8` | `mode_tail/allocation_mode_tail.json` | yes (ancestor of HEAD) | corrected three-arm rerun |
+| `785c7485f37e` | `magnitude/linearization_radius.json` | yes (ancestor of HEAD) | v2 metric-domain rerun |
+
+The two unreachable SHAs are the ones the repo reorganization replaced. All
+six artifacts remain byte-for-byte as committed and are pinned by
+`checksums.sha256`; a `git log --all` cannot reach the two orphaned commits,
+which is why `git_sha` is documented here rather than re-derived at runtime.
+The invalid v1 `linearization_radius.json` was replaced by the
+metric-domain-corrected v2 rerun (reachable `785c7485f37e`).
 
 ## 2. Environment
 
@@ -62,7 +75,7 @@ protocol (same objects, pixel subsets, levels, seeds).
 
 | Result | Value | Command | Evidence | Test |
 |---|---|---|---|---|
-| Directional validation of the retention ordering (real objects) | R_A = 0.90, CI [0.7, 0.95], 65/66 cells | `python experiments/openillumination_factorial.py` (arm A machinery anchor; arm D rows committed) | `results/openillumination/mode_ranking.csv`, `results/openillumination/correctness/mf0_factorial_rows_D.json` | `tests/test_reproduction.py::test_N1_mode_resolved_pass_rate` |
+| Directional validation of the retention ordering (real objects) | R_A = 0.90, CI [0.7, 0.95], 65/66 cells | `python experiments/openillumination_factorial.py` (arm D rows committed) | `results/openillumination/correctness/mf0_factorial_summary.json` (`variants.D`) | `tests/test_reproduction.py::test_N1_mode_resolved_pass_rate` |
 | Directional-validation construction disclosure | rank-equivalent to the mode-index baseline, deviation exactly 0.0 (66/66 cells) | `python experiments/directional_amplitude.py` | `results/magnitude/directional_amplitude_summary.json` | `tests/test_math_gates.py` |
 | Certified dynamic range (P = 1200 subsample) | 36–89% per object, median 62.87% | `python experiments/certified_gaps.py` | `results/certification/certified_gaps.json` | `tests/test_certified_gaps_evidence.py` |
 | Certified greedy optimality | 0.011–0.028% above the convex lower bound | same | same | same |

@@ -1494,7 +1494,9 @@
   "config_sha256": "84878734b737375eb12126bee81b67bf2ebddd57039fa7573d87e5ce8cd7fa0c",
   "git_sha": "fa5440410dcbfc9338653d076a5f62729b2d275c",
   "random_seed": 20260916,
-  "elapsed_s": 2417.5
+  "elapsed_s": 2417.5,
+  "config_sha256_at_run": "84878734b737375eb12126bee81b67bf2ebddd57039fa7573d87e5ce8cd7fa0c",
+  "config_drift_note": "config edited after the run; the committed config is no longer the run-time one (its sha256 now differs from config_sha256). config_sha256_at_run preserves the run-time value; no metric was recomputed (drift registered per audit A7)."
  },
  "note": "Full-resolution (no pixel subsampling) / full-142-light certified gap table via the exact low-rank Woodbury route. No sign-based gate; every row reported."
 }
