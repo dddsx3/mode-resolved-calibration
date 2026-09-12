@@ -9,7 +9,11 @@
 
 典型场景：光度立体、多光照重建等依赖辐射标定的逆问题——只要问题能局部线性化成 `y = A x + B δc + ε`（δc 是标定/干扰参数），就能用这套工具。
 
-![总览示意](docs/img/benchmark/overview_schematic.png)
+**图 1 · 脆弱方向、它们的谱、以及预算能买到什么。** 左：真实物体的逐像素
+Fisher 信息——蓝色区域信息最薄；中：保留谱把 tracked 方向按脆弱程度排序；
+右：精化少量灯恰好抬升最弱模式。
+
+![首屏图](docs/img/hero.png)
 
 ![两问导览](examples/calibration_tour.png)
 
