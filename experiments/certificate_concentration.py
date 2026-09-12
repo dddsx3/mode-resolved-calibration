@@ -131,10 +131,15 @@ def run(config_path=REPO / "configs/certificate_concentration.yaml",
         ranges = np.asarray(ranges)
         rel_spread = float((np.percentile(ranges, 75)
                             - np.percentile(ranges, 25)) / np.median(ranges))
+        # 系统性偏移（clean 标定源 vs 噪声实现标定源）：IQR 只度量族内随机
+        # 离散，不含这项——审计 P2-6：显式暴露，防止把 rel_spread 误读为
+        # 「证书边界精确到 ±1%」。
+        clean_vs_mean_ratio = float(range0 / ranges.mean()) if ranges.mean() else float("inf")
         objects[obj_name] = dict(
             P=P, L=L, R=R,
             range_clean=float(range0),
             range_mean=float(ranges.mean()),
+            clean_vs_mean_ratio=clean_vs_mean_ratio,
             range_median=float(np.median(ranges)),
             range_iqr=[float(np.percentile(ranges, 25)),
                        float(np.percentile(ranges, 75))],
@@ -151,15 +156,19 @@ def run(config_path=REPO / "configs/certificate_concentration.yaml",
               f"rel IQR spread {rel_spread*100:.1f}%", flush=True)
 
     all_spreads = [v["range_rel_spread"] for v in objects.values()]
+    ratios = [v["clean_vs_mean_ratio"] for v in objects.values()]
     summary = dict(
         gate="P-CONC: certificate concentration (instance-wise bound uncertainty)",
-        analysis_status="certificate_concentration_v1",
+        analysis_status="certificate_concentration_v2",
         kappa=kappa, budget_k=budget_k, realizations=R,
         noise_model=dict(a=cfg["noise_a"], b=cfg["noise_b"]),
         noise_fit_convention=cfg["noise_fit_convention"],
         n_objects=len(cfg["cohort"]),
         rel_spread_median=float(np.median(all_spreads)),
         rel_spread_max=float(np.max(all_spreads)),
+        clean_vs_mean_ratio=dict(
+            median=float(np.median(ratios)), min=float(np.min(ratios)),
+            max=float(np.max(ratios))),
         objects=objects,
         manifest=dict(config_sha256=_sha(Path(config_path)),
                       git_sha=_git_sha(), realizations=R,
@@ -168,7 +177,12 @@ def run(config_path=REPO / "configs/certificate_concentration.yaml",
              "calibration; this experiment measures how much they move across "
              "noise realizations of that calibration. The relative IQR spread "
              "is the honest 'certified bound uncertainty' — reported as-is, "
-             "no sign-based gate.")
+             "no sign-based gate. clean_vs_mean_ratio = range_clean/range_mean "
+             "exposes the SYSTEMATIC offset between the noiseless calibration "
+             "source and noisy-realization calibration sources; the IQR "
+             "rel_spread measures only within-family random dispersion and is "
+             "meaningful only within one calibration family — it must not be "
+             "read as the total bound accuracy (audit P2-6).")
     out.write_bytes(json.dumps(summary, ensure_ascii=False, indent=1)
                     .encode("utf-8"))
     print(f"[conc] rel spread median {np.median(all_spreads)*100:.1f}% | "

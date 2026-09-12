@@ -11,27 +11,46 @@
      且对齐后的残差严格 ρ̂-正交；
   3. **冻结管线等价**：arm_energy 与冻结 random48 的 `_recon_error`
      公式（Euclidean V 口径除外）在共同步骤上逐位一致。
+
+CI-safe：场景是**真实 NominalScene 方法 + 合成数组**（object.__new__ 绕过
+数据装载，属性构造与 NominalScene.__init__ 同式），回归锁照旧走真实
+delta_f/estimate_albedo/predicted_degradation 管线，不依赖原始数据。
 """
 
-from pathlib import Path
-
 import numpy as np
-import pytest
 
 from experiments.allocation_mode_tail import arm_energy
 
 
-def _scene(seed=20260910):
-    from experiments.openillumination_validation import NominalScene
-    obj_path = ("D:/data/OpenIllumination/OLAT/obj_09_ball/Lights/000/"
-                "com_masked_thumbnail/A1.png")
-    if not Path(obj_path).exists():
-        pytest.skip("raw data absent")
-    from calibinfo.datasets.openillumination import load_object
-    obj = load_object("D:/data/OpenIllumination", "obj_09_ball",
-                      data_meta="D:/data/OpenIllumination_meta")
-    return NominalScene(obj, np.random.default_rng([20260910, seed]),
-                        noise_fit_convention="corrected")
+def _scene(seed=20260910, L=24, P=180):
+    from experiments.openillumination_validation import NominalScene, _tangents
+    rng = np.random.default_rng(seed)
+    scen = object.__new__(NominalScene)
+    scen.sel = np.arange(L)
+    scen.pidx = np.arange(P)
+    scen.dirs = rng.normal(size=(L, 3))
+    scen.dirs /= np.linalg.norm(scen.dirs, axis=1, keepdims=True)
+    rho = rng.uniform(0.4, 1.2, size=P)
+    n = rng.normal(size=(P, 3))                              # 逐像素法线（行）
+    n /= np.linalg.norm(n, axis=1, keepdims=True)
+    ndl = n @ scen.dirs.T                                    # (P,L)
+    n[ndl.max(axis=1) < 0.2] *= -1.0                         # 保证 Finf > 0
+    scen.rho, scen.n = rho, n
+    s = np.clip(n @ scen.dirs.T, 0, None).T                  # (L,P)
+    scen.I = np.maximum(rho[None, :] * s, 1e-4) \
+        + rng.normal(scale=0.02, size=(L, P))
+    scen.s_hat = s
+    scen.h = (s > 0).astype(float)
+    scen.a, scen.b = 0.01, 0.02
+    scen.w = 1.0 / np.maximum(scen.a + scen.b * scen.I, 1e-6)
+    t1, t2 = _tangents(scen.dirs)
+    scen.B_phi = np.stack([
+        s * rho[None, :],
+        (n @ t1.T).T * rho[None, :] * scen.h,
+        (n @ t2.T).T * rho[None, :] * scen.h,
+    ], axis=-1)                                              # (L,P,3)
+    scen.Finf_diag = (scen.w * s ** 2).sum(0)
+    return scen
 
 
 def _dual_bases(scen, level=0.5):
@@ -77,7 +96,7 @@ def test_gauge_alignment_changes_energy_and_orthogonalizes():
     e_before = (e @ W_dual) ** 2
     e_aligned = e - sg * scen.rho
     e_after = (e_aligned @ W_dual) ** 2
-    assert float(e_after.sum()) != float(e_before.sum())   # 对齐必须改变能量
+    assert float(e_after.sum()) != float(e_before.sum())  # 对齐必须改变能量
     assert abs(float(e_aligned @ scen.rho)) < 1e-12 * max(  # 对齐后严格正交
         1.0, float(np.linalg.norm(e_aligned) * np.linalg.norm(scen.rho)))
 

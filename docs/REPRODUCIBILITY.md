@@ -17,6 +17,34 @@ re-derives the value. The binding table (claim → evidence file → field) is
 - Raw datasets are external (see `docs/DATA.md`); the repository carries only
   manifests and derived evidence.
 
+### 1.1 Provenance note: unreachable git SHAs in early manifests
+
+Two `git_sha` values recorded inside committed result manifests are **not
+reachable** in the current history (`git cat-file -t` fails): the original
+commits were replaced during the 2026-09-09 repository reorganization. This
+is a known, documented state — not an omission:
+
+- `fa54404…` — `results/certification/lowrank_fullres.json` and
+  `results/certification/certificate_concentration.json` (v1). The former
+  carries an explicit `provenance_unknown: true` +
+  `sha_unreachable_reason` block; the latter has been re-run (v2) and
+  records a reachable SHA. The invalid v1
+  `results/magnitude/linearization_radius.json` (same SHA) was replaced by
+  the metric-domain-corrected v2 rerun.
+- `bd67897…` — the seven frozen science-closed manifests (all with
+  `git_dirty: true`: run on a dirty working tree):
+  `results/synthetic/ci01_formal_manifest.json`,
+  `results/gauge_spectrum/ci02_formal_manifest.json`,
+  `results/monte_carlo/ci03_formal_manifest.json`,
+  `results/nonlinear/ci03nl_nl_formal_manifest.json`,
+  `results/openillumination/ci04_formal_manifest.json`,
+  `results/diligent/ci05_formal_manifest.json`,
+  `results/diligent_ablation/ci05abl_ablation_manifest.json`.
+  These are immutable frozen benchmark artifacts and are kept byte-for-byte
+  as committed; their integrity is independently pinned by
+  `checksums.sha256`, and the producing scripts + configs are committed and
+  testable — only the historical commit pointer itself is stale.
+
 ## 2. Environment
 
 ```bash
@@ -57,7 +85,9 @@ protocol (same objects, pixel subsets, levels, seeds).
 | Certified dynamic range (P = 1200 subsample) | 36–89% per object, median 62.87% | `python experiments/certified_gaps.py` | `results/certification/certified_gaps.json` | `tests/test_certified_gaps_evidence.py` |
 | Certified greedy optimality | 0.011–0.028% above the convex lower bound | same | same | same |
 | Full-resolution confirmation (all masked pixels, all 142 lights) | 27.3–89.4%, median 60.06%; greedy 0.002–0.005% | `python experiments/lowrank_fullres.py` | `results/certification/lowrank_fullres.json` | `tests/test_m2_m3_evidence.py::test_fullres_structure` |
-| Mode-tail targeted intervention | Δ < 0 in all 10 cells, 11/11 objects, CIs exclude 0 | `python experiments/allocation_mode_tail.py` | `results/mode_tail/allocation_mode_tail.json` | `tests/test_m2_m3_evidence.py::test_alloc2_structure` |
+| Mode-tail targeted intervention (three-arm, corrected calibers) | honest null: targeted worse than random in 6/8 informative cells, never better; no increment over the scalar arm | `python experiments/allocation_mode_tail.py` | `results/mode_tail/allocation_mode_tail.json` | `tests/test_m2_m3_evidence.py::test_alloc2_structure` |
+| Linearization validity radius (P-RADIUS v2) | see `results/magnitude/linearization_radius.json` (`radius_2x`, `radius_10x`) | `python experiments/linearization_radius.py` | `results/magnitude/linearization_radius.json` | `tests/test_pradius_pconc_artifacts.py` |
+| Certificate concentration (P-CONC) | see `results/certification/certificate_concentration.json` (`rel_spread_median`, `clean_vs_mean_ratio`) | `python experiments/certificate_concentration.py` | `results/certification/certificate_concentration.json` | `tests/test_pradius_pconc_artifacts.py` |
 | Submodularity negative result | E-opt: 1518 violating triples over 10 instances, γ_min = 0.704; A-opt marginal; D-opt clean | `python experiments/submodularity_search.py` | `results/submodularity/submodularity_search.json` | `tests/test_submodularity_harness.py` |
 | Amplitude validity envelope | emp/pred median 201.1 (original pipeline), 1.0045 synthetic MC | `python experiments/directional_amplitude.py` | `results/magnitude/directional_amplitude_summary.json` | `tests/test_math_gates.py` |
 | Certified allocation rank invariance | 594 frozen orderings, rank 1200 = rank(F∞) everywhere | `python experiments/allocation_rank_check.py` | `results/openillumination/correctness/allocation_rank_check.json` | `tests/test_math_gates.py` |

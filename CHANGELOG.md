@@ -103,6 +103,58 @@ its own, independent of any manuscript.
 
 ## [Unreleased]
 
+### Fixed (external audit round, 2026-09-13)
+
+- **P-RADIUS metric domain (P0-1)**: v1 injected the corruption
+  estimator-side, so a single extreme gain dominated the GLS denominator at
+  large levels and E(l) collapsed ~6 orders of magnitude (log-log slope
+  -1.9 instead of +2) - it measured estimator numerical collapse, not
+  linearization failure. v2 injects observation-side (full nonlinear
+  forward, backface flips included) and estimates with the nominal geometry;
+  radius semantics moved to the excess factor q(l) = dev(l)/(l/l_min)^2
+  over the first-order scaling. v1 artifact and radius semantics withdrawn;
+  v2 rerun committed
+- **CI guard actually running (P0-2)**: `tests/test_alloc2_arms_consistency.py`
+  loaded real raw data and silently skipped in CI - the only structural
+  guard for the v1.0 gauge-alignment bug fix ran nowhere public. The scene
+  is now a real `NominalScene` instance over synthetic arrays (same
+  construction formulas; all three tests execute on any machine)
+- **Ghost git SHAs (P1-1)**: two `git_sha` values recorded in result
+  manifests are unreachable in history (commits replaced by the 2026-09-09
+  reorganization). Disposition: v1 `linearization_radius.json` replaced by
+  the v2 rerun; `certificate_concentration.json` re-run (v2) with a
+  reachable SHA; `lowrank_fullres.json` carries an explicit
+  `provenance_unknown` + `sha_unreachable_reason` block; the seven frozen
+  science-closed manifests are kept byte-for-byte and documented in
+  `docs/REPRODUCIBILITY.md` section 1.1
+- **P-CONC metric semantics (P2-6)**: `clean_vs_mean_ratio` added
+  (per object + summary) to expose the systematic noiseless-vs-noisy
+  calibration-source offset that the IQR `rel_spread` does not capture;
+  config `metric_definition` synced; note forbids conflating the two
+- **Stale retracted outcome text (P2-3)**: `docs/EXPERIMENTS.md` section 13
+  and `docs/REPRODUCIBILITY.md` still carried the withdrawn v1.0
+  "significant in all 10 cells" claim; replaced with the RETRACTED marker +
+  the precise v1.1 three-arm outcome (targeted significantly worse in 6/8
+  informative cells, never better; no increment over the scalar arm)
+- **B4 quantification (P2-4)**: the "policy nulls are structural" claim now
+  cites the per-k certified-epsilon-to-policy-gap ratios (125x/98x/127x/
+  247x; k=48 attains the bound) instead of an unquantified pointer
+- **Dynamic-range reconciliation (P2-5)**: `docs/claims.md` N-3 now states
+  the one-law-different-Finf-tails relationship between 4.02% (uniform-Finf
+  synthetic), 62.87% (P=1200) and 60.06% (full-resolution)
+- **Nested duplicate artifacts (P2-1)**: removed
+  `results/mode_tail/mode_tail/` and both `checkpoints_fullres` copies
+  (run intermediates, unreferenced); `results/**/checkpoints*/` gitignored
+
+### Added
+
+- `docs/EXPERIMENTS.md` sections 14/15: missing protocol records for the
+  committed P-RADIUS and P-CONC artifacts (P2-2)
+- `tests/test_pradius_pconc_artifacts.py`: CI-safe artifact gates for
+  P-RADIUS (small-level log-log slope near +2, radius bookkeeping fields)
+  and P-CONC (`clean_vs_mean_ratio` present and distinct from
+  `rel_spread`) (P1-2)
+
 ### Added
 
 - `examples/ex4_calibration_tour.py`: a two-question guided tour figure

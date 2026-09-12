@@ -1,11 +1,17 @@
-# P-RADIUS · 线性化有效半径（预注册）
+# P-RADIUS · 线性化有效半径（预注册；v2 度量域修正）
 # 问题：线性化预测（ΔF 与保留谱）在多大的腐蚀水平 ℓ 上偏离经验二阶矩
 # 达 {2×, 10×}？偏离水平 = 线性化在真实数据上的有效半径。
-# 口径与 ci04 一致（estimator-side corruption、corrected caliber）；
-# level 网格远超预注册范围以覆盖完整的偏离曲线。
+# v2（勘误 2026-09-13，审计 P0-1）：腐蚀注入在**观测侧**（全非线性前向
+# 生成 I' = ρ̂·max(n̂·d2,0)·g），估计器用**名义几何**——v1 的估计器侧注入
+# 使单极端灯支配 GLS 分母、E(ℓ) 塌缩 6 个数量级（度量的是估计器数值崩塌
+# 而非线性化失效），v1 结果作废。
+# 半径语义 v2：q(ℓ) = dev(ℓ)/(ℓ/ℓ_ref)²（一阶标度超出因子）首次超过
+# {2×, 10×} 的最小 ℓ。v1 的「dev 超 2×参考能量」语义在一阶标度下平凡
+# 触发，随 v1 一并作废。
+# 口径与 ci04 场景装配一致（corrected caliber）；种子空间与 v1 相同。
 gate: P-RADIUS
-analysis_status: preregistered_v1
-run_name: linearization_radius_v1
+analysis_status: preregistered_v2
+run_name: linearization_radius_v2
 
 data_root: D:/data/OpenIllumination
 data_meta: D:/data/OpenIllumination_meta
@@ -24,8 +30,12 @@ outcome_independence: >
   regardless of whether it is large or small. No sign-based gate.
 
 metric_definition: >
-  For each level: E(level) = mean over seeds of the bottom-5 dual-coordinate
-  energy (gauge-aligned residual projected on W = F_inf^{1/2} V_bottom5).
-  dev(level) = E(level) / E(level_min). The linearized prediction is
-  dev ~ (level/level_min)^2; the radius is the first level where dev
-  crosses 2x / 10x the reference.
+  For each level: observation-side injection I'(k,p) = rho_hat(p) *
+  max(n(p)@d2_k, 0) * g(k) (full nonlinear forward, backface flips
+  included); the estimator is the nominal-geometry whitened per-pixel GLS
+  (denominator fixed to the nominal s^2, level-independent). E(level) =
+  mean over seeds of the bottom-5 dual-coordinate energy of the
+  gauge-aligned residual e = rho_tilde - rho_hat. dev(level) = E(level) /
+  E(level_min); first-order theory predicts dev ~ (level/level_min)^2.
+  The radius is the first level where the excess factor q(level) =
+  dev(level) / (level/level_min)^2 crosses 2x / 10x.

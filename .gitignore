@@ -60,3 +60,5 @@ outputs/
 
 # regenerated run outputs (frozen artifacts live in results/)
 results/raw/
+# run-intermediate checkpoints must never enter results/ (audit P2-1)
+results/**/checkpoints*/

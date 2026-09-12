@@ -1488,6 +1488,8 @@
    ]
   }
  },
+ "provenance_unknown": true,
+ "sha_unreachable_reason": "The recorded git_sha (fa5440410dcbfc9338653d076a5f62729b2d275c) refers to a working-tree state whose commit is no longer reachable in the repository history (the commit was replaced during the 2026-09-09 repository reorganization). Artifact integrity is independently pinned by checksums.sha256; the producing script is experiments/lowrank_fullres.py with configs/lowrank_fullres.yaml.",
  "manifest": {
   "config_sha256": "84878734b737375eb12126bee81b67bf2ebddd57039fa7573d87e5ce8cd7fa0c",
   "git_sha": "fa5440410dcbfc9338653d076a5f62729b2d275c",

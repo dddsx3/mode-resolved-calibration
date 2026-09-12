@@ -307,30 +307,118 @@ certain calibration components hurt the weakest tracked modes most, does a
 targeted intervention on those components reduce the TARGETED modes' empirical
 error, versus the same budget on random Fisher-active lights?
 
-- **Arms**: targeted = the frozen adaptive normalized weak-Fisher-mode
-  sensitivity heuristic (per-object full 142-light ordering, budgets are
-  prefixes); random_active48 = uniform permutations over the 48 Fisher-active
-  analysis lights (6 permutations averaged per seed). No other policy: this is
-  an intervention study, not a policy competition (P-CERT v1 owns the
-  optimality landscape).
+- **Arms (v1.1, three-arm revision)**: targeted = the frozen adaptive
+  normalized weak-Fisher-mode sensitivity heuristic (per-object full
+  142-light ordering, budgets are prefixes); scalar_targeted = the J_A
+  steepest-descent greedy prefix (exact gradient, same scalar-OED objective
+  as P-CERT — the distinguishing control); random_active48 = uniform
+  permutations over the 48 Fisher-active analysis lights (6 permutations
+  averaged per seed). All three arms share ONE residual pipeline function
+  (`arm_energy`) — the structural guard that fixes the v1.0 bug below.
 - **Grid**: 11 objects × levels {0.2, 0.5, 1.0} × regimes {10, 100} ×
   budgets k ∈ {5, 10, 14, 28, 48} × 10 seeds; scene rng identical to the
   frozen allocation; corrected interface.
 - **Endpoint**: per-run energy of the bottom-5 tracked modes in the
   normalized dual coordinate `W = F∞^{1/2} V_bottom5` (corrected pipeline) of the
   gauge-aligned residual, paired by seed across arms.
-- **Statistics**: Δ(targeted − random_active48) per (regime, budget), median
-  over objects, object-level paired bootstrap (B=10000, seed 20260916), all 11
-  paired differences + sign count, per-mode breakdown.
+- **Pre-registered criteria (config, committed before the run)**: J1 — does
+  targeted reduce the energy vs random_active48; J2 — does scalar_targeted
+  as well; J3 (distinguishing test) — is targeted's reduction strictly
+  larger than scalar_targeted's. Yes ⇒ the mode-resolved language has
+  incremental interventional value; no ⇒ honest negative result.
 - **Output**: `results/mode_tail/allocation_mode_tail.json`.
-- **Outcome (2026-09-12, preregistered protocol)**: targeted intervention
-  reduces the targeted modes' dual-coordinate energy at **all 10
-  (regime, budget) cells, 11/11 objects per cell**, with all paired-bootstrap
-  95% CIs excluding 0 (e.g. 10x/k=5: Δ median −1.06e5, CI [−2.67e6,
-  −5.31e4]). This validates the mode-targeted chain (vulnerability →
-  attribution → targeted intervention → mode-specific improvement) while the
-  overall-reconstruction boundary of the frozen benchmark stands unchanged
-  (different endpoint; P-CERT v1 owns the policy landscape).
+- **RETRACTED outcome (v1.0, 2026-09-12)**: the originally reported
+  "all 10 (regime, budget) cells, 11/11 objects, all CIs excluding 0"
+  significant targeted-vs-random result is **invalid**. External review
+  found a genuine bug: the v1.0 random arm omitted the gauge-alignment step
+  (`sg` computed but not applied) before projection, while the targeted arm
+  applied it — asymmetric residual calibers. The gauge direction ρ̂ carries
+  ~0.91 of its energy inside the bottom-5 dual subspace, inflating the
+  random-arm energy ~28×; the entire v1.0 significance was this artifact.
+  See `erratum` block in the result JSON and C4 in `docs/claims.md`.
+- **Outcome (v1.1, 2026-09-12, three-arm shared-pipeline rerun)**: with the
+  gauge bug fixed and all arms funneled through one pipeline, the
+  pre-registered comparisons are reported regardless of direction
+  (Δ = targeted − comparator in bottom-5 dual energy; positive = targeted
+  worse; the k=48 cells are degenerate — every ordering selects all 48
+  active lights, Δ ≡ 0):
+  J1 — targeted vs random_active48 is **significantly worse in 6/8
+  informative cells** (all CIs entirely positive) and spans 0 in the other
+  2; in no cell is targeted better. J2 — scalar_targeted is significantly
+  worse in 2/8 cells and indistinguishable in the rest. J3 — targeted shows
+  no increment over the scalar arm (1/8 cells significantly different, in
+  the worse direction). Honest negative result: after the caliber repair,
+  the mode-targeted intervention chain shows no mode-specific advantage —
+  consistent with the certified picture that policy differences live far
+  inside the certified epsilon (§12). The pipeline regression guard now
+  runs in CI on a synthetic scene (`tests/test_alloc2_arms_consistency.py`).
+
+## 14. Linearization validity radius（P-RADIUS, `experiments/linearization_radius.py`）
+
+**Erratum (v1, superseded)**: v1 injected the corruption **estimator-side**
+(`estimate_albedo` fitted with the corrupted d2/g). At large levels the
+intensity channel `g = exp(logs·σ·ℓ)` reaches `e^±16` per light, a single
+extreme light dominates the GLS denominator `Σ w·m²`, and E(ℓ) collapsed by
+~6 orders of magnitude (log-log slope −1.9 instead of +2) — v1 measured
+estimator numerical collapse, not linearization failure. v1 outputs and its
+"dev crosses 2× the reference energy" radius semantics are withdrawn.
+
+- **Dataset**: the 11-object held-out OpenIllumination cohort
+  (`configs/linearization_radius.yaml`), P = 1200 subsampled pixels, 48
+  Fisher-active lights, corrected noise-fit convention, scene rng identical
+  to the frozen benchmark.
+- **Corruption**: joint (direction rotation + intensity scaling), levels
+  ℓ ∈ {0.05, 0.1, 0.2, 0.35, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 4.0, 8.0} in the
+  physical units of `CorruptionGenerator("joint", ℓ)`; 20 seeds per level;
+  seed space disjoint from the scene rng.
+- **Metric domain (v2)**: observation-side injection — the corrupted
+  realization (d2, g) generates the true observation
+  `I'(k,p) = ρ̂_p·max(n̂_p·d2_k, 0)·g_k` (full nonlinear forward, backface
+  flips included); the analyst-side estimator is the **nominal-geometry**
+  whitened per-pixel GLS (denominator fixed to the nominal ŝ², level
+  independent — numerical collapse removed from the metric domain).
+- **Endpoint**: gauge-aligned residual e = ρ̃ − ρ̂; bottom-5 dual-coordinate
+  energy (W = F∞^{1/2} V_bottom5) averaged over seeds → E(ℓ);
+  dev(ℓ) = E(ℓ)/E(ℓ_min).
+- **Metric**: excess factor q(ℓ) = dev(ℓ)/(ℓ/ℓ_min)². First-order theory
+  holds while q ≈ 1 (log-log slope +2); the radius is the first level where
+  q crosses 2× / 10×. Reported as `radius_2x` / `radius_10x` with
+  `median_over_crossed_subset`, `n_crossed`, `n_total` (the median is over
+  the crossed subset only — objects that never cross are counted in
+  `n_total`, not silently dropped).
+- **Bootstrap/seed**: none beyond the 20 corruption seeds per (object,
+  level); descriptive protocol, no sign-based gate.
+- **Output**: `results/magnitude/linearization_radius.json`.
+- **Outcome (v2, 2026-09-13)**: small-ℓ log-log slope recovered to +2.007
+  on the smoke object (obj_09_ball, protocol requires +2); per-object
+  radii and the summary table are in the committed artifact.
+
+## 15. Certificate concentration（P-CONC, `experiments/certificate_concentration.py`）
+
+- **Dataset**: the same 11-object cohort; full masked pixel set per object,
+  142 lights, corrected convention.
+- **Perturbation**: R = 10 Gaussian noise realizations of the calibration
+  source (noise model a + b·I, fitted level; seed 20260916 + obj_idx);
+  per realization a full photometric-stereo refit (`calibrated_ps_fullres`)
+  rebuilds the allocation problem.
+- **Endpoint**: certified dynamic range (J_none − J_all)/|J_none| at the
+  Frank–Wolfe lower bound (budget k = 14, κ = 10, 30 FW iterations), per
+  realization; plus the Lipschitz transfer bound
+  |J_A(A) − J_A(B)| ≤ ‖A−B‖·‖A⁻¹‖·‖B⁻¹‖·P verified per pair.
+- **Metric**: `range_rel_spread` = IQR/median over realizations — random
+  dispersion **within** the noisy-calibration family; and (v2, audit P2-6)
+  `clean_vs_mean_ratio` = range_clean/range_mean per object + summary —
+  the **systematic** offset between the noiseless calibration source and
+  noisy-realization sources, which the IQR does not capture. The two must
+  never be conflated: rel_spread is only meaningful within one calibration
+  family.
+- **Bootstrap/seed**: none; deterministic given the seeds; no sign-based
+  gate.
+- **Output**: `results/certification/certificate_concentration.json`.
+- **Outcome (v2, 2026-09-13)**: see the committed artifact
+  (`rel_spread_median`, `clean_vs_mean_ratio.median/min/max`); the
+  clean-vs-mean systematic offset dominates the within-family IQR spread
+  by design of the two metrics.
 
 ---
 

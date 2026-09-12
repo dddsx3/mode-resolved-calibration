@@ -22,5 +22,15 @@ random_seed: 20260916
 
 fw_iters: 30
 
+metric_definition: >
+  Per object: R noise realizations of the calibration source; per
+  realization the certified dynamic range (J_none - J_all)/|J_none| at the
+  FW lower bound. range_rel_spread = IQR/median over realizations (random
+  dispersion within the noisy-calibration family). clean_vs_mean_ratio =
+  range_clean / range_mean, where range_clean uses the noiseless
+  calibration source: this is the SYSTEMATIC offset between calibration
+  families, which the IQR does not capture (audit P2-6); report both,
+  never conflate.
+
 outcome_independence: >
   The concentration is measured and reported as-is; no threshold or gate.

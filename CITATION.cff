@@ -7,7 +7,7 @@ authors:
     name: "GMX"
     email: "3570239187@qq.com"
 version: 0.4.1
-date-released: 2026-09-10
+date-released: 2026-09-13
 license: MIT
 repository-code: "https://github.com/dddsx3/mode-resolved-calibration"
 abstract: >-
@@ -21,11 +21,11 @@ abstract: >-
   Spearman RA = 0.90, CI [0.70, 0.95] — rank-equivalent to the mode-index
   baseline by construction — plus a quantified real-data amplitude validity
   envelope for the linearized theory). Includes a preregistered calibration-allocation
-  evaluation on the 11 held-out objects (29,700 reconstructions): mode-derived
-  guidance improves reconstruction over random allocation (an actionable
-  outcome vs random), classical E/A/D-optimal greedy baselines achieve modestly
-  lower AUC in post-hoc paired comparisons, and an active-set random control
-  shows the benefit over full-universe random is an active-set effect rather
+  evaluation on the 11 held-out objects (29,700 reconstructions): informed
+  allocation policies improve reconstruction over random allocation, but a
+  post-hoc three-arm comparison finds no detectable difference between
+  mode-resolved and scalar-OED targeting; an active-set random control shows
+  the benefit over full-universe random is an active-set effect rather
   than a mode-ordering effect. v0.3.0 closes the math-freeze correctness gates
   (noise-fit coefficient order, normalized dual-coordinate mode projection,
   singular-covariance routes, retention-covariance theorem, allocation rank

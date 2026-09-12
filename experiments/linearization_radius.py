@@ -1,24 +1,37 @@
-"""P-RADIUS · 真实数据线性化有效半径（十问 Q3 / 评估 action 2）。
+"""P-RADIUS · 真实数据线性化有效半径（v2，度量域修正版）。
+
+**勘误（2026-09-13 外部审计 P0-1）**：v1 把腐蚀注入到**估计器侧**
+（`estimate_albedo` 用 corrupted d2/g 拟合），强度通道 g=exp(logs·σ·ℓ) 在
+大 ℓ 时单灯可达 e^±16，**单个极端灯支配分母 Σw·m² ⇒ ρ̃→0**，E(ℓ) 塌缩
+6 个数量级（log-log 斜率 −1.9，与协议要求的 +2 相反）——度量的是**估计器
+数值崩塌**，不是线性化失效。v1 结果作废。
+
+**v2 度量域（方案 a，名义几何估计）**：腐蚀注入移到**观测侧**——前向
+生成真实观测 I'(k,p) = ρ̂_p·max(n̂_p·d2_k,0)·g_k（真实光来自旋转后的 d2、
+强度 g，全非线性模型，含 backface 翻转），分析者按**名义几何**
+（dirs、单位增益）估计。估计器分母固定为名义 ŝ²（与 ℓ 无关、正定），
+数值崩塌从度量域中移除；E(ℓ) 只反映观测扰动经名义管线的传播，其偏离
+一阶标度 = 真实的线性化失效。
 
 问题：以名义标定处的雅可比 Bφ 构造的线性化预测（ΔF 与 pred_deg），
 在多大的腐蚀水平 ℓ 上仍与经验估计误差的二阶矩一致？
-偏离 {2×, 10×} 的交叉水平 = **线性化有效半径**（逐物体报告）。
 
-口径（与 ci04 完全一致）：
+口径（与 ci04 场景装配一致）：
   - 场景：P=1200 子采样、48 active 灯、corrected 口径、场景 rng 同冻结；
   - 腐蚀：joint（方向旋转 + 强度缩放），水平 ℓ = CorruptionGenerator("joint", ℓ)
     的物理单位（σ_logI = ℓ、σ_deg = ℓ 度）——预注册网格 [0.05 ... 8.0]；
-  - 估计器：固定 n̂ 白化逐像素 GLS，腐蚀后的 d2/g 注入（同冻结协议）；
-  - 残差：e = ρ̃ − ρ̂，gauge 对齐（同冻结）；经验二阶矩 = 逐 seed 的
-    e @ W_dual 平方（bottom-5 dual 子空间能量）的均值 E(ℓ)；
-  - 线性化预测：pred_deg_j(ℓ) = 1/ρ_j(Σ_φ(ℓ))（ΔF 在 ℓ 处的广义保留谱），
-    Σ_φ(ℓ) = ℓ² Σ_φ(1)（腐蚀水平平方缩放进精度）。
+    种子空间与 v1 相同（同 raw innovations，可比）；
+  - 估计器：固定 n̂ 白化逐像素 GLS @ 名义几何；残差 e = ρ̃ − ρ̂，gauge
+    对齐（同冻结）；经验二阶矩 = 逐 seed 的 e @ W_dual 平方（bottom-5
+    dual 子空间能量）的均值 E(ℓ)；
+  - 线性化预测：一阶传播给出 dev(ℓ) = E(ℓ)/E(ℓ_ref) ∝ (ℓ/ℓ_ref)²。
 
-度量：dev(ℓ) = E(ℓ) / E_ref，其中 E_ref 为最小水平 {0.05} 的能量——
-线性化生效时 dev ∝ (ℓ/0.05)²（理论标度）；偏离该标度 = 线性化失效。
-半径 = dev 首次超过 {2×dev(0.05), 10×dev(0.05)} 的最小 ℓ。
+度量（v2 语义）：超出因子 q(ℓ) = dev(ℓ) / (ℓ/ℓ_ref)²——线性化生效时
+q ≈ 1；q 偏离 1 = 二阶及更高阶项主导。半径 = q 首次超过 {2, 10} 的最小 ℓ
+（v1 的「dev 超 2×参考能量」语义在一阶标度下会在 ℓ≈0.07 平凡触发，
+随 v1 一并作废）。
 
-输出：results/magnitude/linearization_radius.json
+输出：results/magnitude/linearization_radius.json（覆盖 v1 无效结果）
 """
 from __future__ import annotations
 
@@ -38,12 +51,12 @@ import sys
 sys.path.insert(0, str(REPO))
 sys.path.insert(0, str(REPO / "src"))
 
+from calibinfo.allocation.corruption import (                          # noqa: E402
+    apply_scaled_corruption, raw_innovations)
 from calibinfo.datasets.openillumination import load_object            # noqa: E402
 from calibinfo.models.corruption import CorruptionGenerator            # noqa: E402
 from experiments.openillumination_validation import NominalScene       # noqa: E402
 
-LEVELS = [0.05, 0.1, 0.2, 0.35, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 4.0, 8.0]
-SEEDS = 20
 CROSSINGS = (2.0, 10.0)
 
 
@@ -66,6 +79,7 @@ def run(config_path=REPO / "configs/linearization_radius.yaml",
     out.parent.mkdir(parents=True, exist_ok=True)
 
     objects = {}
+    t_start = time.time()
     for obj_idx, obj_name in enumerate(cfg["cohort"]):
         obj = load_object(cfg["data_root"], obj_name, data_meta=cfg.get("data_meta"))
         scen = NominalScene(obj, np.random.default_rng([20260910, obj_idx]),
@@ -78,18 +92,23 @@ def run(config_path=REPO / "configs/linearization_radius.yaml",
             _deg, W_dual = scen.predicted_degradation(
                 gen.sigma_phi_diag(), mode_coordinate="dual")
             rho_pred = np.sort(_deg)
-            # 经验：seeds 个腐蚀实现（方向 + 强度，联合），gauge 对齐
+            # 经验：seeds 个腐蚀实现（方向 + 强度，联合），观测侧注入 +
+            # 名义几何估计（v2，方案 a）
             energies = np.empty(seeds)
             for s_i in range(seeds):
                 rng = np.random.default_rng(
                     [20260916, 4242, obj_idx, int(level * 1000), s_i])
-                from calibinfo.allocation.corruption import raw_innovations
                 raw = raw_innovations(rng, len(scen.sel))
                 scales = np.ones(len(scen.sel))
-                from calibinfo.allocation.corruption import apply_scaled_corruption
                 d2, g = apply_scaled_corruption(
                     scen.dirs, sig_logI, sig_rad, scales, raw)
-                rho_t = scen.estimate_albedo(d2, g)
+                # 观测侧注入：真实光来自 d2/强度 g（全非线性前向，含翻转）
+                I_obs = scen.rho[None, :] \
+                    * np.maximum(scen.n @ d2.T, 0.0).T * g[:, None]
+                # 名义几何估计：分母固定为名义 ŝ²，与 ℓ 无关
+                scen_obs = NominalScene._from_arrays(scen, I_obs)
+                rho_t = scen_obs.estimate_albedo(
+                    scen.dirs, np.ones(len(scen.sel)))
                 e = rho_t - scen.rho
                 sg = (e * scen.rho).sum() / (scen.rho ** 2).sum()
                 e = e - sg * scen.rho
@@ -99,52 +118,64 @@ def run(config_path=REPO / "configs/linearization_radius.yaml",
                                  pred_deg_bottom5=[float(x) for x in
                                                    1.0 / rho_pred[:5]],
                                  n_seeds=seeds))
-        # 参考能量（最小水平）
+        # 参考能量（最小水平）与一阶标度对齐
         E_ref = rows_obj[0]["E_mean"]
         for r in rows_obj:
+            scale2 = (r["level"] / ref_level) ** 2
             r["dev_from_ref"] = r["E_mean"] / E_ref if E_ref > 0 else float("nan")
-        # 半径：dev 首次超过 {2, 10} 的最小 ℓ
+            r["first_order_scaling"] = scale2
+            r["excess_over_scaling"] = (r["dev_from_ref"] / scale2
+                                        if E_ref > 0 else float("nan"))
+        # 半径：超出因子 q 首次超过 {2, 10} 的最小 ℓ
         radius = {}
         for thr in CROSSINGS:
             hit = [r["level"] for r in rows_obj
-                   if r["dev_from_ref"] > thr]
+                   if r["excess_over_scaling"] > thr]
             radius[f"cross_{thr:g}x"] = (min(hit) if hit else None)
-        # 理论标度检查：dev(ℓ) ≈ (ℓ/ℓ_ref)²（线性化预言）
-        objects[obj_name] = dict(rows=rows_obj, radius=radius,
-                                 E_ref=E_ref)
-        med_all = [r["dev_from_ref"] for r in rows_obj]
-        print(f"[radius] {obj_name}: dev @0.05={med_all[0]:.2f} "
-              f"@1.0={med_all[5]:.2f} @8.0={med_all[-1]:.2f}; "
-              f"radius2x={radius['cross_2x']}, radius10x={radius['cross_10x']}",
-              flush=True)
+        objects[obj_name] = dict(rows=rows_obj, radius=radius, E_ref=E_ref)
+        print(f"[radius] {obj_name}: dev@1.0={rows_obj[5]['dev_from_ref']:.2f} "
+              f"(scaling {rows_obj[5]['first_order_scaling']:.0f}) "
+              f"q@1.0={rows_obj[5]['excess_over_scaling']:.2f}; "
+              f"radius2x={radius['cross_2x']}, radius10x={radius['cross_10x']} "
+              f"elapsed={time.time() - t_start:.0f}s", flush=True)
 
-    rads2 = [v["radius"]["cross_2x"] for v in objects.values()
-             if v["radius"]["cross_2x"] is not None]
-    rads10 = [v["radius"]["cross_10x"] for v in objects.values()
-              if v["radius"]["cross_10x"] is not None]
+    def _agg(key):
+        vals = [v["radius"][key] for v in objects.values()
+                if v["radius"][key] is not None]
+        return dict(
+            median_over_crossed_subset=(float(np.median(vals)) if vals else None),
+            n_crossed=len(vals),
+            n_total=len(objects),
+            per_object={k: v["radius"][key] for k, v in objects.items()})
+
     summary = dict(
         gate="P-RADIUS: linearization validity radius on real data",
-        analysis_status="linearization_radius_v1",
+        analysis_status="linearization_radius_v2",
         levels=levels, seeds=seeds,
         noise_fit_convention=cfg["noise_fit_convention"],
         n_objects=len(cfg["cohort"]),
-        radius_2x=dict(median=float(np.median(rads2)) if rads2 else None,
-                       n_crossed=len(rads2),
-                       per_object={k: v["radius"]["cross_2x"]
-                                   for k, v in objects.items()}),
-        radius_10x=dict(median=float(np.median(rads10)) if rads10 else None,
-                        n_crossed=len(rads10),
-                        per_object={k: v["radius"]["cross_10x"]
-                                    for k, v in objects.items()}),
+        radius_2x=_agg("cross_2x"),
+        radius_10x=_agg("cross_10x"),
         objects=objects,
         manifest=dict(config_sha256=_sha(Path(config_path)),
                       git_sha=_git_sha(), seeds=seeds),
-        note="Linearization validity radius: for each corruption level ℓ, "
-             "E(ℓ) = mean over seeds of the bottom-5 dual-coordinate energy "
-             "of the gauge-aligned residual; dev(ℓ) = E(ℓ)/E(ℓ_min). "
-             "The linearized theory predicts dev ∝ (ℓ/ℓ_min)²; deviation "
-             "from that scaling = linearization breakdown. Radius = first "
-             "level where dev crosses 2× / 10× the reference; per object. "
+        metric_domain=dict(
+            injection="observation-side: I'(k,p) = rho_hat(p) * max(n(p)@d2_k,0)"
+                      " * g(k) — full nonlinear forward, backface flips included",
+            estimator="nominal-geometry whitened GLS (denominator is the fixed"
+                      " nominal s^2, level-independent; estimator numerical"
+                      " collapse removed from the metric domain, fixing audit"
+                      " P0-1: v1 injected corruption estimator-side and a"
+                      " single extreme gain dominated sum(w*m^2))",
+            radius_semantics="excess factor q(level) = dev(level) / "
+                             "(level/level_ref)^2 over the first-order "
+                             "scaling; radius = first level with q > 2 / 10"),
+        note="Linearization validity radius: for each corruption level l, "
+             "E(l) = mean over seeds of the bottom-5 dual-coordinate energy "
+             "of the gauge-aligned residual of the NOMINAL-geometry estimator "
+             "on observation-side-corrupted data; dev(l) = E(l)/E(l_min); "
+             "q(l) = dev(l) / (l/l_min)^2. First-order theory holds while "
+             "q ~ 1; radius = first level where q crosses 2x / 10x. "
              "No sign-based gate; all levels reported.")
     out.write_bytes(json.dumps(summary, ensure_ascii=False, indent=1)
                     .encode("utf-8"))

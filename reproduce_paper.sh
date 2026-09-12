@@ -32,12 +32,10 @@ else
     echo "[reproduce] skip diligent (no local data; contract = results/diligent/*_manifest.json)"
 fi
 
-echo "[reproduce] 4/4 figures and tables from results/"
-for i in 1 2 3 4 5 6 7 8 9; do
-    python paper/make_figures.py --figure "$i" >/dev/null 2>&1 || \
-        echo "[reproduce] Fig.$i skipped (recipe not implemented for this figure)"
+echo "[reproduce] 4/4 figures from results/"
+for i in $(seq 1 10); do
+    python scripts/make_figures.py --figure "$i" || \
+        { echo "[reproduce] FAIL: Fig.$i"; exit 1; }
 done
-python paper/make_tables.py --table 1 >/dev/null 2>&1 || \
-    echo "[reproduce] tables skipped (recipes not implemented)"
 
 echo "[reproduce] DONE"
