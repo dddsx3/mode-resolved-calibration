@@ -103,7 +103,22 @@ its own, independent of any manuscript.
 
 ## [Unreleased]
 
-### Fixed
+### Added
+
+- `examples/ex4_calibration_tour.py`: a two-question guided tour figure
+  (which albedo directions are fragile; what a recalibration budget buys,
+  with the convex lower bound) — the fastest way for a new user to see what
+  the library is for
+- `README.zh-CN.md`: Chinese README for domestic developers
+
+### Changed
+
+- README/docs language pass: internal process vocabulary ("caliber",
+  "provenance only", arm labels) replaced with plain wording ("pipeline
+  version", "kept for reference"); the language switcher links the English
+  and Chinese READMEs
+
+### Fixed (pre-release)
 
 - `stratified_valid_levels` in the MF-0 factorial summary stored a boolean
   instead of the finite-level count (an external audit read it as "only 1 of

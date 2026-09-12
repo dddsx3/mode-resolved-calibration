@@ -30,15 +30,15 @@ committed seeds), all reductions are deterministic (eigh/cholesky/solve —
 no iterative randomness), and every run writes a manifest (git SHA, config
 hash, seeds, conventions).
 
-## 3. Interface calibers (legacy vs corrected)
+## 3. Two pipeline versions (legacy vs corrected)
 
-The real-data pipeline has two interface calibers, both committed:
+The real-data pipeline has two interface versions, both committed:
 
 - `legacy` — bit-reproduces the original frozen benchmark artifacts
   (`results/openillumination/ci04_formal_summary.json` and friends).
 - `corrected` — the documented heteroscedastic noise-fit coefficient order
-  and the normalized dual-coordinate mode projection. **This is the
-  paper-facing caliber.**
+  and the normalized dual-coordinate mode projection. **Reported numbers
+  use this version.**
 
 The preregistered A/B/C/D factorial
 (`experiments/openillumination_factorial.py`,
@@ -54,12 +54,12 @@ protocol (same objects, pixel subsets, levels, seeds).
 |---|---|---|---|---|
 | Directional validation of the retention ordering (real objects) | R_A = 0.90, CI [0.7, 0.95], 65/66 cells | `python experiments/openillumination_factorial.py` (arm A machinery anchor; arm D rows committed) | `results/openillumination/mode_ranking.csv`, `results/openillumination/correctness/mf0_factorial_rows_D.json` | `tests/test_reproduction.py::test_N1_mode_resolved_pass_rate` |
 | Directional-validation construction disclosure | rank-equivalent to the mode-index baseline, deviation exactly 0.0 (66/66 cells) | `python experiments/directional_amplitude.py` | `results/magnitude/directional_amplitude_summary.json` | `tests/test_math_gates.py` |
-| Certified dynamic range (P = 1200 caliber) | 36–89% per object, median 62.87% | `python experiments/certified_gaps.py` | `results/certification/certified_gaps.json` | `tests/test_certified_gaps_evidence.py` |
+| Certified dynamic range (P = 1200 subsample) | 36–89% per object, median 62.87% | `python experiments/certified_gaps.py` | `results/certification/certified_gaps.json` | `tests/test_certified_gaps_evidence.py` |
 | Certified greedy optimality | 0.011–0.028% above the convex lower bound | same | same | same |
 | Full-resolution confirmation (all masked pixels, all 142 lights) | 27.3–89.4%, median 60.06%; greedy 0.002–0.005% | `python experiments/lowrank_fullres.py` | `results/certification/lowrank_fullres.json` | `tests/test_m2_m3_evidence.py::test_fullres_structure` |
 | Mode-tail targeted intervention | Δ < 0 in all 10 cells, 11/11 objects, CIs exclude 0 | `python experiments/allocation_mode_tail.py` | `results/mode_tail/allocation_mode_tail.json` | `tests/test_m2_m3_evidence.py::test_alloc2_structure` |
 | Submodularity negative result | E-opt: 1518 violating triples over 10 instances, γ_min = 0.704; A-opt marginal; D-opt clean | `python experiments/submodularity_search.py` | `results/submodularity/submodularity_search.json` | `tests/test_submodularity_harness.py` |
-| Amplitude validity envelope | emp/pred median 201.1 (frozen caliber), 1.0045 synthetic MC | `python experiments/directional_amplitude.py` | `results/magnitude/directional_amplitude_summary.json` | `tests/test_math_gates.py` |
+| Amplitude validity envelope | emp/pred median 201.1 (original pipeline), 1.0045 synthetic MC | `python experiments/directional_amplitude.py` | `results/magnitude/directional_amplitude_summary.json` | `tests/test_math_gates.py` |
 | Certified allocation rank invariance | 594 frozen orderings, rank 1200 = rank(F∞) everywhere | `python experiments/allocation_rank_check.py` | `results/openillumination/correctness/allocation_rank_check.json` | `tests/test_math_gates.py` |
 | Monte-Carlo variance identity (synthetic) | emp/analytic covariance ratio 1.0045 | `python scripts/run_experiments.py --experiment monte_carlo --config configs/monte_carlo.yaml` | `results/monte_carlo/ci03_formal_summary.json` | `tests/test_reproduction.py::test_N7_covariance_ratio` |
 | Gauge closed form vs direct | max rel 2.55e-8 over 25 decades | `python scripts/run_experiments.py --experiment gauge_spectrum --config configs/gauge_spectrum.yaml` | `results/gauge_spectrum/ci02_formal_summary.json` | `tests/test_reproduction.py::test_N6_gauge_closed_form` |

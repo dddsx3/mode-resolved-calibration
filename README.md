@@ -118,6 +118,10 @@ data and figures — clone-and-run, zero downloads:
 - retention spectrum and gauge response on a synthetic scene
 - mode-resolved vs scalar criteria under controlled nuisance corruption
 - a minimal calibration-allocation demo (small grid, runs in minutes)
+- a two-question guided tour: which directions are fragile, and what a
+  recalibration budget buys (certified) — shown below
+
+![the two questions](examples/calibration_tour.png)
 
 ## Benchmark reproduction
 
@@ -130,16 +134,14 @@ validity panels) whose numbers, protocols, and provenance are documented in
 a committed evidence file in [docs/claims.md](docs/claims.md).
 
 Key results (11 held-out OpenIllumination objects). Numbers use the
-**corrected pipeline caliber** (see *Correctness & integrity* below); the
-pre-correction record is kept explicitly labeled as provenance.
+**corrected pipeline** (see *Correctness & integrity* below); the original
+pipeline's outputs are kept as a reference record.
 
-- **Directional validation (the strongest honest statement of the
-  within-cell result)**: median within-cell Spearman $R_A$ = 0.90
+- **Directional validation**: median within-cell Spearman $R_A$ = 0.90
   (object-cluster bootstrap 95% CI [0.7, 0.95]; 65/66 cells positive, 11/11
-  objects positive). **Construction disclosure**: within a cell this statistic
-  is rank-equivalent to the trivial mode-index baseline
-  (`Spearman(−j, ·)`; per-cell deviation exactly 0.0 on 66/66 cells, both
-  calibers — `results/magnitude/directional_amplitude_summary.json`). What it
+  objects positive). **Important caveat**: within a cell this statistic
+  is by construction equivalent to ranking by mode index
+  (`Spearman(−j, ·)`; per-cell deviation exactly 0.0 on 66/66 cells — `results/magnitude/directional_amplitude_summary.json`). What it
   validates is *directional*: the retention operator's bottom tracked
   directions are the empirically more fragile directions inside a given
   problem instance. It does **not** validate the predicted magnitudes
@@ -161,11 +163,11 @@ pre-correction record is kept explicitly labeled as provenance.
   measured benefit of every informed policy over full-universe random is an
   active-set effect rather than a mode-ordering effect (see
   `allocation_policy_pairwise.csv` and `allocation_random48_summary.json`).
-- **Pre-correction record (legacy caliber; provenance only)**: $R_A$ = 0.90
+- **Pre-correction record (original pipeline; kept for reference)**: $R_A$ = 0.90
   (CI [0.90, 0.95]); stratified (fixed-level) median Spearman 0.536
   (mode-resolved) vs 0.418 (log-determinant) / 0.400 (trace). The stratified
   severity-comparison claim is **retired** after the corrected-interface
-  rerun — it does not survive the corrected noise fit (corrected caliber
+  rerun — it does not survive the corrected noise fit (corrected pipeline
   stratified −0.495; the flip is isolated to the noise-fit correction) — and
   must not be cited as a headline.
 
@@ -185,18 +187,18 @@ dual-coordinate mode projection. A preregistered A/B/C/D factorial
 `results/openillumination/correctness/mf0_factorial_summary.json`) validates
 the machinery and re-measures every headline under the corrected interface:
 
-- the legacy/legacy arm reproduces the frozen benchmark bit-close (max
-  relative difference 0.0 on every pred/emp entry and on the pooled
-  Spearman) — the rerun machinery is exact;
+- re-running with the original settings reproduces the frozen benchmark
+  bit-for-bit (max relative difference 0.0 on every pred/emp entry and on
+  the pooled Spearman);
 - the within-cell directional-validation result is unchanged under the
   corrected interface: $R_A$ = 0.90 (bootstrap 95% CI [0.7, 0.95], 65/66
   cells positive, 11/11 objects positive);
 - the fixed-level scalar-severity association does not survive the corrected
   noise fit (stratified −0.495 vs +0.536; the flip is isolated to the
-  noise-fit correction), so that claim is retired — the corrected caliber is
-  the reported one regardless of direction (fixed before the rerun).
+  noise-fit correction), so that claim is retired — the corrected pipeline
+  is the reported one regardless of direction (decided before the rerun).
 
-All doc-facing numbers come from the corrected caliber; see
+All doc-facing numbers come from the corrected pipeline; see
 [docs/claims.md](docs/claims.md) for the claim→evidence bindings.
 
 ## Research direction: certified bounds on calibration-precision allocation
@@ -241,8 +243,8 @@ Three structural findings anchor it (foundations locked by
    certification is the right tool. The J_A-greedy prefix is certified
    within **0.011–0.028%** of the convex lower bound at every budget
    (essentially optimal), while seeded random subsets sit 0.25–0.64% above
-   it. The earlier benchmark's policy-comparison nulls live entirely inside
-   that remaining epsilon. Adversarial searches for submodularity (with a
+   it. The earlier policy-comparison null results sit within this remaining
+   margin. Adversarial searches for submodularity (with a
    reproducible counterexample harness) and the amplitude validity envelope
    complete the picture as reported negatives/diagnostics. **Full-resolution
    confirmation** (`results/certification/lowrank_fullres.json`): recomputing
@@ -258,9 +260,8 @@ Three structural findings anchor it (foundations locked by
    objects**, paired-bootstrap 95% CIs excluding 0 — the mode-resolved
    signal is real where it applies: at the mode level.
 
-All certified analyses run under preregistered protocols (`configs/`
-committed before each run); the frozen benchmark above stays untouched and
-remains the reproducibility record of the first-generation study. The
+All certified analyses run under preregistered protocols (the `configs/`
+files are committed before each run); the benchmark above stays untouched. The
 claim→evidence bindings for every number in this README live in
 [docs/claims.md](docs/claims.md).
 

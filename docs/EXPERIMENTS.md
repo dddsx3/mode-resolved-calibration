@@ -100,7 +100,7 @@ Criterion definitions used throughout:
   `1 − 1/max_j pred_deg_j`; identical to `P_emin` on the tracked modes — the
   scalarization identity). ρ_min is the weakest tracked retention eigenvalue.
   **Definition freeze (L8)**: `pred_deg_j = 1/ρ_j` is a *different, unbounded*
-  quantity used for within-cell ranking; the two calibers coincide in rank but
+  quantity used for within-cell ranking; the two versions coincide in rank but
   not in magnitude — never substitute one for the other in magnitude claims.
   5 tracked modes along λ.
 - **E-min (P_emin)**: operand = the same weakest-mode datum (theoretically equal to
@@ -317,7 +317,7 @@ error, versus the same budget on random Fisher-active lights?
   budgets k ∈ {5, 10, 14, 28, 48} × 10 seeds; scene rng identical to the
   frozen allocation; corrected interface.
 - **Endpoint**: per-run energy of the bottom-5 tracked modes in the
-  normalized dual coordinate `W = F∞^{1/2} V_bottom5` (corrected caliber) of the
+  normalized dual coordinate `W = F∞^{1/2} V_bottom5` (corrected pipeline) of the
   gauge-aligned residual, paired by seed across arms.
 - **Statistics**: Δ(targeted − random_active48) per (regime, budget), median
   over objects, object-level paired bootstrap (B=10000, seed 20260916), all 11

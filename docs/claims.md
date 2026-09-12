@@ -28,7 +28,7 @@ in the README to appear verbatim under `results/**`.
 | # | Claim | Value | Evidence | Re-derive |
 |---|---|---|---|---|
 | B1 | Directional validation of the retention ordering | within-cell Spearman R_A = 0.90, CI [0.7, 0.95], 65/66 cells, 11/11 objects; exactly rank-equivalent to the mode-index baseline (66/66 cells, deviation 0.0) | `results/magnitude/directional_amplitude_summary.json` | `pytest tests/test_reproduction.py::test_N1_mode_resolved_pass_rate` |
-| B2 | Amplitude validity envelope | emp/pred ratio median 201.1, 5–95% [7.3, 1525.8] (frozen caliber); synthetic matched MC 1.0045 | `results/magnitude/directional_amplitude_summary.json` | `python experiments/directional_amplitude.py` |
+| B2 | Amplitude validity envelope | emp/pred ratio median 201.1, 5–95% [7.3, 1525.8] (original pipeline); synthetic matched MC 1.0045 | `results/magnitude/directional_amplitude_summary.json` | `python experiments/directional_amplitude.py` |
 | B3 | Stratified severity branch retired | arm-D stratified −0.495 vs frozen +0.536; flip isolated to the noise-fit correction | `results/openillumination/correctness/mf0_factorial_summary.json` | `pytest tests/test_factorial_evidence.py` |
 | B4 | Policy-comparison nulls are structural | P-ALLOC2-style overall nulls live inside the certified epsilon (see C2) | `results/certification/certified_gaps.json` | `pytest tests/test_certified_gaps_evidence.py` |
 | B5 | Allocation benefit is an active-set effect | Δ(mode − random_active48) = +0.014/+0.019, CIs span 0, 3/11 improved | `results/openillumination/allocation/allocation_random48_summary.json` | `pytest tests/test_benchmark_evidence.py::test_N11_random48_control_ci_spans_zero` |
@@ -37,7 +37,7 @@ in the README to appear verbatim under `results/**`.
 
 | # | Claim | Value | Evidence | Re-derive |
 |---|---|---|---|---|
-| C1 | Certified dynamic range, P=1200 caliber | 36–89% per object (median 62.87%) | `results/certification/certified_gaps.json` (`display`) | `pytest tests/test_certified_gaps_evidence.py` |
+| C1 | Certified dynamic range, P=1200 subsample | 36–89% per object (median 62.87%) | `results/certification/certified_gaps.json` (`display`) | `pytest tests/test_certified_gaps_evidence.py` |
 | C2 | Greedy is certified essentially optimal | 0.011–0.028% above the convex lower bound at every budget | `results/certification/certified_gaps.json` | `pytest tests/test_certified_gaps_evidence.py` |
 | C3 | Full-resolution confirmation (all masked pixels P = 3559–10252, all 142 lights) | dynamic range 27.3–89.4% (median 60.06%); greedy within 0.002–0.005% | `results/certification/lowrank_fullres.json` (`display`) | `pytest tests/test_m2_m3_evidence.py::test_fullres_structure` |
 | C4 | Mode-tail targeted intervention is significant | Δ(targeted − random_active48) < 0 in all 10 (regime, budget) cells, 11/11 objects per cell, paired-bootstrap CIs exclude 0 | `results/mode_tail/allocation_mode_tail.json` (`aggregated`, `display`) | `pytest tests/test_m2_m3_evidence.py::test_alloc2_structure` |
@@ -51,12 +51,12 @@ in the README to appear verbatim under `results/**`.
 | N-2 | The stratified (cross-object) severity comparison is retired: the corrected-interface factorial flips its sign, and P_mode ≡ P_emin is a scalarization identity, not an independent predictor | `results/openillumination/correctness/mf0_factorial_summary.json` |
 | N-3 | Probe-vs-reconciliation: the assessment report's 4.02% dynamic range is a synthetic-scene instance value; real objects measure 27.3–89.4% (documented divergence) | `results/certification/provenance/reconciliation.json` |
 
-## Interface-caliber note
+## Two pipeline versions
 
-Two calibers exist for the real-data pipeline: `legacy` (bit-reproduces the
+Two versions exist for the real-data pipeline: `legacy` (bit-reproduces the
 original frozen benchmark artifacts) and `corrected` (the mathematically
 documented noise-fit coefficient order and the normalized dual-coordinate
-mode projection). Paper-facing numbers use `corrected`; `legacy` outputs are
-retained as provenance. The preregistered A/B/C/D factorial that motivates
+mode projection). Reported numbers use `corrected`; `legacy` outputs are kept for
+reference. The preregistered A/B/C/D factorial that motivates
 this is documented in `docs/EXPERIMENTS.md` and its evidence gated by
 `tests/test_factorial_evidence.py`.
