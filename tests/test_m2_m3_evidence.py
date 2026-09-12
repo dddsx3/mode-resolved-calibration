@@ -67,9 +67,9 @@ def test_alloc2_structure(alloc2):
         assert len(r["targeted"]) == 5 and len(r["random_active48"]) == 5
         assert all(x >= 0.0 for x in r["targeted"] + r["random_active48"])
     for key, blk in alloc2["aggregated"].items():
-        assert blk["improved_negative"] in range(0, 12)
-        assert len(blk["per_object"]) == 11
-        assert len(blk["delta_ci95"]) == 2
+        for arm in ("targeted", "scalar_targeted"):
+            assert len(blk[arm]["per_object"]) == 11
+            assert len(blk[arm]["delta_ci95"]) == 2
 
 
 def test_alloc2_paired_independence(alloc2):

@@ -88,49 +88,41 @@ def scalar_greedy_prefix(prob, kappa, k_max):
     return out
 
 
-def run(config_path=REPO / "configs/allocation_mode_tail.yaml",
-        out_path=REPO / "results/mode_tail/allocation_mode_tail.json"):
-    cfg = yaml.safe_load(Path(config_path).read_text(encoding="utf-8"))
+def run_object(obj_idx: int, obj_name: str, cfg: dict):
+    """单对象全量计算（对象间零耦合，可并行/重排）。"""
     levels = [float(lv) for lv in cfg["levels"]]
     regimes = [int(rg) for rg in cfg["regimes"]]
     budgets_k = list(cfg["budgets_k"])
     seeds_per_level = int(cfg["seeds_per_level"])
     k_max = max(budgets_k)
-    out = Path(out_path)
-    out.parent.mkdir(parents=True, exist_ok=True)
-
     rows = []
     orderings_meta = []
-    t_start = time.time()
-    for obj_idx, obj_name in enumerate(cfg["cohort"]):
-        obj = load_object(cfg["data_root"], obj_name, data_meta=cfg.get("data_meta"))
-        scen = NominalScene(obj, np.random.default_rng([20260910, obj_idx]),
-                            noise_fit_convention=cfg["noise_fit_convention"])
-        K = 142
-        u_act = (scen.w * scen.s_hat)[:, :, None] * scen.B_phi
-        M0_act = np.einsum("kpi,kpj->kij", scen.B_phi,
-                           scen.w[:, :, None] * scen.B_phi)
-        finf = scen.Finf_diag
-        u142 = np.zeros((K, finf.shape[0], 3))
-        M0142 = np.zeros((K, 3, 3))
-        lam0142 = np.stack([np.eye(3)] * K)
-        u142[scen.sel] = u_act
-        M0142[scen.sel] = M0_act
-        active142 = np.zeros(K, bool)
-        active142[scen.sel] = True
-        active = [int(i) for i in scen.sel]
+    obj = load_object(cfg["data_root"], obj_name, data_meta=cfg.get("data_meta"))
+    scen = NominalScene(obj, np.random.default_rng([20260910, obj_idx]),
+                        noise_fit_convention=cfg["noise_fit_convention"])
+    K = 142
+    u_act = (scen.w * scen.s_hat)[:, :, None] * scen.B_phi
+    M0_act = np.einsum("kpi,kpj->kij", scen.B_phi,
+                       scen.w[:, :, None] * scen.B_phi)
+    finf = scen.Finf_diag
+    u142 = np.zeros((K, finf.shape[0], 3))
+    M0142 = np.zeros((K, 3, 3))
+    lam0142 = np.stack([np.eye(3)] * K)
+    u142[scen.sel] = u_act
+    M0142[scen.sel] = M0_act
+    active142 = np.zeros(K, bool)
+    active142[scen.sel] = True
 
-        for lv_i, level in enumerate(levels):
-            gen = CorruptionGenerator("joint", level)
-            sig_logI, sig_rad = gen.sig_logI, np.radians(gen.sig_deg)
-            lam0142[scen.sel] = np.linalg.inv(gen.sigma_phi_diag())
+    for lv_i, level in enumerate(levels):
+        gen = CorruptionGenerator("joint", level)
+        sig_logI, sig_rad = gen.sig_logI, np.radians(gen.sig_deg)
+        lam0142[scen.sel] = np.linalg.inv(gen.sigma_phi_diag())
+        for rg_i, regime in enumerate(regimes):
             state = SelectionState(u=u142, M0=M0142, lam0=lam0142.copy(),
                                    finf=finf, active=active142)
             _deg, W_dual = scen.predicted_degradation(
                 gen.sigma_phi_diag(), mode_coordinate="dual")
-            # targeted 臂：冻结 mode-aware 启发式全序
             t_order, _steps = select_ordering_mode_aware(state, float(regime))
-            # scalar 臂：J_A 最陡下降前缀（同一 state 的证书问题）
             prob = CertificateProblem(
                 blocks=LightBlocks(u142, M0142, lam0142.copy(), finf,
                                    active142), kappa=1.0)
@@ -145,17 +137,18 @@ def run(config_path=REPO / "configs/allocation_mode_tail.yaml",
                 raw = raw_innovations(rng, len(scen.sel))
                 for k in budgets_k:
                     energies = {}
-                    # targeted / scalar：各自全序的前缀（前缀语义同冻结协议）
-                    for policy, ordr in (("targeted", t_order),
-                                         ("scalar_targeted",
-                                          s_order[k])):
-                        scales48 = budget_scales(ordr, k, regime)[scen.sel]
-                        energies[policy] = arm_energy(
-                            scales48, raw, scen, sig_logI, sig_rad, W_dual)
-                    # random_active48：6 条均匀排列的平均
+                    scales48 = budget_scales(t_order, k, regime)[scen.sel]
+                    energies["targeted"] = arm_energy(
+                        scales48, raw, scen, sig_logI, sig_rad, W_dual)
+                    refined = set(s_order[k])
+                    scales48 = np.where(
+                        np.isin(scen.sel, list(refined)),
+                        1.0 / np.sqrt(regime), 1.0)
+                    energies["scalar_targeted"] = arm_energy(
+                        scales48, raw, scen, sig_logI, sig_rad, W_dual)
                     acc = np.zeros(N_MODES)
                     for _p in range(N_RANDOM_PERMS):
-                        ordr48 = rng.permutation(48)     # 位置索引口径
+                        ordr48 = rng.permutation(48)
                         scales48 = budget_scales(ordr48, k, regime)
                         acc += np.asarray(arm_energy(
                             scales48, raw, scen, sig_logI, sig_rad, W_dual))
@@ -168,8 +161,48 @@ def run(config_path=REPO / "configs/allocation_mode_tail.yaml",
                                          for x in energies["scalar_targeted"]],
                         random_active48=[float(x)
                                          for x in energies["random_active48"]]))
-        print(f"[alloc2] {obj_name} done elapsed={time.time() - t_start:.0f}s",
-              flush=True)
+    print(f"[alloc2] {obj_name} done", flush=True)
+    return obj_name, rows, orderings_meta
+
+
+def _task(payload):
+    obj_idx, obj_name, cfg = payload
+    t0 = time.time()
+    obj_name, rows, ometa = run_object(obj_idx, obj_name, cfg)
+    return obj_name, rows, ometa, time.time() - t0
+
+
+def run(config_path=REPO / "configs/allocation_mode_tail.yaml",
+        out_path=REPO / "results/mode_tail/allocation_mode_tail.json",
+        workers: int = 1):
+    cfg = yaml.safe_load(Path(config_path).read_text(encoding="utf-8"))
+    levels = [float(lv) for lv in cfg["levels"]]
+    regimes = [int(rg) for rg in cfg["regimes"]]
+    budgets_k = list(cfg["budgets_k"])
+    seeds_per_level = int(cfg["seeds_per_level"])
+    out = Path(out_path)
+    out.parent.mkdir(parents=True, exist_ok=True)
+
+    rows = []
+    orderings_meta = []
+    t_start = time.time()
+    payloads = [(i, o, cfg) for i, o in enumerate(cfg["cohort"])]
+    if workers > 1 and len(payloads) > 1:
+        import multiprocessing as mp
+        ctx = mp.get_context("spawn")
+        with ctx.Pool(processes=min(workers, len(payloads))) as pool:
+            for obj_name, rws, ometa, dt in pool.imap_unordered(_task, payloads):
+                rows.extend(rws)
+                orderings_meta.extend(ometa)
+                print(f"[alloc2] {obj_name} done in {dt:.0f}s "
+                      f"(elapsed {time.time() - t_start:.0f}s)", flush=True)
+    else:
+        for pd in payloads:
+            obj_name, rws, ometa, dt = _task(pd)
+            rows.extend(rws)
+            orderings_meta.extend(ometa)
+            print(f"[alloc2] {obj_name} done in {dt:.0f}s "
+                  f"(elapsed {time.time() - t_start:.0f}s)", flush=True)
 
     # ---- 聚合：配对 Δ，object 级 bootstrap ----
     from calibinfo.metrics.cluster_bootstrap import cluster_bootstrap
@@ -282,5 +315,6 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--config", default=str(REPO / "configs/allocation_mode_tail.yaml"))
     ap.add_argument("--out", default=str(REPO / "results/mode_tail/allocation_mode_tail.json"))
+    ap.add_argument("--workers", type=int, default=1)
     args = ap.parse_args()
-    run(args.config, args.out)
+    run(args.config, args.out, workers=args.workers)
