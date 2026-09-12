@@ -135,6 +135,27 @@ why per-instance certification, not a universal constant, is the deliverable.
 of ΔF is preserved along any allocation, which licenses standard
 A/D-optimality naming for the classical greedy baselines.
 
+### Universal ceiling on the calibration-budget value (H2)
+
+For the **uniform** multiplier `t = κ·1` the per-light kernel is
+`U_k(t) = u_k(M0_k + t Λ0_k)^{-1} u_k^T`, Loewner-decreasing in `t`. Since
+
+    M0_k + t Λ0_k ⪰ (1/t)(M0_k + Λ0_k)  ⟺  (t−1)M0_k + (t²−1)Λ0_k ⪰ 0,  t ≥ 1,
+
+we have `U_k(t) ⪯ t U_k(1)`, hence `ΔF(t) ⪯ t ΔF(1)` (Loewner) and
+`J_A(t) ≥ J_A(1)/t` (tr X⁻¹ Loewner-decreasing). Therefore the certified
+dynamic range obeys the **universal ceiling**
+
+    D = 1 − J_A(κ·1)/J_A(1)  ≤  1 − 1/κ.
+
+The "90.0% at κ=10" headline is this ceiling being **met** — when the
+identity precision block `M0` dominates `Λ0` (large level = small `Λ0`),
+the bound is tight to ≤ 1e-4 (`results/magnitude/calibration_value_ceiling.json`,
+5 objects at level 64): κ=10 gives D ∈ [0.89992, 0.89999] against the
+ceiling 0.9. The ceiling is a property of the functional, not an empirical
+saturation artifact. The bound holds on every instance/admissible level
+(machine-checked, CI-safe: `tests/test_math_foundations.py`).
+
 ## 8. What the library does not claim
 
 - No claim that mode-resolved objectives beat scalar criteria — the

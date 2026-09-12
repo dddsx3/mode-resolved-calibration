@@ -1,0 +1,428 @@
+{
+ "gate": "P-CEILING",
+ "analysis_status": "calibration_value_ceiling_v1",
+ "theorem": "D = 1 - J_A(kappa)/J_A(1) <= 1 - 1/kappa (Loewner inverse bound)",
+ "level": 64.0,
+ "kappa_grid": [
+  2.0,
+  3.0,
+  5.0,
+  10.0,
+  20.0,
+  50.0,
+  100.0
+ ],
+ "noise_fit_convention": "corrected",
+ "n_objects": 5,
+ "rows": [
+  {
+   "object": "obj_03_pumpkin",
+   "kappa": 2.0,
+   "J_A_1": 10282.259248854007,
+   "J_A_kappa": 5141.365546699236,
+   "D": 0.49997705540518644,
+   "ceiling": 0.5,
+   "slack": 2.2944594813556485e-05,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "kappa": 3.0,
+   "J_A_1": 10282.259248854007,
+   "J_A_kappa": 3427.73397469657,
+   "D": 0.666636106740977,
+   "ceiling": 0.6666666666666667,
+   "slack": 3.055992568978816e-05,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "kappa": 5.0,
+   "J_A_1": 10282.259248854007,
+   "J_A_kappa": 2056.828546901091,
+   "D": 0.7999633643617445,
+   "ceiling": 0.8,
+   "slack": 3.663563825551108e-05,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "kappa": 10.0,
+   "J_A_1": 10282.259248854007,
+   "J_A_kappa": 1028.6492142629902,
+   "D": 0.8999588330378232,
+   "ceiling": 0.9,
+   "slack": 4.116696217681959e-05,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "kappa": 20.0,
+   "J_A_1": 10282.259248854007,
+   "J_A_kappa": 514.5591121443643,
+   "D": 0.9499566097595027,
+   "ceiling": 0.95,
+   "slack": 4.339024049726525e-05,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "kappa": 50.0,
+   "J_A_1": 10282.259248854007,
+   "J_A_kappa": 206.1038678766647,
+   "D": 0.9799553908447081,
+   "ceiling": 0.98,
+   "slack": 4.460915529191922e-05,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "kappa": 100.0,
+   "J_A_1": 10282.259248854007,
+   "J_A_kappa": 103.28388063512213,
+   "D": 0.9899551374716958,
+   "ceiling": 0.99,
+   "slack": 4.4862528304157046e-05,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_04_dolphin",
+   "kappa": 2.0,
+   "J_A_1": 1580.0352181260882,
+   "J_A_kappa": 790.0187521898422,
+   "D": 0.4999992765181529,
+   "ceiling": 0.5,
+   "slack": 7.234818470980287e-07,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_04_dolphin",
+   "kappa": 3.0,
+   "J_A_1": 1580.0352181260882,
+   "J_A_kappa": 526.6799274594703,
+   "D": 0.6666657037656988,
+   "ceiling": 0.6666666666666667,
+   "slack": 9.629009679601452e-07,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_04_dolphin",
+   "kappa": 5.0,
+   "J_A_1": 1580.0352181260882,
+   "J_A_kappa": 316.0088203991328,
+   "D": 0.7999988754846128,
+   "ceiling": 0.8,
+   "slack": 1.1245153872518898e-06,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_04_dolphin",
+   "kappa": 10.0,
+   "J_A_1": 1580.0352181260882,
+   "J_A_kappa": 158.00550774525598,
+   "D": 0.8999987431086192,
+   "ceiling": 0.9,
+   "slack": 1.2568913808630455e-06,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_04_dolphin",
+   "kappa": 20.0,
+   "J_A_1": 1580.0352181260882,
+   "J_A_kappa": 79.00385553583763,
+   "D": 0.949998674314655,
+   "ceiling": 0.95,
+   "slack": 1.3256853449439276e-06,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_04_dolphin",
+   "kappa": 50.0,
+   "J_A_1": 1580.0352181260882,
+   "J_A_kappa": 31.602865375170598,
+   "D": 0.9799986323009614,
+   "ceiling": 0.98,
+   "slack": 1.3676990385791399e-06,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_04_dolphin",
+   "kappa": 100.0,
+   "J_A_1": 1580.0352181260882,
+   "J_A_kappa": 15.802535549370734,
+   "D": 0.9899986181522508,
+   "ceiling": 0.99,
+   "slack": 1.3818477492266723e-06,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "kappa": 2.0,
+   "J_A_1": 3957.8465284804934,
+   "J_A_kappa": 1978.926748196534,
+   "D": 0.49999911973436506,
+   "ceiling": 0.5,
+   "slack": 8.8026563493937e-07,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "kappa": 3.0,
+   "J_A_1": 3957.8465284804934,
+   "J_A_kappa": 1319.286514587186,
+   "D": 0.66666557050819,
+   "ceiling": 0.6666666666666667,
+   "slack": 1.0961584767654742e-06,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "kappa": 5.0,
+   "J_A_1": 3957.8465284804934,
+   "J_A_kappa": 791.5743182174149,
+   "D": 0.7999987335230712,
+   "ceiling": 0.8,
+   "slack": 1.2664769288850408e-06,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "kappa": 10.0,
+   "J_A_1": 3957.8465284804934,
+   "J_A_kappa": 395.79021603314516,
+   "D": 0.8999985943909002,
+   "ceiling": 0.9,
+   "slack": 1.4056090997804915e-06,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "kappa": 20.0,
+   "J_A_1": 3957.8465284804934,
+   "J_A_kappa": 197.8981192297102,
+   "D": 0.949998536374353,
+   "ceiling": 0.95,
+   "slack": 1.4636256469025e-06,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "kappa": 50.0,
+   "J_A_1": 3957.8465284804934,
+   "J_A_kappa": 79.16285565907447,
+   "D": 0.9799985029511826,
+   "ceiling": 0.98,
+   "slack": 1.497048817356017e-06,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "kappa": 100.0,
+   "J_A_1": 3957.8465284804934,
+   "J_A_kappa": 39.5844223714666,
+   "D": 0.989998494866686,
+   "ceiling": 0.99,
+   "slack": 1.5051333139837197e-06,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "kappa": 2.0,
+   "J_A_1": 13874.891706725499,
+   "J_A_kappa": 6937.696052925876,
+   "D": 0.49998196745831136,
+   "ceiling": 0.5,
+   "slack": 1.8032541688639547e-05,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "kappa": 3.0,
+   "J_A_1": 13874.891706725499,
+   "J_A_kappa": 4625.297487393042,
+   "D": 0.6666426243059579,
+   "ceiling": 0.6666666666666667,
+   "slack": 2.4042360708853572e-05,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "kappa": 5.0,
+   "J_A_1": 13874.891706725499,
+   "J_A_kappa": 2775.3786205842257,
+   "D": 0.7999711508206632,
+   "ceiling": 0.8,
+   "slack": 2.884917933687614e-05,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "kappa": 10.0,
+   "J_A_1": 13874.891706725499,
+   "J_A_kappa": 1387.939446338382,
+   "D": 0.8999675474464702,
+   "ceiling": 0.9,
+   "slack": 3.2452553529793704e-05,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "kappa": 20.0,
+   "J_A_1": 13874.891706725499,
+   "J_A_kappa": 694.2198086941561,
+   "D": 0.9499657494005772,
+   "ceiling": 0.95,
+   "slack": 3.425059942274711e-05,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "kappa": 50.0,
+   "J_A_1": 13874.891706725499,
+   "J_A_kappa": 277.9878740614048,
+   "D": 0.9799646815314128,
+   "ceiling": 0.98,
+   "slack": 3.531846858717547e-05,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "kappa": 100.0,
+   "J_A_1": 13874.891706725499,
+   "J_A_kappa": 139.243665224842,
+   "D": 0.9899643421968225,
+   "ceiling": 0.99,
+   "slack": 3.565780317749123e-05,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_11_pine",
+   "kappa": 2.0,
+   "J_A_1": 2158.1765305162667,
+   "J_A_kappa": 1079.1836439947554,
+   "D": 0.4999558058688558,
+   "ceiling": 0.5,
+   "slack": 4.419413114420401e-05,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_11_pine",
+   "kappa": 3.0,
+   "J_A_1": 2158.1765305162667,
+   "J_A_kappa": 719.5193450655626,
+   "D": 0.6666077427440825,
+   "ceiling": 0.6666666666666667,
+   "slack": 5.8923922584219746e-05,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_11_pine",
+   "kappa": 5.0,
+   "J_A_1": 2158.1765305162667,
+   "J_A_kappa": 431.78789941719106,
+   "D": 0.7999292952583905,
+   "ceiling": 0.8,
+   "slack": 7.070474160952855e-05,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_11_pine",
+   "kappa": 10.0,
+   "J_A_1": 2158.1765305162667,
+   "J_A_kappa": 215.989297841721,
+   "D": 0.8999204676783075,
+   "ceiling": 0.9,
+   "slack": 7.953232169255475e-05,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_11_pine",
+   "kappa": 20.0,
+   "J_A_1": 2158.1765305162667,
+   "J_A_kappa": 108.08996106846283,
+   "D": 0.9499160705623065,
+   "ceiling": 0.95,
+   "slack": 8.392943769341965e-05,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_11_pine",
+   "kappa": 50.0,
+   "J_A_1": 2158.1765305162667,
+   "J_A_kappa": 43.3502524773283,
+   "D": 0.9799134816525141,
+   "ceiling": 0.98,
+   "slack": 8.65183474858533e-05,
+   "bounds_ok": true
+  },
+  {
+   "object": "obj_11_pine",
+   "kappa": 100.0,
+   "J_A_1": 2158.1765305162667,
+   "J_A_kappa": 21.770194701182387,
+   "D": 0.989912690461899,
+   "ceiling": 0.99,
+   "slack": 8.730953810098807e-05,
+   "bounds_ok": true
+  }
+ ],
+ "by_kappa": {
+  "2.0": {
+   "D_median": 0.499982,
+   "D_min": 0.499956,
+   "D_max": 0.499999,
+   "slack_max": 4.4e-05,
+   "ceiling": 0.5
+  },
+  "3.0": {
+   "D_median": 0.666643,
+   "D_min": 0.666608,
+   "D_max": 0.666666,
+   "slack_max": 5.9e-05,
+   "ceiling": 0.6666666666666667
+  },
+  "5.0": {
+   "D_median": 0.799971,
+   "D_min": 0.799929,
+   "D_max": 0.799999,
+   "slack_max": 7.1e-05,
+   "ceiling": 0.8
+  },
+  "10.0": {
+   "D_median": 0.899968,
+   "D_min": 0.89992,
+   "D_max": 0.899999,
+   "slack_max": 8e-05,
+   "ceiling": 0.9
+  },
+  "20.0": {
+   "D_median": 0.949966,
+   "D_min": 0.949916,
+   "D_max": 0.949999,
+   "slack_max": 8.4e-05,
+   "ceiling": 0.95
+  },
+  "50.0": {
+   "D_median": 0.979965,
+   "D_min": 0.979913,
+   "D_max": 0.979999,
+   "slack_max": 8.7e-05,
+   "ceiling": 0.98
+  },
+  "100.0": {
+   "D_median": 0.989964,
+   "D_min": 0.989913,
+   "D_max": 0.989999,
+   "slack_max": 8.7e-05,
+   "ceiling": 0.99
+  }
+ },
+ "all_bounds_ok": true,
+ "manifest": {
+  "config_sha256": "ad37e49487203ed732fddbc84649ffb639f95555852621f1a636ce4899909bd0",
+  "git_sha": "ddfccf1dc7e52672209097c18a8d6f5ec1e249a5",
+  "scene_rng_spec": "default_rng([20260910, obj_idx])  # identical to P-CERT",
+  "elapsed_s": 13.6
+ },
+ "note": "Universal ceiling on the calibration-budget value: the '90.0% at kappa=10' headine is the ceiling 1-1/kappa being met at large level (identity precision block dominant), not an empirical saturation artifact. Every row reported; the only hard gate is the theorem inequality D <= 1-1/kappa."
+}
