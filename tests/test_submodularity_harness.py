@@ -31,7 +31,7 @@ def _as_F(toy_gain_dict, L):
 
 
 def test_detector_selfcheck_supermodular_triggers():
-    """玩具超模（G=|S|²+|S|，处处严格正递增边际）：全部三元组违例。
+    r"""玩具超模（G=|S|²+|S|，处处严格正递增边际）：全部三元组违例。
     三元组总数 = Σ_b C(L,b)·2^b·(L−b)（每元素 ∈ {A}⊆{B}\{x}/外部）。"""
     L = L_TINY
     toy = toy_gain("supermodular", L)
