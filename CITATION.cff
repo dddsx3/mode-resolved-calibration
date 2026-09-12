@@ -12,30 +12,13 @@ license: MIT
 repository-code: "https://github.com/dddsx3/mode-resolved-calibration"
 abstract: >-
   A Python library for mode-resolved calibration-confidence analysis of
-  linearized inverse problems with structured nuisance. This release also serves as the
-  reproducibility package for the associated research manuscript (forthcoming):
-  Schur-complement Delta-Fisher information, calibration-retention spectra, the
-  gauge closed-form spectral response, and the mode-resolved severity analysis on
-  OpenIllumination (11 objects x 6 levels, 20 seeds; paper-facing corrected
-  interface: directional validation of the retention ordering, within-cell
-  Spearman RA = 0.90, CI [0.70, 0.95] — rank-equivalent to the mode-index
-  baseline by construction — plus a quantified real-data amplitude validity
-  envelope for the linearized theory). Includes a preregistered calibration-allocation
-  evaluation on the 11 held-out objects (29,700 reconstructions): informed
-  allocation policies improve reconstruction over random allocation, but a
-  post-hoc three-arm comparison finds no detectable difference between
-  mode-resolved and scalar-OED targeting; an active-set random control shows
-  the benefit over full-universe random is an active-set effect rather
-  than a mode-ordering effect. v0.3.0 closes the math-freeze correctness gates
-  (noise-fit coefficient order, normalized dual-coordinate mode projection,
-  singular-covariance routes, retention-covariance theorem, allocation rank
-  invariance) with a preregistered A/B/C/D factorial rerun: the within-cell
-  directional-validation result is unchanged under the corrected interface
-  (arm D is the paper-facing record). The active research direction is a
-  certified analysis of calibration-precision allocation (exact convex
-  reformulation, low-rank retention structure, Frank-Wolfe certificates).
-  Ships frozen results, independent headline recomputation tests (pytest),
-  and figure/table regeneration scripts.
+  linearized inverse problems with structured nuisance. It computes
+  Schur-complement delta-Fisher information, per-mode calibration-retention
+  spectra, and certified bounds on calibration-precision allocation via an
+  exact convex reformulation with Frank-Wolfe duality-gap certificates and
+  an exact low-rank retention structure. Ships a frozen OpenIllumination
+  benchmark (11 objects), independent headline-recomputation tests, and
+  full reproducibility manifests.
 keywords:
   - photometric inverse problems
   - calibration

@@ -101,9 +101,9 @@ its own, independent of any manuscript.
   targeted intervention significant in all 10 cells on 11/11 objects,
   E-opt submodularity violations pinned (gamma_min 0.704)
 
-## [Unreleased]
+## [0.4.1] - 2026-09-13
 
-### Fixed (2026-09-13)
+### Fixed
 
 - **P-RADIUS metric domain (P0-1)**: v1 injected the corruption
   estimator-side, so a single extreme gain dominated the GLS denominator at
@@ -136,7 +136,7 @@ its own, independent of any manuscript.
   `metric_definition` synced; note forbids conflating the two
 - **Stale retracted outcome text (P2-3)**: `docs/EXPERIMENTS.md` section 13
   and `docs/REPRODUCIBILITY.md` still carried the withdrawn v1.0
-  "significant in all 10 cells" claim; replaced with the RETRACTED marker +
+  "significant in all 10 cells" claim; replaced with the withdrawn marker +
   the precise v1.1 three-arm outcome (targeted significantly worse in 5/8
   informative cells, never better; no increment over the scalar arm)
 - **B4 quantification (P2-4)**: the "policy nulls are structural" claim now
@@ -148,33 +148,6 @@ its own, independent of any manuscript.
 - **Nested duplicate artifacts (P2-1)**: removed
   `results/mode_tail/mode_tail/` and both `checkpoints_fullres` copies
   (run intermediates, unreferenced); `results/**/checkpoints*/` gitignored
-
-### Added
-
-- `docs/EXPERIMENTS.md` sections 14/15: missing protocol records for the
-  committed P-RADIUS and P-CONC artifacts (P2-2)
-- `tests/test_pradius_pconc_artifacts.py`: CI-safe artifact gates for
-  P-RADIUS (small-level log-log slope near +2, radius bookkeeping fields)
-  and P-CONC (`clean_vs_mean_ratio` present and distinct from
-  `rel_spread`) (P1-2)
-
-### Added
-
-- `examples/ex4_calibration_tour.py`: a two-question guided tour figure
-  (which albedo directions are fragile; what a recalibration budget buys,
-  with the convex lower bound) — the fastest way for a new user to see what
-  the library is for
-- `README.zh-CN.md`: Chinese README for domestic developers
-
-### Changed
-
-- README/docs language pass: internal process vocabulary ("caliber",
-  "provenance only", arm labels) replaced with plain wording ("pipeline
-  version", "kept for reference"); the language switcher links the English
-  and Chinese READMEs
-
-### Fixed (pre-release)
-
 - `stratified_valid_levels` in the MF-0 factorial summary stored a boolean
   instead of the finite-level count (an external audit read it as "only 1 of
   6 levels valid"); all six levels are finite - field corrected, summary
@@ -183,8 +156,55 @@ its own, independent of any manuscript.
   (`P_mode = 1 - rho_min`, not `1/(1 - rho_mode)`); definition freeze (L8)
   added distinguishing `P_mode` from the unbounded `pred_deg = 1/rho_j`
 
+### Added
+
+- `docs/EXPERIMENTS.md` sections 14/15: missing protocol records for the
+  committed P-RADIUS and P-CONC artifacts (P2-2)
+- `tests/test_pradius_pconc_artifacts.py`: CI-safe artifact gates for
+  P-RADIUS (small-level log-log slope near +2, radius bookkeeping fields)
+  and P-CONC (`clean_vs_mean_ratio` present and distinct from `rel_spread`)
+- `examples/ex4_calibration_tour.py`: a two-question guided tour figure
+  (which albedo directions are fragile; what a recalibration budget buys,
+  with the convex lower bound) - the fastest way for a new user to see what
+  the library is for
+- `README.zh-CN.md`: Chinese README
+- P-CERT preregistration (`configs/certified_gaps.yaml`, committed before the
+  run) + certificate machinery (`src/calibinfo/allocation/convex.py`) +
+  driver (`experiments/certified_gaps.py`): budget-constrained convex program
+  `min tr DeltaF(t)^{-1} s.t. sum(t_k-1) <= B` with Frank-Wolfe duality-gap
+  global certificates, on the 11 real OpenIllumination objects
+  (corrected-interface scenes, frozen allocation rng spec)
+- P-LOWRANK-FULLRES preregistration (`configs/lowrank_fullres.yaml`) +
+  driver (`experiments/lowrank_fullres.py`): full-resolution / full-142-light
+  certified gap table via the Woodbury low-rank route (batched full-res
+  Lambertian PS, no pixel subsampling); v1.1 adds per-object checkpoint
+  resume + multiprocessing driver
+- P-SUBMOD negative-result pack (`experiments/submodularity_search.py` ->
+  `results/submodularity/submodularity_search.json`): adversarial submodularity
+  search with correct refinement-set semantics, degeneracy guard, and a
+  detector self-check. Findings: E-opt (1/lambda_min) has genuine submodularity
+  violations (1518 triples over 10 instances, gamma_min = 0.704); A-opt is at
+  most marginally non-submodular (gamma_min = 0.99989); D-opt clean;
+  adversarial near-collinear family clean. Harness tests pin a reproducible
+  counterexample and the detector sensitivity/specificity
+- P-ALLOC2 preregistration (`configs/allocation_mode_tail.yaml`) + driver
+  (`experiments/allocation_mode_tail.py`): mode-tail targeted calibration
+  intervention - targeted arm = the frozen weak-Fisher-mode heuristic vs
+  random_active48, paired-by-seed, endpoint = bottom-5 tracked-mode energy in
+  the normalized dual coordinate (M0-2 corrected); outcome-independent
+- `examples/` - three self-contained scripts (retention/gauge visualization,
+  mode-resolved vs scalar criteria, minimal allocation demo), each generating
+  its own synthetic data and figures
+- `CONTRIBUTING.md`, this changelog
+- GitHub Actions CI: pytest matrix, checksum verification, claim gate,
+  frozen-zone drift gate
+
 ### Changed
 
+- README/docs language pass: internal process vocabulary ("caliber",
+  "provenance only", arm labels) replaced with plain wording ("pipeline
+  version", "kept for reference"); the language switcher links the English
+  and Chinese READMEs
 - Caliber downgrade (potential-assessment adjudication): the within-cell
   statistic `R_A` is directional validation only - by construction it is
   rank-equivalent to the mode-index baseline (66/66 cells, deviation exactly
@@ -201,64 +221,12 @@ its own, independent of any manuscript.
 - README: research-direction section for the certified allocation-analysis
   program with generated showcase figures
   (`scripts/make_direction_figures.py` -> `docs/img/`)
-
-### Added
-
-- P-CERT preregistration (`configs/certified_gaps.yaml`, committed before the
-  run) + certificate machinery (`src/calibinfo/allocation/convex.py`) +
-  driver (`experiments/certified_gaps.py`): budget-constrained convex program
-  `min tr DeltaF(t)^{-1} s.t. sum(t_k-1) <= B` with Frank-Wolfe duality-gap
-  global certificates, on the 11 real OpenIllumination objects
-  (corrected-interface scenes, frozen allocation rng spec)
-
-### Added
-
-- P-LOWRANK-FULLRES preregistration (`configs/lowrank_fullres.yaml`) +
-  driver (`experiments/lowrank_fullres.py`): full-resolution / full-142-light
-  certified gap table via the Woodbury low-rank route (batched full-res
-  Lambertian PS, no pixel subsampling)
-
-### Added
-
-- P-SUBMOD negative-result pack (`experiments/submodularity_search.py` →
-  `results/submodularity/submodularity_search.json`): adversarial submodularity
-  search with correct refinement-set semantics, degeneracy guard, and a
-  detector self-check. Findings: E-opt (1/lambda_min) has genuine submodularity
-  violations (1518 triples over 10 instances, gamma_min = 0.704); A-opt is at
-  most marginally non-submodular (gamma_min = 0.99989); D-opt clean;
-  adversarial near-collinear family clean. Harness tests pin a reproducible
-  counterexample and the detector sensitivity/specificity
-
-### Added
-
-- P-ALLOC2 preregistration (`configs/allocation_mode_tail.yaml`) + driver
-  (`experiments/allocation_mode_tail.py`): mode-tail targeted calibration
-  intervention - targeted arm = the frozen weak-Fisher-mode heuristic vs
-  random_active48, paired-by-seed, endpoint = bottom-5 tracked-mode energy in
-  the normalized dual coordinate (M0-2 corrected); outcome-independent
-- `experiments/lowrank_fullres.py` v1.1: per-object checkpoint resume +
-  multiprocessing driver (cloud migration package mirrors it in
-  Multi-Illumination-Inverse-Rendering branch cloud-mode-tail)
-
-### Added (planned, on this branch)
-
-### Added
-
-- `examples/` — three self-contained scripts (retention/gauge visualization,
-  mode-resolved vs scalar criteria, minimal allocation demo), each generating
-  its own synthetic data and figures
-- `CONTRIBUTING.md`, issue/PR templates, this changelog
-- GitHub Actions CI: pytest matrix, checksum verification, claim gate,
-  frozen-zone drift gate
-
-### Changed
-
 - README rewritten library-first (was: reproducibility-package framing);
   the published benchmark is now a separate "Benchmark reproduction" section
 - `pyproject.toml`: version 0.2.0, license/urls/authors/keywords/classifiers
   metadata, `examples` extra
 
-## [0.1.0] — 2026-09-09 (tag `science-closed`)
+## [0.1.0] - 2026-09-09
 
 Initial public snapshot of the research artifact:
 
