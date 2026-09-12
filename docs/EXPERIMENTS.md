@@ -426,6 +426,49 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
   computed post-hoc from the committed v1 `range_clean`/`range_mean` (no
   metric recomputed; `revision` block in the artifact documents this).
 
+
+## 16. α-approximate submodularity bound(P-ALPHA-BOUND, `experiments/alpha_bound.py`)
+
+> **Status: DONE (2026-09-13)** — the assessment report's H5 open item
+> ("也把 α-近似次模界写进论文,而不是把次模当负定理复述") is delivered:
+> the submodularity framing under N-1 is superseded by the α-approximate
+> statement below; this section replaces the "do not write submodularity
+> into the paper" TODO. Methods stated in `docs/methods.md` §9 (L9–L13),
+> bound in `results/submodularity/alpha_bound.json`, gated by
+> `tests/test_alpha_bound.py`.
+
+- **Parameterization**: A-opt selection gain G(S) = F(∅) − F(S) with
+  F(S) = tr M(S)^{-1}, M(S) = ΔF(t_S): t_k = κ on k ∈ S, else 1
+  (refined-set semantics, identical to P-CERT / P-SUBMOD). W_k =
+  u_k[K_k(1) − K_k(κ)]u_k^T ⪰ 0 by Loewner monotonicity of
+  K_k(t) = (M0_k + tΛ0_k)^{-1} in t.
+- **Bound**: γ ≥ 1/(1+α), α = max_x λmax(ΔF(1)^{-1} W_x); α is a function
+  of the nominal design only (A, B, Λ0, κ) — computable a priori, no ground
+  truth, no measurements, no exhaustive search. Derivation: exact additive
+  decomposition + Woodbury marginal gain + two-sided eigenvalue sandwich +
+  Loewner monotonicity (methods.md §9 L9–L13).
+- **Toy verification (CI-safe, no raw data)**: 20 P-SUBMOD instances
+  (10 random / 10 adversarial, L=5, P=40, κ=10), exhaustive triples:
+  γ_measured ≥ 1/(1+α) on all 20 (random α ∈ [0.059, 0.119], adversarial
+  α ∈ [0.025, 0.090], measured γ ∈ [0.9999, 1.0000]); two-sided sandwich on
+  3200 (S,x) pairs with zero violations (min val/lb = 1.0021, min ub/val =
+  1.0368).
+- **Real objects**: same 11-object cohort, corrected convention, level ∈
+  {0.1, 0.5}; α ranges 0.188–0.515 at level 0.5 (γ lower bound 0.66–0.84),
+  worst object `obj_10_pumpkin3` (0.635 @ level 0.1). Overall phrasing:
+  "A-optimal light-refinement selection is ≥ 0.635-supermodular on every
+  held-out object at the probed levels."
+- **Output**: `results/submodularity/alpha_bound.json`.
+- **Honest framing**: the bound is ~1.6× looser than the *measured*
+  γ_min = 0.99989 (N-1/P-SUBMOD). Its value is a-priori computability (no
+  search), the explicit α form, and the two α→0 limits (Λ0 → ∞ or → 0
+  ⇒ exact submodularity; α peaks at intermediate precision). This is the
+  Chamon & Ribeiro (NeurIPS 2017) approximate-supermodularity framework
+  instantiated with calibration precision as the design variable; the repo
+  does **not** claim to be first to give an approximate-submodularity bound.
+- **Outcome**: cf. `docs/claims.md` M9.
+
+
 ---
 
 **Reproduction contract**: every experiment script writes only statistical values and
