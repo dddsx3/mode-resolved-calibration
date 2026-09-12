@@ -1,0 +1,222 @@
+{
+ "gate": "P-CONC: certificate concentration (instance-wise bound uncertainty)",
+ "analysis_status": "certificate_concentration_v1",
+ "kappa": 10.0,
+ "budget_k": 14,
+ "realizations": 10,
+ "noise_model": {
+  "a": 0.0011898987587589964,
+  "b": 0.00392361015138986
+ },
+ "noise_fit_convention": "corrected",
+ "n_objects": 11,
+ "rel_spread_median": 0.010811445739959093,
+ "rel_spread_max": 0.10632595030394862,
+ "objects": {
+  "obj_03_pumpkin": {
+   "P": 1200,
+   "L": 48,
+   "R": 10,
+   "range_clean": 0.5393394004043416,
+   "range_mean": 0.43001309205042804,
+   "range_median": 0.42965826345409897,
+   "range_iqr": [
+    0.428311708841828,
+    0.4315387305996639
+   ],
+   "range_rel_spread": 0.007510670764000444,
+   "fw_lower_bound_clean": 0.5979261388843732,
+   "fw_lower_bound_mean": 1.0643583162507977,
+   "df_norm_diff_median": 65585.05026282661,
+   "J_none_mean": 1.3512297059826825,
+   "J_all_mean": 0.7701930370088761
+  },
+  "obj_04_dolphin": {
+   "P": 1200,
+   "L": 48,
+   "R": 10,
+   "range_clean": 0.8801296257307175,
+   "range_mean": 0.3432820007710536,
+   "range_median": 0.348822804705999,
+   "range_iqr": [
+    0.33447028962109643,
+    0.35390513675465973
+   ],
+   "range_rel_spread": 0.05571552912070564,
+   "fw_lower_bound_clean": 0.02877393129291345,
+   "fw_lower_bound_mean": 0.09863858889398752,
+   "df_norm_diff_median": 101349764.7856985,
+   "J_none_mean": 0.2698228004157401,
+   "J_all_mean": 0.1774607046640903
+  },
+  "obj_07_pumpkin2": {
+   "P": 1200,
+   "L": 48,
+   "R": 10,
+   "range_clean": 0.881198815100557,
+   "range_mean": 0.5144791032330748,
+   "range_median": 0.4781356647749907,
+   "range_iqr": [
+    0.4688494750432256,
+    0.5196877039746367
+   ],
+   "range_rel_spread": 0.10632595030394862,
+   "fw_lower_bound_clean": 0.07168593729761674,
+   "fw_lower_bound_mean": 0.24690939390009753,
+   "df_norm_diff_median": 43981234.122823745,
+   "J_none_mean": 0.4488247330468248,
+   "J_all_mean": 0.22252023281340053
+  },
+  "obj_09_ball": {
+   "P": 1200,
+   "L": 48,
+   "R": 10,
+   "range_clean": 0.6286669293085096,
+   "range_mean": 0.4420652145506173,
+   "range_median": 0.4415699434919793,
+   "range_iqr": [
+    0.44101092519916185,
+    0.44316898745529726
+   ],
+   "range_rel_spread": 0.004887248980465551,
+   "fw_lower_bound_clean": 0.28666371002925056,
+   "fw_lower_bound_mean": 0.58186599088579,
+   "df_norm_diff_median": 202946.2220392648,
+   "J_none_mean": 0.8450526302072265,
+   "J_all_mean": 0.47148937686655
+  },
+  "obj_10_pumpkin3": {
+   "P": 1200,
+   "L": 48,
+   "R": 10,
+   "range_clean": 0.6313795051999885,
+   "range_mean": 0.488180751369468,
+   "range_median": 0.4864138979275346,
+   "range_iqr": [
+    0.48151804834237133,
+    0.49504265087574156
+   ],
+   "range_rel_spread": 0.027804720611385808,
+   "fw_lower_bound_clean": 0.5922833809900201,
+   "fw_lower_bound_mean": 1.2071045325858543,
+   "df_norm_diff_median": 3388602.537259781,
+   "J_none_mean": 1.5852912541714186,
+   "J_all_mean": 0.8115787775389893
+  },
+  "obj_11_pine": {
+   "P": 1200,
+   "L": 48,
+   "R": 10,
+   "range_clean": 0.36002036849586166,
+   "range_mean": 0.26978496183879436,
+   "range_median": 0.26919560610584825,
+   "range_iqr": [
+    0.26739931651199905,
+    0.27292423138791977
+   ],
+   "range_rel_spread": 0.02052379292457065,
+   "fw_lower_bound_clean": 0.23065204391065933,
+   "fw_lower_bound_mean": 0.3263372032123125,
+   "df_norm_diff_median": 125096.4406513559,
+   "J_none_mean": 0.4485694596189046,
+   "J_all_mean": 0.3275825181083123
+  },
+  "obj_13_mushroom": {
+   "P": 1200,
+   "L": 48,
+   "R": 10,
+   "range_clean": 0.6290731268980578,
+   "range_mean": 0.45827878905950514,
+   "range_median": 0.458254845252563,
+   "range_iqr": [
+    0.45781820305865883,
+    0.4594899823353675
+   ],
+   "range_rel_spread": 0.003648143154465185,
+   "fw_lower_bound_clean": 0.3373996815746354,
+   "fw_lower_bound_mean": 0.6844705973465515,
+   "df_norm_diff_median": 157226.28873248748,
+   "J_none_mean": 0.9511504926977741,
+   "J_all_mean": 0.5152602230829137
+  },
+  "obj_16_friends_cup": {
+   "P": 1200,
+   "L": 48,
+   "R": 10,
+   "range_clean": 0.5255830064322522,
+   "range_mean": 0.45016227459993347,
+   "range_median": 0.45024619635181806,
+   "range_iqr": [
+    0.44901351663393974,
+    0.4512688047272399
+   ],
+   "range_rel_spread": 0.005009010873548628,
+   "fw_lower_bound_clean": 1.0175638919729542,
+   "fw_lower_bound_mean": 1.7737596713750134,
+   "df_norm_diff_median": 20629.926326052846,
+   "J_none_mean": 2.084144333478897,
+   "J_all_mean": 1.1459481318337115
+  },
+  "obj_17_pumpkin5": {
+   "P": 1200,
+   "L": 48,
+   "R": 10,
+   "range_clean": 0.5606211790749384,
+   "range_mean": 0.3733061276510488,
+   "range_median": 0.37389452646194693,
+   "range_iqr": [
+    0.37135869752747575,
+    0.3754010379127868
+   ],
+   "range_rel_spread": 0.010811445739959093,
+   "fw_lower_bound_clean": 0.20756709131879708,
+   "fw_lower_bound_mean": 0.37957021556051906,
+   "df_norm_diff_median": 712815.3215403766,
+   "J_none_mean": 0.5803383123598931,
+   "J_all_mean": 0.36372213692090577
+  },
+  "obj_18_fabric_hat": {
+   "P": 1200,
+   "L": 48,
+   "R": 10,
+   "range_clean": 0.5501314467969635,
+   "range_mean": 0.34995835953880766,
+   "range_median": 0.34977392844605726,
+   "range_iqr": [
+    0.34873101329422934,
+    0.35171730841280757
+   ],
+   "range_rel_spread": 0.008537786483530839,
+   "fw_lower_bound_clean": 0.09617565998296328,
+   "fw_lower_bound_mean": 0.17432883950962935,
+   "df_norm_diff_median": 553889.4860385491,
+   "J_none_mean": 0.29385156839630966,
+   "J_all_mean": 0.19102019635975898
+  },
+  "obj_19_cylinder": {
+   "P": 1200,
+   "L": 48,
+   "R": 10,
+   "range_clean": 0.8888319975839026,
+   "range_mean": 0.2883849484521852,
+   "range_median": 0.28765650325376146,
+   "range_iqr": [
+    0.28406896473605747,
+    0.2976276983318149
+   ],
+   "range_rel_spread": 0.04713515405489146,
+   "fw_lower_bound_clean": 0.019286423192172702,
+   "fw_lower_bound_mean": 0.06773414786411898,
+   "df_norm_diff_median": 80107787.33442119,
+   "J_none_mean": 0.22000567547648794,
+   "J_all_mean": 0.15668308353159238
+  }
+ },
+ "manifest": {
+  "config_sha256": "0cef02895e128657a0d7d231cc180d15554ea06fc8b58f41bc5ce55d6d7ceaf8",
+  "git_sha": "fa5440410dcbfc9338653d076a5f62729b2d275c",
+  "realizations": 10,
+  "elapsed_s": 1097.8
+ },
+ "note": "The certified bounds are computed from the ESTIMATED nominal calibration; this experiment measures how much they move across noise realizations of that calibration. The relative IQR spread is the honest 'certified bound uncertainty' — reported as-is, no sign-based gate."
+}
