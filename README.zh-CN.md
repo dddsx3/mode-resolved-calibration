@@ -1,3 +1,5 @@
+[English](README.md) · 简体中文
+
 # mode-resolved-calibration（模式级标定敏感度分析）
 
 [![CI](https://github.com/dddsx3/mode-resolved-calibration/actions/workflows/ci.yml/badge.svg)](https://github.com/dddsx3/mode-resolved-calibration/actions)
@@ -8,6 +10,8 @@
 **calibinfo** 是一个分析"带标定不确定度的线性化逆问题"的 Python 库。它不把估计器的信息量压成一个标量（trace、log-行列式、E-最优性），而是追踪 Fisher 信息中**最脆弱的可辨识方向**：随着标定不确定度增大，每个脆弱方向上还剩多少可用信息（retention 谱），以及把标定预算花在哪些灯/分量上最值（凸程序 + 认证下界）。
 
 典型场景：光度立体、多光照重建等依赖辐射标定的逆问题——只要问题能局部线性化成 `y = A x + B δc + ε`（δc 是标定/干扰参数），就能用这套工具。
+
+![总览示意](docs/img/benchmark/overview_schematic.png)
 
 ![两问导览](examples/calibration_tour.png)
 

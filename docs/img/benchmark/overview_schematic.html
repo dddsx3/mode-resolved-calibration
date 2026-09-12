@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<!-- ============================================================
+  Overview schematic — mode-resolved-calibration
+  Rendered to PNG by scripts/render_schematic.py (Edge headless, 2x).
+  Design language: paper-figure-html templates (low-saturation HSL palette,
+  flex layout, no absolute coordinates for content).
+============================================================ -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  :root {
+    --c-primary:   hsl(211, 44%, 46%);
+    --c-primary-d: hsl(211, 48%, 34%);
+    --c-secondary: hsl(211, 24%, 93%);
+    --c-border:    hsl(211, 16%, 66%);
+    --c-node-bg:   hsl(211, 22%, 97%);
+    --c-focus-bg:  hsl(211, 30%, 88%);
+    --c-text:      hsl(211, 16%, 20%);
+    --c-muted:     hsl(211, 10%, 44%);
+    --c-green:     hsl(152, 40%, 38%);
+    --c-green-bg:  hsl(152, 32%, 96%);
+    --c-orange:    hsl( 28, 62%, 48%);
+    --c-orange-bg: hsl( 28, 52%, 96%);
+    --c-violet:    hsl(262, 34%, 52%);
+    --c-violet-bg: hsl(262, 30%, 96%);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    color: var(--c-text); background: #ffffff; width: 1180px;
+  }
+  .fig { padding: 26px 30px 22px; width: 1180px; background: #fff; }
+
+  .lane-label {
+    font-size: 12.5px; letter-spacing: 1.6px; text-transform: uppercase;
+    color: var(--c-muted); margin: 0 0 8px 4px; font-weight: 600;
+  }
+  .track { display: flex; align-items: stretch; gap: 0; }
+  .stage {
+    flex: 0 0 196px; background: var(--c-node-bg);
+    border: 1.25px solid var(--c-border); border-top: 3px solid var(--c-primary);
+    border-radius: 8px; padding: 11px 12px 12px; text-align: center;
+  }
+  .stage-num {
+    width: 26px; height: 26px; margin: 0 auto 7px; border-radius: 50%;
+    background: var(--c-focus-bg); border: 1.25px solid var(--c-primary);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: var(--c-primary-d);
+  }
+  .stage-title { font-size: 15.5px; font-weight: 700; color: var(--c-primary-d); line-height: 1.35; }
+  .stage-formula {
+    margin-top: 7px; font-family: "Cambria Math", Georgia, serif;
+    font-size: 14.5px; color: var(--c-text);
+  }
+  .stage-sub {
+    margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--c-border);
+    font-size: 11.8px; color: var(--c-muted); line-height: 1.45;
+  }
+  .arrow {
+    flex: 0 0 30px; display: flex; align-items: center; justify-content: center;
+    color: var(--c-primary); font-size: 21px;
+  }
+
+  /* fan-out: drop bar from the pipeline into the three outcome cards */
+  .fan { position: relative; height: 34px; }
+  .fan .drop, .fan .bar, .fan .head {
+    position: absolute; border-color: var(--c-border);
+  }
+  .fan .drop { top: 0; left: 981px; height: 17px; border-left: 1.6px solid var(--c-border); }
+  .fan .bar  { top: 17px; left: 190px; width: 791px; height: 0; border-top: 1.6px solid var(--c-border); }
+  .fan .head { top: 17px; height: 17px; width: 0; border-left: 1.6px solid var(--c-border); }
+  .fan .h1 { left: 190px; } .fan .h2 { left: 590px; } .fan .h3 { left: 981px; }
+
+  .out-row { display: flex; gap: 46px; justify-content: center; }
+  .out {
+    flex: 0 0 320px; background: var(--c-node-bg); border-radius: 8px;
+    border: 1.25px solid var(--c-border); padding: 12px 14px 13px; text-align: center;
+  }
+  .out.green  { border-top: 3px solid var(--c-green);  background: var(--c-green-bg); }
+  .out.green  .out-title { color: var(--c-green); }
+  .out.violet { border-top: 3px solid var(--c-violet); background: var(--c-violet-bg); }
+  .out.violet .out-title { color: var(--c-violet); }
+  .out.orange { border-top: 3px solid var(--c-orange); background: var(--c-orange-bg); }
+  .out.orange .out-title { color: var(--c-orange); }
+  .out-tag {
+    display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 1.2px;
+    text-transform: uppercase; color: var(--c-muted); margin-bottom: 5px;
+  }
+  .out-title { font-size: 15.5px; font-weight: 700; line-height: 1.35; }
+  .out-sub {
+    margin-top: 7px; padding-top: 6px; border-top: 1px dashed var(--c-border);
+    font-size: 11.8px; color: var(--c-muted); line-height: 1.5;
+  }
+  .out-sub b { color: var(--c-text); font-weight: 600; }
+
+  .footer {
+    margin-top: 18px; padding-top: 10px; border-top: 1px solid var(--c-secondary);
+    text-align: center; font-size: 12px; color: var(--c-muted);
+  }
+  .footer code { font-family: Consolas, monospace; font-size: 11.5px; color: var(--c-primary-d); }
+</style>
+</head>
+<body>
+<div class="fig">
+
+  <div class="lane-label">modeling pipeline</div>
+  <div class="track">
+    <div class="stage">
+      <div class="stage-num">1</div>
+      <div class="stage-title">photometric<br>observations</div>
+      <div class="stage-formula">y = Ax + B&thinsp;&delta;c + &epsilon;</div>
+      <div class="stage-sub">calibrated multi-light captures</div>
+    </div>
+    <div class="arrow">&#9654;</div>
+    <div class="stage">
+      <div class="stage-num">2</div>
+      <div class="stage-title">per-light Fisher<br>blocks</div>
+      <div class="stage-formula">A<sub>k</sub>,&nbsp; B<sub>k</sub>,&nbsp; &Lambda;<sub>k</sub></div>
+      <div class="stage-sub">whitened design + nuisance Jacobian</div>
+    </div>
+    <div class="arrow">&#9654;</div>
+    <div class="stage">
+      <div class="stage-num">3</div>
+      <div class="stage-title">Schur complement<br>&Delta;F(&Lambda;)</div>
+      <div class="stage-formula">A&#7522;[I &minus; BKB&#7522]A</div>
+      <div class="stage-sub">calibratable information</div>
+    </div>
+    <div class="arrow">&#9654;</div>
+    <div class="stage">
+      <div class="stage-num">4</div>
+      <div class="stage-title">retention spectrum<br>R(&Lambda;)</div>
+      <div class="stage-formula">&rho;<sub>j</sub> &isin; [0, 1]</div>
+      <div class="stage-sub">per-mode surviving information</div>
+    </div>
+    <div class="arrow">&#9654;</div>
+    <div class="stage">
+      <div class="stage-num">5</div>
+      <div class="stage-title">bottom-k<br>modes</div>
+      <div class="stage-formula">fragile directions</div>
+      <div class="stage-sub">ranked per scene</div>
+    </div>
+  </div>
+
+  <div class="lane-label" style="margin-top:20px;">answers &amp; guarantees</div>
+  <div class="fan">
+    <div class="drop"></div>
+    <div class="bar"></div>
+    <div class="head h1"></div>
+    <div class="head h2"></div>
+    <div class="head h3"></div>
+  </div>
+
+  <div class="out-row">
+    <div class="out green">
+      <div class="out-tag">diagnosis</div>
+      <div class="out-title">mode-resolved<br>vulnerability ranking</div>
+      <div class="out-sub">which albedo directions degrade first,<br>validated directionally on real data</div>
+    </div>
+    <div class="out violet">
+      <div class="out-tag">guarantee</div>
+      <div class="out-title">certified budget value</div>
+      <div class="out-sub">convex program + Frank–Wolfe lower bound:<br><b>any</b> allocation is bounded, 27–89% per scene</div>
+    </div>
+    <div class="out orange">
+      <div class="out-tag">decision</div>
+      <div class="out-title">calibration<br>allocation</div>
+      <div class="out-sub">which lights to recalibrate<br>under a fixed budget</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    one audited implementation: <code>src/calibinfo</code>
+    &nbsp;(schur &middot; retention &middot; gauge &middot; low-rank &middot; convex certificates &middot; mode tracking)
+  </div>
+</div>
+</body>
+</html>

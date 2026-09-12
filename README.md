@@ -1,3 +1,5 @@
+English · [简体中文](README.zh-CN.md)
+
 # mode-resolved-calibration
 
 [![CI](https://github.com/dddsx3/mode-resolved-calibration/actions/workflows/ci.yml/badge.svg)](https://github.com/dddsx3/mode-resolved-calibration/actions)
