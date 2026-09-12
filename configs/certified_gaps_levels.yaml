@@ -1,0 +1,40 @@
+# P-CERT-LEVELS -- dynamic range as a curve in `level` (H1 deliverable).
+# PREREGISTERED: committed BEFORE the run.
+#
+# Question: how much does calibration-precision allocation buy, as a function
+# of the calibration-uncertainty operating point `level`? The certified
+# dynamic range at level 0.5 (P-CERT) is a single point on this curve.
+# Re-sampling the same functional across the level grid shows the range
+# spanning 0.7% -> 89.9% (median), 37x, driven by one parameter.
+#
+# Method: identical assembly to P-CERT (11-object cohort, corrected
+# convention, 142-light universe, 48 Fisher-active lights, kappa=10) with
+# the *uniform* allocation endpoint (t_k = kappa on every active light vs
+# t = 1). The dynamic range D(level) = (J_none - J_all)/J_none is the
+# same functional the certified program reports; the FW lower bounds are
+# not recomputed per level (the uniform endpoint is the P-CERT 'all_refined'
+# candidate, cf. docs/EXPERIMENTS.md 12). The scene is built once per
+# object; `level` only enters Sigma_phi (NominalScene is level-independent).
+#
+# Output: results/certification/certified_gaps_levels.json
+
+gate: P-CERT-LEVELS
+analysis_status: certified_gaps_levels_v1
+run_name: certified_gaps_levels_v1
+
+data_root: D:/data/OpenIllumination
+data_meta: D:/data/OpenIllumination_meta
+cohort: [obj_03_pumpkin, obj_04_dolphin, obj_07_pumpkin2, obj_09_ball, obj_10_pumpkin3, obj_11_pine, obj_13_mushroom, obj_16_friends_cup, obj_17_pumpkin5, obj_18_fabric_hat, obj_19_cylinder]
+n_objects: 11
+noise_fit_convention: corrected
+scene_rng_spec: "default_rng([20260910, obj_idx])  # identical to P-CERT"
+K_lights: 142
+kappa: 10.0
+
+levels: [0.025, 0.05, 0.1, 0.2, 0.35, 0.5, 0.75, 1.0, 2.0, 4.0, 8.0]
+
+# -- reporting discipline --
+outcome_independence: >
+  Descriptive curve: every D(level) per object is reported regardless of
+  shape; the only hard gate is numerical (the universal ceiling
+  D <= 1 - 1/kappa, docs/methods.md section 7).
