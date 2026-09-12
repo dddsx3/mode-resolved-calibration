@@ -1,0 +1,44 @@
+# P-CANNEL-DECOMP -- channel decomposition of the calibration-budget value (H4).
+# PREREGISTERED: committed BEFORE the run.
+#
+# Question: which nuisance channel carries the calibration-budget value?
+# The corruption generator has three modes: "joint" (intensity + direction),
+# "intensity" (log-I only, direction variance 0), "direction" (angles only,
+# log-I variance 0). The same D(level) functional is computed per mode on
+# the same 11-object cohort, showing that the intensity channel alone
+# reproduces the joint dynamic range while the direction channel contributes
+# <= 2% (with a non-monotone, hump-shaped profile in level).
+#
+# Numerical approximation (MUST stay in the docstring): a channel set to
+# variance zero makes Sigma_phi singular and Lambda0 = Sigma_phi^-1
+# undefined. The closed channel is therefore approximated by an extremely
+# small but positive variance -- radians(1e-3)^2 for the direction channels,
+# (1e-6)^2 for the intensity channel -- so that its Lambda0 is huge but
+# finite, W_k ~ 0, and the closed channel contributes ~nothing to the
+# dynamic range. This is a limiting approximation, not a measurement.
+
+gate: P-CHANNEL-DECOMP
+analysis_status: channel_decomposition_v1
+run_name: channel_decomposition_v1
+
+data_root: D:/data/OpenIllumination
+data_meta: D:/data/OpenIllumination_meta
+cohort: [obj_03_pumpkin, obj_04_dolphin, obj_07_pumpkin2, obj_09_ball, obj_10_pumpkin3, obj_11_pine, obj_13_mushroom, obj_16_friends_cup, obj_17_pumpkin5, obj_18_fabric_hat, obj_19_cylinder]
+n_objects: 11
+noise_fit_convention: corrected
+scene_rng_spec: "default_rng([20260910, obj_idx])  # identical to P-CERT"
+K_lights: 142
+kappa: 10.0
+
+levels: [0.05, 0.1, 0.2, 0.35, 0.5, 1.0, 2.0, 4.0]
+channels: [joint, intensity, direction]
+
+# closed-channel approximation (see docstring)
+closed_direction_sigma_deg: 0.001      # radians(1e-3) for direction channels
+closed_intensity_sigma_logI: 0.000001  # 1e-6 for the intensity channel
+
+# -- reporting discipline --
+outcome_independence: >
+  Descriptive table: every D per channel/level/object is reported regardless
+  of shape; the claim "direction <= 2%" is a finding from the numbers, not a
+  gate. The only hard gate is the universal ceiling D <= 1 - 1/kappa.
