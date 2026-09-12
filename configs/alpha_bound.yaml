@@ -1,0 +1,68 @@
+# P-ALPHA-BOUND -- alpha-approximate submodularity bound for the A-optimal
+# selection function (assessment-report H5 item; the last open deliverable).
+# PREREGISTERED: this file is committed BEFORE the run.
+#
+# Claim (proved and machine-checked in tests/test_alpha_bound.py):
+#   for the A-opt selection function G(S) = F(0) - F(S), F(S) = tr M(S)^-1,
+#   M(S) = DeltaF(t_S) with t_k = kappa on k in S else 1,
+#       gamma >= 1/(1+alpha),  alpha := max_x lambda_max( DeltaF(1)^-1 W_x ),
+#   W_x = u_x [ K_x(1) - K_x(kappa) ] u_x^T >= 0.
+# alpha is computable from the nominal design (A, B, Lambda0) alone -- no
+# ground truth or measured data required. Lambda0 -> inf or -> 0 drives
+# W_x -> 0, hence alpha -> 0 and gamma -> 1 (exact submodularity); alpha is
+# largest at intermediate precision levels.
+#
+# Honest framing (must stay in the paper): the bound is ~1.6x looser than the
+# measured gamma_min = 0.99989; its value is (i) computable a priori, without
+# exhaustive search, (ii) an explicit form of alpha, and (iii) the two limits
+# alpha -> 0. It instantiates the Chamon & Ribeiro (NeurIPS 2017)
+# approximate-supermodularity framework with calibration precision as the
+# design variable; no claim of being first to give an approximate-submodular
+# bound.
+
+gate: P-ALPHA-BOUND
+analysis_status: alpha_bound_v1
+run_name: alpha_bound_v1
+
+# -- parameterization --
+kappa: 10.0
+objective: "A-opt selection gain G(S) = F(0)-F(S), F(S) = tr M(S)^-1"
+bound: "gamma >= 1/(1+alpha), alpha = max_x lambda_max(DeltaF(1)^-1 W_x)"
+provenance_of_bound: >
+  Steps: (1) exact additive decomposition M(S) = A + sum_{k in S} W_k with
+  W_k >= 0 (Loewner); (2) exact marginal gain by the Woodbury identity;
+  (3) two-sided eigenvalue sandwich 1/(1+rho) tr[W_x M^2] <= d_x G(S)
+  <= tr[W_x M^-2]; (4) S subset T => M(S) <= M(T) (Loewner) and
+  rho(S,x) <= max_x lambda_max(A^-1 W_x). Consequence gamma >= 1/(1+alpha).
+chamon_ribeiro_note: >
+  This is the Chamon & Ribeiro (NeurIPS 2017) approximate-supermodularity
+  framework instantiated with calibration precision as the design variable;
+  not claimed as a first approximate-submodular bound.
+
+# -- data & lineage (same cohort and assembly as P-CERT) --
+data_root: D:/data/OpenIllumination
+data_meta: D:/data/OpenIllumination_meta
+cohort: [obj_03_pumpkin, obj_04_dolphin, obj_07_pumpkin2, obj_09_ball, obj_10_pumpkin3, obj_11_pine, obj_13_mushroom, obj_16_friends_cup, obj_17_pumpkin5, obj_18_fabric_hat, obj_19_cylinder]
+n_objects: 11
+noise_fit_convention: corrected
+scene_rng_spec: "default_rng([20260910, obj_idx])  # identical to P-CERT"
+K_lights: 142
+
+# -- level grid (real objects) --
+levels: [0.1, 0.5]          # objective-side calibration-uncertainty operating points
+
+# -- toy verification grid (P-SUBMOD instance family; no raw data) --
+toy_L: 5
+toy_P: 40
+toy_seeds: [20260918, 20260919, 20260920, 20260921, 20260922,
+            20260923, 20260924, 20260925, 20260926, 20260927]
+toy_families: [random, adversarial]
+toy_inequality_pairs_per_instance: 160
+
+# -- reporting discipline --
+outcome_independence: >
+  Descriptive/certifying table: no sign-based gate, no success criterion on
+  the bound tightness. Every computed alpha / gamma-lower-bound is reported
+  regardless of outcome. The only hard gates are numerical (the theorem
+  inequality gamma >= 1/(1+alpha) - 1e-9 on the toy family, and zero
+  inequality violations on the two-sided sandwich).

@@ -143,11 +143,84 @@ A/D-optimality naming for the classical greedy baselines.
   `results/submodularity/submodularity_search.json`).
 - No claim that the linearized theory predicts real-data error magnitudes —
   the matched-GLS variance identity holds on matched synthetic ensembles
-  (ratio ≈ 1.0045) and the real-data deviation (emp/pred ≈ 10²) is reported
+  (ratio ≈ 1.0045) and the real-data deviation (emp/pred ≈ 102) is reported
   as a validity envelope.
 - No claim of overall reconstruction advantage for any allocation policy —
   the certified result is about the information landscape itself plus the
   mode-targeted intervention endpoint.
+
+## 9. α-approximate submodularity bound for the A-opt selection function
+
+This section proves a **prior, computable lower bound** on the submodularity
+ratio of the A-optimal light-refinement selection function. It answers the
+"how close is greedy allocation to optimal?" question with a bound that
+needs no ground truth, no measured data, and no exhaustive search — only the
+nominal design (`A`, `B`, `Λ0`). It instantiates the Chamon & Ribeiro
+(NeurIPS 2017) approximate-supermodularity framework with the calibration
+precision `t` as the design variable; the novelty here is the explicit form
+of `α`, not the framework (which is **not** claimed as first).
+
+**Setup.** For a refined set `S ⊆ {1..L}` (light `k ∈ S` carries precision
+multiplier `t_k = κ`, others `t_k = 1`), define the A-opt remaining cost
+
+    F(S) = tr M(S)^{-1},   M(S) = ΔF(t_S),   G(S) = F(∅) − F(S).
+
+**L9 (exact additive decomposition).** With `U_k(t) = u_k(M0_k + tΛ0_k)^{-1} u_k^T`
+(Loewner-decreasing in `t`) and `A := ΔF(1)`,
+
+    M(S) = A + Σ_{k∈S} W_k,   W_k = U_k(1) − U_k(κ) ⪰ 0.
+
+**L10 (exact marginal gain).** By the Woodbury identity
+`M^{-1} − (M+W)^{-1} = M^{-1}W(M+W)^{-1}`,
+
+    Δ_x G(S) = tr[ M(S)^{-1} W_x (M(S)+W_x)^{-1} ].
+
+**L11 (two-sided eigenvalue sandwich).** Let `ρ(S,x) = λmax(M(S)^{-1}W_x)`.
+Simultaneously diagonalize `M^{-1}W_x` (both are symmetric: the product of
+two PD/PSD symmetric matrices is diagonalizable with real eigenvalues, since
+`M^{-1/2}(M^{-1}W_x)M^{1/2} = M^{-1/2}W_xM^{-1/2} ⪰ 0`), and use the fact
+that `(I+X)^{-1}` has eigenvalues `1/(1+μ_j) ∈ [1/(1+ρ), 1]`:
+
+    (1/(1+ρ)) · tr[W_x M(S)^{-2}]  ≤  Δ_x G(S)  ≤  tr[W_x M(S)^{-2}].
+
+**L12 (monotonicity + uniform bound).** `S ⊆ T ⇒ M(S) ⪯ M(T)` (Loewner),
+so `M(S)^{-1} ⪰ M(T)^{-1}` and the marginal gain has the correct
+diminishing-returns direction; moreover `ρ(S,x) ≤ ρ_max := max_x λmax(A^{-1}W_x)`
+(monotonicity of `λmax` under conjugation and `M(S) ⪰ A`).
+
+**L13 (the bound).**
+
+    γ  ≥  1/(1+α),    α := max_x λmax( ΔF(1)^{-1} W_x ).
+
+`α` is a function of the nominal design only (`A`, `B`, `Λ0`, `κ`), so the
+bound is available **a priori**, before any calibration data exists.
+
+**Limit behavior.** `Λ0_x → ∞` (calibration excellent) or `Λ0_x → 0`
+(calibration very poor) drive `W_x → 0`, hence `α → 0` and `γ → 1` (exact
+submodularity); `α` peaks at intermediate precision levels. This is the
+quantitative form of the assessment report's qualitative "low-SNR →
+supermodular" tendency.
+
+**Numerical verification** (`results/submodularity/alpha_bound.json`,
+`experiments/alpha_bound.py`):
+
+- **(a) theorem on the P-SUBMOD toy family** — 20 instances (10 random /
+  10 adversarial, L=5, P=40), exhaustive triples: `γ_measured ≥ 1/(1+α)`
+  on all 20 (random α ∈ [0.059, 0.119], adversarial α ∈ [0.025, 0.090];
+  measured γ ∈ [0.9999, 1.0000]).
+- **(b) two-sided sandwich** — 1600 random `(S,x)` pairs with zero
+  violations (`min val/lb = 1.0021`, `min ub/val = 1.0368`).
+- **(c) real objects** — on the 11 held-out OpenIllumination objects the
+  nominal-design `α @ level=0.5` ranges 0.188–0.515 (γ lower bound
+  0.66–0.84; `obj_10_pumpkin3` is the worst at 0.635 @ level=0.1). The
+  most conservative statement is
+  "A-optimal light-refinement selection is ≥ 0.635-supermodular on every
+  held-out object at the probed levels."
+
+**Honest framing.** The bound is about a factor 1.6 looser than the *measured*
+`γ_min = 0.99989` (P-SUBMOD negative-result pack). Its value is the a-priori
+computability (no exhaustive search), the explicit form of `α`, and the two
+`α → 0` limits — not numerical tightness.
 
 ## Tests binding these statements
 
@@ -159,3 +232,4 @@ A/D-optimality naming for the classical greedy baselines.
 | `tests/test_lowrank_identity.py` | M4 spectral identity, Woodbury trace/gradient |
 | `tests/test_math_gates.py` | singular-covariance counterexample, retention-covariance theorem, polyfit order, rank invariance |
 | `tests/test_known_answer_precheck.py` | λmin reading, trace dilution, parallel sums, gauge identity |
+| `tests/test_alpha_bound.py` | L9–L13: γ ≥ 1/(1+α) on toy family, two-sided sandwich zero violations, real-object α in range |
