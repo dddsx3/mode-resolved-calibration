@@ -248,7 +248,14 @@ Three structural findings anchor it (verified by
    the certified table on ALL masked pixels (P = 3559–10252) with all 142
    lights via the exact low-rank route gives dynamic range 27.3–89.4%
    (median 60.06%) and greedy within 0.002–0.005% of the lower bound — the
-   subsampled table was not a sampling artifact.
+   subsampled table was not a sampling artifact. The dynamic range is a
+   **curve in the calibration-uncertainty operating point `level`**, not a
+   single number: re-sampling the same functional across an 11-point grid
+   (`results/certification/certified_gaps_levels.json`) gives median D =
+   0.7% at level 0.025 rising to 89.85% at level 8.0 (37× span), with
+   median 62.87% at the P-CERT operating point level = 0.5 — see the
+   certified-value curve below.
+
 
    **Figure 5. Certified optimality gaps.** Left: the J_A landscape over the
    calibration budget (median across the 11 objects). Right: the greedy
@@ -256,6 +263,12 @@ Three structural findings anchor it (verified by
    the certification is not just asymptotic.
 
    ![certified optimality gaps](docs/img/certified_gap.png)
+
+   Certified value curve (median with IQR and per-object ranges, log
+   x-axis; saturates toward the universal ceiling 1 − 1/κ = 90% at large
+   level — the same ceiling the level=64 table meets, docs/methods.md §7):
+
+   ![certified value curve](docs/img/certified_value_curve.png)
 4. **Mode-tail targeted intervention: no detectable advantage over scalar
    targeting** — the preregistered three-arm comparison (`P-ALLOC2 v1.1`,
    `results/mode_tail/allocation_mode_tail.json`) finds that the

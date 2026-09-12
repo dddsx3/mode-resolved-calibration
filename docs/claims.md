@@ -47,6 +47,7 @@ in the README to appear verbatim under `results/**`.
 | C3 | Full-resolution confirmation (all masked pixels P = 3559–10252, all 142 lights) | dynamic range 27.3–89.4% (median 60.06%); greedy within 0.002–0.005% | `results/certification/lowrank_fullres.json` (`display`) | `pytest tests/test_m2_m3_evidence.py::test_fullres_structure` |
 | C4 | **Superseded** — the v1.0 "targeted intervention is significant" claim was a gauge-alignment asymmetry artifact; the corrected three-arm rerun (same file, `aggregated`) finds no mode-specific advantage: targeted is never better than random and shows no increment over the scalar arm | `results/mode_tail/allocation_mode_tail.json` (`erratum`, `aggregated`) | `results/mode_tail/allocation_mode_tail.json` | `pytest tests/test_m2_m3_evidence.py::test_alloc2_structure` |
 | C5 | Allocation rank invariance | all 594 frozen orderings keep numerical rank 1200 = rank(F∞) at every budget prefix | `results/openillumination/correctness/allocation_rank_check.json` | `pytest tests/test_math_gates.py` |
+| C6 | Dynamic range is a curve in `level` (not a single number) | median D: 0.7% @ level 0.025 rising to 89.85% @ level 8.0 (37× span); median 62.87% @ the P-CERT operating point level 0.5; saturates toward the universal ceiling 1−1/κ = 90% at large level | `results/certification/certified_gaps_levels.json` (`by_level`) | `pytest tests/test_certified_gaps_levels.py` |
 
 ## Registered negative results
 

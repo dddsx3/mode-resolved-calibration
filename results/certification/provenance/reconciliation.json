@@ -38,7 +38,7 @@
   "assessment_claim": "total dynamic range 4.02% at 'real scale' (P=1200, L=142, 48 active)",
   "clarification": "real SCALE but SYNTHETIC generic scene (build(): biased-up normals, sig_logI=sig_deg=0.1) - not the real OpenIllumination objects (SYNTHETIC generic scene - not the real OpenIllumination objects)",
   "our_certified_measurements": "real objects, corrected interface, level 0.5, kappa=10 (results/certification/certified_gaps.json): dynamic ranges 36-63% across the 11 objects (instance-dependent)",
-  "consequence": "instance-dependence of the certified dynamic range is itself the methodological motivation for per-instance certification; the assessment's 4.02% must not be quoted as a real-object number"
+  "consequence": "the divergence is driven by the level operating point (calibration-uncertainty), not instance-dependence per se: a matched-heterogeneity control holds Finf heterogeneity fixed (obj_11_pine het 10.20 vs probe scene het 11.81) and finds the synthetic-vs-real scene-type effect is only 0.65x at the same level (the real object is lower), while changing level 0.1->0.5 on the same object gives 13.09x; the assessment's 4.02% must not be quoted as a real-object number"
  },
  "conclusion": {
   "b4_gate": "CLOSED with documented divergence",
