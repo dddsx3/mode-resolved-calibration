@@ -39,7 +39,7 @@ to reproduce the frozen artifacts.
 - **λ⋆ naming lock**: λ⋆ is the **directional crossover precision** — the
   calibration precision at which a fixed gauge direction's Rayleigh information
   reaches a pre-specified reference floor (existence condition `0 < μ < ‖Aa‖²`);
-  within-scene interpretation only (math freeze v1.0 §29)
+  within-scene interpretation only (see `docs/methods.md` §4)
 
 ## 3. Monte-Carlo tightness and linearization validity  (`experiments/monte_carlo_validation.py`)
 
@@ -86,7 +86,7 @@ to reproduce the frozen artifacts.
 - **Seed**: experiment seed `20260907`
 - **Output**: `results/openillumination/ci04_formal_summary.json`,
   `results/openillumination/mode_ranking.csv`, `level_severity.csv`
-- **Math-interface conventions (math freeze v1.0 M0-1/M0-2)**: the noise fit and
+- **Pipeline conventions (legacy vs corrected)**: the noise fit and
   the empirical mode projection each have a `legacy` (frozen-benchmark
   bit-reproducible, default) and a `corrected` convention
   (`noise_fit_convention` / `mode_coordinate`); the corrected arms are exercised
@@ -170,7 +170,7 @@ Config: `configs/openillumination_allocation.yaml` (frozen at tag
   normalized weak-Fisher-mode sensitivity heuristic** (G_ℓ from the per-light
   sensitivity kernel g_ℓj over the bottom-5 tracked modes, recomputed each
   step; a heuristic aggregate, not an exact retention-gradient optimization,
-  math freeze v1.0 §33), E-opt (λ_min gain), A-opt (trace(ΔF⁺) decrease,
+  see `docs/methods.md`), E-opt (λ_min gain), A-opt (trace(ΔF⁺) decrease,
   positive-subspace pseudo-A as implemented), D-opt (positive-subspace logdet
   gain), random (5 fixed-seed permutations estimating the same-object
   random-policy expectation). Every policy yields one full 142-light
@@ -188,10 +188,10 @@ Config: `configs/openillumination_allocation.yaml` (frozen at tag
 - **Statistics**: Δ_random = median over the 11 objects of (U_mode − U_random);
   paired object-cluster bootstrap B=10000, seed 20260910, resamples shared across
   policies; all 11 paired differences + exact sign count reported; Δ_Eopt/Δ_Aopt/
-  Δ_Dopt as secondary; frozen result grades strong/neutral/negative per the
-  preregistered rule (historical internal labels — see the semantic erratum in
-  `docs/WORDING.md`: the award tested beating random, not superiority over the
-  classical baselines; public text says "actionable outcome vs random").
+  Δ_Dopt as secondary. The internal result grades recorded in
+  `allocation_summary.json` tested beating random only — not superiority over
+  the classical baselines (whose paired comparison is post-hoc; see the
+  post-hoc analyses below).
 - **Provenance**: run manifest, driver, analysis script and the run-layer change
   record live in `results/openillumination/allocation/provenance/`.
 - **Output**: `results/openillumination/allocation/` — `per_run_errors.csv`,
@@ -200,7 +200,7 @@ Config: `configs/openillumination_allocation.yaml` (frozen at tag
   `allocation_policy_pairwise.csv`, `allocation_random48_per_run.csv`,
   `allocation_random48_summary.json`.
 
-Post-hoc analyses (2026-09-10, registered in `docs/WORDING.md` §5; no new
+Post-hoc analyses (2026-09-10, registered in `docs/claims.md`; no new
 deterministic policy runs):
 
 - **Paired policy comparison** (`provenance/a5_pairwise.py` →
@@ -220,15 +220,16 @@ deterministic policy runs):
   random48 − random_full = −0.198 / −0.342 (CIs exclude 0): the measured benefit
   over full-universe random is an active-set effect, not a mode-ordering effect.
 
-## 11. Math-freeze correctness rerun (MF-0.3 factorial, `experiments/openillumination_factorial.py`)
+## 11. Interface-correctness factorial rerun (`experiments/openillumination_factorial.py`)
 
 Preregistered four-arm rerun of the §5 controlled-corruption protocol after the
-two math-interface corrections of the math-method freeze v1.0 (M0-1 noise-fit
-coefficient order; M0-2 normalized dual-coordinate mode projection). Same
+two pipeline-interface corrections (the heteroscedastic noise-fit
+coefficient order and the normalized dual-coordinate mode projection;
+see `docs/methods.md`). Same
 objects, pixel subsets, levels, seeds and statistics across all arms; the arm
 labels were fixed before the rerun:
 
-| arm | noise fit (M0-1) | mode coordinate (M0-2) | role |
+| arm | noise fit | mode coordinate | role |
 |-----|------------------|------------------------|------|
 | A | legacy | legacy | == frozen benchmark (machinery anchor) |
 | B | corrected | legacy | |
@@ -237,7 +238,7 @@ labels were fixed before the rerun:
 
 - **Sampling**: one shared rng stream; the corrected scenes reuse the legacy
   scenes' frozen (light, pixel) subsets; corruption draws are shared.
-- **Machinery check**: arm A vs the frozen §5 summary — max relative difference
+- **Machinery check**: the legacy arm vs the frozen §5 summary — max relative difference
   over all pred/emp entries plus the pooled Spearman; tolerance 1e-7
   (expected ~1e-12), hard error on breach.
 - **Reported per arm**: R_A (median within-cell Spearman of S = 1 − 1/ρ vs
@@ -316,7 +317,7 @@ error, versus the same budget on random Fisher-active lights?
   budgets k ∈ {5, 10, 14, 28, 48} × 10 seeds; scene rng identical to the
   frozen allocation; corrected interface.
 - **Endpoint**: per-run energy of the bottom-5 tracked modes in the
-  normalized dual coordinate `W = F∞^{1/2} V_bottom5` (M0-2 corrected) of the
+  normalized dual coordinate `W = F∞^{1/2} V_bottom5` (corrected caliber) of the
   gauge-aligned residual, paired by seed across arms.
 - **Statistics**: Δ(targeted − random_active48) per (regime, budget), median
   over objects, object-level paired bootstrap (B=10000, seed 20260916), all 11
@@ -336,4 +337,4 @@ error, versus the same budget on random Fisher-active lights?
 **Reproduction contract**: every experiment script writes only statistical values and
 manifests to `results/*/`; N1–N9 are independently recomputed from the CSVs by
 `tests/test_reproduction.py` (frozen at `science-closed`) and N10–N12 by
-`tests/test_manuscript_evidence.py` (frozen at `manuscript-evidence-v1`).
+`tests/test_benchmark_evidence.py`.

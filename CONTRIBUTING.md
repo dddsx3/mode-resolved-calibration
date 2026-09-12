@@ -6,15 +6,19 @@ version: open an issue first for anything semantic; keep PRs small; make sure
 
 ## Ground rules
 
-1. **The frozen benchmark is immutable.** `results/`, `configs/`, and
-   `tests/test_reproduction.py` reproduce published numbers — never edit them.
-   CI fails if `git diff science-closed HEAD` touches those paths.
+1. **Committed evidence is immutable.** The benchmark artifacts under
+   `results/` reproduce published numbers — never edit them. Every committed
+   file is pinned by `checksums.sha256` (CI verifies), so any artifact change
+   is visible in the diff and must be accompanied by a checksum regeneration
+   plus a re-derived test.
 2. **Single source of truth.** The math lives once, in `src/calibinfo`
-   (docstrings carry the normative definitions). Docs, examples, and papers
-   reference it — they never restate formulas independently.
-3. **Claims are gated.** `tests/test_wording_gate.py` scans the repo for
-   overclaiming sentence patterns; `docs/WORDING.md` is the approved wording
-   registry. New numeric claims must trace to a file under `results/`.
+   (docstrings carry the normative definitions; `docs/methods.md` is the
+   prose statement). Docs, examples, and papers reference it — they never
+   restate formulas independently.
+3. **Numeric claims are gated.** `tests/test_claims_gate.py` scans the repo
+   for overclaiming sentence patterns; `docs/claims.md` is the
+   claim-to-evidence registry. New numeric claims must trace to a file under
+   `results/` and be registered there.
 4. **Experimental code is quarantined.** New analysis capabilities go into
    `src/calibinfo/experimental/` with a header
    `# status: experimental — NOT part of the published results`, and never

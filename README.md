@@ -20,8 +20,11 @@ convex program in the per-light precision multipliers, the retention spectrum
 has an exact low-rank structure that removes the sampling bottleneck, and the
 optimization landscape itself — not any particular policy — is certified
 (see [Research direction](#research-direction-certified-bounds-on-calibration-precision-allocation)).
+The mathematical statements are collected in
+[docs/methods.md](docs/methods.md); every number in this README is bound to a
+committed evidence file in [docs/claims.md](docs/claims.md).
 
-![how it works](paper/figures/overview_schematic.png)
+![how it works](docs/img/benchmark/overview_schematic.png)
 
 ## Quickstart
 
@@ -120,17 +123,17 @@ data and figures — clone-and-run, zero downloads:
 
 The `results/`, `configs/`, and `experiments/` trees hold a frozen benchmark
 (OpenIllumination controlled-corruption study + DiLiGenT sanity + synthetic
-validity panels) that reproduced a research manuscript; its numbers, protocol,
-and provenance are documented in `docs/REPRODUCIBILITY.md` and
-`docs/EXPERIMENTS.md`, guarded by `tests/test_reproduction.py`. This benchmark
-is separate from the library API — the examples above never touch it.
+validity panels) whose numbers, protocols, and provenance are documented in
+`docs/REPRODUCIBILITY.md` and `docs/EXPERIMENTS.md`, guarded by
+`tests/test_reproduction.py`. This benchmark is separate from the library API
+— the examples above never touch it. Every headline number below is bound to
+a committed evidence file in [docs/claims.md](docs/claims.md).
 
-Key results (11 held-out OpenIllumination objects). **Paper-facing numbers are
-the corrected-interface arm D of the MF-0 factorial** (see "Math-interface
-correctness" below); the pre-correction record is kept explicitly labeled as
-frozen provenance.
+Key results (11 held-out OpenIllumination objects). Numbers use the
+**corrected pipeline caliber** (see *Correctness & integrity* below); the
+pre-correction record is kept explicitly labeled as provenance.
 
-- **Directional validation (arm D; the strongest honest statement of the
+- **Directional validation (the strongest honest statement of the
   within-cell result)**: median within-cell Spearman $R_A$ = 0.90
   (object-cluster bootstrap 95% CI [0.7, 0.95]; 65/66 cells positive, 11/11
   objects positive). **Construction disclosure**: within a cell this statistic
@@ -158,43 +161,43 @@ frozen provenance.
   measured benefit of every informed policy over full-universe random is an
   active-set effect rather than a mode-ordering effect (see
   `allocation_policy_pairwise.csv` and `allocation_random48_summary.json`).
-- **Frozen pre-correction record (arm A; provenance only, not paper-facing)**:
-  $R_A$ = 0.90 (CI [0.90, 0.95]); stratified (fixed-level) median Spearman
-  0.536 (mode-resolved) vs 0.418 (log-determinant) / 0.400 (trace). The
-  stratified severity-comparison claim is **retired** after the MF-0 rerun —
-  it does not survive the corrected interface (arm D stratified −0.495; the
-  flip is isolated to the noise-fit correction) — and must not be cited as a
-  headline.
+- **Pre-correction record (legacy caliber; provenance only)**: $R_A$ = 0.90
+  (CI [0.90, 0.95]); stratified (fixed-level) median Spearman 0.536
+  (mode-resolved) vs 0.418 (log-determinant) / 0.400 (trace). The stratified
+  severity-comparison claim is **retired** after the corrected-interface
+  rerun — it does not survive the corrected noise fit (corrected caliber
+  stratified −0.495; the flip is isolated to the noise-fit correction) — and
+  must not be cited as a headline.
 
-![stratified medians](paper/figures/fig1_stratified_median.png)
+![stratified medians](docs/img/benchmark/fig1_stratified_median.png)
 
-![pooled](paper/figures/fig2_pooled.png)
+![pooled](docs/img/benchmark/fig2_pooled.png)
 
-![allocation forest](paper/figures/fig10_allocation_forest.png)
+![allocation forest](docs/img/benchmark/fig10_allocation_forest.png)
 
-### Math-interface correctness (MF-0)
+### Correctness & integrity
 
-The math-method freeze required two interface corrections to be rerun on the
+Two pipeline-interface details were corrected and re-verified on the
 identical frozen protocol (same objects, pixel subsets, levels, seeds): the
-heteroscedastic noise-fit coefficient order (M0-1) and the normalized
-dual-coordinate mode projection (M0-2). The preregistered A/B/C/D factorial
+heteroscedastic noise-fit coefficient order and the normalized
+dual-coordinate mode projection. A preregistered A/B/C/D factorial
 (`experiments/openillumination_factorial.py`,
-`results/openillumination/correctness/mf0_factorial_summary.json`) shows that
-arm A (legacy/legacy) reproduces the frozen benchmark bit-close (max relative
-difference 0.0 on every pred/emp entry and on the pooled Spearman), and
-reports the corrected paper-facing arm D (corrected/corrected, fixed a
-priori):
+`results/openillumination/correctness/mf0_factorial_summary.json`) validates
+the machinery and re-measures every headline under the corrected interface:
 
-- the within-cell directional-validation result is unchanged: median
-  within-cell Spearman $R_A$ = 0.90 (bootstrap 95% CI [0.7, 0.95], 65/66
+- the legacy/legacy arm reproduces the frozen benchmark bit-close (max
+  relative difference 0.0 on every pred/emp entry and on the pooled
+  Spearman) — the rerun machinery is exact;
+- the within-cell directional-validation result is unchanged under the
+  corrected interface: $R_A$ = 0.90 (bootstrap 95% CI [0.7, 0.95], 65/66
   cells positive, 11/11 objects positive);
 - the fixed-level scalar-severity association does not survive the corrected
-  noise fit: stratified median −0.495 (arm D) vs 0.536 (arm A); the flip is
-  driven by the noise-fit correction (arm B −0.577 with the legacy projection,
-  arm C 0.509 with the corrected projection). Per the preregistered decision
-  rule the corrected arm D is the reported result regardless of direction, and
-  the stratified severity-comparison claim is downgraded accordingly
-  (`docs/WORDING.md` §6).
+  noise fit (stratified −0.495 vs +0.536; the flip is isolated to the
+  noise-fit correction), so that claim is retired — the corrected caliber is
+  the reported one regardless of direction (fixed before the rerun).
+
+All doc-facing numbers come from the corrected caliber; see
+[docs/claims.md](docs/claims.md) for the claim→evidence bindings.
 
 ## Research direction: certified bounds on calibration-precision allocation
 
@@ -255,10 +258,11 @@ Three structural findings anchor it (foundations locked by
    objects**, paired-bootstrap 95% CIs excluding 0 — the mode-resolved
    signal is real where it applies: at the mode level.
 
-Work on this direction proceeds on the `mode-tail-design` branch under
-preregistered protocols (`configs/`, committed before each run); the frozen
-benchmark above stays untouched and remains the reproducibility record of the
-previous-generation manuscript.
+All certified analyses run under preregistered protocols (`configs/`
+committed before each run); the frozen benchmark above stays untouched and
+remains the reproducibility record of the first-generation study. The
+claim→evidence bindings for every number in this README live in
+[docs/claims.md](docs/claims.md).
 
 ## Installation
 
@@ -273,7 +277,7 @@ Requires Python ≥ 3.10.
 ## Contributing
 
 Bug reports and PRs welcome — see `CONTRIBUTING.md`. The known-answer test
-suite and the claim guard (`tests/test_wording_gate.py`) run on every change.
+suite and the claims guard (`tests/test_claims_gate.py`) run on every change.
 
 ## Citation / License
 

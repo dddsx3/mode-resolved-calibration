@@ -1,4 +1,4 @@
-"""Manuscript-evidence recomputation gate (N10-N12).
+"""Benchmark-evidence recomputation gate (N10-N12).
 
 Independently recomputes the three post-adjudication allocation headline
 numbers from the frozen artifacts under results/ (post tag

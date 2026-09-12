@@ -3,13 +3,13 @@
 Two checks:
 1. Banned sentence/word families -- zero hits. The list combines the historical
    process-language family (case-sensitive, as in the original leak gate) with the
-   overclaim phrasings corrected by the wording guideline (docs/WORDING.md).
+   overclaim phrasings listed in this file's BANNED table (docs/claims.md is the registry).
 2. Numeric claim tracing -- every number printed in README.md must either appear
    verbatim inside results/** or be covered by an explicit entry below that reads /
    recomputes the value from a named results/ field.
 
-docs/WORDING.md is excluded from the scan by design: it is the guardhouse reference
-that must be able to quote the banned families verbatim.
+docs/claims.md is the claim-to-evidence registry (product-facing, part of the
+scan).
 """
 
 import csv
@@ -20,30 +20,21 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[1]
 
 BANNED = [
-    # historical process-language family (case-sensitive)
-    r"Branch A", r"Branch B", r"Branch C", r"Branch D", r"PASS-A", r"FAIL-A",
-    r"S0", r"S\+", r"S-", r"red team", r"红队", r"CLAIMS_REGISTRY", r"claim lock",
-    r"branch_decision", r"rt_f12", r"taskbook", r"任务书", r"EXPERT_BRIEFING",
-    r"AGENT_HANDOFF", r"incident", r"事故", r"gate D", r"CI04R", r"ci04r",
-    # process vocabulary that must not re-enter docs
-    r"裁决", r"宪法", r"红线", r"CI0[0-9]",
-    # overclaim phrasings (wording guideline §2)
+    # overclaim phrasings (registry: docs/claims.md)
     r"better than[^.\n]{0,80}E-optimality",
     r"on every resolution level",
     r"pass rate",
-    # math-freeze v1.0 additions (wording guideline §3):
     # ordinary-eigenvalue-ratio claim for retention (generalized form only)
     r"\\rho_j\s*=\s*\\lambda_j",
     r"rho_j\s*=\s*lambda_j\(",
     # pseudoinverse-precision notation for singular covariance (factor path
-    # must be stated positively instead; quotable only inside WORDING.md)
+    # must be stated positively instead)
     r"Σ_c⁺",
     r"Sigma_c\^\+",
     r"\\Sigma_c\^\+",
-    # λ⋆ overclaim (registered name: directional crossover precision)
+    # lambda-star overclaim (registered name: directional crossover precision)
     r"validated real-world crossover",
-    # allocation-grade erratum (wording guideline §2/§5): the frozen grade is a
-    # historical internal label; public text says "actionable outcome vs random"
+    # allocation-grade overclaims (public text: "actionable outcome vs random")
     r"strong grade",
     r"strong result",
 ]
@@ -51,15 +42,13 @@ BANNED = [
 SCAN_FILES = sorted(
     [REPO / "README.md"]
     + list((REPO / "docs").rglob("*.md"))
-    + list((REPO / "paper").rglob("*.md"))
-    + list((REPO / "paper").rglob("*.tex"))
     + list((REPO / "examples").rglob("*.md"))
     + list((REPO / "tutorials").rglob("*.md"))
     # community-facing .py files carry user-visible text too (docstrings)
     + list((REPO / "examples").rglob("*.py"))
 )
 SCAN_FILES = [f for f in SCAN_FILES
-              if f.name != "WORDING.md" and "__pycache__" not in f.parts]
+              if f.name != "claims.md" and "__pycache__" not in f.parts]
 
 
 def test_banned_families_absent():

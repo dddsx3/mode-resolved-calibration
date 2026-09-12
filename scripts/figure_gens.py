@@ -4,7 +4,7 @@ import json
 from pathlib import Path
 
 FROZEN = Path(__file__).resolve().parents[1] / "results"
-FIGS = Path(__file__).resolve().parents[1] / "paper" / "figures"
+FIGS = Path(__file__).resolve().parents[1] / "docs" / "img" / "benchmark"
 
 
 def _load(name):

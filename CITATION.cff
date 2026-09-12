@@ -6,7 +6,7 @@ authors:
   - alias: dddsx3
     name: "GMX"
     email: "3570239187@qq.com"
-version: 0.3.0
+version: 0.4.0
 date-released: 2026-09-10
 license: MIT
 repository-code: "https://github.com/dddsx3/mode-resolved-calibration"

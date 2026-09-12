@@ -1,7 +1,7 @@
 """Overview schematic for the README (pure illustration, no data).
 
 Regenerate with:  python paper/make_schematic.py
-Output:           paper/figures/overview_schematic.png
+Output:           docs/img/benchmark/overview_schematic.png
 """
 from pathlib import Path
 

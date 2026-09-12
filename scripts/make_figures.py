@@ -13,7 +13,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 FROZEN = ROOT / "results"
-FIGS = ROOT / "paper" / "figures"
+FIGS = ROOT / "docs/img/benchmark" / "figures"
 
 FIGURES = {f"Fig.{i}" for i in range(1, 10)}
 

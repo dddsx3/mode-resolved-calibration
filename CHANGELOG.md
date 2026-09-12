@@ -65,6 +65,42 @@ interface is exercised by a preregistered factorial rerun into
   (including the retired stratified severity comparison) is kept explicitly
   labeled as provenance
 
+## [0.4.0] — 2026-09-12
+
+Repository restructured for public research use: the project now stands on
+its own, independent of any manuscript.
+
+### Changed
+
+- Documentation rewritten product-first: `docs/methods.md` (mathematical
+  foundations, standalone), `docs/claims.md` (claim-to-evidence registry
+  replacing the internal wording guide), `docs/REPRODUCIBILITY.md`
+  (per-result reproduction index), `docs/EXPERIMENTS.md` (protocol docs,
+  internal process language removed)
+- CI simplified to pytest matrix + claims gate + full checksum verification
+  (tag-based drift gates superseded by the checksum manifest)
+- `paper/` directory dissolved: benchmark figures moved to
+  `docs/img/benchmark/`, generation scripts to `scripts/`
+- Test files renamed to product-facing names
+  (`test_math_gates.py`, `test_claims_gate.py`, `test_benchmark_evidence.py`,
+  `test_factorial_evidence.py`)
+- README restructured: library-first, evidence-bound numbers, research
+  direction section; internal process vocabulary removed
+
+### Added
+
+- `docs/methods.md`: standalone mathematical foundations (model, effective
+  information, retention spectrum, gauge response, convex allocation
+  formulation with certificates, exact low-rank structure)
+- `experiments/allocation_mode_tail.py` + `experiments/submodularity_search.py`
+  + `experiments/certified_gaps.py` + `experiments/lowrank_fullres.py` +
+  `experiments/directional_amplitude.py` + `experiments/allocation_rank_check.py`
+  with preregistered configs (see docs/EXPERIMENTS.md sections 11-13)
+- Certified results: dynamic range 27.3-89.4% (full resolution),
+  J_A-greedy within 0.002-0.005% of the convex lower bound, mode-tail
+  targeted intervention significant in all 10 cells on 11/11 objects,
+  E-opt submodularity violations pinned (gamma_min 0.704)
+
 ## [Unreleased]
 
 ### Fixed
