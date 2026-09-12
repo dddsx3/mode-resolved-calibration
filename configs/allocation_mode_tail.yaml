@@ -34,6 +34,14 @@ policies:
     (select_ordering_mode_aware; bottom-5 tracked modes recomputed at every
     step) - this is the 'targeted' arm: the theory says which lights hurt the
     weak modes most
+  scalar_targeted: >
+    J_A steepest-descent greedy prefix (exact gradient, same certificate
+    functional as P-CERT) - the scalar-OED targeted control: it optimizes the
+    A-optimal functional itself, with no access to the mode decomposition.
+    Preregistered distinctiveness judgment (J3): the mode-resolved claim
+    survives only if the targeted arm reduces the bottom-5 tracked-mode
+    energy STRICTLY MORE than this scalar arm; if scalar >= targeted, the
+    mode language adds no incremental intervention value (honest negative).
   random_active48: >
     uniform permutations over the same 48 Fisher-active lights (the attribution
     control of the frozen benchmark), 6 permutations averaged per seed
@@ -54,6 +62,19 @@ statistics:
   paired_innovation_seed_space: "[20260916, 7777, obj_idx, lv_i, s_i]  # disjoint from frozen (20260910) and random48 (20260912)"
   bootstrap: object-level paired bootstrap, B=10000, seed 20260916, shared resamples
   reporting: >
-    Delta(targeted - random_active48) with 95% CI per (regime, budget), all 11
-    paired differences + sign count, per-mode breakdown - reported regardless
-    of direction; no sign-based gate
+    Delta(targeted - random_active48) and Delta(scalar_targeted -
+    random_active48) with 95% CI per (regime, budget), all 11 paired
+    differences + sign count, per-mode breakdown, and the distinctive
+    contrast Delta(targeted - scalar_targeted) - reported regardless of
+    direction; no sign-based gate
+
+# -- v1.1 erratum --
+erratum:
+  v1_0_bug: >
+    the random_active48 arm missed the gauge alignment (sg computed but not
+    applied) while the targeted arm had it - asymmetric residual conventions;
+    the gauge direction carries 0.91 energy fraction inside the bottom-5 dual
+    subspace, so the random arm was inflated ~28x and the v1.0 significance
+    claim was an artifact
+  disposition: v1.0 results retracted; this three-arm rerun (shared residual
+    pipeline function) replaces them
