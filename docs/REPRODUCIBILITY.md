@@ -111,7 +111,7 @@ allocation evaluation were executed once, preregistered, and committed:
   correctness rerun, amplitude/directional analyses;
 - `results/openillumination/allocation/` — the 29,700-reconstruction
   allocation evaluation (`uos_table.csv`, paired statistics, provenance with
-  the exact cloud driver and run logs);
+  the exact cloud driver and statistics scripts);
 - `results/{synthetic,gauge_spectrum,monte_carlo,nonlinear,diligent,diligent_ablation}/`
   — the synthetic validity panels and external sanity panels;
 - `results/certification|mode_tail|submodularity|magnitude/` — the certified
