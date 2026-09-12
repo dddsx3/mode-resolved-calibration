@@ -327,15 +327,11 @@ error, versus the same budget on random Fisher-active lights?
   larger than scalar_targeted's. Yes ⇒ the mode-resolved language has
   incremental interventional value; no ⇒ honest negative result.
 - **Output**: `results/mode_tail/allocation_mode_tail.json`.
-- **RETRACTED outcome (v1.0, 2026-09-12)**: the originally reported
-  "all 10 (regime, budget) cells, 11/11 objects, all CIs excluding 0"
-  significant targeted-vs-random result is **invalid**. External review
-  found a genuine bug: the v1.0 random arm omitted the gauge-alignment step
-  (`sg` computed but not applied) before projection, while the targeted arm
-  applied it — asymmetric residual calibers. The gauge direction ρ̂ carries
-  ~0.91 of its energy inside the bottom-5 dual subspace, inflating the
-  random-arm energy ~28×; the entire v1.0 significance was this artifact.
-  See `erratum` block in the result JSON and C4 in `docs/claims.md`.
+- **Withdrawn v1.0 outcome**: the originally reported "all 10 (regime,
+  budget) cells, 11/11 objects, all CIs excluding 0" significance was an
+  artifact — the v1.0 random arm omitted the gauge-alignment step before
+  projection (asymmetric residual calibers; ~28× energy inflation). See
+  the `erratum` block in the result JSON.
 - **Outcome (v1.1, 2026-09-12, three-arm shared-pipeline rerun)**: with the
   gauge bug fixed and all arms funneled through one pipeline, the
   pre-registered comparisons are reported regardless of direction
@@ -412,7 +408,7 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
   realization; plus the Lipschitz transfer bound
   |J_A(A) − J_A(B)| ≤ ‖A−B‖·‖A⁻¹‖·‖B⁻¹‖·P verified per pair.
 - **Metric**: `range_rel_spread` = IQR/median over realizations — random
-  dispersion **within** the noisy-calibration family; and (v2, audit P2-6)
+  dispersion **within** the noisy-calibration family; and (v2)
   `clean_vs_mean_ratio` = range_clean/range_mean per object + summary —
   the **systematic** offset between the noiseless calibration source and
   noisy-realization sources, which the IQR does not capture. The two must
@@ -434,5 +430,5 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
 
 **Reproduction contract**: every experiment script writes only statistical values and
 manifests to `results/*/`; N1–N9 are independently recomputed from the CSVs by
-`tests/test_reproduction.py` (frozen at `science-closed`) and N10–N12 by
+`tests/test_reproduction.py` (the frozen benchmark gates) and N10–N12 by
 `tests/test_benchmark_evidence.py`.

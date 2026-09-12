@@ -19,33 +19,13 @@ re-derives the value. The binding table (claim → evidence file → field) is
 
 ### 1.1 Provenance note: unreachable git SHAs in early manifests
 
-Two `git_sha` values recorded inside committed result manifests are **not
-reachable** in the current history (`git cat-file -t` fails): the original
-commits were replaced during the 2026-09-09 repository reorganization. This
-is a known, documented state — not an omission:
-
-- `fa54404…` — `results/certification/lowrank_fullres.json` and
-  `results/certification/certificate_concentration.json` (v1). The former
-  carries an explicit `provenance_unknown: true` +
-  `sha_unreachable_reason` block; the latter keeps the v1 manifest and its
-  v2 fields (`clean_vs_mean_ratio`) were added post-hoc from committed v1
-  fields, documented by an in-file `revision` block (the full-resolution
-  rerun is a cloud-scale job). The invalid v1
-  `results/magnitude/linearization_radius.json` (same SHA) was replaced by
-  the metric-domain-corrected v2 rerun.
-- `bd67897…` — the seven frozen science-closed manifests (all with
-  `git_dirty: true`: run on a dirty working tree):
-  `results/synthetic/ci01_formal_manifest.json`,
-  `results/gauge_spectrum/ci02_formal_manifest.json`,
-  `results/monte_carlo/ci03_formal_manifest.json`,
-  `results/nonlinear/ci03nl_nl_formal_manifest.json`,
-  `results/openillumination/ci04_formal_manifest.json`,
-  `results/diligent/ci05_formal_manifest.json`,
-  `results/diligent_ablation/ci05abl_ablation_manifest.json`.
-  These are immutable frozen benchmark artifacts and are kept byte-for-byte
-  as committed; their integrity is independently pinned by
-  `checksums.sha256`, and the producing scripts + configs are committed and
-  testable — only the historical commit pointer itself is stale.
+Two `git_sha` values recorded inside committed result manifests are not
+reachable in the current history: the original commits were replaced during
+the 2026-09-09 repository reorganization. The affected artifacts are pinned
+by `checksums.sha256` and remain byte-for-byte as committed
+(`lowrank_fullres.json` and `certificate_concentration.json` carry an
+explicit in-file note); the invalid v1 `linearization_radius.json` was
+replaced by the metric-domain-corrected v2 rerun.
 
 ## 2. Environment
 

@@ -7,7 +7,8 @@ number in the docs to the file and field that produces it, and re-derive it
 with the listed command.
 
 The enforcement is mechanical: `tests/test_claims_gate.py` blocks
-overclaim phrasings, and `tests/test_readme_*` requires every number printed
+overclaim phrasings, and its `test_readme_numeric_claims_traceable`
+requires every number printed
 in the README to appear verbatim under `results/**`.
 
 ## Library / methods claims
@@ -35,14 +36,14 @@ in the README to appear verbatim under `results/**`.
 | B6 | Linearization validity radius (v2: observation-side injection + nominal-geometry estimator) | radius_2x median 1.0 (11/11 crossed, per-object 0.5–1.5); radius_10x median 1.5 (per-object 1.5–2.0); small-level log-log slope +2.02–2.19 (v1: −1.9, withdrawn as estimator-collapse artifact) | `results/magnitude/linearization_radius.json` | `pytest tests/test_pradius_pconc_artifacts.py` |
 | B7 | Certificate concentration: two distinct uncertainty quantities | rel_spread_median 1.08% (within-family IQR); clean_vs_mean_ratio median 1.42, min 1.17, max 3.08 (systematic noiseless-vs-noisy calibration-source offset: +16.8% to +208.2%, median +42.2%). Reported separately; rel_spread is not the total bound accuracy | `results/certification/certificate_concentration.json` | `pytest tests/test_pradius_pconc_artifacts.py` |
 
-## Certified-allocation claims (preregistered protocols)
+## Certified-allocation claims
 
 | # | Claim | Value | Evidence | Re-derive |
 |---|---|---|---|---|
 | C1 | Certified dynamic range, P=1200 subsample | 36–89% per object (median 62.87%) | `results/certification/certified_gaps.json` (`display`) | `pytest tests/test_certified_gaps_evidence.py` |
 | C2 | Greedy is certified essentially optimal | 0.011–0.028% above the convex lower bound at every budget | `results/certification/certified_gaps.json` | `pytest tests/test_certified_gaps_evidence.py` |
 | C3 | Full-resolution confirmation (all masked pixels P = 3559–10252, all 142 lights) | dynamic range 27.3–89.4% (median 60.06%); greedy within 0.002–0.005% | `results/certification/lowrank_fullres.json` (`display`) | `pytest tests/test_m2_m3_evidence.py::test_fullres_structure` |
-| C4 | ~~Mode-tail targeted intervention is significant~~ **RETRACTED** — v1.0 was a gauge-alignment asymmetry artifact (random arm missed the gauge projection; ~0.91 energy fraction × ~28× inflation). Corrected three-arm rerun: consistent null-to-negative — targeted vs random_active48 is significantly **worse** in 5/8 informative cells and never better; no increment over the scalar arm (distinctiveness CI spans 0 in 9/10 cells; the single excluding cell is worse-directed) | see `results/mode_tail/allocation_mode_tail.json` (`erratum`, `aggregated`) | `results/mode_tail/allocation_mode_tail.json` | `pytest tests/test_m2_m3_evidence.py::test_alloc2_structure` |
+| C4 | **Superseded** — the v1.0 "targeted intervention is significant" claim was a gauge-alignment asymmetry artifact; the corrected three-arm rerun (same file, `aggregated`) finds no mode-specific advantage: targeted is never better than random and shows no increment over the scalar arm | `results/mode_tail/allocation_mode_tail.json` (`erratum`, `aggregated`) | `results/mode_tail/allocation_mode_tail.json` | `pytest tests/test_m2_m3_evidence.py::test_alloc2_structure` |
 | C5 | Allocation rank invariance | all 594 frozen orderings keep numerical rank 1200 = rank(F∞) at every budget prefix | `results/openillumination/correctness/allocation_rank_check.json` | `pytest tests/test_math_gates.py` |
 
 ## Registered negative results

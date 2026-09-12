@@ -5,9 +5,7 @@
 [![CI](https://github.com/dddsx3/mode-resolved-calibration/actions/workflows/ci.yml/badge.svg)](https://github.com/dddsx3/mode-resolved-calibration/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-中文说明 | [English](README.md)
-
-**calibinfo** 是一个分析"带标定不确定度的线性化逆问题"的 Python 库。它不把估计器的信息量压成一个标量（trace、log-行列式、E-最优性），而是追踪 Fisher 信息中**最脆弱的可辨识方向**：随着标定不确定度增大，每个脆弱方向上还剩多少可用信息（retention 谱），以及把标定预算花在哪些灯/分量上最值（凸程序 + 认证下界）。
+**calibinfo** 是一个分析"带标定不确定度的线性化逆问题"的 Python 库。它不把估计器的信息量压成一个标量（trace、对数行列式、E-最优性），而是追踪 Fisher 信息中**最脆弱的可辨识方向**：随着标定不确定度增大，每个脆弱方向上还剩多少可用信息（retention 谱），以及把标定预算花在哪些灯/分量上最有效（凸程序 + 认证下界）。
 
 典型场景：光度立体、多光照重建等依赖辐射标定的逆问题——只要问题能局部线性化成 `y = A x + B δc + ε`（δc 是标定/干扰参数），就能用这套工具。
 
@@ -86,25 +84,25 @@ spec = retention_spectrum(DeltaF, A.T @ A) # 逐模式保留率
 [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md)。摘要：
 
 - **方向性验证**：细胞内 Spearman R_A = 0.90（bootstrap 95% CI
-  [0.7, 0.95]，65/66 细胞、11/11 物体为正）。构造性说明：该统计量在
-  细胞内等价于按模式序号排序（66/66 细胞偏差恰为 0）——它验证的是
-  **方向**（理论标出的弱方向确实是经验上更脆的方向），不验证幅值；
+  [0.7, 0.95]，65/66 细胞、11/11 物体为正）——验证的是**方向**（理论标出的
+  弱方向确实是经验上更脆的方向），不验证幅值；该细胞内统计量与按模式序号
+  排序构造性等价的说明见 [docs/methods.md](docs/methods.md)；
 - **幅值有效域**：真实数据 emp/pred 中位 201.1（合成 matched MC 为
   1.0045）——线性化理论在真实光度数据上的可证伪有效域；
 - **认证动态范围**：全部 masked 像素、全部 142 灯下，重标所有 48 个
   有效灯可带来 **27.3–89.4%（中位 60.06%）** 的 tr ΔF⁻¹ 改善，逐物体
   差异大——所以按实例认证；J_A-greedy 距凸下界仅 **0.002–0.005%**；
-- **靶向干预显著**：把预算按理论敏感性花在最弱 tracked modes 上，被
-  靶向模式的对偶坐标能量在**全部 10 个（regime, budget）单元、11/11
-  物体**显著下降（配对 bootstrap CI 全排除 0）；
-- **注册的负结果**：E-opt 增益违反次模性（γ_min = 0.704）；跨物体
-  severity 分支已退役（修正管线翻转 + P_mode ≡ P_emin 标量化恒等）；
-  策略排序差异全部落在认证 epsilon 内。
+- **靶向干预无可检出增量**：预注册三臂对照发现，模式靶向臂与标量 OED
+  靶向臂统计不可区分——模式分解提供诊断洞察（哪些方向脆弱），但在简单
+  标量准则之上没有增量分配价值（诚实负结果）；
+- **负结果**：E-opt 增益违反次模性（γ_min = 0.704）；固定水平 severity
+  分支经修正管线复测后已撤回（符号翻转，且该跨物体对比是标量化恒等式的
+  产物）；策略排序差异全部落在认证 epsilon 内。
 
 ## 复现与完整性
 
 - `checksums.sha256` 钉住**每一个**提交文件的哈希（CI 强制校验）；
-- 每个实验预注册（config 先于运行提交）、带 manifest（git SHA、种子、
+- 每个认证分析在运行前提交 config、带 manifest（git SHA、种子、
   口径）；
 - 复现命令、证据文件与验收测试的对应表见
   [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md)；

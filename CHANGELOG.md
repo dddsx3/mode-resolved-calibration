@@ -103,7 +103,7 @@ its own, independent of any manuscript.
 
 ## [Unreleased]
 
-### Fixed (external audit round, 2026-09-13)
+### Fixed (2026-09-13)
 
 - **P-RADIUS metric domain (P0-1)**: v1 injected the corruption
   estimator-side, so a single extreme gain dominated the GLS denominator at

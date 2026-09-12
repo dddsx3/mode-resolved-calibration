@@ -6,20 +6,21 @@ English · [简体中文](README.zh-CN.md)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 **calibinfo** is a Python library for mode-resolved calibration-confidence
-analysis of linearized inverse problems with structured nuisance. Instead of
-compressing an estimator's information content into scalar summaries (trace,
-log-determinant, E-optimality), it tracks the *weakest identifiable modes* of
-the Fisher information — how much usable signal survives in each fragile
-direction as calibration uncertainty grows. The framework exposes which
-identifiable directions and calibration components are information-active. A
-downstream allocation stress test shows that identifying the Fisher-active
-substructure has decision value, while no additional performance advantage is
-observed for the tested within-active-set mode ordering.
+analysis of linearized inverse problems with structured nuisance. Scalar
+summaries (trace, log-determinant, E-optimality) compress an estimator's
+information content into one number. This library instead tracks the *weakest
+identifiable modes* of the Fisher information: how much usable signal
+survives in each fragile direction as calibration uncertainty grows, and
+which identifiable directions and calibration components are
+information-active. A downstream allocation stress test shows that
+identifying the Fisher-active substructure has decision value, while no
+additional performance advantage is observed for the tested
+within-active-set mode ordering.
 
 The current research direction is a **certified analysis of
-calibration-precision allocation**: the budget-allocation problem is an exact
-convex program in the per-light precision multipliers, the retention spectrum
-has an exact low-rank structure that removes the sampling bottleneck, and the
+calibration-precision allocation**. The budget-allocation problem is an exact
+convex program in the per-light precision multipliers. The retention spectrum
+has an exact low-rank structure that removes the sampling bottleneck. And the
 optimization landscape itself — not any particular policy — is certified
 (see [Research direction](#research-direction-certified-bounds-on-calibration-precision-allocation)).
 The mathematical statements are collected in
@@ -54,8 +55,9 @@ data and figures on the fly, no downloads required.
 
 ## Features
 
-- **Schur-complement delta-Fisher information** `ΔF(Λ)` with a single audited
-  implementation (SVD/lstsq paths; no raw solves on rank-deficient systems)
+- **Schur-complement delta-Fisher information** `ΔF(Λ)` with a single
+  implementation (SVD/lstsq paths; never a raw solve on a rank-deficient
+  system)
 - **Calibration-retention spectrum** `R(Λ) = F∞^{-1/2} ΔF(Λ) F∞^{-1/2} ∈ [0, I]`
   on the identifiable subspace `range(F∞)` — dimension `r = rank(F∞)` (not the
   nuisance dimension `q`) — with per-mode retention levels and continuous mode
@@ -132,22 +134,20 @@ The `results/`, `configs/`, and `experiments/` trees hold a frozen benchmark
 validity panels) whose numbers, protocols, and provenance are documented in
 `docs/REPRODUCIBILITY.md` and `docs/EXPERIMENTS.md`, guarded by
 `tests/test_reproduction.py`. This benchmark is separate from the library API
-— the examples above never touch it. Every headline number below is bound to
-a committed evidence file in [docs/claims.md](docs/claims.md).
+— the examples above never touch it.
 
 Key results (11 held-out OpenIllumination objects). Numbers use the
-**corrected pipeline** (see *Correctness & integrity* below); the original
-pipeline's outputs are kept as a reference record.
+**corrected pipeline** (see [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md)
+for the two pipeline versions); the original pipeline's outputs are kept as a
+reference record.
 
 - **Directional validation**: median within-cell Spearman $R_A$ = 0.90
   (object-cluster bootstrap 95% CI [0.7, 0.95]; 65/66 cells positive, 11/11
-  objects positive). **Important caveat**: within a cell this statistic
-  is by construction equivalent to ranking by mode index
-  (`Spearman(−j, ·)`; per-cell deviation exactly 0.0 on 66/66 cells — `results/magnitude/directional_amplitude_summary.json`). What it
-  validates is *directional*: the retention operator's bottom tracked
-  directions are the empirically more fragile directions inside a given
-  problem instance. It does **not** validate the predicted magnitudes
-  `1/ρ_j`;
+  objects positive). This validates *direction*: the retention operator's
+  bottom tracked directions are the empirically more fragile directions
+  inside a given problem instance, not the predicted magnitudes `1/ρ_j`.
+  For the by-construction rank-equivalence of the within-cell statistic see
+  [docs/methods.md](docs/methods.md);
 - **Amplitude validity envelope**: on real data the empirical/predicted
   degradation ratio has median 201.1 (5–95% [7.3, 1525.8]), against 1.0045 on
   synthetic matched Monte-Carlo — the matched-GLS variance theorem holds where
@@ -165,13 +165,6 @@ pipeline's outputs are kept as a reference record.
   measured benefit of every informed policy over full-universe random is an
   active-set effect rather than a mode-ordering effect (see
   `allocation_policy_pairwise.csv` and `allocation_random48_summary.json`).
-- **Pre-correction record (original pipeline; kept for reference)**: $R_A$ = 0.90
-  (CI [0.90, 0.95]); stratified (fixed-level) median Spearman 0.536
-  (mode-resolved) vs 0.418 (log-determinant) / 0.400 (trace). The stratified
-  severity-comparison claim is **retired** after the corrected-interface
-  rerun — it does not survive the corrected noise fit (corrected pipeline
-  stratified −0.495; the flip is isolated to the noise-fit correction) — and
-  must not be cited as a headline.
 
 ![stratified medians](docs/img/benchmark/fig1_stratified_median.png)
 
@@ -181,33 +174,17 @@ pipeline's outputs are kept as a reference record.
 
 ### Correctness & integrity
 
-Two pipeline-interface details were corrected and re-verified on the
-identical frozen protocol (same objects, pixel subsets, levels, seeds): the
-heteroscedastic noise-fit coefficient order and the normalized
-dual-coordinate mode projection. A preregistered A/B/C/D factorial
-(`experiments/openillumination_factorial.py`,
-`results/openillumination/correctness/mf0_factorial_summary.json`) validates
-the machinery and re-measures every headline under the corrected interface:
-
-- re-running with the original settings reproduces the frozen benchmark
-  bit-for-bit (max relative difference 0.0 on every pred/emp entry and on
-  the pooled Spearman);
-- the within-cell directional-validation result is unchanged under the
-  corrected interface: $R_A$ = 0.90 (bootstrap 95% CI [0.7, 0.95], 65/66
-  cells positive, 11/11 objects positive);
-- the fixed-level scalar-severity association does not survive the corrected
-  noise fit (stratified −0.495 vs +0.536; the flip is isolated to the
-  noise-fit correction), so that claim is retired — the corrected pipeline
-  is the reported one regardless of direction (decided before the rerun).
-
-All doc-facing numbers come from the corrected pipeline; see
-[docs/claims.md](docs/claims.md) for the claim→evidence bindings.
+Two pipeline-interface details (the heteroscedastic noise-fit coefficient
+order and the normalized dual-coordinate mode projection) exist in a
+`legacy` and a `corrected` version. Reported numbers use `corrected`; a
+preregistered A/B/C/D factorial re-measured every headline under it on the
+identical frozen protocol — see
+[docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md).
 
 ## Research direction: certified bounds on calibration-precision allocation
 
-The active research program repositions the project from "mode-resolved beats
-scalar summaries" (three times falsified, and explained by the results below)
-to a statement that is harder to overturn and more broadly useful:
+The active research program addresses a question that survives the negative
+results above:
 
 > **How much can calibration-precision allocation buy at all?** The
 > budget-allocation problem is reformulated as an exact convex program in the
@@ -215,8 +192,8 @@ to a statement that is harder to overturn and more broadly useful:
 > certified — with Frank–Wolfe duality-gap certificates and exact dynamic-range
 > bounds, independent of any particular selection policy.
 
-Three structural findings anchor it (foundations locked by
-`tests/test_math_foundations.py`, no raw data required):
+Three structural findings anchor it (verified by
+`tests/test_math_foundations.py`; no raw data required):
 
 1. **Exact low-rank structure** — with per-light block-diagonal nuisance, the
    retention spectrum consists of exactly `P − 3L` modes pinned at ρ = 1 plus
@@ -246,9 +223,8 @@ Three structural findings anchor it (foundations locked by
    within **0.011–0.028%** of the convex lower bound at every budget
    (essentially optimal), while seeded random subsets sit 0.25–0.64% above
    it. The earlier policy-comparison null results sit within this remaining
-   margin. Adversarial searches for submodularity (with a
-   reproducible counterexample harness) and the amplitude validity envelope
-   complete the picture as reported negatives/diagnostics. **Full-resolution
+   margin. See also the submodularity counterexample harness and the
+   amplitude validity envelope. **Full-resolution
    confirmation** (`results/certification/lowrank_fullres.json`): recomputing
    the certified table on ALL masked pixels (P = 3559–10252) with all 142
    lights via the exact low-rank route gives dynamic range 27.3–89.4%
@@ -262,10 +238,8 @@ Three structural findings anchor it (foundations locked by
    decomposition adds diagnostic insight (which directions are fragile) but
    not incremental allocation value over simple scalar criteria.
 
-All certified analyses run under preregistered protocols (the `configs/`
-files are committed before each run); the benchmark above stays untouched. The
-claim→evidence bindings for every number in this README live in
-[docs/claims.md](docs/claims.md).
+All certified analyses commit their `configs/` before running; the
+benchmark above stays untouched.
 
 ## Installation
 
