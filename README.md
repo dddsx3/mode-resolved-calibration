@@ -269,6 +269,17 @@ Three structural findings anchor it (verified by
    level — the same ceiling the level=64 table meets, docs/methods.md §7):
 
    ![certified value curve](docs/img/certified_value_curve.png)
+
+   **Channel decomposition.** The calibration-budget value is carried by
+   the **intensity** channel alone: the intensity-only rows reproduce the
+   joint dynamic range at every level (median |joint − intensity| < 0.05 pp
+   at level 0.5, `results/openillumination/channel_decomposition.json`),
+   while the direction channel contributes ≤ 2% everywhere (max 1.68% at
+   obj_19_cylinder @ level 0.2) with a non-monotone, hump-shaped profile in
+   level — the tracked fragile *directions* contribute diagnosis, not
+   magnitude, to the calibration-budget value.
+
+   ![channel decomposition](docs/img/channel_decomposition.png)
 4. **Mode-tail targeted intervention: no detectable advantage over scalar
    targeting** — the preregistered three-arm comparison (`P-ALLOC2 v1.1`,
    `results/mode_tail/allocation_mode_tail.json`) finds that the

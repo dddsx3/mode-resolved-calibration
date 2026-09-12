@@ -1,0 +1,2591 @@
+{
+ "gate": "P-CHANNEL-DECOMP",
+ "analysis_status": "channel_decomposition_v1",
+ "kappa": 10.0,
+ "levels": [
+  0.05,
+  0.1,
+  0.2,
+  0.35,
+  0.5,
+  1.0,
+  2.0,
+  4.0
+ ],
+ "channels": [
+  "joint",
+  "intensity",
+  "direction"
+ ],
+ "noise_fit_convention": "corrected",
+ "n_objects": 11,
+ "by_channel": {
+  "joint": {
+   "0.05": {
+    "median_pct": 2.242,
+    "max_pct": 41.022,
+    "min_pct": 0.919
+   },
+   "0.1": {
+    "median_pct": 7.821,
+    "max_pct": 69.147,
+    "min_pct": 2.751
+   },
+   "0.2": {
+    "median_pct": 24.494,
+    "max_pct": 83.612,
+    "min_pct": 9.041
+   },
+   "0.35": {
+    "median_pct": 47.913,
+    "max_pct": 87.775,
+    "min_pct": 22.329
+   },
+   "0.5": {
+    "median_pct": 62.867,
+    "max_pct": 88.883,
+    "min_pct": 36.002
+   },
+   "1.0": {
+    "median_pct": 81.197,
+    "max_pct": 89.713,
+    "min_pct": 65.304
+   },
+   "2.0": {
+    "median_pct": 87.611,
+    "max_pct": 89.927,
+    "min_pct": 82.19
+   },
+   "4.0": {
+    "median_pct": 89.387,
+    "max_pct": 89.982,
+    "min_pct": 87.896
+   }
+  },
+  "intensity": {
+   "0.05": {
+    "median_pct": 2.229,
+    "max_pct": 40.758,
+    "min_pct": 0.918
+   },
+   "0.1": {
+    "median_pct": 7.778,
+    "max_pct": 69.076,
+    "min_pct": 2.743
+   },
+   "0.2": {
+    "median_pct": 24.408,
+    "max_pct": 83.661,
+    "min_pct": 9.011
+   },
+   "0.35": {
+    "median_pct": 47.834,
+    "max_pct": 87.827,
+    "min_pct": 22.265
+   },
+   "0.5": {
+    "median_pct": 62.825,
+    "max_pct": 88.922,
+    "min_pct": 35.924
+   },
+   "1.0": {
+    "median_pct": 81.21,
+    "max_pct": 89.728,
+    "min_pct": 65.262
+   },
+   "2.0": {
+    "median_pct": 87.628,
+    "max_pct": 89.932,
+    "min_pct": 82.196
+   },
+   "4.0": {
+    "median_pct": 89.395,
+    "max_pct": 89.983,
+    "min_pct": 87.912
+   }
+  },
+  "direction": {
+   "0.05": {
+    "median_pct": 0.006,
+    "max_pct": 1.152,
+    "min_pct": 0.001
+   },
+   "0.1": {
+    "median_pct": 0.023,
+    "max_pct": 1.611,
+    "min_pct": 0.004
+   },
+   "0.2": {
+    "median_pct": 0.07,
+    "max_pct": 1.68,
+    "min_pct": 0.015
+   },
+   "0.35": {
+    "median_pct": 0.127,
+    "max_pct": 1.333,
+    "min_pct": 0.041
+   },
+   "0.5": {
+    "median_pct": 0.153,
+    "max_pct": 0.969,
+    "min_pct": 0.073
+   },
+   "1.0": {
+    "median_pct": 0.16,
+    "max_pct": 0.389,
+    "min_pct": 0.04
+   },
+   "2.0": {
+    "median_pct": 0.094,
+    "max_pct": 0.293,
+    "min_pct": 0.011
+   },
+   "4.0": {
+    "median_pct": 0.035,
+    "max_pct": 0.225,
+    "min_pct": 0.003
+   }
+  }
+ },
+ "display": {
+  "joint_vs_intensity_note": "intensity channel alone reproduces the joint dynamic range (median |joint-intensity| across level per object within the closed-channel approximation)",
+  "direction_max_pct": 1.68,
+  "direction_peak_per_object": {
+   "obj_03_pumpkin": {
+    "level": 1.0,
+    "D_pct": 0.151
+   },
+   "obj_04_dolphin": {
+    "level": 0.1,
+    "D_pct": 1.611
+   },
+   "obj_07_pumpkin2": {
+    "level": 0.1,
+    "D_pct": 0.666
+   },
+   "obj_09_ball": {
+    "level": 0.5,
+    "D_pct": 0.153
+   },
+   "obj_10_pumpkin3": {
+    "level": 0.35,
+    "D_pct": 0.43
+   },
+   "obj_11_pine": {
+    "level": 2.0,
+    "D_pct": 0.269
+   },
+   "obj_13_mushroom": {
+    "level": 0.5,
+    "D_pct": 0.184
+   },
+   "obj_16_friends_cup": {
+    "level": 1.0,
+    "D_pct": 0.133
+   },
+   "obj_17_pumpkin5": {
+    "level": 1.0,
+    "D_pct": 0.185
+   },
+   "obj_18_fabric_hat": {
+    "level": 2.0,
+    "D_pct": 0.293
+   },
+   "obj_19_cylinder": {
+    "level": 0.2,
+    "D_pct": 1.68
+   }
+  },
+  "direction_claim": "the direction channel contributes <= 2% at every level/object (and its profile is non-monotone, hump-shaped)"
+ },
+ "rows": [
+  {
+   "object": "obj_03_pumpkin",
+   "channel": "joint",
+   "level": 0.05,
+   "J_A_1": 0.43084445775402314,
+   "J_A_kappa": 0.42407007117206197,
+   "D": 0.015723508704918253,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "channel": "joint",
+   "level": 0.1,
+   "J_A_1": 0.451056598573027,
+   "J_A_kappa": 0.42652841454295304,
+   "D": 0.0543793929801091,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "channel": "joint",
+   "level": 0.2,
+   "J_A_1": 0.5291430802028219,
+   "J_A_kappa": 0.43498262212375005,
+   "D": 0.17794895483274556,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "channel": "joint",
+   "level": 0.35,
+   "J_A_1": 0.7404623301058214,
+   "J_A_kappa": 0.4569982025721803,
+   "D": 0.3828204569071468,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "channel": "joint",
+   "level": 0.5,
+   "J_A_1": 1.0643753084474805,
+   "J_A_kappa": 0.490315767807156,
+   "D": 0.5393394003828024,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "channel": "joint",
+   "level": 1.0,
+   "J_A_1": 2.9555819263279846,
+   "J_A_kappa": 0.683044584561627,
+   "D": 0.7688967514393209,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "channel": "joint",
+   "level": 2.0,
+   "J_A_1": 10.494339821813174,
+   "J_A_kappa": 1.4437777730326542,
+   "D": 0.8624231921638684,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "channel": "joint",
+   "level": 4.0,
+   "J_A_1": 40.62486668327472,
+   "J_A_kappa": 4.464501971356998,
+   "D": 0.8901042062202008,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "channel": "intensity",
+   "level": 0.05,
+   "J_A_1": 0.4308168457734677,
+   "J_A_kappa": 0.42406800178753573,
+   "D": 0.015665227699755806,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "channel": "intensity",
+   "level": 0.1,
+   "J_A_1": 0.45093460765830673,
+   "J_A_kappa": 0.42651844950070705,
+   "D": 0.05414567376940137,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "channel": "intensity",
+   "level": 0.2,
+   "J_A_1": 0.5286514221358498,
+   "J_A_kappa": 0.4349365498064474,
+   "D": 0.17727157897500195,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "channel": "intensity",
+   "level": 0.35,
+   "J_A_1": 0.7391334313665081,
+   "J_A_kappa": 0.4568475230177822,
+   "D": 0.3819146805832289,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "channel": "intensity",
+   "level": 0.5,
+   "J_A_1": 1.062082864934487,
+   "J_A_kappa": 0.490004715734901,
+   "D": 0.538637961393788,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "channel": "intensity",
+   "level": 1.0,
+   "J_A_1": 2.9500987617710934,
+   "J_A_kappa": 0.6819215622767341,
+   "D": 0.7688478870221477,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "channel": "intensity",
+   "level": 2.0,
+   "J_A_1": 10.483397192978945,
+   "J_A_kappa": 1.4406180686868528,
+   "D": 0.8625809895239227,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "channel": "intensity",
+   "level": 4.0,
+   "J_A_1": 40.60650120235375,
+   "J_A_kappa": 4.45745020370156,
+   "D": 0.890228163675348,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "channel": "direction",
+   "level": 0.05,
+   "J_A_1": 0.4227963976804363,
+   "J_A_kappa": 0.4227810434961416,
+   "D": 3.6315787880290286e-05,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "channel": "direction",
+   "level": 0.1,
+   "J_A_1": 0.42284447255999924,
+   "J_A_kappa": 0.4227862128381866,
+   "D": 0.00013778049754297757,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "channel": "direction",
+   "level": 0.2,
+   "J_A_1": 0.42300035981705264,
+   "J_A_kappa": 0.4228063835344949,
+   "D": 0.0004585723819280773,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "channel": "direction",
+   "level": 0.35,
+   "J_A_1": 0.42326626325864325,
+   "J_A_kappa": 0.4228580456259429,
+   "D": 0.0009644464209302633,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "channel": "direction",
+   "level": 0.5,
+   "J_A_1": 0.4234835873576911,
+   "J_A_kappa": 0.42292864833128396,
+   "D": 0.001310414483521429,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "channel": "direction",
+   "level": 1.0,
+   "J_A_1": 0.42384771557795675,
+   "J_A_kappa": 0.42320893661792225,
+   "D": 0.0015070954414923927,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "channel": "direction",
+   "level": 2.0,
+   "J_A_1": 0.42402297860606797,
+   "J_A_kappa": 0.4236245025337261,
+   "D": 0.0009397511277616142,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_03_pumpkin",
+   "channel": "direction",
+   "level": 4.0,
+   "J_A_1": 0.4240794212927492,
+   "J_A_kappa": 0.42392721778423004,
+   "D": 0.0003589033112128305,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_04_dolphin",
+   "channel": "joint",
+   "level": 0.05,
+   "J_A_1": 0.0031015185060681407,
+   "J_A_kappa": 0.00220672557901762,
+   "D": 0.28850155989714477,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_04_dolphin",
+   "channel": "joint",
+   "level": 0.1,
+   "J_A_1": 0.006021499797966164,
+   "J_A_kappa": 0.0025090177571360428,
+   "D": 0.583323450748351,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_04_dolphin",
+   "channel": "joint",
+   "level": 0.2,
+   "J_A_1": 0.017616703663353835,
+   "J_A_kappa": 0.003688873703179125,
+   "D": 0.7906036354092338,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_04_dolphin",
+   "channel": "joint",
+   "level": 0.35,
+   "J_A_1": 0.04945180604614891,
+   "J_A_kappa": 0.006893308265320599,
+   "D": 0.8606055305869376,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_04_dolphin",
+   "channel": "joint",
+   "level": 0.5,
+   "J_A_1": 0.09863879527626672,
+   "J_A_kappa": 0.011823869307163917,
+   "D": 0.8801296257314607,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_04_dolphin",
+   "channel": "joint",
+   "level": 1.0,
+   "J_A_1": 0.3879549309953841,
+   "J_A_kappa": 0.04077095758058325,
+   "D": 0.8949080052263382,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_04_dolphin",
+   "channel": "joint",
+   "level": 2.0,
+   "J_A_1": 1.54520665037036,
+   "J_A_kappa": 0.15650295877315495,
+   "D": 0.8987171335719764,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_04_dolphin",
+   "channel": "joint",
+   "level": 4.0,
+   "J_A_1": 6.174209701329922,
+   "J_A_kappa": 0.6194055710764746,
+   "D": 0.899678565996381,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_04_dolphin",
+   "channel": "intensity",
+   "level": 0.05,
+   "J_A_1": 0.003075206856565437,
+   "J_A_kappa": 0.002202669732605717,
+   "D": 0.28373282340239653,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_04_dolphin",
+   "channel": "intensity",
+   "level": 0.1,
+   "J_A_1": 0.005969080016087845,
+   "J_A_kappa": 0.0024953755851207316,
+   "D": 0.5819497178132638,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_04_dolphin",
+   "channel": "intensity",
+   "level": 0.2,
+   "J_A_1": 0.017541795347630465,
+   "J_A_kappa": 0.0036541736304914483,
+   "D": 0.7916875919439426,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_04_dolphin",
+   "channel": "intensity",
+   "level": 0.35,
+   "J_A_1": 0.04936623762923654,
+   "J_A_kappa": 0.0068370523574241586,
+   "D": 0.8615034751326685,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_04_dolphin",
+   "channel": "intensity",
+   "level": 0.5,
+   "J_A_1": 0.09854940416437341,
+   "J_A_kappa": 0.011755483590348486,
+   "D": 0.8807148182170521,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_04_dolphin",
+   "channel": "intensity",
+   "level": 1.0,
+   "J_A_1": 0.38786208662651644,
+   "J_A_kappa": 0.04068683632478205,
+   "D": 0.8950997333132986,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_04_dolphin",
+   "channel": "intensity",
+   "level": 2.0,
+   "J_A_1": 1.545112784364405,
+   "J_A_kappa": 0.15641192743918625,
+   "D": 0.8987698962677811,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_04_dolphin",
+   "channel": "intensity",
+   "level": 4.0,
+   "J_A_1": 6.1741155718178655,
+   "J_A_kappa": 0.6193122109535525,
+   "D": 0.8996921577269397,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_04_dolphin",
+   "channel": "direction",
+   "level": 0.05,
+   "J_A_1": 0.002111077967179782,
+   "J_A_kappa": 0.002086756641956151,
+   "D": 0.01152080861140439,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_04_dolphin",
+   "channel": "direction",
+   "level": 0.1,
+   "J_A_1": 0.002132645848589006,
+   "J_A_kappa": 0.0020982923570866444,
+   "D": 0.016108390206977234,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_04_dolphin",
+   "channel": "direction",
+   "level": 0.2,
+   "J_A_1": 0.0021473210718613222,
+   "J_A_kappa": 0.002118560783449305,
+   "D": 0.013393566890808594,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_04_dolphin",
+   "channel": "direction",
+   "level": 0.35,
+   "J_A_1": 0.0021526861777781915,
+   "J_A_kappa": 0.002135399912256494,
+   "D": 0.00803009082333537,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_04_dolphin",
+   "channel": "direction",
+   "level": 0.5,
+   "J_A_1": 0.0021542564706603447,
+   "J_A_kappa": 0.0021434609729982274,
+   "D": 0.005011240680552847,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_04_dolphin",
+   "channel": "direction",
+   "level": 1.0,
+   "J_A_1": 0.002155474723904832,
+   "J_A_kappa": 0.0021520302172768437,
+   "D": 0.00159802691712768,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_04_dolphin",
+   "channel": "direction",
+   "level": 2.0,
+   "J_A_1": 0.002155794375583849,
+   "J_A_kappa": 0.002154854952511314,
+   "D": 0.0004357665476702205,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_04_dolphin",
+   "channel": "direction",
+   "level": 4.0,
+   "J_A_1": 0.0021558755385368087,
+   "J_A_kappa": 0.0021556336074215554,
+   "D": 0.00011221942590315654,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "channel": "joint",
+   "level": 0.05,
+   "J_A_1": 0.007464191297827858,
+   "J_A_kappa": 0.005212543387427041,
+   "D": 0.3016599951097268,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "channel": "joint",
+   "level": 0.1,
+   "J_A_1": 0.014788667316709352,
+   "J_A_kappa": 0.005974198735584971,
+   "D": 0.5960285935410238,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "channel": "joint",
+   "level": 0.2,
+   "J_A_1": 0.0438530392181479,
+   "J_A_kappa": 0.008938806806038079,
+   "D": 0.796164485622723,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "channel": "joint",
+   "level": 0.35,
+   "J_A_1": 0.12364315378720399,
+   "J_A_kappa": 0.01697419432082722,
+   "D": 0.8627162620743187,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "channel": "joint",
+   "level": 0.5,
+   "J_A_1": 0.24690988464283556,
+   "J_A_kappa": 0.029333186859203827,
+   "D": 0.8811988150995438,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "channel": "joint",
+   "level": 1.0,
+   "J_A_1": 0.971828103057478,
+   "J_A_kappa": 0.10188672550167843,
+   "D": 0.8951597250777873,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "channel": "joint",
+   "level": 2.0,
+   "J_A_1": 3.8708974356278443,
+   "J_A_kappa": 0.3919100553544109,
+   "D": 0.8987547301699962,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "channel": "joint",
+   "level": 4.0,
+   "J_A_1": 15.466283633941153,
+   "J_A_kappa": 1.5516829064432116,
+   "D": 0.8996731895542117,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "channel": "intensity",
+   "level": 0.05,
+   "J_A_1": 0.00742005223042734,
+   "J_A_kappa": 0.005204439541263329,
+   "D": 0.29859799100584067,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "channel": "intensity",
+   "level": 0.1,
+   "J_A_1": 0.014707573673097718,
+   "J_A_kappa": 0.005949184305644046,
+   "D": 0.5955019884397407,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "channel": "intensity",
+   "level": 0.2,
+   "J_A_1": 0.04372280796726473,
+   "J_A_kappa": 0.00888294050340659,
+   "D": 0.7968350863911292,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "channel": "intensity",
+   "level": 0.35,
+   "J_A_1": 0.12344702228214173,
+   "J_A_kappa": 0.016886974143826002,
+   "D": 0.8632046862561793,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "channel": "intensity",
+   "level": 0.5,
+   "J_A_1": 0.2466453349778979,
+   "J_A_kappa": 0.029222047137316395,
+   "D": 0.8815219953787693,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "channel": "intensity",
+   "level": 1.0,
+   "J_A_1": 0.9713281170783333,
+   "J_A_kappa": 0.10170546427812231,
+   "D": 0.8952923708375259,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "channel": "intensity",
+   "level": 2.0,
+   "J_A_1": 3.8700520452726206,
+   "J_A_kappa": 0.3915824246386958,
+   "D": 0.8988172716909518,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "channel": "intensity",
+   "level": 4.0,
+   "J_A_1": 15.464945909122369,
+   "J_A_kappa": 1.5510730137970965,
+   "D": 0.8997039483415097,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "channel": "direction",
+   "level": 0.05,
+   "J_A_1": 0.00495012374955105,
+   "J_A_kappa": 0.004919136570037141,
+   "D": 0.006259879769009788,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "channel": "direction",
+   "level": 0.1,
+   "J_A_1": 0.004968895192903715,
+   "J_A_kappa": 0.004935811667431619,
+   "D": 0.006658125033376447,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "channel": "direction",
+   "level": 0.2,
+   "J_A_1": 0.0049790137869607405,
+   "J_A_kappa": 0.0049572582943737085,
+   "D": 0.004369438109210744,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "channel": "direction",
+   "level": 0.35,
+   "J_A_1": 0.004982276152361381,
+   "J_A_kappa": 0.004970937632281135,
+   "D": 0.002275771100096869,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "channel": "direction",
+   "level": 0.5,
+   "J_A_1": 0.0049831905173288405,
+   "J_A_kappa": 0.00497652868441437,
+   "D": 0.0013368609711598364,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "channel": "direction",
+   "level": 1.0,
+   "J_A_1": 0.004983886643346787,
+   "J_A_kappa": 0.004981888777540099,
+   "D": 0.0004008650175371959,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "channel": "direction",
+   "level": 2.0,
+   "J_A_1": 0.0049840697279878825,
+   "J_A_kappa": 0.004983533962385997,
+   "D": 0.00010749560722968183,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_07_pumpkin2",
+   "channel": "direction",
+   "level": 4.0,
+   "J_A_1": 0.004984119621099999,
+   "J_A_kappa": 0.004983976955619632,
+   "D": 2.862400809219689e-05,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_09_ball",
+   "channel": "joint",
+   "level": 0.05,
+   "J_A_1": 0.17900006274236635,
+   "J_A_kappa": 0.17491616401824506,
+   "D": 0.022815068674021766,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_09_ball",
+   "channel": "joint",
+   "level": 0.1,
+   "J_A_1": 0.19150545976458697,
+   "J_A_kappa": 0.1763682647732165,
+   "D": 0.07904315109333314,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_09_ball",
+   "channel": "joint",
+   "level": 0.2,
+   "J_A_1": 0.24053899642495274,
+   "J_A_kappa": 0.18154582191344837,
+   "D": 0.24525409762366754,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_09_ball",
+   "channel": "joint",
+   "level": 0.35,
+   "J_A_1": 0.37476938311320207,
+   "J_A_kappa": 0.19520588306257367,
+   "D": 0.4791306551218188,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_09_ball",
+   "channel": "joint",
+   "level": 0.5,
+   "J_A_1": 0.5818821294300074,
+   "J_A_kappa": 0.2160720779034912,
+   "D": 0.6286669293055136,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_09_ball",
+   "channel": "joint",
+   "level": 1.0,
+   "J_A_1": 1.7985590057482193,
+   "J_A_kappa": 0.3381893666643086,
+   "D": 0.8119664878475209,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_09_ball",
+   "channel": "joint",
+   "level": 2.0,
+   "J_A_1": 6.662026098305211,
+   "J_A_kappa": 0.8253519522748165,
+   "D": 0.876110969831718,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_09_ball",
+   "channel": "joint",
+   "level": 4.0,
+   "J_A_1": 26.113088156438106,
+   "J_A_kappa": 2.7714080525785483,
+   "D": 0.8938690040804207,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_09_ball",
+   "channel": "intensity",
+   "level": 0.05,
+   "J_A_1": 0.1789811314347944,
+   "J_A_kappa": 0.17491469602278625,
+   "D": 0.02271991119627949,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_09_ball",
+   "channel": "intensity",
+   "level": 0.1,
+   "J_A_1": 0.19142286225760693,
+   "J_A_kappa": 0.1763613438843239,
+   "D": 0.07868192020352319,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_09_ball",
+   "channel": "intensity",
+   "level": 0.2,
+   "J_A_1": 0.24022501027504922,
+   "J_A_kappa": 0.18151435158992413,
+   "D": 0.2443986103607757,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_09_ball",
+   "channel": "intensity",
+   "level": 0.35,
+   "J_A_1": 0.3740060556333822,
+   "J_A_kappa": 0.19510427239988654,
+   "D": 0.47833926894719414,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_09_ball",
+   "channel": "intensity",
+   "level": 0.5,
+   "J_A_1": 0.5806855541903878,
+   "J_A_kappa": 0.21586766535941243,
+   "D": 0.6282537703897547,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_09_ball",
+   "channel": "intensity",
+   "level": 1.0,
+   "J_A_1": 1.796365959533535,
+   "J_A_kappa": 0.3375292228151817,
+   "D": 0.8121044205809664,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_09_ball",
+   "channel": "intensity",
+   "level": 2.0,
+   "J_A_1": 6.659043079735698,
+   "J_A_kappa": 0.8238251413713178,
+   "D": 0.8762847557063685,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_09_ball",
+   "channel": "intensity",
+   "level": 4.0,
+   "J_A_1": 26.109740184626308,
+   "J_A_kappa": 2.7689022818262368,
+   "D": 0.8939513659558898,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_09_ball",
+   "channel": "direction",
+   "level": 0.05,
+   "J_A_1": 0.17422591297423662,
+   "J_A_kappa": 0.1742148705674941,
+   "D": 6.337981850122558e-05,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_09_ball",
+   "channel": "direction",
+   "level": 0.1,
+   "J_A_1": 0.17425905316585596,
+   "J_A_kappa": 0.1742186148796967,
+   "D": 0.0002320584521986265,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_09_ball",
+   "channel": "direction",
+   "level": 0.2,
+   "J_A_1": 0.1743546572885885,
+   "J_A_kappa": 0.1742329699140126,
+   "D": 0.0006979301641165378,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_09_ball",
+   "channel": "direction",
+   "level": 0.35,
+   "J_A_1": 0.17448892376853814,
+   "J_A_kappa": 0.17426805094636072,
+   "D": 0.0012658271792105901,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_09_ball",
+   "channel": "direction",
+   "level": 0.5,
+   "J_A_1": 0.17457990419451025,
+   "J_A_kappa": 0.17431264469710867,
+   "D": 0.00153087205904188,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_09_ball",
+   "channel": "direction",
+   "level": 1.0,
+   "J_A_1": 0.17470462977377088,
+   "J_A_kappa": 0.17446238647495446,
+   "D": 0.0013865877460151209,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_09_ball",
+   "channel": "direction",
+   "level": 2.0,
+   "J_A_1": 0.1747545639211993,
+   "J_A_kappa": 0.17463186549292942,
+   "D": 0.0007021185914504849,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_09_ball",
+   "channel": "direction",
+   "level": 4.0,
+   "J_A_1": 0.17476934687703463,
+   "J_A_kappa": 0.17472802201556276,
+   "D": 0.0002364537157705975,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "channel": "joint",
+   "level": 0.05,
+   "J_A_1": 0.36649014387096557,
+   "J_A_kappa": 0.3576780938192709,
+   "D": 0.024044439390973702,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "channel": "joint",
+   "level": 0.1,
+   "J_A_1": 0.39311007835398787,
+   "J_A_kappa": 0.360875050733644,
+   "D": 0.08200000304066703,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "channel": "joint",
+   "level": 0.2,
+   "J_A_1": 0.4962992286546805,
+   "J_A_kappa": 0.37191586549522176,
+   "D": 0.2506217136315626,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "channel": "joint",
+   "level": 0.35,
+   "J_A_1": 0.7762126136939237,
+   "J_A_kappa": 0.40095809825719786,
+   "D": 0.4834429495430697,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "channel": "joint",
+   "level": 0.5,
+   "J_A_1": 1.2071548798458545,
+   "J_A_kappa": 0.4449820292058835,
+   "D": 0.6313795051197534,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "channel": "joint",
+   "level": 1.0,
+   "J_A_1": 3.7382288290696204,
+   "J_A_kappa": 0.7000425963607344,
+   "D": 0.8127341507515572,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "channel": "joint",
+   "level": 2.0,
+   "J_A_1": 13.857576923786667,
+   "J_A_kappa": 1.713613320300556,
+   "D": 0.8763410566129262,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "channel": "joint",
+   "level": 4.0,
+   "J_A_1": 54.33063939788505,
+   "J_A_kappa": 5.762317798846897,
+   "D": 0.893939812549469,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "channel": "intensity",
+   "level": 0.05,
+   "J_A_1": 0.3661721708948882,
+   "J_A_kappa": 0.35764313652793406,
+   "D": 0.023292415548975275,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "channel": "intensity",
+   "level": 0.1,
+   "J_A_1": 0.39210583989431563,
+   "J_A_kappa": 0.3607407488710893,
+   "D": 0.07999138965050906,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "channel": "intensity",
+   "level": 0.2,
+   "J_A_1": 0.49396621256888207,
+   "J_A_kappa": 0.37143310937929713,
+   "D": 0.24805968520063115,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "channel": "intensity",
+   "level": 0.35,
+   "J_A_1": 0.7725792287387795,
+   "J_A_kappa": 0.39979746457223175,
+   "D": 0.48251590296454994,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "channel": "intensity",
+   "level": 0.5,
+   "J_A_1": 1.2027225973713784,
+   "J_A_kappa": 0.443160109794557,
+   "D": 0.6315358913492524,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "channel": "intensity",
+   "level": 1.0,
+   "J_A_1": 3.7323461946624312,
+   "J_A_kappa": 0.6966438737962659,
+   "D": 0.8133496097461363,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "channel": "intensity",
+   "level": 2.0,
+   "J_A_1": 13.850457621775973,
+   "J_A_kappa": 1.7086764811724062,
+   "D": 0.8766339331282463,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "channel": "intensity",
+   "level": 4.0,
+   "J_A_1": 54.322799940334846,
+   "J_A_kappa": 5.755976514001826,
+   "D": 0.8940412401362986,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "channel": "direction",
+   "level": 0.05,
+   "J_A_1": 0.3559174185576203,
+   "J_A_kappa": 0.35559513523401165,
+   "D": 0.0009055002840679992,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "channel": "direction",
+   "level": 0.1,
+   "J_A_1": 0.35656430423445973,
+   "J_A_kappa": 0.35571452437499607,
+   "D": 0.0023832443387403327,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "channel": "direction",
+   "level": 0.2,
+   "J_A_1": 0.35754120655843646,
+   "J_A_kappa": 0.3560858244521439,
+   "D": 0.004070529716844605,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "channel": "direction",
+   "level": 0.35,
+   "J_A_1": 0.3582363710775621,
+   "J_A_kappa": 0.35669512759116234,
+   "D": 0.004302308785017485,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "channel": "direction",
+   "level": 0.5,
+   "J_A_1": 0.35853134485352967,
+   "J_A_kappa": 0.3571993028074281,
+   "D": 0.0037152736161624087,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "channel": "direction",
+   "level": 1.0,
+   "J_A_1": 0.3588153165051653,
+   "J_A_kappa": 0.35812981432880336,
+   "D": 0.00191045962875462,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "channel": "direction",
+   "level": 2.0,
+   "J_A_1": 0.35890153278962217,
+   "J_A_kappa": 0.3586632346839971,
+   "D": 0.000663965137660121,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_10_pumpkin3",
+   "channel": "direction",
+   "level": 4.0,
+   "J_A_1": 0.35892454432562965,
+   "J_A_kappa": 0.3588573935201558,
+   "D": 0.00018708892031899717,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_11_pine",
+   "channel": "joint",
+   "level": 0.05,
+   "J_A_1": 0.19627063238115303,
+   "J_A_kappa": 0.1944664033238399,
+   "D": 0.009192557416380795,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_11_pine",
+   "channel": "joint",
+   "level": 0.1,
+   "J_A_1": 0.20070675121461098,
+   "J_A_kappa": 0.19518464240995376,
+   "D": 0.027513318666358998,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_11_pine",
+   "channel": "joint",
+   "level": 0.2,
+   "J_A_1": 0.21682977072892107,
+   "J_A_kappa": 0.19722614050554407,
+   "D": 0.09041023360157173,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_11_pine",
+   "channel": "joint",
+   "level": 0.35,
+   "J_A_1": 0.2600160125717257,
+   "J_A_kappa": 0.20195751250484958,
+   "D": 0.22328817172696472,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_11_pine",
+   "channel": "joint",
+   "level": 0.5,
+   "J_A_1": 0.32635968569253565,
+   "J_A_kappa": 0.2088635513871739,
+   "D": 0.3600203684962951,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_11_pine",
+   "channel": "joint",
+   "level": 1.0,
+   "J_A_1": 0.7155963706113919,
+   "J_A_kappa": 0.24827988163804524,
+   "D": 0.6530448003447534,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_11_pine",
+   "channel": "joint",
+   "level": 2.0,
+   "J_A_1": 2.2699808924294196,
+   "J_A_kappa": 0.4042825412662416,
+   "D": 0.8219004650591736,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_11_pine",
+   "channel": "joint",
+   "level": 4.0,
+   "J_A_1": 8.481982539103772,
+   "J_A_kappa": 1.026659083114895,
+   "D": 0.8789600098347556,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_11_pine",
+   "channel": "intensity",
+   "level": 0.05,
+   "J_A_1": 0.1962669453681728,
+   "J_A_kappa": 0.19446615139810647,
+   "D": 0.009175227987006464,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_11_pine",
+   "channel": "intensity",
+   "level": 0.1,
+   "J_A_1": 0.20068885383339435,
+   "J_A_kappa": 0.19518338328767376,
+   "D": 0.027432866552175653,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_11_pine",
+   "channel": "intensity",
+   "level": 0.2,
+   "J_A_1": 0.21675047261203784,
+   "J_A_kappa": 0.19721978584586414,
+   "D": 0.09010677822664645,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_11_pine",
+   "channel": "intensity",
+   "level": 0.35,
+   "J_A_1": 0.25977315956181285,
+   "J_A_kappa": 0.2019351166197184,
+   "D": 0.22264826373770116,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_11_pine",
+   "channel": "intensity",
+   "level": 0.5,
+   "J_A_1": 0.3258882974826528,
+   "J_A_kappa": 0.20881512138233652,
+   "D": 0.35924326526805755,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_11_pine",
+   "channel": "intensity",
+   "level": 1.0,
+   "J_A_1": 0.714147189832557,
+   "J_A_kappa": 0.24808035578484064,
+   "D": 0.6526201330526736,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_11_pine",
+   "channel": "intensity",
+   "level": 2.0,
+   "J_A_1": 2.2667328942035576,
+   "J_A_kappa": 0.4035729863368114,
+   "D": 0.8219582962911863,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_11_pine",
+   "channel": "intensity",
+   "level": 4.0,
+   "J_A_1": 8.476944285671676,
+   "J_A_kappa": 1.0246745889824684,
+   "D": 0.8791221748720887,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_11_pine",
+   "channel": "direction",
+   "level": 0.05,
+   "J_A_1": 0.19410917830981272,
+   "J_A_kappa": 0.19410732818030466,
+   "D": 9.531386017799098e-06,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_11_pine",
+   "channel": "direction",
+   "level": 0.1,
+   "J_A_1": 0.1941152747428518,
+   "J_A_kappa": 0.19410794599403403,
+   "D": 3.775462197652904e-05,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_11_pine",
+   "channel": "direction",
+   "level": 0.2,
+   "J_A_1": 0.19413864387664478,
+   "J_A_kappa": 0.1941104062338858,
+   "D": 0.00014545091175620643,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_11_pine",
+   "channel": "direction",
+   "level": 0.35,
+   "J_A_1": 0.19419590694730565,
+   "J_A_kappa": 0.19411708291335156,
+   "D": 0.000405899563967037,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_11_pine",
+   "channel": "direction",
+   "level": 0.5,
+   "J_A_1": 0.1942695161916094,
+   "J_A_kappa": 0.19412715506995487,
+   "D": 0.0007328021629194542,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_11_pine",
+   "channel": "direction",
+   "level": 1.0,
+   "J_A_1": 0.19453010277157784,
+   "J_A_kappa": 0.194181182904492,
+   "D": 0.0017936548745648953,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_11_pine",
+   "channel": "direction",
+   "level": 2.0,
+   "J_A_1": 0.19486532931819453,
+   "J_A_kappa": 0.19434020979519198,
+   "D": 0.00269478169790319,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_11_pine",
+   "channel": "direction",
+   "level": 4.0,
+   "J_A_1": 0.19508534814907752,
+   "J_A_kappa": 0.19464571697053312,
+   "D": 0.002253532531866239,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_13_mushroom",
+   "channel": "joint",
+   "level": 0.05,
+   "J_A_1": 0.2104861243880198,
+   "J_A_kappa": 0.2057672495354949,
+   "D": 0.022418935529573934,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_13_mushroom",
+   "channel": "joint",
+   "level": 0.1,
+   "J_A_1": 0.22505372487665193,
+   "J_A_kappa": 0.20745174804115407,
+   "D": 0.07821233283361649,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_13_mushroom",
+   "channel": "joint",
+   "level": 0.2,
+   "J_A_1": 0.2826726711103719,
+   "J_A_kappa": 0.21343412990780153,
+   "D": 0.2449424662475971,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_13_mushroom",
+   "channel": "joint",
+   "level": 0.35,
+   "J_A_1": 0.4406580528289291,
+   "J_A_kappa": 0.22938891644874396,
+   "D": 0.47944008971102,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_13_mushroom",
+   "channel": "joint",
+   "level": 0.5,
+   "J_A_1": 0.6844872757690991,
+   "J_A_kappa": 0.25389472487986237,
+   "D": 0.6290731268969422,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_13_mushroom",
+   "channel": "joint",
+   "level": 1.0,
+   "J_A_1": 2.1173223682312905,
+   "J_A_kappa": 0.3975989991789698,
+   "D": 0.8122161248827193,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_13_mushroom",
+   "channel": "joint",
+   "level": 2.0,
+   "J_A_1": 7.846227321290418,
+   "J_A_kappa": 0.971166249505317,
+   "D": 0.8762250684644202,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_13_mushroom",
+   "channel": "joint",
+   "level": 4.0,
+   "J_A_1": 30.759999966693822,
+   "J_A_kappa": 3.2632092652700746,
+   "D": 0.8939138729257673,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_13_mushroom",
+   "channel": "intensity",
+   "level": 0.05,
+   "J_A_1": 0.21045639112345418,
+   "J_A_kappa": 0.2057647359153179,
+   "D": 0.022292766606380413,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_13_mushroom",
+   "channel": "intensity",
+   "level": 0.1,
+   "J_A_1": 0.2249360905408648,
+   "J_A_kappa": 0.20744045216573476,
+   "D": 0.07778048570623469,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_13_mushroom",
+   "channel": "intensity",
+   "level": 0.2,
+   "J_A_1": 0.28228579428785705,
+   "J_A_kappa": 0.2133860170802816,
+   "D": 0.24407808895022132,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_13_mushroom",
+   "channel": "intensity",
+   "level": 0.35,
+   "J_A_1": 0.4398339677103533,
+   "J_A_kappa": 0.22924689740710333,
+   "D": 0.4787876466192562,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_13_mushroom",
+   "channel": "intensity",
+   "level": 0.5,
+   "J_A_1": 0.6832948461931112,
+   "J_A_kappa": 0.25362916995641743,
+   "D": 0.6288144548879894,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_13_mushroom",
+   "channel": "intensity",
+   "level": 1.0,
+   "J_A_1": 2.1153942010328826,
+   "J_A_kappa": 0.39686909163688305,
+   "D": 0.8123900068161745,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_13_mushroom",
+   "channel": "intensity",
+   "level": 2.0,
+   "J_A_1": 7.843779121987692,
+   "J_A_kappa": 0.9697156998489754,
+   "D": 0.8763713657960273,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_13_mushroom",
+   "channel": "intensity",
+   "level": 4.0,
+   "J_A_1": 30.757315653910382,
+   "J_A_kappa": 3.261071424906746,
+   "D": 0.8939741210968732,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_13_mushroom",
+   "channel": "direction",
+   "level": 0.05,
+   "J_A_1": 0.20490902115711734,
+   "J_A_kappa": 0.20488621485865105,
+   "D": 0.00011129963111192874,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_13_mushroom",
+   "channel": "direction",
+   "level": 0.1,
+   "J_A_1": 0.20497270914789661,
+   "J_A_kappa": 0.20489405285062415,
+   "D": 0.00038374034084563436,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_13_mushroom",
+   "channel": "direction",
+   "level": 0.2,
+   "J_A_1": 0.2051313484502005,
+   "J_A_kappa": 0.20492313632947073,
+   "D": 0.001015018534723473,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_13_mushroom",
+   "channel": "direction",
+   "level": 0.35,
+   "J_A_1": 0.20532279861126804,
+   "J_A_kappa": 0.20498900193364206,
+   "D": 0.0016257165784007669,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_13_mushroom",
+   "channel": "direction",
+   "level": 0.5,
+   "J_A_1": 0.20544350506608483,
+   "J_A_kappa": 0.20506507139504923,
+   "D": 0.0018420327812936658,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_13_mushroom",
+   "channel": "direction",
+   "level": 1.0,
+   "J_A_1": 0.20560697033813746,
+   "J_A_kappa": 0.20528663656104756,
+   "D": 0.0015579908432242513,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_13_mushroom",
+   "channel": "direction",
+   "level": 2.0,
+   "J_A_1": 0.20567368384990936,
+   "J_A_kappa": 0.20551141011475454,
+   "D": 0.000788986379381603,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_13_mushroom",
+   "channel": "direction",
+   "level": 4.0,
+   "J_A_1": 0.2056937013526839,
+   "J_A_kappa": 0.20563806855522165,
+   "D": 0.0002704642733169872,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "channel": "joint",
+   "level": 0.05,
+   "J_A_1": 0.7453351553159224,
+   "J_A_kappa": 0.7340025610260889,
+   "D": 0.015204695778813856,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "channel": "joint",
+   "level": 0.1,
+   "J_A_1": 0.7780474206286407,
+   "J_A_kappa": 0.7382087655091143,
+   "D": 0.05120337663652675,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "channel": "joint",
+   "level": 0.2,
+   "J_A_1": 0.9043972890611055,
+   "J_A_kappa": 0.7520663783250892,
+   "D": 0.1684336215715084,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "channel": "joint",
+   "level": 0.35,
+   "J_A_1": 1.2471972387606511,
+   "J_A_kappa": 0.7876446024298859,
+   "D": 0.3684682919819691,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "channel": "joint",
+   "level": 0.5,
+   "J_A_1": 1.773800147066042,
+   "J_A_kappa": 0.8415209329618681,
+   "D": 0.5255830064318194,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "channel": "joint",
+   "level": 1.0,
+   "J_A_1": 4.859415427758445,
+   "J_A_kappa": 1.1539859774805525,
+   "D": 0.7625257616608292,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "channel": "joint",
+   "level": 2.0,
+   "J_A_1": 17.182072571652917,
+   "J_A_kappa": 2.3918020006720058,
+   "D": 0.8607966535644824,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "channel": "joint",
+   "level": 4.0,
+   "J_A_1": 66.45291672659093,
+   "J_A_kappa": 7.3249003394657075,
+   "D": 0.889773079944666,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "channel": "intensity",
+   "level": 0.05,
+   "J_A_1": 0.7453015635646878,
+   "J_A_kappa": 0.7340002270644261,
+   "D": 0.015163441287052621,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "channel": "intensity",
+   "level": 0.1,
+   "J_A_1": 0.7778968976890226,
+   "J_A_kappa": 0.738196898062315,
+   "D": 0.05103504043356952,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "channel": "intensity",
+   "level": 0.2,
+   "J_A_1": 0.9037892531789726,
+   "J_A_kappa": 0.7520099103575366,
+   "D": 0.16793665369174285,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "channel": "intensity",
+   "level": 0.35,
+   "J_A_1": 1.2455148967254406,
+   "J_A_kappa": 0.7874586355420488,
+   "D": 0.36776457863945167,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "channel": "intensity",
+   "level": 0.5,
+   "J_A_1": 1.770822375496659,
+   "J_A_kappa": 0.8411370356140313,
+   "D": 0.5250020288578524,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "channel": "intensity",
+   "level": 1.0,
+   "J_A_1": 4.852268399046567,
+   "J_A_kappa": 1.152573342817381,
+   "D": 0.762467108570529,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "channel": "intensity",
+   "level": 2.0,
+   "J_A_1": 17.16979663410711,
+   "J_A_kappa": 2.3876434052080877,
+   "D": 0.8609393310771585,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "channel": "intensity",
+   "level": 4.0,
+   "J_A_1": 66.43694535970403,
+   "J_A_kappa": 7.315997130777043,
+   "D": 0.889880591421435,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "channel": "direction",
+   "level": 0.05,
+   "J_A_1": 0.7318388274837504,
+   "J_A_kappa": 0.7318247005371259,
+   "D": 1.93033576437537e-05,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "channel": "direction",
+   "level": 0.1,
+   "J_A_1": 0.731883933186602,
+   "J_A_kappa": 0.7318294417232117,
+   "D": 7.445369534628485e-05,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "channel": "direction",
+   "level": 0.2,
+   "J_A_1": 0.7320396196063046,
+   "J_A_kappa": 0.7318480873165871,
+   "D": 0.00026164197208407075,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "channel": "direction",
+   "level": 0.35,
+   "J_A_1": 0.7323423914135511,
+   "J_A_kappa": 0.7318969100499979,
+   "D": 0.0006082965683487188,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "channel": "direction",
+   "level": 0.5,
+   "J_A_1": 0.7326330007333222,
+   "J_A_kappa": 0.7319661673162976,
+   "D": 0.0009101875241179399,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "channel": "direction",
+   "level": 1.0,
+   "J_A_1": 0.7332495813444708,
+   "J_A_kappa": 0.7322727053529843,
+   "D": 0.0013322557780331339,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "channel": "direction",
+   "level": 2.0,
+   "J_A_1": 0.7336392796572917,
+   "J_A_kappa": 0.7328484757503324,
+   "D": 0.0010779192566252776,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_16_friends_cup",
+   "channel": "direction",
+   "level": 4.0,
+   "J_A_1": 0.7337861329246597,
+   "J_A_kappa": 0.7334160980444315,
+   "D": 0.000504281647778324,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "channel": "joint",
+   "level": 0.05,
+   "J_A_1": 0.14509484476576917,
+   "J_A_kappa": 0.14256161435067555,
+   "D": 0.017459134534952576,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "channel": "joint",
+   "level": 0.1,
+   "J_A_1": 0.1524612002218657,
+   "J_A_kappa": 0.14349027983576906,
+   "D": 0.05884067797604846,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "channel": "joint",
+   "level": 0.2,
+   "J_A_1": 0.18101973699874888,
+   "J_A_kappa": 0.14661226432388808,
+   "D": 0.19007580745241393,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "channel": "joint",
+   "level": 0.35,
+   "J_A_1": 0.25910740435729573,
+   "J_A_kappa": 0.15462232108628657,
+   "D": 0.4032500866973667,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "channel": "joint",
+   "level": 0.5,
+   "J_A_1": 0.3795824466280412,
+   "J_A_kappa": 0.1667804878389226,
+   "D": 0.5606211790864148,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "channel": "joint",
+   "level": 1.0,
+   "J_A_1": 1.0871974791817758,
+   "J_A_kappa": 0.2378283697794542,
+   "D": 0.7812463932877736,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "channel": "joint",
+   "level": 2.0,
+   "J_A_1": 3.9154210325636933,
+   "J_A_kappa": 0.5211963336638701,
+   "D": 0.8668862609335765,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "channel": "joint",
+   "level": 4.0,
+   "J_A_1": 15.226397271110951,
+   "J_A_kappa": 1.6529488019595273,
+   "D": 0.8914418970864718,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "channel": "intensity",
+   "level": 0.05,
+   "J_A_1": 0.1450837192442397,
+   "J_A_kappa": 0.1425607669328972,
+   "D": 0.01738963079031124,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "channel": "intensity",
+   "level": 0.1,
+   "J_A_1": 0.15241180063505796,
+   "J_A_kappa": 0.14348628153458529,
+   "D": 0.05856186373550146,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "channel": "intensity",
+   "level": 0.2,
+   "J_A_1": 0.18082980659578385,
+   "J_A_kappa": 0.14659362112785065,
+   "D": 0.1893282203440206,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "channel": "intensity",
+   "level": 0.35,
+   "J_A_1": 0.2586334771880944,
+   "J_A_kappa": 0.15456147329788855,
+   "D": 0.40239185205911365,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "channel": "intensity",
+   "level": 0.5,
+   "J_A_1": 0.3788206454935086,
+   "J_A_kappa": 0.16665749668941704,
+   "D": 0.5600622651590068,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "channel": "intensity",
+   "level": 1.0,
+   "J_A_1": 1.0857446517543607,
+   "J_A_kappa": 0.23742103971846465,
+   "D": 0.7813288425277191,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "channel": "intensity",
+   "level": 2.0,
+   "J_A_1": 3.913408571452081,
+   "J_A_kappa": 0.5202079856292099,
+   "D": 0.8670703617751353,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "channel": "intensity",
+   "level": 4.0,
+   "J_A_1": 15.224056089122527,
+   "J_A_kappa": 1.651278081821499,
+   "D": 0.8915349449479942,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "channel": "direction",
+   "level": 0.05,
+   "J_A_1": 0.14211926377159223,
+   "J_A_kappa": 0.14211237567600626,
+   "D": 4.8467008645896873e-05,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "channel": "direction",
+   "level": 0.1,
+   "J_A_1": 0.14214028195032524,
+   "J_A_kappa": 0.14211470530874723,
+   "D": 0.00017993943185613465,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "channel": "direction",
+   "level": 0.2,
+   "J_A_1": 0.14220456518059763,
+   "J_A_kappa": 0.14212369462716767,
+   "D": 0.0005686916824874578,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "channel": "direction",
+   "level": 0.35,
+   "J_A_1": 0.14230858025276089,
+   "J_A_kappa": 0.14214608625029168,
+   "D": 0.0011418426224236893,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "channel": "direction",
+   "level": 0.5,
+   "J_A_1": 0.1423941353701833,
+   "J_A_kappa": 0.14217555830310705,
+   "D": 0.0015350145320804263,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "channel": "direction",
+   "level": 1.0,
+   "J_A_1": 0.14255013986379178,
+   "J_A_kappa": 0.14228631820143578,
+   "D": 0.0018507288916593508,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "channel": "direction",
+   "level": 2.0,
+   "J_A_1": 0.14263711859783149,
+   "J_A_kappa": 0.14245185999659726,
+   "D": 0.0012988105975174913,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_17_pumpkin5",
+   "channel": "direction",
+   "level": 4.0,
+   "J_A_1": 0.14266832113433944,
+   "J_A_kappa": 0.14258816968563343,
+   "D": 0.000561802704824325,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "channel": "joint",
+   "level": 0.05,
+   "J_A_1": 0.0682021757221607,
+   "J_A_kappa": 0.06693304495063995,
+   "D": 0.018608361948611107,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "channel": "joint",
+   "level": 0.1,
+   "J_A_1": 0.07175882258427993,
+   "J_A_kappa": 0.06740244735604004,
+   "D": 0.060708566157469786,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "channel": "joint",
+   "level": 0.2,
+   "J_A_1": 0.08493922367280332,
+   "J_A_kappa": 0.06894804684977354,
+   "D": 0.18826610524049317,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "channel": "joint",
+   "level": 0.35,
+   "J_A_1": 0.12019424454477357,
+   "J_A_kappa": 0.07277950805019912,
+   "D": 0.3944842506740161,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "channel": "joint",
+   "level": 0.5,
+   "J_A_1": 0.17433356416968881,
+   "J_A_kappa": 0.07842718828676284,
+   "D": 0.5501314468026066,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "channel": "joint",
+   "level": 1.0,
+   "J_A_1": 0.49198622239464096,
+   "J_A_kappa": 0.11061634612591728,
+   "D": 0.7751637320502286,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "channel": "joint",
+   "level": 2.0,
+   "J_A_1": 1.7606486989051313,
+   "J_A_kappa": 0.23792283750929696,
+   "D": 0.864866377002266,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "channel": "joint",
+   "level": 4.0,
+   "J_A_1": 6.8310381396184825,
+   "J_A_kappa": 0.7458585924680343,
+   "D": 0.8908132882259545,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "channel": "intensity",
+   "level": 0.05,
+   "J_A_1": 0.06819989106464487,
+   "J_A_kappa": 0.06693288466327982,
+   "D": 0.018577836145868495,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "channel": "intensity",
+   "level": 0.1,
+   "J_A_1": 0.07174766887592773,
+   "J_A_kappa": 0.0674016570673619,
+   "D": 0.060573561157524644,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "channel": "intensity",
+   "level": 0.2,
+   "J_A_1": 0.08488676200948411,
+   "J_A_kappa": 0.06894412114218418,
+   "D": 0.18781068437406903,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "channel": "intensity",
+   "level": 0.35,
+   "J_A_1": 0.12002159167677709,
+   "J_A_kappa": 0.07276547986309845,
+   "D": 0.3937300876740681,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "channel": "intensity",
+   "level": 0.5,
+   "J_A_1": 0.1739867357852563,
+   "J_A_kappa": 0.07839599202635815,
+   "D": 0.549413973010456,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "channel": "intensity",
+   "level": 1.0,
+   "J_A_1": 0.49088622330388537,
+   "J_A_kappa": 0.11047621890451698,
+   "D": 0.7749453668490384,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "channel": "intensity",
+   "level": 2.0,
+   "J_A_1": 1.7581302237296987,
+   "J_A_kappa": 0.2373930392286051,
+   "D": 0.8649741435392656,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "channel": "intensity",
+   "level": 4.0,
+   "J_A_1": 6.827006289173844,
+   "J_A_kappa": 0.7443428685694766,
+   "D": 0.8909708242469553,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "channel": "direction",
+   "level": 0.05,
+   "J_A_1": 0.06671864857145188,
+   "J_A_kappa": 0.06671745670730791,
+   "D": 1.7864033062448955e-05,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "channel": "direction",
+   "level": 0.1,
+   "J_A_1": 0.06672254273251896,
+   "J_A_kappa": 0.06671785523858881,
+   "D": 7.025352659207678e-05,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "channel": "direction",
+   "level": 0.2,
+   "J_A_1": 0.06673703395104438,
+   "J_A_kappa": 0.06671943698349084,
+   "D": 0.0002636762006302876,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "channel": "direction",
+   "level": 0.35,
+   "J_A_1": 0.06677011637299064,
+   "J_A_kappa": 0.06672368817697596,
+   "D": 0.0006953439433192098,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "channel": "direction",
+   "level": 0.5,
+   "J_A_1": 0.06680877049309392,
+   "J_A_kappa": 0.06672999239233302,
+   "D": 0.0011791580683114735,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "channel": "direction",
+   "level": 1.0,
+   "J_A_1": 0.06692326492762278,
+   "J_A_kappa": 0.06676189827825135,
+   "D": 0.0024112190214560674,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "channel": "direction",
+   "level": 2.0,
+   "J_A_1": 0.06703941534442168,
+   "J_A_kappa": 0.06684278341037164,
+   "D": 0.0029330794882356636,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_18_fabric_hat",
+   "channel": "direction",
+   "level": 4.0,
+   "J_A_1": 0.06710315141520967,
+   "J_A_kappa": 0.06696642377563722,
+   "D": 0.0020375740436754343,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_19_cylinder",
+   "channel": "joint",
+   "level": 0.05,
+   "J_A_1": 0.0014877707897487985,
+   "J_A_kappa": 0.0008774635851561152,
+   "D": 0.41021588056297986,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_19_cylinder",
+   "channel": "joint",
+   "level": 0.1,
+   "J_A_1": 0.003506520369609033,
+   "J_A_kappa": 0.0010818587394127212,
+   "D": 0.6914722786756988,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_19_cylinder",
+   "channel": "joint",
+   "level": 0.2,
+   "J_A_1": 0.01154778821829214,
+   "J_A_kappa": 0.0018924926573511281,
+   "D": 0.8361164387866633,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_19_cylinder",
+   "channel": "joint",
+   "level": 0.35,
+   "J_A_1": 0.03362596074043389,
+   "J_A_kappa": 0.004110724688975142,
+   "D": 0.8777514575507085,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_19_cylinder",
+   "channel": "joint",
+   "level": 0.5,
+   "J_A_1": 0.06773436045668467,
+   "J_A_kappa": 0.007529893547126281,
+   "D": 0.8888319975805845,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_19_cylinder",
+   "channel": "joint",
+   "level": 1.0,
+   "J_A_1": 0.26834988905955215,
+   "J_A_kappa": 0.027605989096201634,
+   "D": 0.8971268846320435,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_19_cylinder",
+   "channel": "joint",
+   "level": 2.0,
+   "J_A_1": 1.0707954957657073,
+   "J_A_kappa": 0.1078586169265927,
+   "D": 0.8992724405798281,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_19_cylinder",
+   "channel": "joint",
+   "level": 4.0,
+   "J_A_1": 4.280572480621537,
+   "J_A_kappa": 0.42883942168579714,
+   "D": 0.8998172735943184,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_19_cylinder",
+   "channel": "intensity",
+   "level": 0.05,
+   "J_A_1": 0.0014793171950651537,
+   "J_A_kappa": 0.000876375033356557,
+   "D": 0.40758139209085664,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_19_cylinder",
+   "channel": "intensity",
+   "level": 0.1,
+   "J_A_1": 0.0034855479563697758,
+   "J_A_kappa": 0.0010778668476642812,
+   "D": 0.6907611482738318,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_19_cylinder",
+   "channel": "intensity",
+   "level": 0.2,
+   "J_A_1": 0.011510020492683345,
+   "J_A_kappa": 0.0018805944048155632,
+   "D": 0.8366124190646739,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_19_cylinder",
+   "channel": "intensity",
+   "level": 0.35,
+   "J_A_1": 0.03357724157242342,
+   "J_A_kappa": 0.0040873843188413955,
+   "D": 0.8782692047521166,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_19_cylinder",
+   "channel": "intensity",
+   "level": 0.5,
+   "J_A_1": 0.06768111957434085,
+   "J_A_kappa": 0.007497789190042574,
+   "D": 0.8892188953551956,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_19_cylinder",
+   "channel": "intensity",
+   "level": 1.0,
+   "J_A_1": 0.2682921576620937,
+   "J_A_kappa": 0.027558905376322673,
+   "D": 0.8972802424920958,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_19_cylinder",
+   "channel": "intensity",
+   "level": 2.0,
+   "J_A_1": 1.0707363054980952,
+   "J_A_kappa": 0.10780332324359282,
+   "D": 0.8993185131670267,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_19_cylinder",
+   "channel": "intensity",
+   "level": 4.0,
+   "J_A_1": 4.280512897276686,
+   "J_A_kappa": 0.42878098297816997,
+   "D": 0.899829531351029,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_19_cylinder",
+   "channel": "direction",
+   "level": 0.05,
+   "J_A_1": 0.0008052645751009718,
+   "J_A_kappa": 0.000799372608122863,
+   "D": 0.0073168088604544275,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_19_cylinder",
+   "channel": "direction",
+   "level": 0.1,
+   "J_A_1": 0.0008132148423567557,
+   "J_A_kappa": 0.0008018835379650928,
+   "D": 0.013933961607026162,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_19_cylinder",
+   "channel": "direction",
+   "level": 0.2,
+   "J_A_1": 0.0008214365643239118,
+   "J_A_kappa": 0.000807636673908047,
+   "D": 0.01679970312402981,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_19_cylinder",
+   "channel": "direction",
+   "level": 0.35,
+   "J_A_1": 0.0008255329747018942,
+   "J_A_kappa": 0.0008145267635626223,
+   "D": 0.013332248954981262,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_19_cylinder",
+   "channel": "direction",
+   "level": 0.5,
+   "J_A_1": 0.0008269520607204294,
+   "J_A_kappa": 0.0008189383882453375,
+   "D": 0.009690613102905204,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_19_cylinder",
+   "channel": "direction",
+   "level": 1.0,
+   "J_A_1": 0.0008281986916269722,
+   "J_A_kappa": 0.0008249791131003238,
+   "D": 0.0038874470090306916,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_19_cylinder",
+   "channel": "direction",
+   "level": 2.0,
+   "J_A_1": 0.0008285666239090276,
+   "J_A_kappa": 0.0008275415379135531,
+   "D": 0.0012371799272318446,
+   "ceiling": 0.9
+  },
+  {
+   "object": "obj_19_cylinder",
+   "channel": "direction",
+   "level": 4.0,
+   "J_A_1": 0.0008286646628907856,
+   "J_A_kappa": 0.0008283783403292377,
+   "D": 0.0003455228325400168,
+   "ceiling": 0.9
+  }
+ ],
+ "manifest": {
+  "config_sha256": "e5f8f68b1426773cf5f89d58ad3a930ed028a311b0a3dd1b5e3694e32fbf2474",
+  "git_sha": "f878dc41cca1eac44a405562c2a502b9d61f3524",
+  "scene_rng_spec": "default_rng([20260910, obj_idx])  # identical to P-CERT",
+  "closed_channel_approx": {
+   "direction_sigma_deg": 0.001,
+   "intensity_sigma_logI": 1e-06,
+   "note": "closed channels approximated by tiny positive variance; see module docstring"
+  },
+  "elapsed_s": 143.4
+ },
+ "note": "Channel decomposition of the calibration-budget value: the intensity channel alone reproduces the joint dynamic range within the closed-channel approximation; the direction channel contributes <= 2% (hump-shaped in level, peak position object-dependent). Descriptive table: no sign-based gate."
+}

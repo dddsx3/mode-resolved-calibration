@@ -101,6 +101,12 @@ spec = retention_spectrum(DeltaF, A.T @ A) # 逐模式保留率
   中位 D 从 level=0.025 的 0.7% 单调上升到 level=8.0 的 89.85%(37 倍跨度);
   P-CERT 操作点 level=0.5 处为中位 62.87%。曲线在大 level 处逼近普适上界
   1 − 1/κ = 90%(docs/methods.md §7,level=64 表即此上界被取到);
+  通道分解:标定预算价值几乎全部由**强度**通道承载——仅强度通道的 D 曲线
+  在每档 level 都与 joint 复现(level=0.5 处中位差 <0.05pp,见
+  `results/openillumination/channel_decomposition.json`);方向通道在
+  每档 level/物体上的贡献都 ≤2%(最大 1.68%,obj_19_cylinder @ level 0.2),
+  且其随 level 的剖面是非单调的帽形——被追踪的脆弱**方向**提供诊断,而非
+  预算价值的量级;
 - **靶向干预无可检出增量**：预注册三臂对照发现，模式靶向臂与标量 OED
   靶向臂统计不可区分——模式分解提供诊断洞察（哪些方向脆弱），但在简单
   标量准则之上没有增量分配价值（诚实负结果）；
