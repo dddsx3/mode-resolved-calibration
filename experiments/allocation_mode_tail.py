@@ -72,6 +72,50 @@ def arm_energy(scales48, raw, scen, sig_logI, sig_rad, W_dual):
     return ((e @ W_dual) ** 2).tolist()
 
 
+def arm_metrics(scales48, raw, scen, sig_logI, sig_rad, W_dual):
+    """M3/E3 · 扩展臂读出——与 arm_energy **同一次重估**（同 corruption、
+    同固定 n̂ 白化 GLS），在其 dual 能量之外增加两组决策层端点：
+
+      - normal angular error（度）：一步交替法线重估（calibrated_ps 的
+        n-更新原样：掩码内无权重 LSQ + 归一化，口径 = corrupted d2/g）
+        后 arccos(n̂_est·n̂_gt) 的 mean/median/p95（n̂_gt = scen.n）；
+      - parameter MSE：gauge 对齐后 albedo 残差 ‖e‖²/P 与未对齐 MAE。
+
+    不新建第二条残差管线：corruption→GLS 段与 arm_energy 逐语句相同，
+    dual 能量读出与之逐值一致（tests 对拍）；法线重估是 calibrated_ps
+    既有更新步的向量化（einsum 批量正规方程 + pinv，掩码语义相同）。"""
+    d2, g = apply_scaled_corruption(scen.dirs, sig_logI, sig_rad, scales48, raw)
+    rho_t = scen.estimate_albedo(d2, g)
+    # --- 一步法线重估（calibrated_ps 的 n-更新；掩码 (I>1e-3)&(n·d2>0)）---
+    ndl = np.clip(scen.n @ d2.T, 0, None).T                  # (L,P)
+    act = (scen.I > 1e-3) & (ndl > 0)
+    g_col = (np.broadcast_to(np.asarray(g, float).reshape(-1, 1), ndl.shape)
+             if np.ndim(g) == 1 else np.asarray(g, float))
+    Y = scen.I / np.maximum(rho_t[None, :] * g_col, 1e-12)   # (L,P) ≈ n·d2
+    M = act.astype(float)
+    A = np.einsum("lp,li,lj->pij", M, d2, d2)                # (P,3,3)
+    b = np.einsum("lp,lp,li->pi", M, Y, d2)                  # (P,3)
+    n_sol = np.linalg.pinv(A) @ b[..., None]                 # (P,3,1)
+    nrm = np.linalg.norm(n_sol[..., 0], axis=1)
+    ok = nrm > 1e-9
+    n_est = np.zeros_like(scen.n)
+    n_est[ok] = n_sol[ok, :, 0] / nrm[ok, None]
+    n_est[~ok] = np.array([0.0, 0.0, 1.0])
+    cosang = np.clip((n_est * scen.n).sum(1), -1.0, 1.0)
+    ang = np.degrees(np.arccos(cosang))
+    # --- 端点 ---
+    e = rho_t - scen.rho
+    sg = (e * scen.rho).sum() / (scen.rho ** 2).sum()
+    e_al = e - sg * scen.rho
+    return dict(
+        dual=((e_al @ W_dual) ** 2).tolist(),
+        ang_mean_deg=float(ang.mean()),
+        ang_median_deg=float(np.median(ang)),
+        ang_p95_deg=float(np.percentile(ang, 95)),
+        mse_aligned=float(e_al @ e_al / len(e_al)),
+        mae_raw=float(np.abs(e).mean()))
+
+
 def scalar_greedy_prefix(prob, kappa, k_max):
     """scalar_targeted 臂排序：J_A 最陡下降前缀（精确梯度；48 步）。
     这是标量 OED 口径的靶向（与 P-CERT 的 greedy 同款），预注册声明：

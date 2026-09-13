@@ -1,0 +1,65 @@
+# P-DECISION-QUALITY -- predicted vs realized decision quality (E3/M3).
+# PREREGISTERED: this file is committed BEFORE the run.
+#
+# Scope (fixed by the acceptance report): NO real recalibration loop
+# (OpenIllumination is a calibration dataset; light_pos.npy IS the GT).
+# Instead: a controlled corruption-injection predicted-vs-realized closed
+# loop on the frozen pipeline.
+#
+# Arm (single residual pipeline, M3-1): arm_metrics in
+# experiments/allocation_mode_tail.py -- the SAME corruption + fixed-n-hat
+# whitened GLS as arm_energy (dual-energy readout value-identical, tested),
+# extended with (i) a one-step alternating normal refit (calibrated_ps's
+# own n-update, vectorized; corrupted-calibration convention) giving the
+# normal angular error arccos(n_est . n_gt) in degrees, and (ii) the
+# gauge-aligned albedo MSE + unaligned MAE. No second residual pipeline.
+#
+# Grid: 11 objects x 4 levels x 2 regimes x 5 budgets (the frozen
+# BUDGET_COUNTS) x 9 selection units (mode_aware / e_opt / a_opt / d_opt +
+# 5 random permutations, frozen rng spec). Corrected convention throughout
+# (the arm frame; the legacy AUC benchmark is NOT reused here -- the
+# convention split is documented in EXPERIMENTS s18).
+#
+# Predicted side: J_A = tr DeltaF(t)^{-1} of each unit's allocation on the
+# same corrected state (t = regime on the selected lights).
+#
+# Endpoints (realized): normal angular error (mean/median/p95, deg) --
+# the impact-facing headline; gauge-aligned albedo MSE; bottom-5 dual
+# energy (continuity with the frozen endpoint family).
+#
+# Statistics: trapezoid AUC over the frozen budget fractions per endpoint;
+# dAUC (policy - mean random) per (object, level, regime); object-cluster
+# paired bootstrap (B=10000, seed 20260910) of the median dAUC per policy;
+# within-cell Spearman(predicted J_A, realized endpoint) across the 9
+# units (does the information ordering predict the realized ordering?).
+#
+# outcome_independence: descriptive, no sign gate -- every dAUC / Spearman
+# is reported regardless of direction.
+
+gate: P-DECISION-QUALITY
+analysis_status: decision_quality_v1
+run_name: decision_quality_v1
+
+data_root: D:/data/OpenIllumination
+data_meta: D:/data/OpenIllumination_meta
+cohort: [obj_03_pumpkin, obj_04_dolphin, obj_07_pumpkin2, obj_09_ball, obj_10_pumpkin3, obj_11_pine, obj_13_mushroom, obj_16_friends_cup, obj_17_pumpkin5, obj_18_fabric_hat, obj_19_cylinder]
+n_objects: 11
+noise_fit_convention: corrected
+scene_rng_spec: "default_rng([20260910, obj_idx])  # identical to P-CERT"
+K_lights: 142
+
+levels: [0.2, 0.5, 1.0, 2.0]
+regimes: [10, 100]
+budgets_k: [14, 28, 57, 85, 114]        # frozen BUDGET_COUNTS
+budget_fractions: [0.1, 0.2, 0.4, 0.6, 0.8]
+policies: [mode_aware, a_opt]   # the decision contrast that matters;
+                                  # e/d-opt are redundant with a_opt here (frozen benchmark
+                                  # showed they improve similarly) and each ordering costs ~230s
+n_random_perms: 5                        # frozen spec; rng [20260911, obj, r, p]
+seeds_per_level: 10                      # frozen spec; rng [20260910, 7777, obj, lv, s]
+
+workers: 11                           # per-object multiprocessing (32 cores)
+
+bootstrap:
+  B: 10000
+  seed: 20260910
