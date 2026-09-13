@@ -336,6 +336,27 @@ with the analytic gradient
   disagree: median Spearman 0.936 (min 0.586), and the top-3 light sets
   are disjoint in 11 of 44 object×level cells.
 
+**Mechanism (why mean-type tasks sit at the ceiling).** The
+albedo-weighted mean functional `a = ρ/‖ρ‖` is *exactly* gauge-aligned
+with the light-intensity nuisance component — per light `B_phi[:,0] = ŝ·ρ`,
+so `A_k a = B_k c̄` with `c̄_k = e_1/‖ρ‖` (alignment residual at machine
+precision on all 11 objects). For exactly gauge-aligned functionals the
+inverse form obeys the two-term law
+
+    J_a(t) ≈ 1/(c̄ᵀΛ(t)c̄) + 1/‖Aa‖²  ⟹  V_a = (1 − 1/κ)/(1 + q·r),
+
+with `q = c̄ᵀΛ0c̄` (confusable-prior precision) and `r = 1/‖Aa‖²`
+(residual-information precision): the functional's posterior variance is
+dominated by the intensity-confusable calibration prior, which uniform
+refinement shrinks by exactly 1/t. Verified on all 44 cells
+(`gauge_mechanism_rho_mean`): median |ΔV| = 0.0008, max 0.039 (level 0.1;
+max 0.008 at level 0.5); `V_rho_mean` rises 0.878 → 0.9000 along the
+level grid toward the ceiling. The registered uniform-mean task is *not*
+exactly aligned (texture residual 0.31–34.6) but inherits the mechanism
+through its ρ-component; the all-parameter A-opt mixes in
+gauge-orthogonal directions whose variance is calibration-insensitive —
+that contrast is the value gap above.
+
 **Scope.** `H` acts on the per-pixel log-albedo-direction parameterization
 that the certified pipeline carries. The photometric-stereo
 normals-vs-albedo task pair requires the joint `4P` (log ρ, n)

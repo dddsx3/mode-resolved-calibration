@@ -40,7 +40,10 @@ Fisher 信息——蓝色区域信息最薄；中：保留谱把 tracked 方向�
 动态范围（= P-CERT 认证头条，新路线交叉复现），而对均值-反照率任务是
 89.76%（level 0.1 处：7.82% vs 87.93%）；两个任务下的逐灯增益排序不一致
 （中位 Spearman 0.936；44 个物体×level 单元中 11 个 top-3 完全不同）——
-`results/goal_oriented/goal_orientation.json`。
+`results/goal_oriented/goal_orientation.json`。均值类任务逼近普适上界并非
+巧合：ρ-加权均值泛函与灯强 nuisance 分量**精确 gauge 对齐**，闭式
+`V = (1−1/κ)/(1+q·r)` 以中位 0.0008 的偏差预测其价值曲线
+（`gauge_mechanism_rho_mean`；`methods.md` §10）。
 
 ## 安装
 

@@ -492,6 +492,16 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
   cross-check) vs V_mean 0.89759; at level 0.1: 0.078212 vs 0.879347;
   (ii) rankings are task-dependent — Spearman(mean, contrast) median
   0.936387 (min 0.585541), top-3 disjoint in 11/44 object×level cells.
+- **Mechanism (v1.1)**: the ρ-weighted mean functional is *exactly*
+  gauge-aligned with the light-intensity nuisance (per light
+  `B_phi[:,0] = ŝ·ρ` ⟹ `A_k a = B_k c̄`, `c̄_k = e_1/‖ρ‖`; alignment
+  residual at machine precision). For exactly gauge-aligned functionals
+  the two-term law `J_a(t) ≈ 1/(c̄ᵀΛ(t)c̄) + 1/‖Aa‖²` gives
+  `V_a = (1−1/κ)/(1+qr)`; agreement median |ΔV| 0.000821, max 0.03854
+  (level 0.1; 0.008095 at level 0.5); `V_rho_mean` median rises
+  0.878324 → 0.899972 along the level grid. The uniform-mean task is not
+  exactly aligned (texture residual 0.313745–34.581472) and inherits the
+  mechanism qualitatively (`gauge_mechanism_rho_mean` field).
 - **Output**: `results/goal_oriented/goal_orientation.json`.
 - **Honest scope**: H acts on the per-pixel scalar parameterization; the
   photometric-stereo normals-vs-albedo pair needs the joint 4P (log ρ, n)

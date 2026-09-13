@@ -240,7 +240,11 @@ certified P-CERT headline, reproduced by the new route as a cross-check —
 but 89.76% for the mean-albedo task (at level 0.1: 7.82% vs 87.93%), and
 the per-light gain rankings under the two tasks disagree (median Spearman
 0.936; top-3 light sets disjoint in 11 of 44 object×level cells) —
-`results/goal_oriented/goal_orientation.json`.
+`results/goal_oriented/goal_orientation.json`. The mean-task saturation of
+the universal ceiling is not a coincidence: the albedo-weighted mean
+functional is *exactly* gauge-aligned with the light-intensity nuisance
+component, and the closed form `V = (1−1/κ)/(1+q·r)` predicts its value
+curve to a median 0.0008 (`gauge_mechanism_rho_mean`; methods.md §10).
 
 Three structural findings anchor it (verified by
 `tests/test_math_foundations.py`; no raw data required):
