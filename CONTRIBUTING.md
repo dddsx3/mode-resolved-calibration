@@ -34,6 +34,18 @@ pip install -e .[dev,examples]
 pytest
 ```
 
+### Regenerating `checksums.sha256`
+
+Run `scripts/make_checksums.sh` **only when the working tree is
+byte-identical to what you are about to commit** — any unstaged
+modification leaks into the hashes and silently desynchronises the ledger
+(this bit us twice: unstaged docs were hashed while only code was staged,
+so the committed `checksums.sha256` did not verify against its own commit).
+Safe sequence: `git stash` (the files you are *not* committing) →
+regenerate → `git add` → `git stash pop`; then verify with a clean
+`git worktree add /tmp/wt HEAD && (cd /tmp/wt && sha256sum -c
+checksums.sha256)` before pushing.
+
 ## Pull requests
 
 - one purpose per PR; reference the issue it closes;

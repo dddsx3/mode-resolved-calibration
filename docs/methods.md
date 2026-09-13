@@ -77,6 +77,15 @@ precision λ, with low-precision slope Σαᵢ² and saturation ‖Aa‖². The
 pre-specified floor μ; it exists iff `0 < μ < ‖Aa‖²` and is a within-scene
 diagnostic only.
 
+**Scope note (forward form vs downstream variance).** The closed form
+`aᵀΔF(λ)a = Σᵢ αᵢ²sᵢ²λ/(sᵢ²+λ)` is an **information** statement. The task
+functional is the **inverse** form `aᵀΔF⁻¹a`; the two coincide only when
+`a` is an eigen-direction of ΔF. `gauge.py` therefore diagnoses how much
+information a direction carries, and does **not** directly give that
+direction's downstream variance — on the real cohort the forward-form
+ratio predicts `V ≈ 0` where the realized task value is `≈ 0.9` (see §10
+for the mechanism that does predict it).
+
 ## 5. Allocation as a convex program
 
 With per-light precision multipliers `t ∈ [1, κ]^L` (t_k multiplies Λ0k:
@@ -185,6 +194,20 @@ structure, not on PSD-ness of `M0` by itself. The exact numbers are pinned by
 which also checks that the legitimate family `u² = F∞·m` respects the bound on
 a dense `b`-grid. (Per-light verification for the multi-light direction-parameterized
 `ΔF(t)` is the same argument applied per block.)
+
+**Extension to any quadratic functional (M10′).** The ceiling holds for
+*every* task functional, not only the trace: by the same Loewner chain
+(`ΔF(κ·1) ⪯ κΔF(1)` under the structural assumptions above),
+`ΔF(κ·1)^{-1} ⪰ ΔF(1)^{-1}/κ`, so for any task operator `H`,
+
+    tr(H ΔF(κ·1)^{-1} Hᵀ) ≥ tr(H ΔF(1)^{-1} Hᵀ)/κ   ⟹   V_H ≤ 1 − 1/κ.
+
+This step uses only operator monotonicity of `X ↦ X^{-1}` (Löwner), which
+holds unconditionally — unlike the α-bound collapse step in §9, no
+framework reduction and no numerical support are needed; the proof chain
+is closed. Empirically saturated by the gauge-aligned mean functionals
+(§10: `V_rho_mean` → 0.9000 at the ceiling from below, 44/44 cells at or
+below it; `results/goal_oriented/goal_orientation.json`).
 
 ## 8. What the library does not claim
 
@@ -345,13 +368,17 @@ inverse form obeys the two-term law
 
     J_a(t) ≈ 1/(c̄ᵀΛ(t)c̄) + 1/‖Aa‖²  ⟹  V_a = (1 − 1/κ)/(1 + q·r),
 
-with `q = c̄ᵀΛ0c̄` (confusable-prior precision) and `r = 1/‖Aa‖²`
+with `q = c̄ᵀΛ0c̄` (confusable-prior precision) and `r = 1/‖Aa‖²` — note this is
+the *inverse*-form law; the forward closed form of §4 does not give it
+(see the scope note there)
 (residual-information precision): the functional's posterior variance is
 dominated by the intensity-confusable calibration prior, which uniform
 refinement shrinks by exactly 1/t. Verified on all 44 cells
-(`gauge_mechanism_rho_mean`): median |ΔV| = 0.0008, max 0.039 (level 0.1;
-max 0.008 at level 0.5); `V_rho_mean` rises 0.878 → 0.9000 along the
-level grid toward the ceiling. The registered uniform-mean task is *not*
+(`gauge_mechanism_rho_mean`): `V_rho_mean` rises 0.878 → 0.9000 along the
+level grid toward the ceiling. The two-term law is accurate to ≤ 2e-4 at
+large `level`; the worst case over the cohort is 3.9e-2 at `level` 0.1,
+where the prior term `1/q` is largest (per-level `|ΔV|` medians:
+1.6e-2 / 2.3e-3 / 3e-4 / 0.0 for `level` = 0.1 / 0.5 / 2.0 / 8.0). The registered uniform-mean task is *not*
 exactly aligned (texture residual 0.31–34.6) but inherits the mechanism
 through its ρ-component; the all-parameter A-opt mixes in
 gauge-orthogonal directions whose variance is calibration-insensitive —

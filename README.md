@@ -72,7 +72,10 @@ data and figures on the fly, no downloads required.
   tracking across Λ
 - **Closed-form gauge response** `aᵀΔF(λ)a = Σᵢ αᵢ² sᵢ² λ/(sᵢ²+λ)` for gauge
   directions, with the λ⋆ directional crossover precision diagnostic
-  (existence condition `0 < μ < ‖Aa‖²`; within-scene interpretation only)
+  (existence condition `0 < μ < ‖Aa‖²`; within-scene interpretation only).
+  Scope: this is an *information* statement — the downstream task variance
+  is the inverse form `aᵀΔF⁻¹a`, which it does not directly give
+  (methods.md §4 scope note, §10 for the law that does)
 - **Singular-covariance-safe marginal routes**: `delta_f_marginal` and the
   covariance-factor path `Σ_c = LLᵀ, C = BL` handle any proper `Σ_c ⪰ 0`
 - **Known-answer test suite**: LO monotonicity, rank-deficient Λ = 0 routes,
