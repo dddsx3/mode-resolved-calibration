@@ -39,6 +39,9 @@ BANNED = [
     r"strong result",
 ]
 
+# numbers printed in a scan file that are NOT data claims (tooling versions)
+NON_CLAIM_TOKENS = {"3.10"}          # README "Requires Python >= 3.10"
+
 SCAN_FILES = sorted(
     [REPO / "README.md", REPO / "README.zh-CN.md"]
     + list((REPO / "docs").rglob("*.md"))
@@ -146,13 +149,46 @@ def test_readme_numeric_claims_traceable():
         assert _approx(tok_hi, v["ci95"][1], 3), (tok_hi, v["ci95"][1])
         assert v["ci95"][0] < 0 < v["ci95"][1]         # CI spans 0
 
-    # generic sweep: every other number printed in README must appear verbatim
-    # somewhere under results/** (claim-tracing rule, guideline section 4)
-    readme2 = re.sub(r"\d+e-\d+", " ", readme)
-    tokens = set(re.findall(r"\d+\.\d+|\d+", readme2))
+    # numbers quoted from the certified / level / channel evidence layer, and
+    # from the corrected amplitude arm -- each verified against its own field
+    # (decimals match the rounding printed in the README)
+    cg = json.loads((REPO / "results/certification/certified_gaps.json")
+                    .read_text(encoding="utf-8"))
+    lr = json.loads((REPO / "results/certification/lowrank_fullres.json")
+                    .read_text(encoding="utf-8"))
+    ampD = json.loads((REPO / "results/magnitude/"
+                       "directional_amplitude_summary.json")
+                      .read_text(encoding="utf-8"))["arm_D_corrected"]
+    for tok, val, dec in (
+            ("0.014", r48["regimes"]["10"]["mode_minus_random_active48"]["median"], 3),
+            ("0.019", r48["regimes"]["100"]["mode_minus_random_active48"]["median"], 3),
+            ("0.027", max(meds), 3),
+            ("0.64", max(v["random_mean_minus_lower_rel"]["median"]
+                         for v in cg["by_k"].values()) * 100, 2),
+            ("15.98", ampD["ratio_stats"]["median"], 2),
+            ("714.2", ampD["ratio_stats"]["p95"], 1),
+            ("27.3", lr["by_k"]["48"]["dynamic_range_pct"]["min"], 1),
+            ("89.4", lr["by_k"]["48"]["dynamic_range_pct"]["max"], 1)):
+        assert _approx(tok, val, dec), (tok, val)
+        traced[tok] = val
+
+    # generic sweep: every other number printed in README must appear as a
+    # *token* under results/** (claim-tracing rule, guideline section 4).
+    # Two hardening points over the original sweep:
+    #   (a) the unicode minus is normalised and the token regex keeps the sign,
+    #       so the signed `traced` keys actually match README tokens (before,
+    #       "-0.150" was keyed but the tokenizer produced "0.150", so those six
+    #       entries were never checked);
+    #   (b) presence is tested on token boundaries -- a bare substring hit is
+    #       not traceability (the literal "15.98" occurs inside the unrelated
+    #       value "15.986150483597436").
+    readme2 = re.sub(r"\d+e-\d+", " ", readme.replace("\u2212", "-"))
+    tokens = set(re.findall(r"-?\d+\.\d+|-?\d+", readme2))
     results_text = "\n".join(
         q.read_text(encoding="utf-8", errors="ignore")
         for q in sorted((REPO / "results").rglob("*")) if q.is_file())
     untraced = [tk for tk in sorted(tokens)
-                if tk not in results_text and tk not in traced]
+                if tk not in traced and tk not in NON_CLAIM_TOKENS
+                and re.search(r"(?<![\w.])" + re.escape(tk) + r"(?![\w])",
+                              results_text) is None]
     assert not untraced, f"README numbers not traceable to results/**: {untraced}"

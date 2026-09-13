@@ -19,7 +19,7 @@ re-derives the value. The binding table (claim → evidence file → field) is
 
 ### 1.1 Provenance note: git SHAs recorded in result manifests
 
-Six distinct `git_sha` values are recorded across the committed result
+Ten distinct `git_sha` values are recorded across the committed result
 manifests. They are not all the current HEAD: results are produced from an
 earlier working-tree state, and two of the recorded commits were replaced
 during the 2026-09-09 repository reorganization. The complete ledger:
@@ -32,9 +32,13 @@ during the 2026-09-09 repository reorganization. The complete ledger:
 | `b070f7e831f0` | `openillumination/validation_summary.json` | yes (ancestor of HEAD) | frozen benchmark record |
 | `f54d6308b3c8` | `mode_tail/allocation_mode_tail.json` | yes (ancestor of HEAD) | corrected three-arm rerun |
 | `785c7485f37e` | `magnitude/linearization_radius.json` | yes (ancestor of HEAD) | v2 metric-domain rerun |
+| `49344ed426ef` | `submodularity/alpha_bound.json` | yes (ancestor of HEAD) | P-ALPHA-BOUND v1 run (2026-09-13) |
+| `ddfccf1dc7e5` | `magnitude/calibration_value_ceiling.json` | yes (ancestor of HEAD) | P-CEILING v1 run (2026-09-13) |
+| `e67a8bf51c8e` | `certification/certified_gaps_levels.json` | yes (ancestor of HEAD) | P-CERT-LEVELS v1 run (2026-09-13) |
+| `f878dc41cca1` | `openillumination/channel_decomposition.json` | yes (ancestor of HEAD) | P-CHANNEL-DECOMP v1 run (2026-09-13) |
 
 The two unreachable SHAs are the ones the repo reorganization replaced. All
-six artifacts remain byte-for-byte as committed and are pinned by
+ten artifacts remain byte-for-byte as committed and are pinned by
 `checksums.sha256`; a `git log --all` cannot reach the two orphaned commits,
 which is why `git_sha` is documented here rather than re-derived at runtime.
 The invalid v1 `linearization_radius.json` was replaced by the
