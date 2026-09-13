@@ -601,6 +601,16 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
   （dual Spearman median −0.375、albedo-MSE −0.518;dAUC_dual 为正）
   ——与 C8 的 E(k) 驼峰同一机制。**决策层有效域包络**:信息论预测对
   物理重建误差方向有效;弱模式族端点需覆盖度警告。
+- **诚实披露（验收 G-1/G-2）**: informed 族内判别(仅 mode_aware vs
+  a_opt 两个单元)的符号一致率为 **130/175 = 0.743** [二项 CI 0.67,
+  0.81]——排序力非纯构造主导,但远弱于含 universe-random 的 88/88 头条
+  (后者中 random 单元在两轴上天然处于差角)。本网格的随机对照仅
+  universe-random,无 active-set-restricted 臂(冻结 AUC 层的 B5 已给出
+  该警告)。
+- **量级说明**: dual 端点以原始能量单位报告(物体间量级 1e2–1e5),
+  与 mse_aligned(1e-3)差约 7 个量级——只在同一端点内比较,勿跨端点
+  比较效应大小;运行代价 4.2 h(workers=2;逐物体独立播种,
+  determinism 与并行度解耦)。
 - **Output**: `results/openillumination/decision_quality.json`（3080 rows
   + 88 AUC cells + bootstrap + within-cell Spearman）+
   `docs/img/decision_quality.png`（predicted-vs-realized 散点 + dAUC

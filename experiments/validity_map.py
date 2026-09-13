@@ -124,8 +124,8 @@ def run(rows_path=ROWS, radius_path=RADIUS, out_path=OUT, img_path=IMG):
         question="in which (level, curvature) regime is the Fisher "
                  "linearization valid: rank, sign, and magnitude endpoints",
         sources=dict(
-            cells=f"results/{Path(rows_path).name}",
-            curvature=f"results/magnitude/{Path(radius_path).name}"),
+            cells=str(Path(rows_path).relative_to(REPO)).replace("\\", "/"),
+            curvature=str(Path(radius_path).relative_to(REPO)).replace("\\", "/")),
         panels=dict(
             rank_correlation="Spearman(pred_deg, emp_deg) per cell",
             sign_agreement="Kendall tau (pairwise sign agreement of the "

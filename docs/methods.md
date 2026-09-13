@@ -217,8 +217,10 @@ below it; `results/goal_oriented/goal_orientation.json`).
   `results/submodularity/submodularity_search.json`).
 - No claim that the linearized theory predicts real-data error magnitudes —
   the matched-GLS variance identity holds on matched synthetic ensembles
-  (ratio ≈ 1.0045) and the real-data deviation (emp/pred ≈ 102) is reported
-  as a validity envelope.
+  (ratio ≈ 1.0045) and the real-data deviation (emp/pred median 15.98,
+  pooled over the corrected arm's 66 cells; `validity_map.json` /
+  `directional_amplitude_summary.json`, cross-reproduced bit-exactly) is
+  reported as a validity envelope.
 - No claim of overall reconstruction advantage for any allocation policy —
   the certified result is about the information landscape itself plus the
   mode-targeted intervention endpoint.
@@ -389,6 +391,29 @@ that the certified pipeline carries. The photometric-stereo
 normals-vs-albedo task pair requires the joint `4P` (log ρ, n)
 parameterization — a mechanical extension of the same functional, not
 attempted here and not claimed.
+
+**Decision-layer reading: aggregate vs per-light.** Two results at
+different granularities combine into one boundary statement. At the
+*budget-aggregate* level the A-opt criterion is predictive:
+Spearman(predicted `J_A`, realized normal angular error) is positive in
+88/88 object×level×regime cells (median +0.750), and even **within the
+informed family alone** (mode_aware vs a_opt, the two units the grid
+carries) the predicted ordering agrees with the realized ordering in
+130/175 = 0.743 [binomial 95% CI 0.67, 0.81] of (cell, budget) pairs —
+well above chance, though far weaker than the all-units headline (the
+88/88 includes universe-random units, which sit at the bad corner of
+both axes by construction). At the *single-light* level the criterion is
+**not** predictive (C8: the stable 100-seed oracle ranking
+anti-correlates with single-light `J_A` gains, −0.36/−0.82). **A-opt
+ranks how much budget to spend, not which light to spend it on** — which
+is exactly the C8 decomposition's mechanism: the greedy advantage over
+universe-random is entirely the active-set restriction (dilution median
+0.063 `J_A` units vs mode-ordering gap ≤ 0.004), because per-light
+ordering does not transfer to the realized endpoint. Caveat: the 88/88
+headline is measured against universe-random only; the frozen AUC
+layer's active-set control shows the advantage disappears within the
+active set (B5), and this grid does not carry an active-set-restricted
+random arm.
 
 ## Tests binding these statements
 
