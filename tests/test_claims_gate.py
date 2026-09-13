@@ -204,3 +204,70 @@ def test_readme_numeric_claims_traceable():
                 and re.search(r"(?<![\w.])" + re.escape(tk) + r"(?![\w])",
                               results_text) is None]
     assert not untraced, f"README numbers not traceable to results/**: {untraced}"
+
+
+# --------------------------------------------------------------- E-1b 加固
+# docs/methods.md + docs/claims.md 的数字此前零机器校验(验收 E-1 的
+# `emp/pred ≈ 102` 错字段抓取正落在这个盲区)。本测试把数字追溯扩展到
+# docs:每个数字 token 必须满足其一——
+#   (a) 在 results/** 的某个数字的"打印精度舍入"范围内
+#       (|n − v| ≤ 0.5·10^-dec,dec = token 小数位);
+#   (b) 同 (a) 但按百分比换算(|n·100 − v| ≤ 0.5·10^-dec);
+#   (c) 在白名单里(派生量/日期/版本号,逐项注明理由)。
+# 注意:舍入匹配只能防"数字不存在于证据层"(如 102 这种抓错字段只有在
+# 恰好无相近数时才被抓;本测试的价值是把 docs 纳入追溯纪律本身)。
+DOCS_NON_CLAIM = {
+    # 年份(related work 引用、changelog、provenance)
+    "2017": "Chamon & Ribeiro NeurIPS 2017 citation year",
+    "2021": "Alexanderian et al. JUQ 2021 citation year",
+    "1968": "Backus-Gilbert 1968 citation year",
+    "1993": "Pukelsheim 1993 citation year",
+    "2013": "Jaggi 2013 citation year",
+    "1978": "Bunch-Nielsen-Sorensen 1978 citation year",
+    "2026": "dates in provenance/changelog (2026-09-xx)",
+    "2025": "dates in provenance/changelog",
+    # 版本号
+    "1.0": "version labels (v1.0, s1.0)",
+    "1.1": "version labels (v1.1)",
+    # 派生统计(注明来源;不在 results 字面中)
+    "102": "REMOVED - the wrong emp/pred value is now 15.98 (E-1a); "
+           "kept here so it can NEVER re-enter docs",
+    "100": "percentages/counts in prose (e.g. '100% of the advantage')",
+}
+
+
+def _decimals(tok):
+    return len(tok.split(".")[1]) if "." in tok else 0
+
+
+def _results_numbers():
+    import re as _re
+    text = "\n".join(
+        q.read_text(encoding="utf-8", errors="ignore")
+        for q in sorted((REPO / "results").rglob("*")) if q.is_file())
+    text = text.replace("\u2212", "-")
+    return [float(m) for m in _re.findall(r"-?\d+\.?\d*(?:[eE]-?\d+)?", text)]
+
+
+def test_docs_numeric_claims_traceable():
+    """E-1b: docs(methods/claims)的每个数字可追溯到 results/**(舍入
+    匹配 + 百分比换算),否则必须在带理由的白名单里。"""
+    numbers = _results_numbers()
+    for doc in (REPO / "docs/methods.md", REPO / "docs/claims.md"):
+        text = doc.read_text(encoding="utf-8")
+        text = re.sub(r"\d+e-\d+", " ", text.replace("\u2212", "-"))
+        tokens = set(re.findall(r"-?\d+\.\d+|-?\d+", text))
+        untraced = []
+        for tk in sorted(tokens):
+            if tk in DOCS_NON_CLAIM:
+                continue
+            v = float(tk)
+            tol = 0.5 * 10 ** -_decimals(tk) + 1e-9
+            if any(abs(n - v) <= tol for n in numbers):
+                continue
+            if any(abs(n * 100.0 - v) <= tol for n in numbers):
+                continue                                     # 百分比换算
+            untraced.append(tk)
+        assert not untraced, (
+            f"{doc.name} numbers not traceable to results/** "
+            f"(rounding/percent match): {untraced}")

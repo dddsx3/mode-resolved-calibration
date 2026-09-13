@@ -307,7 +307,7 @@ supermodular" tendency.
   on all 20 (random α ∈ [0.059, 0.119], adversarial α ∈ [0.025, 0.090];
   measured γ ∈ [0.9999, 1.0000]).
 - **(b) two-sided sandwich** — 1600 random `(S,x)` pairs with zero
-  violations (`min val/lb = 1.0021`, `min ub/val = 1.0368`).
+  violations (`min val/lb = 1.000096`, `min ub/val = 1.001011`).
 - **(c) real objects** — on the 11 held-out OpenIllumination objects the
   nominal-design `α @ level=0.5` ranges 0.188–0.515 (γ lower bound
   0.66–0.84; `obj_10_pumpkin3` is the worst at 0.635 @ level=0.1). The
