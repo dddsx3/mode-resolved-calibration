@@ -438,15 +438,85 @@
   "at_level": 0.1,
   "phrasing": "A-optimal light-refinement selection is >= 0.635-supermodular on every held-out object at the probed levels"
  },
+ "proof_limits": {
+  "instances": 400,
+  "adversarial_triples": 162000,
+  "m_inv_sq_reversal_samples": 12493,
+  "gamma_bound_violations": 0,
+  "reversal_instances": 227,
+  "min_ratio_observed": 0.270682,
+  "min_tightness": 1.314983,
+  "m_inv_sq_ordering_counterexample_2x2": {
+   "M": "[[1,-1],[-1,2]]",
+   "H": "[[1,-1],[-1,1]]",
+   "W": "[[1,-2],[-2,4]]",
+   "d_MW": 0.333333,
+   "d_NW": 0.5,
+   "tr_W_Minv2": 1.0,
+   "tr_W_Ninv2": 1.25,
+   "m_inv_sq_ordering_reversed": true,
+   "alpha": 2.0,
+   "gamma_bound": 0.333333,
+   "ratio_dMW_over_dNW": 0.666667,
+   "bound_holds_here": true
+  },
+  "semantics": "triples are (S subset of T subset of N\\{x}, x) with positive gains at both ends; ratio = dS/dT; a triple is a violation if ratio < 1/(1+alpha)-1e-9; a reversal is tr[W_x M(S)^-2] < tr[W_x M(T)^-2]-1e-12",
+  "families": {
+   "near_singular": {
+    "instances": 100,
+    "triples": 40500,
+    "m_inv_sq_reversal_triples": 2,
+    "gamma_bound_violations": 0,
+    "reversal_instances": 2,
+    "min_ratio": 0.923378,
+    "min_tightness": 4961.029877,
+    "alpha_min": 4960.029877,
+    "alpha_max": 522338419.141029
+   },
+   "counterexample_rotated": {
+    "instances": 100,
+    "triples": 40500,
+    "m_inv_sq_reversal_triples": 11103,
+    "gamma_bound_violations": 0,
+    "reversal_instances": 100,
+    "min_ratio": 0.473674,
+    "min_tightness": 1.454317,
+    "alpha_min": 2.0,
+    "alpha_max": 3.209587
+   },
+   "shared_null_dir": {
+    "instances": 100,
+    "triples": 40500,
+    "m_inv_sq_reversal_triples": 225,
+    "gamma_bound_violations": 0,
+    "reversal_instances": 31,
+    "min_ratio": 0.270682,
+    "min_tightness": 47158.217178,
+    "alpha_min": 63779.052212,
+    "alpha_max": 1101153.071169
+   },
+   "anisotropic": {
+    "instances": 100,
+    "triples": 40500,
+    "m_inv_sq_reversal_triples": 1163,
+    "gamma_bound_violations": 0,
+    "reversal_instances": 94,
+    "min_ratio": 0.311783,
+    "min_tightness": 1.314983,
+    "alpha_min": 0.314983,
+    "alpha_max": 654238.806287
+   }
+  }
+ },
  "manifest": {
   "config_sha256": "35de2dd60dfdecba9fe3da43fd3b1b9e1538f2741c076bd0a968c17b9622dfa3",
-  "git_sha": "0450cd861dd224578b55e28c2c7df6131335f38c",
+  "git_sha": "21f1ef9e39193f6dba6a3a73f62bcee9461e4af4",
   "scene_rng_spec": "default_rng([20260910, obj_idx])  # identical to P-CERT",
   "levels": [
    0.1,
    0.5
   ],
-  "elapsed_s": 15.0
+  "elapsed_s": 17.3
  },
  "note": "gamma lower bound 1/(1+alpha); alpha = max_x lambda_max(DeltaF(1)^-1 W_x), W_x = u_x[K_x(1)-K_x(kappa)]u_x^T. Alpha is nominal-design-only (no truth/data). The bound is ~1.6x looser than the measured gamma_min 0.99989 (P-SUBMOD); value is the a-priori computability, the explicit alpha form, and the alpha->0 limits. Chamon & Ribeiro (NeurIPS 2017) approximate-supermodularity framework instantiated with calibration precision as design variable; not claimed as the first approximate-submodular bound."
 }

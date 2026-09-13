@@ -258,8 +258,8 @@ certificate — the additive family `M(S) = A + Σ_{k∈S} W_k`, `W_k ⪰ 0`, is
 the Chamon–Ribeiro setting with calibration precision as the design
 variable — together with (ii) direct numerical support at scale:
 **162,000 exhaustive triples** over near-singular and adversarially scaled
-`(A, {W_k})` families give **zero violations**, including **12,499 triples
-on which the `M^{-2}` ordering is reversed** (min observed ratio 0.312,
+`(A, {W_k})` families give **zero violations**, including **12,493 triples
+on which the `M^{-2}` ordering is reversed** (min observed ratio 0.271,
 min bound slack 1.31×; `results/submodularity/alpha_bound.json`, field
 `proof_limits`). A self-contained proof of the collapse step is left open
 and flagged as such.
@@ -293,8 +293,8 @@ supermodular" tendency.
   instances (near-singular, rotated 2×2 counterexample, shared
   null-direction, anisotropic; P=8, L=5), 162,000 exhaustive
   `(S ⊆ T ⊆ N\{x}, x)` triples: **zero violations** of `γ ≥ 1/(1+α)`,
-  12,499 triples with the `M^{-2}` trace ordering reversed, min observed
-  ratio 0.312 (`proof_limits` field; `tests/test_gamma_bound_proof_limits.py`
+  12,493 triples with the `M^{-2}` trace ordering reversed, min observed
+  ratio 0.271 (`proof_limits` field; `tests/test_gamma_bound_proof_limits.py`
   pins the counterexample and re-derives the family check).
 
 **Honest framing.** The bound is about a factor 1.6 looser than the *measured*
