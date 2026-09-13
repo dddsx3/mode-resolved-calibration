@@ -12,7 +12,7 @@
  ],
  "question": "in which (level, curvature) regime is the Fisher linearization valid: rank, sign, and magnitude endpoints",
  "sources": {
-  "cells": "results/mf0_factorial_rows_D.json",
+  "cells": "results/openillumination/correctness/mf0_factorial_rows_D.json",
   "curvature": "results/magnitude/linearization_radius.json"
  },
  "panels": {
@@ -1164,7 +1164,7 @@
   }
  ],
  "manifest": {
-  "git_sha": "9f7681169d8bb4a3213935bdc466fd1af9e6ee52",
+  "git_sha": "d5765bf1ef8ce5a0e1b12b084b53f11ee8ca51ff",
   "rows_sha256": "2c270d8d61d3a9a500e43ac44143e76e84ec6ed10ffd33585d0d12236b738c8a",
   "radius_sha256": "8d83c4d250b4873a91769dad9b8c3d625d54f18f1af4c8e21d0379e826241434"
  },

@@ -35,7 +35,7 @@ during the 2026-09-09 repository reorganization. The complete ledger:
 | `21f1ef9e3919` | `submodularity/alpha_bound.json` | yes (ancestor of HEAD) | P-ALPHA-BOUND v3 run: proof-limits adversarial-search extension (2026-09-13) |
 | `f289a2d2a5b1` | `goal_oriented/goal_orientation.json` | yes (ancestor of HEAD) | P-GOAL-ORIENTED v1.1 run: rho_mean gauge-mechanism extension (2026-09-13) |
 | `7f7094b20c7a` | `openillumination/active_set_ablation.json` | yes (ancestor of HEAD) | P-ACTIVE-SET-ABLATION v1 run (2026-09-14) |
-| `9f7681169d8b` | `magnitude/validity_map.json` | yes (ancestor of HEAD) | P-VALIDITY-MAP v1 run (2026-09-14) |
+| `d5765bf1ef8c` | `magnitude/validity_map.json` | yes (ancestor of HEAD) | P-VALIDITY-MAP v1.0.1 run: resolvable source-path labels (2026-09-14) |
 | `a3d5cae56233` | `openillumination/decision_quality.json` | yes (ancestor of HEAD) | P-DECISION-QUALITY v1 run (2026-09-14) |
 | `ddfccf1dc7e5` | `magnitude/calibration_value_ceiling.json` | yes (ancestor of HEAD) | P-CEILING v1 run (2026-09-13) |
 | `e67a8bf51c8e` | `certification/certified_gaps_levels.json` | yes (ancestor of HEAD) | P-CERT-LEVELS v1 run (2026-09-13) |
