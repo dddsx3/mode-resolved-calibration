@@ -510,6 +510,47 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
 - **Outcome**: cf. `docs/claims.md` M11.
 
 
+## 18. Active-set ablation（P-ACTIVE-SET-ABLATION, `experiments/active_set_ablation.py`）
+
+> **Status: DONE (2026-09-14)** — E4/M1: the "informed beats random" advantage
+> formalized as a six-policy ablation on the certified J_A functional, plus
+> the realized-value arm's honest finding (the E(k) hump).
+
+- **Six policies, one table** (11 objects × budgets {5,10,14,28,48}, level
+  0.5, κ=10, the P-CERT state; existing policies read from
+  `certified_gaps.json`, the other three computed on the rebuilt state):
+  random_universe (any of 142; inactive lights are exact no-ops) /
+  random_active48 / classical A-opt greedy / mode_tail (mode-aware prefix) /
+  continuous (FW) / rounded (top-k of fw_t).
+- **Decomposition (J_A units, 55 rows)**: active-set dilution
+  +0.011..+0.298 (median 0.063, 55/55 ≥ 0); mode-ordering |gap| ≤ 0.004
+  (median 5e-5); rounding loss ≤ 0.0005; certified gap ≤ 0.0008 — **the
+  entire advantage over universe-random is the active-set effect**;
+  ordering within the active set, rounding, and the certified gap are
+  orders smaller.
+- **Realized-value arm (the reframed M1-3)**: the weak-mode endpoint is
+  NON-MONOTONE in refinement coverage — the E(k) hump along the a_opt
+  ordering (legacy frame, frozen seed spec, **bit-exact frozen anchor**:
+  obj_10 k=14 → 1.4648, k=48 → 0.1889; obj_03: 0.59 → 1.21 → 0.20).
+  Mechanism: partial refinement removes mostly gauge-parallel error
+  (unaligned mae improves, 0.12→0.06 / 0.18→0.14) while redistributing
+  into the gauge-aligned weak modes (dual energy worsens); the stable
+  100-seed oracle ranking (split-half 0.82/0.88) ANTI-correlates with
+  single-light J_A gains (Spearman −0.36 / −0.82; top-5 overlap 2/5, 1/5).
+  J_A gains predict total information, not weak-mode energy — the
+  decision-level validity envelope.
+- **Convention note**: the frozen AUC benchmark (allocation_summary /
+  random48_summary) is `legacy`; this ablation's J_A table and the
+  corrected-frame readouts are `corrected`. The legacy k-curve uses the
+  frozen seed spec and reproduces the frozen per-run numbers bit-exactly,
+  anchoring both layers; the AUC reference numbers are copied with source
+  labels (no recomputation).
+- **Output**: `results/openillumination/active_set_ablation.json`
+  (decomposition aggregates, 55 policy rows, 2 oracle rows with mechanism
+  anchors and both k-curves, AUC reference layer).
+- **Outcome**: cf. `docs/claims.md` C8.
+
+
 ---
 
 **Reproduction contract**: every experiment script writes only statistical values and
