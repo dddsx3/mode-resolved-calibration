@@ -83,7 +83,7 @@ def _m_s_inv(A, blocks, C, S, kappa):
     """M(S)^{-1}(dense;P 小或单点验证用=toy/测试路径)。"""
     M = A.copy()
     for k in S:
-        M -= (blocks.u[k] @ C[k]) @ blocks.u[k].T
+        M += (blocks.u[k] @ C[k]) @ blocks.u[k].T
     return np.linalg.inv(M), M
 
 

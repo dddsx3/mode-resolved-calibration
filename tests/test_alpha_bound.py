@@ -110,6 +110,30 @@ def test_gamma_bound_holds_on_toy_family():
             assert g is not None and g >= lb - 1e-9, (family, seed, a, lb, g)
 
 
+def test_refined_set_matches_direct_assembly():
+    from calibinfo.allocation.alpha_bound import _m_s_inv
+
+    u, M0, lam0, finf = _build_instance(SEEDS[0], "random")
+    blocks = LightBlocks(u, M0, lam0, finf, np.ones(L, bool))
+    A, C = decompose(blocks, KAPPA)
+    for size in range(L):
+        for selected in itertools.combinations(range(L), size):
+            t = np.ones(L)
+            t[list(selected)] = KAPPA
+            direct = blocks.assemble(t[:, None, None] * lam0)
+            inverse, matrix = _m_s_inv(A, blocks, C, selected, KAPPA)
+            np.testing.assert_allclose(matrix, direct, rtol=1e-11, atol=1e-11)
+            for x in set(range(L)) - set(selected):
+                updated = t.copy()
+                updated[x] = KAPPA
+                refined = blocks.assemble(updated[:, None, None] * lam0)
+                expected = np.trace(inverse) - np.trace(np.linalg.inv(refined))
+                lower, upper, value = delta_gain_interval(
+                    A, blocks, C, selected, x, KAPPA)
+                assert value == pytest.approx(expected, abs=1e-11)
+                assert lower - 1e-11 <= value <= upper + 1e-11
+
+
 def test_two_sided_sandwich_zero_violations():
     """两端不等式 1600 个 (S,x) 对零违反。"""
     rng = np.random.default_rng(12345)
