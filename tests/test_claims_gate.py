@@ -162,6 +162,9 @@ def test_readme_numeric_claims_traceable():
     go = json.loads((REPO / "results/goal_oriented/goal_orientation.json")
                     .read_text(encoding="utf-8"))
     go_v = go["headline"]["value_curves_by_level"]
+    # gauge-mechanism sentence (v1.1+ artifacts): two-term-law agreement
+    gm_head = go["headline"].get("gauge_mechanism_rho_mean")
+    gm_entry = (("0.0008", gm_head["median_abs_dV"], 4),) if gm_head else ()
     for tok, val, dec in (
             ("0.014", r48["regimes"]["10"]["mode_minus_random_active48"]["median"], 3),
             ("0.019", r48["regimes"]["100"]["mode_minus_random_active48"]["median"], 3),
@@ -176,7 +179,8 @@ def test_readme_numeric_claims_traceable():
             ("89.76", go_v["0.5"]["mean"] * 100, 2),
             ("87.93", go_v["0.1"]["mean"] * 100, 2),
             ("7.82", go_v["0.1"]["all"] * 100, 2),
-            ("0.936", go["headline"]["spearman_mean_vs_contrast"]["median"], 3)):
+            ("0.936", go["headline"]["spearman_mean_vs_contrast"]["median"], 3)
+            ) + gm_entry:
         assert _approx(tok, val, dec), (tok, val)
         traced[tok] = val
 

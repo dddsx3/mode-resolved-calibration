@@ -71,7 +71,51 @@ def _task_operators(scen, cfg):
         h[0, order[:n_d]] -= 1.0 / n_d                     # 最暗四分位
         nrm = float(np.linalg.norm(h))
         tasks["contrast"] = h / nrm if nrm > 0 else h
+    # rho_mean(机制任务,不在 config tasks 里 —— 见 _gauge_mechanism):
+    # a = rho/||rho|| 与灯强 nuisance 列精确 gauge 对齐
+    # (B_phi[:,0] = s_hat*rho ⟹ A_k a = B_k e_1/||rho||,逐灯恒等)。
+    tasks["rho_mean"] = scen.rho / np.linalg.norm(scen.rho)
     return tasks
+
+
+def _gauge_mechanism(scen, blk, active_idx, kappa, a):
+    """rho_mean 的 gauge 机制闭式(验收报告 §4 探查的入库版)。
+
+    精确 gauge 恒等式 A a = B c̄(c̄_k = e_1/||rho||)下,两项定律
+        J_a(t) ≈ 1/(c̄ᵀΛ(t)c̄) + 1/||A a||²
+    给出闭式价值曲线
+        V_pred = (1 − 1/κ) / (1 + q·r),
+        q = c̄ᵀΛ0 c̄(先验精度二次型), r = 1/||A a||²(残差信息精度)。
+    返回对齐残差、(q, r)、实测/预测 V 与偏差。"""
+    rho = scen.rho
+    nsel = len(active_idx)
+    # 对齐残差:每灯 LSQ(rho_mean 应到机器精度;uniform mean 因纹理不为零)
+    def _align(a_dir):
+        num_l = den_l = 0.0
+        for j in range(nsel):
+            Aw_a = np.sqrt(scen.w[j]) * scen.s_hat[j] * a_dir
+            Bk = np.sqrt(scen.w[j])[:, None] * scen.B_phi[j]
+            c, res, *_ = np.linalg.lstsq(Bk, Aw_a, rcond=None)
+            r2 = float(res[0] ** 2) if len(res) else float(
+                np.sum((Bk @ c - Aw_a) ** 2))
+            num_l += r2
+            den_l += float(Aw_a @ Aw_a)
+        return float(np.sqrt(num_l / den_l)) if den_l > 0 else float("inf")
+
+    align_resid = _align(a)
+    uniform_align_resid = _align(np.full(len(rho), 1.0 / np.sqrt(len(rho))))
+    # 闭式量(解析:c̄_k = e_1/||rho||,Λ0 逐灯共享)
+    L0 = blk.lam0[int(active_idx[0])]
+    q = nsel * float(L0[0, 0]) / float(rho @ rho)
+    AA2 = float(np.sum(rho ** 2 * blk.finf) / float(rho @ rho))
+    r = 1.0 / AA2
+    V_pred = (1.0 - 1.0 / kappa) / (1.0 + q * r)
+    J_pred1 = 1.0 / q + r
+    return dict(align_residual=align_resid,
+                uniform_align_residual=round(uniform_align_resid, 6),
+                q=round(q, 6),
+                r=round(r, 6), qr=round(q * r, 6),
+                J_pred_t1=round(J_pred1, 6), V_pred=round(V_pred, 6))
 
 
 def _gains(blk, H, kappa, active_idx):
@@ -152,6 +196,12 @@ def run(config_path=REPO / "configs/goal_orientation.yaml",
                 km2 = np.array([pos_m[k] for k in sorted(pos_m)])
                 row["spearman_all_vs_mean"] = round(
                     float(spearmanr(ka, km2).statistic), 6)
+            # gauge 机制(rho_mean):闭式 V_pred vs 实测
+            gm = _gauge_mechanism(scen, blk, active_idx, kappa,
+                                  tasks["rho_mean"])
+            gm["V_meas"] = round(row["V_rho_mean"], 6)
+            gm["dV"] = round(gm["V_pred"] - gm["V_meas"], 6)
+            row["gauge_mechanism_rho_mean"] = gm
             rows.append(row)
         print(f"[goal] {obj_name}: " + "; ".join(
             f"lv={r['level']} rho(m,c)={r.get('spearman_mean_vs_contrast')}"
@@ -163,7 +213,7 @@ def run(config_path=REPO / "configs/goal_orientation.yaml",
     t3 = [r["top3_overlap_mean_vs_contrast"] for r in rows
           if "top3_overlap_mean_vs_contrast" in r]
     by_task = {}
-    for name in cfg["tasks"]:
+    for name in list(cfg["tasks"]) + ["rho_mean"]:
         vs = [r[f"V_{name}"] for r in rows]
         by_task[name] = dict(min=round(min(vs), 6), max=round(max(vs), 6),
                              median=round(float(np.median(vs)), 6))
@@ -172,13 +222,37 @@ def run(config_path=REPO / "configs/goal_orientation.yaml",
         rs = [r for r in rows if r["level"] == lv]
         by_level[str(lv)] = {
             name: round(float(np.median([r[f"V_{name}"] for r in rs])), 6)
-            for name in cfg["tasks"]}
+            for name in list(cfg["tasks"]) + ["rho_mean"]}
+    # gauge 机制汇总(两项定律 V = (1−1/κ)/(1+qr) 的吻合度)
+    gms = [r["gauge_mechanism_rho_mean"] for r in rows]
+    dvs = [abs(g["dV"]) for g in gms]
+    gm_by_level = {}
+    for lv in levels:
+        d = [abs(r["gauge_mechanism_rho_mean"]["dV"])
+             for r in rows if r["level"] == lv]
+        gm_by_level[str(lv)] = dict(max_abs_dV=round(max(d), 6),
+                                    median_abs_dV=round(float(np.median(d)), 6))
+    gauge_summary = dict(
+        law="V_pred = (1 - 1/kappa) / (1 + q*r);  J_a(t) ~ 1/(c'L(t)c) + 1/||Aa||^2",
+        identity="A rho/||rho|| = B cbar with cbar_k = e_1/||rho|| per light "
+                 "(B_phi[:,0] = s_hat*rho);  exact to machine precision",
+        max_align_residual=round(max(g["align_residual"] for g in gms), 12),
+        uniform_align_residual=dict(
+            min=round(min(g["uniform_align_residual"] for g in gms), 6),
+            max=round(max(g["uniform_align_residual"] for g in gms), 6)),
+        max_abs_dV=round(max(dvs), 6),
+        median_abs_dV=round(float(np.median(dvs)), 6),
+        by_level=gm_by_level,
+        note="approximate law for exactly gauge-aligned functionals; the "
+             "uniform-mean task (registered) is NOT exactly aligned "
+             "(texture residual, see uniform_align_residual) and inherits "
+             "the mechanism qualitatively")
     summary = dict(
         gate=cfg["gate"], analysis_status=cfg["analysis_status"],
         kappa=kappa, levels=levels,
         noise_fit_convention=cfg["noise_fit_convention"],
         n_objects=len(cfg["cohort"]), n_active_lights=int(len(active_idx)),
-        tasks=list(cfg["tasks"]),
+        tasks=list(cfg["tasks"]) + ["rho_mean"],
         headline=dict(
             n_cells=len(mc),
             spearman_mean_vs_contrast=dict(
@@ -188,7 +262,8 @@ def run(config_path=REPO / "configs/goal_orientation.yaml",
                 min=int(min(t3)), max=int(max(t3)),
                 n_cells_disjoint=int(sum(1 for x in t3 if x == 0))),
             value_curves=by_task,
-            value_curves_by_level=by_level),
+            value_curves_by_level=by_level,
+            gauge_mechanism_rho_mean=gauge_summary),
         rows=rows,
         manifest=dict(
             config_sha256=_sha(Path(config_path)),

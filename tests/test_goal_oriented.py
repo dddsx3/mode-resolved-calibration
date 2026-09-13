@@ -149,3 +149,29 @@ def test_goal_orientation_artifact_fields():
         (REPO / "configs/goal_orientation.yaml").read_bytes()).hexdigest()
     assert j["manifest"]["config_sha256"] == cfg_hash
     assert j["manifest"]["git_sha"]
+
+
+def test_goal_orientation_gauge_mechanism_fields():
+    """两项定律 V=(1-1/kappa)/(1+q*r) 的机制字段(v1.1)。"""
+    if not ART.exists():
+        pytest.skip("artifact not committed")
+    import json
+    j = json.loads(ART.read_text(encoding="utf-8"))
+    if "gauge_mechanism_rho_mean" not in j.get("headline", {}):
+        pytest.skip("artifact predates the gauge-mechanism fields")
+    g = j["headline"]["gauge_mechanism_rho_mean"]
+    # rho_mean 方向与灯强 nuisance 精确 gauge 对齐(机器精度)
+    assert g["max_align_residual"] < 1e-9
+    # 均匀均值方向不对齐(纹理残差)——与机制叙述一致
+    assert g["uniform_align_residual"]["min"] > 0.1
+    assert g["uniform_align_residual"]["max"] > 1.0
+    # 两项定律吻合:中位偏差 < 0.005,最差 < 0.05,且逐 level 递减
+    assert g["median_abs_dV"] < 0.005
+    assert g["max_abs_dV"] < 0.05
+    bl = g["by_level"]
+    assert bl["8.0"]["max_abs_dV"] < bl["0.5"]["max_abs_dV"] < bl["0.1"]["max_abs_dV"]
+    # 逐行:V_rho_mean 逼近天花板,闭式从上方逼近(近似定律)
+    for r in j["rows"]:
+        gm = r["gauge_mechanism_rho_mean"]
+        assert gm["V_pred"] >= gm["V_meas"] - 1e-9
+        assert gm["V_meas"] <= 1.0 - 1.0 / 10.0 + 1e-6   # <= ceiling
