@@ -162,6 +162,11 @@ reference record.
   synthetic matched Monte-Carlo — the matched-GLS variance theorem holds where
   its assumptions hold, and the real-data deviation is reported as a positive,
   falsifiable validity envelope of the linearized theory;
+- **Model-validity map**: ordering validity is curvature-robust (median
+  Spearman ≥ 0.8 and Kendall sign agreement ≥ 0.7 in every curvature bin)
+  while the magnitude ratio grows monotonically with the linearization
+  curvature metric — linearization failure hits magnitudes, not directions
+  (`results/magnitude/validity_map.json`, methods.md §4 scope note);
 - preregistered allocation evaluation: mode-aware guidance improves
   reconstruction over random allocation for 11/11 objects (Δ AUC −0.150 at 10×,
   −0.279 at 100×; bootstrap 95% CI excludes 0 — an actionable outcome vs

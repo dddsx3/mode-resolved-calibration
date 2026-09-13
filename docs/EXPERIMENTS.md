@@ -551,6 +551,29 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
 - **Outcome**: cf. `docs/claims.md` C8.
 
 
+## 19. Model-validity map（P-VALIDITY-MAP, `experiments/validity_map.py`）
+
+> **Status: DONE (2026-09-14)** — E2/M2: "Fisher 线性化在哪个 regime 准",
+> 不证明它永远准。**只读 join** 两个已提交产物(corrected arm-D 的逐 cell
+> pred_deg/emp_deg x linearization-radius 的曲率指标),无实验重算。
+
+- **四端点(逐 cell,66 = 11 物体 x 6 level)**:Spearman 排序相关;
+  **Kendall 符号一致率**(预测 vs 经验模式排序的逐对符号一致,
+  M2-1 的新端点,直接从已提交行补算);幅值比中位数 emp/pred;
+  跨模式 log-ratio IQR。
+- **二维图**(`docs/img/validity_map.png`):横轴 level,纵轴
+  excess-over-first-order-scaling q(ℓ)(对数轴,红线 = 一阶边界 q=1),
+  四面板着色。
+- **核心发现(B8)**:排序/符号效度对曲率稳健——四个曲率箱
+  (q<0.75 / 0.75-1.0 / 1.0-1.5 / >=1.5)的 median Spearman 全部 >= 0.8、
+  Kendall 全部 >= 0.7;幅值比随曲率单调恶化(median-of-medians
+  7.7 -> 10.4 -> 72.0 -> 106.5)。**线性化失效打幅值,不打方向**:
+  排序类问题在全网格有效,幅值类问题只在次线性 regime 有效。
+- **Output**: `results/magnitude/validity_map.json`(cells + by-excess-bin
+  + by-level + manifest 含来源产物 sha256)+ `docs/img/validity_map.png`。
+- **Outcome**: cf. `docs/claims.md` B8.
+
+
 ---
 
 **Reproduction contract**: every experiment script writes only statistical values and

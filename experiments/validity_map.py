@@ -70,7 +70,8 @@ def _cell_metrics(pred, emp):
 
 
 def run(rows_path=ROWS, radius_path=RADIUS, out_path=OUT, img_path=IMG):
-    rows = json.loads(Path(rows_path).read_text(encoding="utf-8"))
+    _rows_doc = json.loads(Path(rows_path).read_text(encoding="utf-8"))
+    rows = _rows_doc["rows"] if isinstance(_rows_doc, dict) else _rows_doc
     rad = json.loads(Path(radius_path).read_text(encoding="utf-8"))
     excess = {}
     for obj_name, o in rad["objects"].items():
