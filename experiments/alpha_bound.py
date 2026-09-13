@@ -152,6 +152,208 @@ def toy_instance_report(seed, family, L, P, kappa, rng):
         min_ub_over_val=(None if min_ratio_ub == np.inf else round(float(min_ratio_ub), 6)))
 
 
+# ------------------------------------------------- proof-limits 对抗搜索(N1)
+# 2x2 反例:X -> X^{-2} 非算子单调,Löwner 定理(t^p 算子单调 iff |p|<=1),
+# 所以 M(S) <= M(T) 推不出 tr[W M(S)^{-2}] >= tr[W M(T)^{-2}]。
+# 该反例把反转机制钉死:d(M,W)=1/3 < d(N,W)=1/2 而 tr[W M^{-2}]=1 < tr[W N^{-2}]=1.25。
+_LIMITS_M2 = np.array([[1.0, -1.0], [-1.0, 2.0]])
+_LIMITS_H2 = np.array([[1.0, -1.0], [-1.0, 1.0]])
+_LIMITS_W2 = np.array([[1.0, -2.0], [-2.0, 4.0]])
+
+_LIMITS_P, _LIMITS_L = 8, 5
+
+
+def _limits_counterexample_2x2():
+    """钉死 2x2 反例的精确数值(与 tests/test_gamma_bound_proof_limits.py 对拍)。"""
+    M, H, W = _LIMITS_M2, _LIMITS_H2, _LIMITS_W2
+    N = M + H
+    Minv, Ninv = np.linalg.inv(M), np.linalg.inv(N)
+    d_MW = float(np.trace(Minv - np.linalg.inv(M + W)))
+    d_NW = float(np.trace(Ninv - np.linalg.inv(N + W)))
+    w, v = np.linalg.eigh(M)
+    Mh = (v / np.sqrt(w)) @ v.T
+    alpha = float(np.linalg.eigvalsh(Mh @ W @ Mh).max())
+    return dict(
+        M="[[1,-1],[-1,2]]", H="[[1,-1],[-1,1]]", W="[[1,-2],[-2,4]]",
+        d_MW=round(d_MW, 6), d_NW=round(d_NW, 6),
+        tr_W_Minv2=round(float(np.trace(W @ Minv @ Minv)), 6),
+        tr_W_Ninv2=round(float(np.trace(W @ Ninv @ Ninv)), 6),
+        m_inv_sq_ordering_reversed=bool(np.trace(W @ Minv @ Minv)
+                                        < np.trace(W @ Ninv @ Ninv)),
+        alpha=round(alpha, 6),
+        gamma_bound=round(1.0 / (1.0 + alpha), 6),
+        ratio_dMW_over_dNW=round(d_MW / d_NW, 6),
+        bound_holds_here=bool(d_MW / d_NW >= 1.0 / (1.0 + alpha) - 1e-9))
+
+
+def _limits_search(A, Ws, tol=1e-15):
+    """单 (A, {W_k}) 实例的穷举 (S ⊆ T ⊆ N\\{x}, x) 三元组审计:
+    γ 比值、γ ≥ 1/(1+α) 违反数、M^{-2} 迹排序反转数。"""
+    L = len(Ws)
+    wA, vA = np.linalg.eigh(A)
+    Ah = (vA / np.sqrt(wA)) @ vA.T
+    alpha = max(float(np.linalg.eigvalsh(Ah @ W @ Ah).max()) for W in Ws)
+    Ms, Fs = {}, {}
+    for n in range(L + 1):
+        for S in itertools.combinations(range(L), n):
+            M = A.copy()
+            for k in S:
+                M = M + Ws[k]
+            Sf = frozenset(S)
+            Ms[Sf] = M
+            Fs[Sf] = float(np.trace(np.linalg.inv(M)))
+    F0 = Fs[frozenset()]
+    G = {S: F0 - val for S, val in Fs.items()}
+    n_triples = n_rev = n_viol = 0
+    min_ratio = min_tight = np.inf
+    for x in range(L):
+        Wx = Ws[x]
+        rest = [k for k in range(L) if k != x]
+        for m in range(len(rest) + 1):
+            for Tt in itertools.combinations(rest, m):
+                Tf = frozenset(Tt)
+                dT = G[Tf | {x}] - G[Tf]
+                if dT <= tol:
+                    continue
+                MTinv = np.linalg.inv(Ms[Tf])
+                trT = float(np.trace(Wx @ MTinv @ MTinv))
+                for j in range(m + 1):
+                    for St in itertools.combinations(Tt, j):
+                        Sf = frozenset(St)
+                        dS = G[Sf | {x}] - G[Sf]
+                        if dS <= tol:
+                            continue
+                        n_triples += 1
+                        ratio = dS / dT
+                        min_ratio = min(min_ratio, ratio)
+                        min_tight = min(min_tight, ratio * (1.0 + alpha))
+                        if ratio < 1.0 / (1.0 + alpha) - 1e-9:
+                            n_viol += 1
+                        MSinv = np.linalg.inv(Ms[Sf])
+                        if float(np.trace(Wx @ MSinv @ MSinv)) < trT - 1e-12:
+                            n_rev += 1
+    return dict(alpha=alpha, triples=n_triples, reversals=n_rev,
+                violations=n_viol, min_ratio=float(min_ratio),
+                min_tightness=float(min_tight))
+
+
+def _make_near_singular(seed):
+    r = np.random.default_rng(seed)
+    Q = np.linalg.qr(r.normal(size=(_LIMITS_P, _LIMITS_P)))[0]
+    A = (Q * 10.0 ** r.uniform(-6, 2, size=_LIMITS_P)) @ Q.T
+    Ws = []
+    for _ in range(_LIMITS_L):
+        G = r.normal(size=(_LIMITS_P, 3))
+        Ws.append((G @ G.T) * 10.0 ** r.uniform(-2, 2))
+    return A, Ws
+
+
+def _make_counterexample_rotated(seed):
+    """把 2x2 反例 (M, H, W) 旋转嵌入 P 维:A = Q(M ⊕ D)Q^T,
+    W_0 = Q(H⊕0)Q^T, W_1 = Q(W⊕0)Q^T —— 反转机制在高维重现。"""
+    r = np.random.default_rng(seed)
+    P = _LIMITS_P
+    Q = np.linalg.qr(r.normal(size=(P, P)))[0]
+    D = np.diag(10.0 ** r.uniform(-2, 2, size=P - 2))
+    A = Q @ np.block([[_LIMITS_M2, np.zeros((2, P - 2))],
+                      [np.zeros((P - 2, 2)), D]]) @ Q.T
+
+    def emb(X):
+        return Q @ np.block([[X, np.zeros((2, P - 2))],
+                             [np.zeros((P - 2, 2)), np.zeros((P - 2, P - 2))]]) @ Q.T
+
+    Ws = [emb(_LIMITS_H2), emb(_LIMITS_W2)]
+    for _ in range(_LIMITS_L - 2):
+        v = r.normal(size=P)
+        v /= np.linalg.norm(v)
+        Ws.append(np.outer(v, v) * r.uniform(0.01, 0.1))
+    return A, Ws
+
+
+def _make_shared_null_dir(seed):
+    """A 带近零特征方向,全部 W_k 对齐在该方向上(近超模机制)。"""
+    r = np.random.default_rng(seed)
+    P = _LIMITS_P
+    Q = np.linalg.qr(r.normal(size=(P, P)))[0]
+    eigs = np.concatenate([[1e-6, 1e-4],
+                           10.0 ** r.uniform(-1, 2, size=P - 2)])
+    A = (Q * eigs) @ Q.T
+    v = Q[:, 0]
+    Ws = []
+    for _ in range(_LIMITS_L):
+        g = r.normal(size=P)
+        Ws.append(10.0 ** r.uniform(-3, 0) * np.outer(v, v)
+                  + np.outer(g, g) * 10.0 ** r.uniform(-3, -1))
+    return A, Ws
+
+
+def _make_anisotropic(seed):
+    """A 谱 1e-5..1e3 强各向异性,W_k 集中在 A 的大特征方向(对抗缩放)。"""
+    r = np.random.default_rng(seed)
+    P = _LIMITS_P
+    Q = np.linalg.qr(r.normal(size=(P, P)))[0]
+    A = (Q * 10.0 ** r.uniform(-5, 3, size=P)) @ Q.T
+    Ws = []
+    for _ in range(_LIMITS_L):
+        v = Q[:, int(r.integers(P // 2, P))]
+        g = r.normal(size=P)
+        Ws.append(np.outer(v, v) * 10.0 ** r.uniform(-1, 1)
+                  + np.outer(g, g) * 1e-3)
+    return A, Ws
+
+
+_LIMITS_FAMILIES = dict(
+    near_singular=(_make_near_singular, 100, 100),
+    counterexample_rotated=(_make_counterexample_rotated, 1000, 100),
+    shared_null_dir=(_make_shared_null_dir, 2000, 100),
+    anisotropic=(_make_anisotropic, 3000, 100))
+
+
+def proof_limits_run():
+    """N1 · proof-limits 对抗搜索:固定族 + 固定种子,结果可复现。
+
+    回答"γ ≥ 1/(1+α) 的塌缩步骤缺证明,数值上站得住吗":
+    4 族 × 100 实例(A, {W_k ⪰ 0}),穷举全部 (S ⊆ T ⊆ N\\{x}, x) 三元组,
+    记录违反数、M^{-2} 迹排序反转数、最小比值与最小紧度。"""
+    families = {}
+    tot = dict(instances=0, adversarial_triples=0, m_inv_sq_reversal_samples=0,
+               gamma_bound_violations=0, reversal_instances=0,
+               min_ratio_observed=np.inf, min_tightness=np.inf)
+    for name, (fn, base, n) in _LIMITS_FAMILIES.items():
+        fam = dict(instances=n, triples=0, m_inv_sq_reversal_triples=0,
+                   gamma_bound_violations=0, reversal_instances=0,
+                   min_ratio=np.inf, min_tightness=np.inf,
+                   alpha_min=np.inf, alpha_max=0.0)
+        for i in range(n):
+            A, Ws = fn(base + i)
+            r = _limits_search(A, Ws)
+            fam["triples"] += r["triples"]
+            fam["m_inv_sq_reversal_triples"] += r["reversals"]
+            fam["gamma_bound_violations"] += r["violations"]
+            fam["min_ratio"] = min(fam["min_ratio"], r["min_ratio"])
+            fam["min_tightness"] = min(fam["min_tightness"], r["min_tightness"])
+            fam["alpha_min"] = min(fam["alpha_min"], r["alpha"])
+            fam["alpha_max"] = max(fam["alpha_max"], r["alpha"])
+            if r["reversals"] > 0:
+                fam["reversal_instances"] += 1
+        families[name] = {k: (round(v, 6) if isinstance(v, float) else v)
+                          for k, v in fam.items()}
+        tot["instances"] += n
+        tot["adversarial_triples"] += fam["triples"]
+        tot["m_inv_sq_reversal_samples"] += fam["m_inv_sq_reversal_triples"]
+        tot["gamma_bound_violations"] += fam["gamma_bound_violations"]
+        tot["reversal_instances"] += fam["reversal_instances"]
+        tot["min_ratio_observed"] = min(tot["min_ratio_observed"], fam["min_ratio"])
+        tot["min_tightness"] = min(tot["min_tightness"], fam["min_tightness"])
+    tot = {k: (round(v, 6) if isinstance(v, float) else v) for k, v in tot.items()}
+    tot["m_inv_sq_ordering_counterexample_2x2"] = _limits_counterexample_2x2()
+    tot["semantics"] = ("triples are (S subset of T subset of N\\{x}, x) with "
+                        "positive gains at both ends; ratio = dS/dT; a triple "
+                        "is a violation if ratio < 1/(1+alpha)-1e-9; a "
+                        "reversal is tr[W_x M(S)^-2] < tr[W_x M(T)^-2]-1e-12")
+    return dict(**tot, families=families)
+
+
 # ---------------------------------------------------------------- 真实物体
 def build_state(scen, level: float, kappa: float, K: int) -> LightBlocks:
     """P-CERT 同款装配:142 灯全域、48 个 Fisher-active 灯。"""
@@ -242,6 +444,13 @@ def run(config_path=REPO / "configs/alpha_bound.yaml",
                                   ">= 0.635-supermodular on every held-out "
                                   "object at the probed levels")
 
+    # ---- proof-limits 对抗搜索(N1)----
+    proof_limits = proof_limits_run()
+    print(f"[alpha] proof-limits: {proof_limits['adversarial_triples']} triples, "
+          f"{proof_limits['gamma_bound_violations']} violations, "
+          f"{proof_limits['m_inv_sq_reversal_samples']} M^-2 reversals, "
+          f"min ratio {proof_limits['min_ratio_observed']}", flush=True)
+
     summary = dict(
         gate=cfg["gate"], analysis_status=cfg["analysis_status"],
         kappa=kappa, objective=cfg["objective"], bound=cfg["bound"],
@@ -250,6 +459,7 @@ def run(config_path=REPO / "configs/alpha_bound.yaml",
         real=real,
         by_level=by_level,
         gamma_overall=gamma_overall,
+        proof_limits=proof_limits,
         manifest=dict(
             config_sha256=_sha(Path(config_path)),
             git_sha=_git_sha(),

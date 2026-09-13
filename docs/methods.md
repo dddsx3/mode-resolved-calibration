@@ -240,10 +240,29 @@ that `(I+X)^{-1}` has eigenvalues `1/(1+μ_j) ∈ [1/(1+ρ), 1]`:
 λmax(A^{-1} W_x)` — this avoids invoking monotonicity of matrix inversion on
 singular limits, which is unsafe when `rank(F∞) < n` (the Loewner ordering of
 inverses only holds for *strictly* positive-definite arguments; see CR17, §4).
-Combining with the lower bound from L11 (`Δ_x G(S) ≥ tr[W_x M^{-2}]/(1+ρ)`),
-the worst-case ratio collapses to a single design-only quantity:
+Combining with the lower bound from L11 (`Δ_x G(S) ≥ tr[W_x M^{-2}]/(1+ρ)`):
 
     γ ≥ 1/(1 + α),    α := max_x λmax(A^{-1} W_x),    A := ΔF(1).
+
+**Proof status of the final collapse (explicit).** The step above assumes
+`tr[W_x M(S)^{-2}] ≥ tr[W_x M(N\{x})^{-2}]` for `S ⊆ N\{x}`. We do **not**
+claim that step as established here: `X ↦ X^{-2}` is not operator-monotone
+on the PD cone (Löwner: `t ↦ t^p` is operator-monotone iff `|p| ≤ 1`), so
+`M(S) ⪯ M(T)` alone does not deliver the `M^{-2}` ordering — and the
+ordering **does reverse in practice**: on the pinned 2×2 counterexample
+(`M=[[1,-1],[-1,2]]`, `H=[[1,-1],[-1,1]]`, `W=[[1,-2],[-2,4]]`) the gain
+*increases* (`d(M,W) = 1/3 < d(N,W) = 1/2` for `N = M+H`) while
+`tr[W M^{-2}] = 1 < tr[W N^{-2}] = 1.25`. We therefore present
+`γ ≥ 1/(1+α)` as (i) a **CR17-form** α-approximate-supermodularity
+certificate — the additive family `M(S) = A + Σ_{k∈S} W_k`, `W_k ⪰ 0`, is
+the Chamon–Ribeiro setting with calibration precision as the design
+variable — together with (ii) direct numerical support at scale:
+**162,000 exhaustive triples** over near-singular and adversarially scaled
+`(A, {W_k})` families give **zero violations**, including **12,499 triples
+on which the `M^{-2}` ordering is reversed** (min observed ratio 0.312,
+min bound slack 1.31×; `results/submodularity/alpha_bound.json`, field
+`proof_limits`). A self-contained proof of the collapse step is left open
+and flagged as such.
 
 This is the *uniform ceiling*: the A-opt selection function is
 `α`-approximately supermodular with a bound computable **a priori** from
@@ -270,6 +289,13 @@ supermodular" tendency.
   most conservative statement is
   "A-optimal light-refinement selection is ≥ 0.635-supermodular on every
   held-out object at the probed levels."
+- **(d) proof-limits adversarial search** — 400 synthetic `(A, {W_k ⪰ 0})`
+  instances (near-singular, rotated 2×2 counterexample, shared
+  null-direction, anisotropic; P=8, L=5), 162,000 exhaustive
+  `(S ⊆ T ⊆ N\{x}, x)` triples: **zero violations** of `γ ≥ 1/(1+α)`,
+  12,499 triples with the `M^{-2}` trace ordering reversed, min observed
+  ratio 0.312 (`proof_limits` field; `tests/test_gamma_bound_proof_limits.py`
+  pins the counterexample and re-derives the family check).
 
 **Honest framing.** The bound is about a factor 1.6 looser than the *measured*
 `γ_min = 0.99989` (P-SUBMOD negative-result pack). Its value is the a-priori
