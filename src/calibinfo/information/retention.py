@@ -43,7 +43,7 @@ def retention_spectrum_dual(DeltaF, Finf, tol_rel=1e-12):
     out = retention_spectrum(DeltaF, Finf, tol_rel=tol_rel)
     rho_g, ok = retention_spectrum_gen_eig(DeltaF, Finf)
     dual_rel = None
-    if ok and rho_g.size == out["rho"].size:
+    if ok and rho_g.size and rho_g.size == out["rho"].size:
         dual_rel = float(np.abs(out["rho"] - rho_g).max()
                         / max(np.abs(rho_g).max(), 1e-300))
     out["gen_eig_available"] = bool(ok)
@@ -59,6 +59,12 @@ def retention_spectrum(DeltaF, Finf, tol_rel=1e-12):
     DeltaF : (n, n) ΔF(Λ)（任意 Λ）
     Finf   : (n, n) F∞ = AᵀA（校准极限 Fisher）
     tol_rel: range(F∞) 截断容差（相对最大特征值）
+
+    rank(F∞)=0 returns empty rho, (n,0) basis/modes, cond_Finf=inf,
+    and bounds_ok=True (empty-spectrum convention).
+    Unlike retention_spectrum_lowrank, this API accepts rank-deficient
+    Finf and returns only its k identifiable modes. The low-rank API
+    requires strictly positive finf_diag and returns the full P-spectrum.
 
     返回
     ----
@@ -78,12 +84,23 @@ def retention_spectrum(DeltaF, Finf, tol_rel=1e-12):
     n = Finf.shape[0]
     assert DeltaF.shape == (n, n)
     w, V = np.linalg.eigh(Finf)
-    keep = w > tol_rel * max(w.max(), 1e-300)
+    keep = w > tol_rel * max(float(w.max()) if w.size else 0.0, 1e-300)
     Vk = V[:, keep]
     wk = w[keep]
-    Fh = Vk @ np.diag(1.0 / np.sqrt(wk)) @ Vk.T        # 正定平方根（限制到 range）
-    R = Fh @ DeltaF @ Fh
-    rho, U = np.linalg.eigh(0.5 * (R + R.T))           # 升序；U 列 = retention modes
+    k = int(keep.sum())
+    if k == 0:
+        return dict(rho=np.empty(0), basis=Vk, modes=np.empty((n, 0)),
+                    n_identifiable=0, cond_Finf=float("inf"), bounds_ok=True)
+    if k == n:
+        # Preserve the full-rank path used by the frozen benchmark.
+        Fh = Vk @ np.diag(1.0 / np.sqrt(wk)) @ Vk.T
+        R = Fh @ DeltaF @ Fh
+        rho, U = np.linalg.eigh(0.5 * (R + R.T))
+    else:
+        scale = 1.0 / np.sqrt(wk)
+        R = (Vk.T @ DeltaF @ Vk) * scale[:, None] * scale[None, :]
+        rho, reduced_modes = np.linalg.eigh(0.5 * (R + R.T))
+        U = Vk @ reduced_modes
     tol = 1e-9
     return dict(rho=rho, basis=Vk, modes=U, n_identifiable=int(keep.sum()),
                 cond_Finf=float(wk.max() / wk.min()),
