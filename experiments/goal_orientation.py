@@ -167,6 +167,12 @@ def run(config_path=REPO / "configs/goal_orientation.yaml",
         vs = [r[f"V_{name}"] for r in rows]
         by_task[name] = dict(min=round(min(vs), 6), max=round(max(vs), 6),
                              median=round(float(np.median(vs)), 6))
+    by_level = {}
+    for lv in levels:
+        rs = [r for r in rows if r["level"] == lv]
+        by_level[str(lv)] = {
+            name: round(float(np.median([r[f"V_{name}"] for r in rs])), 6)
+            for name in cfg["tasks"]}
     summary = dict(
         gate=cfg["gate"], analysis_status=cfg["analysis_status"],
         kappa=kappa, levels=levels,
@@ -181,7 +187,8 @@ def run(config_path=REPO / "configs/goal_orientation.yaml",
             top3_overlap_mean_vs_contrast=dict(
                 min=int(min(t3)), max=int(max(t3)),
                 n_cells_disjoint=int(sum(1 for x in t3 if x == 0))),
-            value_curves=by_task),
+            value_curves=by_task,
+            value_curves_by_level=by_level),
         rows=rows,
         manifest=dict(
             config_sha256=_sha(Path(config_path)),

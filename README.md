@@ -230,6 +230,18 @@ budget as a curve in the operating point; Decision allocates it; Certification
 bounds the distance to the global optimum. The layers are separable — the
 certificates hold for *any* candidate allocation, not only the greedy one.
 
+**Goal-oriented value (which task is the calibration for?).** The value
+layer extends to downstream tasks: for task operators `H` (linear functionals
+of the parameter estimate), `J_H = tr(H ΔF⁻¹Hᵀ)` prices the *same*
+calibration state per task (low-rank push-through route; `methods.md` §10).
+On the 11 held-out objects the same uniform refinement at level 0.5 buys a
+median 62.87% dynamic range for the all-parameter A-opt functional — the
+certified P-CERT headline, reproduced by the new route as a cross-check —
+but 89.76% for the mean-albedo task (at level 0.1: 7.82% vs 87.93%), and
+the per-light gain rankings under the two tasks disagree (median Spearman
+0.936; top-3 light sets disjoint in 11 of 44 object×level cells) —
+`results/goal_oriented/goal_orientation.json`.
+
 Three structural findings anchor it (verified by
 `tests/test_math_foundations.py`; no raw data required):
 

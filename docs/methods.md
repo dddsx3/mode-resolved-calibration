@@ -302,6 +302,46 @@ supermodular" tendency.
 computability (no exhaustive search), the explicit form of `α`, and the two
 `α → 0` limits — not numerical tightness.
 
+## 10. Goal-oriented calibration value (J_H)
+
+The A-opt functional prices calibration for *all* parameters equally. A
+downstream task — a set of linear functionals `H ∈ R^{m×P}` of the parameter
+estimate — has its own price:
+
+    J_H(t) = tr(H ΔF(t)^{-1} H^T).
+
+The low-rank route extends exactly (push-through/Woodbury on
+`ΔF = D − V Vᵀ`):
+
+    J_H = tr(H D^{-1} H^T) + tr(G^{-1} (H D^{-1} V)^T (H D^{-1} V)),
+    G = I − V^T D^{-1} V,
+
+with the analytic gradient
+`∇_{t_k} J_H = −tr(K_k Λ0_k K_k (u_k^T Z)(Z^T u_k))`, `Z = ΔF^{-1} H^T`
+(`information.lowrank.woodbury_quad_risk[_grad]`; `H = I` reproduces
+`tr ΔF^{-1}` to < 1e-10 and the gradient matches FD to ≤ 1e-6 —
+`tests/test_goal_oriented.py`).
+
+**Finding** (11 held-out objects × 4 levels, κ = 10;
+`results/goal_oriented/goal_orientation.json`; descriptive, no sign gate):
+
+- **Value is task-dependent.** The same uniform refinement of all 48
+  Fisher-active lights recovers a median dynamic range of 62.87% for the
+  all-parameter A-opt functional at level 0.5 — numerically the P-CERT
+  certified headline, an independent cross-check of the quad-risk route —
+  but 89.76% for the mean-albedo task; at level 0.1 the gap is 7.82%
+  vs 87.93%.
+- **Rankings are task-dependent.** Per-light single-refinement gains
+  ranked under the mean task vs the bright/dim-quartile contrast task
+  disagree: median Spearman 0.936 (min 0.586), and the top-3 light sets
+  are disjoint in 11 of 44 object×level cells.
+
+**Scope.** `H` acts on the per-pixel log-albedo-direction parameterization
+that the certified pipeline carries. The photometric-stereo
+normals-vs-albedo task pair requires the joint `4P` (log ρ, n)
+parameterization — a mechanical extension of the same functional, not
+attempted here and not claimed.
+
 ## Tests binding these statements
 
 | File | Binds |
@@ -313,3 +353,5 @@ computability (no exhaustive search), the explicit form of `α`, and the two
 | `tests/test_math_gates.py` | singular-covariance counterexample, retention-covariance theorem, polyfit order, rank invariance |
 | `tests/test_known_answer_precheck.py` | λmin reading, trace dilution, parallel sums, gauge identity |
 | `tests/test_alpha_bound.py` | L9–L12: γ ≥ 1/(1+α) on toy family, two-sided sandwich zero violations, real-object α in range |
+| `tests/test_gamma_bound_proof_limits.py` | 2×2 `M^{-2}`-reversal counterexample pinned; adversarial exhaustive family re-derivation; artifact `proof_limits` fields |
+| `tests/test_goal_oriented.py` | §10: H=I parity, dense parity, row-mixing invariance, gradient FD; artifact headline fields |

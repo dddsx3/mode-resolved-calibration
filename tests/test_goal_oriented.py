@@ -18,6 +18,11 @@ from calibinfo.information.lowrank import (
     woodbury_trace_inv, woodbury_trace_inv_grad,
     woodbury_quad_risk, woodbury_quad_risk_grad)
 
+from pathlib import Path
+
+REPO = Path(__file__).resolve().parents[1]
+ART = REPO / "results/goal_oriented/goal_orientation.json"
+
 
 def _state(seed=20260913, L=6, P=30, q=3):
     rng = np.random.default_rng(seed)
@@ -112,3 +117,35 @@ def test_goal_oriented_gradient_H_identity_matches_trace_grad():
     _, g_H = woodbury_quad_risk_grad(finf, u, M0, lam0, active, t0,
                                      np.eye(finf.size))
     np.testing.assert_allclose(g_H, g_ref, rtol=1e-9, atol=1e-12)
+
+
+# ------------------------------------------------- 产物 pin(N4-3 登记后)
+def test_goal_orientation_artifact_fields():
+    """goal_orientation.json 的 headline 与 M11/README 引用的数字一致。"""
+    if not ART.exists():
+        pytest.skip("artifact not committed")
+    import hashlib
+    import json
+    j = json.loads(ART.read_text(encoding="utf-8"))
+    if "headline" not in j:
+        pytest.skip("artifact predates the v1 headline")
+    h = j["headline"]
+    assert j["analysis_status"] == "goal_orientation_v1"
+    assert j["n_objects"] == 11 and h["n_cells"] == 44
+    assert h["spearman_mean_vs_contrast"]["median"] == pytest.approx(0.936387,
+                                                                    abs=1e-4)
+    assert h["spearman_mean_vs_contrast"]["min"] == pytest.approx(0.585541,
+                                                                 abs=1e-4)
+    assert h["top3_overlap_mean_vs_contrast"]["n_cells_disjoint"] == 11
+    # H=I 交叉验证:V_all @ level 0.5 的中位数 = P-CERT 认证头条 62.87%
+    v50 = h["value_curves_by_level"]["0.5"]["all"]
+    assert v50 == pytest.approx(0.6287, abs=5e-4)
+    # 任务价值差距 @ level 0.1(README 7.82% vs 87.93%)
+    v01 = h["value_curves_by_level"]["0.1"]
+    assert v01["all"] == pytest.approx(0.078212, abs=1e-4)
+    assert v01["mean"] == pytest.approx(0.879347, abs=1e-4)
+    # manifest:config 当前 hash 匹配
+    cfg_hash = hashlib.sha256(
+        (REPO / "configs/goal_orientation.yaml").read_bytes()).hexdigest()
+    assert j["manifest"]["config_sha256"] == cfg_hash
+    assert j["manifest"]["git_sha"]

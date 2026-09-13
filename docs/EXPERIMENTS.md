@@ -469,6 +469,37 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
 - **Outcome**: cf. `docs/claims.md` M9.
 
 
+## 17. Goal-oriented calibration value(P-GOAL-ORIENTED, `experiments/goal_orientation.py`)
+
+> **Status: DONE (2026-09-13)** — T10/N4 of the CalibrationValue strategy:
+> the finite-nonlinearity route's recommended replacement. `J_H(t) =
+> tr(H ΔF(t)^{-1} H^T)` via the low-rank push-through route
+> (`woodbury_quad_risk`, math-gated in `tests/test_goal_oriented.py`:
+> H=I parity < 1e-10, dense parity < 1e-10, gradient FD ≤ 1e-6).
+> Methods: `docs/methods.md` §10.
+
+- **Tasks** (on the per-pixel log-albedo-direction parameterization, P
+  pixels): `all` (H = I, A-opt reference), `mean` (H = 1/√P·1ᵀ,
+  mean-albedo task), `contrast` (bright-quartile mean minus dim-quartile
+  mean, unit norm; quartiles by per-pixel mean intensity). κ = 10,
+  levels {0.1, 0.5, 2.0, 8.0}, the same 11-object cohort / corrected
+  convention / P-CERT scene assembly as P-ALPHA-BOUND.
+- **Per-light block value**: gain_k(H) = J_H(t=1) − J_H(t_k=κ, rest 1)
+  over the 48 Fisher-active lights; rankings compared via Spearman +
+  top-3 overlap.
+- **Findings (descriptive, no sign gate)**: (i) value is task-dependent —
+  V_all @ 0.5 median 0.628667 (= the P-CERT 62.87% headline, route
+  cross-check) vs V_mean 0.89759; at level 0.1: 0.078212 vs 0.879347;
+  (ii) rankings are task-dependent — Spearman(mean, contrast) median
+  0.936387 (min 0.585541), top-3 disjoint in 11/44 object×level cells.
+- **Output**: `results/goal_oriented/goal_orientation.json`.
+- **Honest scope**: H acts on the per-pixel scalar parameterization; the
+  photometric-stereo normals-vs-albedo pair needs the joint 4P (log ρ, n)
+  parameterization — flagged as an extension in methods.md §10, not
+  claimed here.
+- **Outcome**: cf. `docs/claims.md` M11.
+
+
 ---
 
 **Reproduction contract**: every experiment script writes only statistical values and

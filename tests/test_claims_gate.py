@@ -159,6 +159,9 @@ def test_readme_numeric_claims_traceable():
     ampD = json.loads((REPO / "results/magnitude/"
                        "directional_amplitude_summary.json")
                       .read_text(encoding="utf-8"))["arm_D_corrected"]
+    go = json.loads((REPO / "results/goal_oriented/goal_orientation.json")
+                    .read_text(encoding="utf-8"))
+    go_v = go["headline"]["value_curves_by_level"]
     for tok, val, dec in (
             ("0.014", r48["regimes"]["10"]["mode_minus_random_active48"]["median"], 3),
             ("0.019", r48["regimes"]["100"]["mode_minus_random_active48"]["median"], 3),
@@ -168,7 +171,12 @@ def test_readme_numeric_claims_traceable():
             ("15.98", ampD["ratio_stats"]["median"], 2),
             ("714.2", ampD["ratio_stats"]["p95"], 1),
             ("27.3", lr["by_k"]["48"]["dynamic_range_pct"]["min"], 1),
-            ("89.4", lr["by_k"]["48"]["dynamic_range_pct"]["max"], 1)):
+            ("89.4", lr["by_k"]["48"]["dynamic_range_pct"]["max"], 1),
+            # goal-oriented paragraph: V_H medians (x100, 2dp) + Spearman
+            ("89.76", go_v["0.5"]["mean"] * 100, 2),
+            ("87.93", go_v["0.1"]["mean"] * 100, 2),
+            ("7.82", go_v["0.1"]["all"] * 100, 2),
+            ("0.936", go["headline"]["spearman_mean_vs_contrast"]["median"], 3)):
         assert _approx(tok, val, dec), (tok, val)
         traced[tok] = val
 
