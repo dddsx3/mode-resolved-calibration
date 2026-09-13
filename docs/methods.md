@@ -204,17 +204,20 @@ that `(I+X)^{-1}` has eigenvalues `1/(1+μ_j) ∈ [1/(1+ρ), 1]`:
 
     (1/(1+ρ)) · tr[W_x M(S)^{-2}]  ≤  Δ_x G(S)  ≤  tr[W_x M(S)^{-2}].
 
-**L12 (monotonicity + uniform bound).** `S ⊆ T ⇒ M(S) ⪯ M(T)` (Loewner),
-so `M(S)^{-1} ⪰ M(T)^{-1}` and the marginal gain has the correct
-diminishing-returns direction; moreover `ρ(S,x) ≤ ρ_max := max_x λmax(A^{-1}W_x)`
-(monotonicity of `λmax` under conjugation and `M(S) ⪰ A`).
+**L12 (uniform precision ceiling, CR17-style).** Define the submodularity ratio
+`γ = inf_{x, S: x∉S} Δ_x G(S) / Δ_x G(N\{x})`. Because `M(S) ⪰ A` (each `W_k ⪰
+0` and `S ⊆ N`), the Rayleigh quotient gives `ρ(S,x) = λmax(M(S)^{-1} W_x) ≤
+λmax(A^{-1} W_x)` — this avoids invoking monotonicity of matrix inversion on
+singular limits, which is unsafe when `rank(F∞) < n` (the Loewner ordering of
+inverses only holds for *strictly* positive-definite arguments; see CR17, §4).
+Combining with the lower bound from L11 (`Δ_x G(S) ≥ tr[W_x M^{-2}]/(1+ρ)`),
+the worst-case ratio collapses to a single design-only quantity:
 
-**L13 (the bound).**
+    γ ≥ 1/(1 + α),    α := max_x λmax(A^{-1} W_x),    A := ΔF(1).
 
-    γ  ≥  1/(1+α),    α := max_x λmax( ΔF(1)^{-1} W_x ).
-
-`α` is a function of the nominal design only (`A`, `B`, `Λ0`, `κ`), so the
-bound is available **a priori**, before any calibration data exists.
+This is the *uniform ceiling*: the A-opt selection function is
+`α`-approximately supermodular with a bound computable **a priori** from
+(`A`, `B`, `Λ0`, `κ`), independent of any measured data.
 
 **Limit behavior.** `Λ0_x → ∞` (calibration excellent) or `Λ0_x → 0`
 (calibration very poor) drive `W_x → 0`, hence `α → 0` and `γ → 1` (exact
@@ -253,4 +256,4 @@ computability (no exhaustive search), the explicit form of `α`, and the two
 | `tests/test_lowrank_identity.py` | M4 spectral identity, Woodbury trace/gradient |
 | `tests/test_math_gates.py` | singular-covariance counterexample, retention-covariance theorem, polyfit order, rank invariance |
 | `tests/test_known_answer_precheck.py` | λmin reading, trace dilution, parallel sums, gauge identity |
-| `tests/test_alpha_bound.py` | L9–L13: γ ≥ 1/(1+α) on toy family, two-sided sandwich zero violations, real-object α in range |
+| `tests/test_alpha_bound.py` | L9–L12: γ ≥ 1/(1+α) on toy family, two-sided sandwich zero violations, real-object α in range |

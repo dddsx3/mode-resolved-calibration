@@ -433,7 +433,7 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
 > ("也把 α-近似次模界写进论文,而不是把次模当负定理复述") is delivered:
 > the submodularity framing under N-1 is superseded by the α-approximate
 > statement below; this section replaces the "do not write submodularity
-> into the paper" TODO. Methods stated in `docs/methods.md` §9 (L9–L13),
+> into the paper" TODO. Methods stated in `docs/methods.md` §9 (L9–L12),
 > bound in `results/submodularity/alpha_bound.json`, gated by
 > `tests/test_alpha_bound.py`.
 
@@ -446,7 +446,7 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
   of the nominal design only (A, B, Λ0, κ) — computable a priori, no ground
   truth, no measurements, no exhaustive search. Derivation: exact additive
   decomposition + Woodbury marginal gain + two-sided eigenvalue sandwich +
-  Loewner monotonicity (methods.md §9 L9–L13).
+  Loewner monotonicity (methods.md §9 L9–L12).
 - **Toy verification (CI-safe, no raw data)**: 20 P-SUBMOD instances
   (10 random / 10 adversarial, L=5, P=40, κ=10), exhaustive triples:
   γ_measured ≥ 1/(1+α) on all 20 (random α ∈ [0.059, 0.119], adversarial

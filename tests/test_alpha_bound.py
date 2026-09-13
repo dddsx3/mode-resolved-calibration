@@ -9,7 +9,7 @@ Two layers:
    statement are read from results/submodularity/alpha_bound.json only (no
    raw data in CI), with range pins to catch regressions.
 
-The theorem itself (methods.md §9, L9–L13):
+The theorem itself (methods.md §9, L9–L12):
     γ ≥ 1/(1+α),  α = max_x λmax( ΔF(1)^{-1} W_x ),
     W_x = u_x [K_x(1) − K_x(κ)] u_x^T ⪰ 0,
 where α is nominal-design-only (no truth, no measurements).
