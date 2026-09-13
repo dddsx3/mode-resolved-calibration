@@ -58,7 +58,7 @@ policies: [mode_aware, a_opt]   # the decision contrast that matters;
 n_random_perms: 5                        # frozen spec; rng [20260911, obj, r, p]
 seeds_per_level: 10                      # frozen spec; rng [20260910, 7777, obj, lv, s]
 
-workers: 11                           # per-object multiprocessing (32 cores)
+workers: 5                            # per-object multiprocessing (OOM at 11: each worker holds the object + 142-state + ordering internals)
 
 bootstrap:
   B: 10000
