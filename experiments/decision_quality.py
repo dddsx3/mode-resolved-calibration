@@ -117,6 +117,7 @@ def _run_object(payload):
                       data_meta=cfg.get("data_meta"))
     scen = NominalScene(obj, np.random.default_rng([20260910, obj_idx]),
                         noise_fit_convention=cfg["noise_fit_convention"])
+    del obj            # 177 MB 原图;场景已抽取子样本,worker 内存纪律
     K = int(cfg["K_lights"])
     finf = scen.Finf_diag
     u_act = (scen.w * scen.s_hat)[:, :, None] * scen.B_phi
