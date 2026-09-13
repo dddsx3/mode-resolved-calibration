@@ -1,0 +1,74 @@
+# P-ACTIVE-SET-ABLATION -- formalize the active-set ablation (E4/M1).
+# PREREGISTERED: this file is committed BEFORE the run.
+#
+# Question: decompose the "informed beats random" advantage into
+#   (a) active-set effect      -- picking within the 48 Fisher-active lights
+#                                 vs the full 142 universe (mechanical on J_A:
+#                                 inactive lights are exact no-ops, u_k = 0);
+#   (b) mode-ordering effect   -- mode-aware ordering vs classical A-opt
+#                                 greedy on the same functional J_A;
+#   (c) rounding loss          -- continuous FW solution rounded to top-k
+#                                 vs the continuous optimum itself;
+#   (d) certified gap          -- greedy vs the FW duality-gap lower bound
+#                                 (already in certified_gaps.json).
+#
+# Endpoint: the certified information functional J_A = tr DeltaF^{-1} on the
+# identical P-CERT state (level 0.5, kappa 10, 142-light universe, 48 active,
+# corrected convention, frozen scene rng). Existing policies are READ from
+# results/certification/certified_gaps.json (greedy / random_active48 /
+# continuous fw / lower bound); the three missing ones are computed here:
+#   random_universe  -- seeded random k-subsets of ALL 142 lights
+#   mode_tail        -- select_ordering_mode_aware k-prefix (regime 10)
+#   rounded          -- top-k coordinates of the continuous fw_t
+#
+# Oracle arm (small scale, M1-3): on the listed objects, per-light REALIZED
+# value under the frozen corruption+GLS pipeline (arm_energy from
+# allocation_mode_tail.py, the single residual pipeline): value_k =
+# E_baseline - E(refine light k); oracle ranking vs the single-light J_A
+# gains (Spearman + top-5 overlap) bounds how far information-theoretic
+# selection is from the empirical oracle.
+#
+# AUC reference layer: medians/CIs are COPIED from the existing AUC-endpoint
+# artifacts (allocation_summary.json, allocation_random48_summary.json) with
+# explicit source labels -- no recomputation, no new AUC runs.
+#
+# outcome_independence: descriptive table, no sign gate.
+
+gate: P-ACTIVE-SET-ABLATION
+analysis_status: active_set_ablation_v1
+run_name: active_set_ablation_v1
+
+kappa: 10.0
+level: 0.5
+budgets_k: [5, 10, 14, 28, 48]
+n_random_universe: 10        # seeded subsets of the full 142 universe
+random_seed: 20260913
+
+# -- data & lineage (identical cohort/assembly to P-CERT) --
+data_root: D:/data/OpenIllumination
+data_meta: D:/data/OpenIllumination_meta
+cohort: [obj_03_pumpkin, obj_04_dolphin, obj_07_pumpkin2, obj_09_ball, obj_10_pumpkin3, obj_11_pine, obj_13_mushroom, obj_16_friends_cup, obj_17_pumpkin5, obj_18_fabric_hat, obj_19_cylinder]
+n_objects: 11
+noise_fit_convention: corrected
+scene_rng_spec: "default_rng([20260910, obj_idx])  # identical to P-CERT"
+K_lights: 142
+
+# -- oracle arm (M1-3; the only corruption-pipeline compute) --
+oracle:
+  objects: [obj_03_pumpkin, obj_10_pumpkin3]
+  seeds: 100                 # per-light realized values are draw-noise dominated
+                            # (single-seed std ~ between-light spread); 100 seeds
+                            # give a stable ranking (split-half Spearman ~0.82-0.88)
+  regime: 10.0               # corruption-improvement factor (matches mode_tail)
+  k_curve_ks: [0, 5, 14, 28, 48, 114]     # E(k) hump along the a_opt ordering
+  k_curve_levels: [0.2, 0.5, 1.0]         # frozen LEVELS grid (legacy anchor)
+  k_curve_seeds: 10                        # frozen SEEDS_PER_LEVEL (legacy curve
+                                           # MUST use the frozen spec to reproduce
+                                           # per-run numbers bit-exactly)
+  k_curve_seeds_corrected: 20              # denser sampling for the corrected curve
+
+# -- reused artifacts (read-only) --
+certified_gaps: results/certification/certified_gaps.json
+auc_reference:
+  allocation_summary: results/openillumination/allocation/allocation_summary.json
+  random48_summary: results/openillumination/allocation/allocation_random48_summary.json
