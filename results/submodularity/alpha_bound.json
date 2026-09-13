@@ -33,8 +33,8 @@
    "inequality_pairs": 160,
    "viol_lb": 0,
    "viol_ub": 0,
-   "min_val_over_lb": 1.00246,
-   "min_ub_over_val": 1.037156
+   "min_val_over_lb": 1.002699,
+   "min_ub_over_val": 1.035138
   },
   {
    "seed": 20260919,
@@ -46,8 +46,8 @@
    "inequality_pairs": 160,
    "viol_lb": 0,
    "viol_ub": 0,
-   "min_val_over_lb": 1.003837,
-   "min_ub_over_val": 1.036982
+   "min_val_over_lb": 1.003849,
+   "min_ub_over_val": 1.034985
   },
   {
    "seed": 20260920,
@@ -59,8 +59,8 @@
    "inequality_pairs": 160,
    "viol_lb": 0,
    "viol_ub": 0,
-   "min_val_over_lb": 1.002135,
-   "min_ub_over_val": 1.036803
+   "min_val_over_lb": 1.002222,
+   "min_ub_over_val": 1.034795
   },
   {
    "seed": 20260921,
@@ -72,8 +72,8 @@
    "inequality_pairs": 160,
    "viol_lb": 0,
    "viol_ub": 0,
-   "min_val_over_lb": 1.003526,
-   "min_ub_over_val": 1.051784
+   "min_val_over_lb": 1.003655,
+   "min_ub_over_val": 1.04844
   },
   {
    "seed": 20260922,
@@ -85,8 +85,8 @@
    "inequality_pairs": 160,
    "viol_lb": 0,
    "viol_ub": 0,
-   "min_val_over_lb": 1.003071,
-   "min_ub_over_val": 1.042011
+   "min_val_over_lb": 1.003238,
+   "min_ub_over_val": 1.039802
   },
   {
    "seed": 20260923,
@@ -98,8 +98,8 @@
    "inequality_pairs": 160,
    "viol_lb": 0,
    "viol_ub": 0,
-   "min_val_over_lb": 1.002419,
-   "min_ub_over_val": 1.058097
+   "min_val_over_lb": 1.00253,
+   "min_ub_over_val": 1.054013
   },
   {
    "seed": 20260924,
@@ -111,8 +111,8 @@
    "inequality_pairs": 160,
    "viol_lb": 0,
    "viol_ub": 0,
-   "min_val_over_lb": 1.00336,
-   "min_ub_over_val": 1.027368
+   "min_val_over_lb": 1.003415,
+   "min_ub_over_val": 1.025877
   },
   {
    "seed": 20260925,
@@ -124,8 +124,8 @@
    "inequality_pairs": 160,
    "viol_lb": 0,
    "viol_ub": 0,
-   "min_val_over_lb": 1.004231,
-   "min_ub_over_val": 1.025441
+   "min_val_over_lb": 1.004303,
+   "min_ub_over_val": 1.024354
   },
   {
    "seed": 20260926,
@@ -137,8 +137,8 @@
    "inequality_pairs": 160,
    "viol_lb": 0,
    "viol_ub": 0,
-   "min_val_over_lb": 1.001897,
-   "min_ub_over_val": 1.031738
+   "min_val_over_lb": 1.001938,
+   "min_ub_over_val": 1.03013
   },
   {
    "seed": 20260927,
@@ -150,8 +150,8 @@
    "inequality_pairs": 160,
    "viol_lb": 0,
    "viol_ub": 0,
-   "min_val_over_lb": 1.002864,
-   "min_ub_over_val": 1.034074
+   "min_val_over_lb": 1.002941,
+   "min_ub_over_val": 1.032557
   },
   {
    "seed": 20260918,
@@ -163,8 +163,8 @@
    "inequality_pairs": 160,
    "viol_lb": 0,
    "viol_ub": 0,
-   "min_val_over_lb": 1.000513,
-   "min_ub_over_val": 1.005988
+   "min_val_over_lb": 1.000517,
+   "min_ub_over_val": 1.005653
   },
   {
    "seed": 20260919,
@@ -176,8 +176,8 @@
    "inequality_pairs": 160,
    "viol_lb": 0,
    "viol_ub": 0,
-   "min_val_over_lb": 1.000802,
-   "min_ub_over_val": 1.009878
+   "min_val_over_lb": 1.000774,
+   "min_ub_over_val": 1.009243
   },
   {
    "seed": 20260920,
@@ -189,8 +189,8 @@
    "inequality_pairs": 160,
    "viol_lb": 0,
    "viol_ub": 0,
-   "min_val_over_lb": 1.00028,
-   "min_ub_over_val": 1.001958
+   "min_val_over_lb": 1.000275,
+   "min_ub_over_val": 1.001856
   },
   {
    "seed": 20260921,
@@ -202,8 +202,8 @@
    "inequality_pairs": 160,
    "viol_lb": 0,
    "viol_ub": 0,
-   "min_val_over_lb": 1.00077,
-   "min_ub_over_val": 1.006516
+   "min_val_over_lb": 1.000756,
+   "min_ub_over_val": 1.00626
   },
   {
    "seed": 20260922,
@@ -215,8 +215,8 @@
    "inequality_pairs": 160,
    "viol_lb": 0,
    "viol_ub": 0,
-   "min_val_over_lb": 1.000736,
-   "min_ub_over_val": 1.012278
+   "min_val_over_lb": 1.000789,
+   "min_ub_over_val": 1.010927
   },
   {
    "seed": 20260923,
@@ -228,8 +228,8 @@
    "inequality_pairs": 160,
    "viol_lb": 0,
    "viol_ub": 0,
-   "min_val_over_lb": 1.000665,
-   "min_ub_over_val": 1.005049
+   "min_val_over_lb": 1.000649,
+   "min_ub_over_val": 1.00478
   },
   {
    "seed": 20260924,
@@ -241,8 +241,8 @@
    "inequality_pairs": 160,
    "viol_lb": 0,
    "viol_ub": 0,
-   "min_val_over_lb": 1.001603,
-   "min_ub_over_val": 1.01112
+   "min_val_over_lb": 1.001608,
+   "min_ub_over_val": 1.010429
   },
   {
    "seed": 20260925,
@@ -254,8 +254,8 @@
    "inequality_pairs": 160,
    "viol_lb": 0,
    "viol_ub": 0,
-   "min_val_over_lb": 1.000501,
-   "min_ub_over_val": 1.003446
+   "min_val_over_lb": 1.000504,
+   "min_ub_over_val": 1.003347
   },
   {
    "seed": 20260926,
@@ -267,8 +267,8 @@
    "inequality_pairs": 160,
    "viol_lb": 0,
    "viol_ub": 0,
-   "min_val_over_lb": 1.000932,
-   "min_ub_over_val": 1.003815
+   "min_val_over_lb": 1.000922,
+   "min_ub_over_val": 1.003698
   },
   {
    "seed": 20260927,
@@ -281,7 +281,7 @@
    "viol_lb": 0,
    "viol_ub": 0,
    "min_val_over_lb": 1.000096,
-   "min_ub_over_val": 1.001093
+   "min_ub_over_val": 1.001011
   }
  ],
  "real": [
@@ -440,13 +440,13 @@
  },
  "manifest": {
   "config_sha256": "35de2dd60dfdecba9fe3da43fd3b1b9e1538f2741c076bd0a968c17b9622dfa3",
-  "git_sha": "49344ed426ef9696282ac6f2d541bf409ad87c33",
+  "git_sha": "0450cd861dd224578b55e28c2c7df6131335f38c",
   "scene_rng_spec": "default_rng([20260910, obj_idx])  # identical to P-CERT",
   "levels": [
    0.1,
    0.5
   ],
-  "elapsed_s": 14.2
+  "elapsed_s": 15.0
  },
  "note": "gamma lower bound 1/(1+alpha); alpha = max_x lambda_max(DeltaF(1)^-1 W_x), W_x = u_x[K_x(1)-K_x(kappa)]u_x^T. Alpha is nominal-design-only (no truth/data). The bound is ~1.6x looser than the measured gamma_min 0.99989 (P-SUBMOD); value is the a-priori computability, the explicit alpha form, and the alpha->0 limits. Chamon & Ribeiro (NeurIPS 2017) approximate-supermodularity framework instantiated with calibration precision as design variable; not claimed as the first approximate-submodular bound."
 }
