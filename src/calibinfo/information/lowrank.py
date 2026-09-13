@@ -119,3 +119,67 @@ def woodbury_trace_inv_grad(finf_diag, u, M0, lam, active, t):
         Y = Yall[:, 3 * j:3 * j + 3]
         grad[k] = -float(np.trace(K @ lam[k] @ K @ (Y.T @ Y)))
     return f, grad
+
+
+def woodbury_quad_risk(finf_diag, u, M0, lam, active, t, H):
+    """J_H(t) = tr(H ΔF(t)^{-1} Hᵀ)（goal-oriented A-型风险；N4/T10）。
+
+    H 为 (m, P) 任务算子（m = 下游任务的线性泛函数）；H=None 退化为
+    tr(ΔF^{-1})（= woodbury_trace_inv）。push-through 恒等式：
+
+        J_H = tr(H D⁻¹ Hᵀ) + tr(G⁻¹ (H D⁻¹ V)ᵀ (H D⁻¹ V)),
+        G = I − Vᵀ D⁻¹ V,
+
+    全部从 3|active|×3|active| 小矩阵出发（与 tr 路线同 cost 量级 + 一次
+    (m,3|active|) 窄乘）。要求 ΔF ≻ 0（G 的 PD 性），破坏即抛错（禁静默正则化）。
+    """
+    if H is None:
+        return woodbury_trace_inv(finf_diag, u, M0, lam, active, t)
+    finf_diag = np.asarray(finf_diag, float)
+    H = np.atleast_2d(np.asarray(H, float))
+    if H.shape[1] != finf_diag.shape[0]:
+        raise ValueError(f"H 列数 {H.shape[1]} != P {finf_diag.shape[0]}")
+    Dinv = 1.0 / finf_diag
+    V, _idx = _build_V(finf_diag, u, M0, lam, active, t, whiten=False)
+    Z = Dinv[:, None] * V
+    G = np.eye(V.shape[1]) - V.T @ Z
+    w = np.linalg.eigvalsh(0.5 * (G + G.T))
+    if w.min() <= max(1.0, float(w.max())) * 1e-12:
+        raise np.linalg.LinAlgError(
+            f"G = I - V^T D^-1 V 数值奇异（min eig {w.min():.3e}）——"
+            "ΔF 非 PD：近零 F∞ 像素须在调用方截断并记录")
+    Lm = (H * Dinv[None, :]) @ V                       # (m, 3|active|)
+    J0 = float((H * H * Dinv[None, :]).sum())          # tr(H D⁻¹ Hᵀ)
+    return J0 + float(np.trace(np.linalg.solve(G, Lm.T @ Lm)))
+
+
+def woodbury_quad_risk_grad(finf_diag, u, M0, lam, active, t, H):
+    """J_H 及其解析梯度（对 t_k；FD 对拍见 tests/test_goal_oriented.py）：
+
+        ∇_{t_k} J_H = −tr(H ΔF⁻¹ u_k K_k Λ0k K_k u_kᵀ ΔF⁻¹ Hᵀ)
+                    = −tr(K_k Λ0k K_k · (u_kᵀ Z)(Zᵀ u_k)),  Z = ΔF⁻¹ Hᵀ。
+
+    H=None 退化为 woodbury_trace_inv_grad。"""
+    if H is None:
+        return woodbury_trace_inv_grad(finf_diag, u, M0, lam, active, t)
+    finf_diag = np.asarray(finf_diag, float)
+    H = np.atleast_2d(np.asarray(H, float))
+    if H.shape[1] != finf_diag.shape[0]:
+        raise ValueError(f"H 列数 {H.shape[1]} != P {finf_diag.shape[0]}")
+    Dinv = 1.0 / finf_diag
+    idx = np.flatnonzero(active)
+    V, _idx = _build_V(finf_diag, u, M0, lam, active, t, whiten=False)
+    Z = Dinv[:, None] * V
+    G = np.eye(V.shape[1]) - V.T @ Z
+    Ginv = np.linalg.inv(G)
+    Lm = (H * Dinv[None, :]) @ V                       # (m, 3|active|)
+    J0 = float((H * H * Dinv[None, :]).sum())
+    f = J0 + float(np.trace(Ginv @ (Lm.T @ Lm)))
+    # Z_full = ΔF⁻¹ Hᵀ (P, m) = (H D⁻¹)ᵀ + D⁻¹ V G⁻¹ (H D⁻¹ V)ᵀ
+    Zfull = (H * Dinv[None, :]).T + (Dinv[:, None] * V) @ (Ginv @ Lm.T)
+    grad = np.zeros(u.shape[0])
+    for j, k in enumerate(idx):
+        K = sym_inv(M0[k] + t[k] * lam[k])
+        Mk = u[k].T @ Zfull                           # (q, m)
+        grad[k] = -float(np.trace(K @ lam[k] @ K @ (Mk @ Mk.T)))
+    return f, grad

@@ -1,0 +1,53 @@
+# P-GOAL-ORIENTED -- task-dependent value of calibration refinement (T10/N4).
+# PREREGISTERED: this file is committed BEFORE the run.
+#
+# Question: does the SAME calibration refinement carry the same value for
+# DIFFERENT downstream estimation tasks? For task operators H (m x P rows,
+# linear functionals of the per-pixel parameter vector), the goal-oriented
+# risk is J_H(t) = tr(H DeltaF(t)^-1 H^T), computed by the low-rank
+# push-through route (woodbury_quad_risk, math-gated in
+# tests/test_goal_oriented.py: H=I parity < 1e-10, dense parity < 1e-10,
+# gradient FD <= 1e-6).
+#
+# Tasks (on the per-pixel log-albedo-direction parameterization, P pixels):
+#   all:       H = I                (A-opt reference -- every parameter)
+#   mean:      H = 1/sqrt(P) 1^T    (estimate the object's mean albedo)
+#   contrast:  bright-quartile mean minus dim-quartile mean, unit norm
+#              (quartiles by per-pixel mean intensity of the nominal images)
+#
+# Per-light block value under task H: gain_k(H) = J_H(t=1) - J_H(t_k=kappa,
+# rest 1) over the 48 Fisher-active lights. Deliverable: the mean-task and
+# contrast-task rankings of the same 48 lights DISAGREE (Spearman < 1,
+# top-3 sets differ) -- the same calibration budget is valued differently
+# by different downstream tasks.
+#
+# Honest scope note: H acts on the per-pixel scalar (log-albedo direction)
+# parameterization that the certified pipeline carries; the photometric-
+# stereo normals-vs-albedo pair requires the joint 4P parameterization and
+# is flagged as an extension in docs/methods.md (not claimed here).
+#
+# outcome_independence: descriptive table -- every Spearman / top-3 overlap /
+# value ratio is reported regardless of outcome; no sign-based gate. The
+# only hard gates are numerical (quad-risk parity + gradient FD, in tests).
+
+gate: P-GOAL-ORIENTED
+analysis_status: goal_orientation_v1
+run_name: goal_orientation_v1
+
+kappa: 10.0
+
+# -- data & lineage (identical cohort/assembly to P-CERT / P-ALPHA-BOUND) --
+data_root: D:/data/OpenIllumination
+data_meta: D:/data/OpenIllumination_meta
+cohort: [obj_03_pumpkin, obj_04_dolphin, obj_07_pumpkin2, obj_09_ball, obj_10_pumpkin3, obj_11_pine, obj_13_mushroom, obj_16_friends_cup, obj_17_pumpkin5, obj_18_fabric_hat, obj_19_cylinder]
+n_objects: 11
+noise_fit_convention: corrected
+scene_rng_spec: "default_rng([20260910, obj_idx])  # identical to P-CERT"
+K_lights: 142
+
+# -- level grid (subset of the P-CERT-LEVELS 11-point grid) --
+levels: [0.1, 0.5, 2.0, 8.0]
+
+# -- tasks --
+tasks: [all, mean, contrast]
+contrast_quartile: 0.25      # bright/dim quartile cut by mean intensity
