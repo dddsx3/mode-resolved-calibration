@@ -17,8 +17,10 @@ identifying the Fisher-active substructure has decision value, while no
 additional performance advantage is observed for the tested
 within-active-set mode ordering.
 
-The current research direction is a **certified analysis of
-calibration-precision allocation**. The budget-allocation problem is an exact
+The current research direction treats **calibration uncertainty as a
+designable resource**: how much is better calibration worth, where should
+precision be spent, and how close is that allocation to globally optimal.
+The budget-allocation problem is an exact
 convex program in the per-light precision multipliers. The retention spectrum
 has an exact low-rank structure that removes the sampling bottleneck. And the
 optimization landscape itself — not any particular policy — is certified
@@ -152,13 +154,6 @@ Key results (11 held-out OpenIllumination objects). Numbers use the
 for the two pipeline versions); the original pipeline's outputs are kept as a
 reference record.
 
-- **Directional validation**: median within-cell Spearman $R_A$ = 0.90
-  (object-cluster bootstrap 95% CI [0.7, 0.95]; 65/66 cells positive, 11/11
-  objects positive). This validates *direction*: the retention operator's
-  bottom tracked directions are the empirically more fragile directions
-  inside a given problem instance, not the predicted magnitudes `1/ρ_j`.
-  For the by-construction rank-equivalence of the within-cell statistic see
-  [docs/methods.md](docs/methods.md);
 - **Amplitude validity envelope**: on real data the empirical/predicted
   degradation ratio has median 15.98 (5–95% [0.005, 714.2]), against 1.0045 on
   synthetic matched Monte-Carlo — the matched-GLS variance theorem holds where
@@ -176,6 +171,15 @@ reference record.
   measured benefit of every informed policy over full-universe random is an
   active-set effect rather than a mode-ordering effect (see
   `allocation_policy_pairwise.csv` and `allocation_random48_summary.json`).
+- **Retention-ordering self-consistency (weakest evidence tier)**: median
+  within-cell Spearman $R_A$ = 0.90 (object-cluster bootstrap 95% CI [0.7,
+  0.95]; 65/66 cells positive, 11/11 objects positive). This is a
+  within-scene construction identity (66/66 cells, deviation 0.0), not an
+  out-of-sample validation — see
+  [docs/methods.md](docs/methods.md). It validates *direction* only: the
+  retention operator's bottom tracked directions are the empirically more
+  fragile directions inside a given problem instance, not the predicted
+  magnitudes `1/ρ_j`.
 
 **Figure 3. Benchmark evidence.** Left: per-level severity medians under
 controlled corruption (mode-resolved vs scalar criteria). Middle: pooled
@@ -208,6 +212,23 @@ results above:
 > per-light precision multipliers, and the *optimization landscape itself* is
 > certified — with Frank–Wolfe duality-gap certificates and exact dynamic-range
 > bounds, independent of any particular selection policy.
+
+### The four-layer pipeline
+
+The program is organized as four layers, each with its own object, question,
+and committed evidence:
+
+| Layer | Object | Question it answers | Evidence |
+|---|---|---|---|
+| **Diagnosis** | `R = F∞^{-1/2} ΔF F∞^{-1/2}` | Which identifiable directions are hurt by calibration uncertainty? | `results/magnitude/directional_amplitude_summary.json` |
+| **Valuation** | `V(B) = 1 − J*(B)/J₀` | What is better calibration worth? | `results/certification/certified_gaps_levels.json` (the level curve) |
+| **Decision** | `t*(B) = argmin J_A(t)` | Where exactly should the budget be spent? | `results/certification/certified_gaps.json` (greedy prefix) |
+| **Certification** | `J_A(t) − J* ≤ g_FW(t)` | How far from optimal is that allocation? | `results/certification/certified_gaps.json` (FW gap) |
+
+Diagnosis identifies the fragile modes; Valuation prices the calibration
+budget as a curve in the operating point; Decision allocates it; Certification
+bounds the distance to the global optimum. The layers are separable — the
+certificates hold for *any* candidate allocation, not only the greedy one.
 
 Three structural findings anchor it (verified by
 `tests/test_math_foundations.py`; no raw data required):

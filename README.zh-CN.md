@@ -17,7 +17,18 @@ Fisher 信息——蓝色区域信息最薄；中：保留谱把 tracked 方向�
 
 ![两问导览](examples/calibration_tour.png)
 
-## 回答两个问题
+## 回答两个问题（四层流水线）
+
+当前研究方向把**标定不确定度当作可设计的资源**：更好的标定值多少钱、
+预算该花在哪、这个分配离全局最优有多远。程序分四层，每层有自己的对象、
+问题与证据：
+
+| 层 | 对象 | 回答的问题 | 证据 |
+|---|---|---|---|
+| **诊断 Diagnosis** | `R = F∞^{-1/2} ΔF F∞^{-1/2}` | 哪些可辨识方向被标定不确定度伤害？ | `results/magnitude/directional_amplitude_summary.json` |
+| **估值 Valuation** | `V(B) = 1 − J*(B)/J₀` | 更好的标定值多少钱？ | `results/certification/certified_gaps_levels.json`（level 曲线） |
+| **决策 Decision** | `t*(B) = argmin J_A(t)` | 预算具体投到哪里？ | `results/certification/certified_gaps.json`（greedy 前缀） |
+| **认证 Certification** | `J_A(t) − J* ≤ g_FW(t)` | 离最优还有多远？ | `results/certification/certified_gaps.json`（FW 间隙） |
 
 1. **诊断**：哪些可辨识参数方向最脆弱？它们如何随标定精度恢复？
 2. **决策**：只够重新标定 k 个分量时，能换来多少信息？选哪几个有区别吗？（用凸优化对偶间隙给出**全局认证**的回答，而不是只报一个策略排名）
@@ -87,10 +98,6 @@ spec = retention_spectrum(DeltaF, A.T @ A) # 逐模式保留率
 （声明 → 证据文件 → 复现命令 → 验收测试），复现指南见
 [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md)。摘要：
 
-- **方向性验证**：细胞内 Spearman R_A = 0.90（bootstrap 95% CI
-  [0.7, 0.95]，65/66 细胞、11/11 物体为正）——验证的是**方向**（理论标出的
-  弱方向确实是经验上更脆的方向），不验证幅值；该细胞内统计量与按模式序号
-  排序构造性等价的说明见 [docs/methods.md](docs/methods.md)；
 - **幅值有效域**：真实数据 emp/pred 中位 15.98（合成 matched MC 为
   1.0045）——线性化理论在真实光度数据上的可证伪有效域；
 - **认证动态范围**：全部 masked 像素、全部 142 灯下，重标所有 48 个
@@ -113,6 +120,11 @@ spec = retention_spectrum(DeltaF, A.T @ A) # 逐模式保留率
 - **负结果**：E-opt 增益违反次模性（γ_min = 0.704）；固定水平 severity
   分支经修正管线复测后已撤回（符号翻转，且该跨物体对比是标量化恒等式的
   产物）；策略排序差异全部落在认证 epsilon 内。
+- **保留序自洽性（最弱证据层）**：细胞内 Spearman R_A = 0.90（bootstrap
+  95% CI [0.7, 0.95]，65/66 细胞、11/11 物体为正）。这是**场景内构造性
+  恒等式**（66/66 细胞、偏差 0.0），不是样本外验证——见
+  [docs/methods.md](docs/methods.md)。它只验证**方向**（理论标出的弱方向
+  确实是经验上更脆的方向），不验证幅值 `1/ρ_j`。
 
 ## 复现与完整性
 
