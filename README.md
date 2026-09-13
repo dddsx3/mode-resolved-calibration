@@ -167,6 +167,14 @@ reference record.
   while the magnitude ratio grows monotonically with the linearization
   curvature metric — linearization failure hits magnitudes, not directions
   (`results/magnitude/validity_map.json`, methods.md §4 scope note);
+- **Decision quality**: on the physical reconstruction endpoint (normal
+  angular error from the single frozen residual pipeline, extended with a
+  one-step normal refit), the information-theoretic allocation beats
+  random by several degrees of mean error with bootstrap CIs excluding
+  zero, and the predicted J_A ordering predicts the realized ordering in
+  88/88 object×level×regime cells — while the gauge-aligned weak-mode
+  endpoints show the error-redistribution phenomenon instead
+  (`results/openillumination/decision_quality.json`);
 - preregistered allocation evaluation: mode-aware guidance improves
   reconstruction over random allocation for 11/11 objects (Δ AUC −0.150 at 10×,
   −0.279 at 100×; bootstrap 95% CI excludes 0 — an actionable outcome vs

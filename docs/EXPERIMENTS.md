@@ -574,6 +574,40 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
 - **Outcome**: cf. `docs/claims.md` B8.
 
 
+## 20. Decision quality: predicted vs realized（P-DECISION-QUALITY, `experiments/decision_quality.py`）
+
+> **Status: DONE (2026-09-14)** — E3/M3, the impact pillar. Range fixed by
+> the acceptance report: NO real recalibration (OpenIllumination is a
+> calibration dataset); a controlled corruption-injection
+> predicted-vs-realized closed loop on the **single** residual pipeline.
+
+- **Arm（M3-1）**: `arm_metrics` — the same corruption + fixed-n̂ 白化 GLS
+  as `arm_energy`（dual 读出逐值一致，测试钉死）, extended with a
+  one-step alternating normal refit（`calibrated_ps` 自己的 n-更新:
+  掩码内无权重 LSQ + 归一化,einsum 批量向量化;与逐像素循环参照差
+  ≤1e-12）→ **法线角误差（度）**;plus gauge 对齐 albedo MSE 与未对齐
+  MAE。无第二条残差管线。
+- **网格**: 11 物体 × 4 level {0.2,0.5,1.0,2.0} × 2 regime {10,100} ×
+  5 预算 {14,28,57,85,114} × 7 selection units（mode_aware, a_opt +
+  5 random perms,冻结 rng 规范）× 10 seeds/level;corrected 口径;
+  predicted 侧 = 同分配在同一状态上的 J_A。逐对象多进程（workers=2;
+  a_opt 排序 ~230s/次,冻结贪心语义不可改）。
+- **核心结果（B9）**: 法线角误差端点——dAUC vs random:a_opt
+  **−4.04°** [−6.06, −2.57] @10、**−5.29°** [−7.71, −3.55] @100;
+  mode_aware **−3.82°** [−6.00, −2.46] @10、**−5.12°** [−7.87, −3.45]
+  @100（对象层配对 bootstrap B=10000,全部 CI 不含 0）;
+  Spearman(predicted J_A, realized 法线误差) **88/88 cell 为正**
+  （median +0.750, min +0.357）。gauge 对齐端点则呈再分配现象
+  （dual Spearman median −0.375、albedo-MSE −0.518;dAUC_dual 为正）
+  ——与 C8 的 E(k) 驼峰同一机制。**决策层有效域包络**:信息论预测对
+  物理重建误差方向有效;弱模式族端点需覆盖度警告。
+- **Output**: `results/openillumination/decision_quality.json`（3080 rows
+  + 88 AUC cells + bootstrap + within-cell Spearman）+
+  `docs/img/decision_quality.png`（predicted-vs-realized 散点 + dAUC
+  forest）。
+- **Outcome**: cf. `docs/claims.md` B9.
+
+
 ---
 
 **Reproduction contract**: every experiment script writes only statistical values and
