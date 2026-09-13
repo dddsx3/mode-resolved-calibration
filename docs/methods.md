@@ -137,13 +137,26 @@ A/D-optimality naming for the classical greedy baselines.
 
 ### Universal ceiling on the calibration-budget value (H2)
 
-For the **uniform** multiplier `t = κ·1` the per-light kernel is
-`U_k(t) = u_k(M0_k + t Λ0_k)^{-1} u_k^T`, Loewner-decreasing in `t`. Since
+**Structural assumptions (all objects come from one whitened model).** The
+ceiling is a theorem about the *model* `y = A x + B δc + ε`, not a universal
+matrix identity. Concretely, for every light-indexed block the objects share
+a single `(w_k, s_k, B_k)`:
 
-    M0_k + t Λ0_k ⪰ (1/t)(M0_k + Λ0_k)  ⟺  (t−1)M0_k + (t²−1)Λ0_k ⪰ 0,  t ≥ 1,
+    u_k = w_k s_k B_k       (= A^T B_k in the whitened coordinate system),
+    M0_k = B_k^T (w_k B_k)  (identity-precision block, PSD),
+    F∞ = diag( Σ_k w_k s_k² )   (= A^T A, the calibration-limit Fisher).
+
+Under this structure `u_k u_k^T = F∞ · M0_k` per-light, and `M0_k ⪰ 0`.
+Both properties are used **below and only below**; dropping them is what the
+non-legitimate counterexample at the end of this section exploits.
+
+**The ceiling.** For the **uniform** multiplier `t = κ·1` the per-light kernel
+is `U_k(t) = u_k(M0_k + t Λ0_k)^{-1} u_k^T`, Loewner-decreasing in `t`. Since
+
+    M0_k + t Λ0_k ⪰ (1/t)(M0_k + Λ0_k)  ⟺  (t−1)M0_k + (t2−1)Λ0_k ⪰ 0,  t ≥ 1,
 
 we have `U_k(t) ⪯ t U_k(1)`, hence `ΔF(t) ⪯ t ΔF(1)` (Loewner) and
-`J_A(t) ≥ J_A(1)/t` (tr X⁻¹ Loewner-decreasing). Therefore the certified
+`J_A(t) ≥ J_A(1)/t` (tr X−1 Loewner-decreasing). Therefore the certified
 dynamic range obeys the **universal ceiling**
 
     D = 1 − J_A(κ·1)/J_A(1)  ≤  1 − 1/κ.
@@ -155,6 +168,23 @@ the bound is tight to ≤ 1e-4 (`results/magnitude/calibration_value_ceiling.jso
 ceiling 0.9. The ceiling is a property of the functional, not an empirical
 saturation artifact. The bound holds on every instance/admissible level
 (machine-checked, CI-safe: `tests/test_math_foundations.py`).
+
+**Non-legitimate counterexample (why the structure is necessary).** In the
+single-light scalar model `ΔF(t) = F∞ − u²/(m + t·λ)` the ceiling ``D ≤ 1−1/κ``
+is *not* implied by `M0 ⪰ 0` alone. If `u` and `m` are decoupled — e.g.
+`u² = 1, m = 0.01, F∞ = 1, λ = 1, κ = 2` — both `ΔF(1) ≈ 0.0099` and
+`ΔF(κ) ≈ 0.50` are positive definite, yet
+
+    D ≈ 0.9803  >  1 − 1/κ = 0.5.
+
+This `(u, M0, F∞)` triple cannot arise from any whitened model (the structural
+link `u u^T = F∞·M0` is violated: `1 ≠ 0.01`); it exists only as a detached
+matrix example. It demonstrates that the ceiling rests on the shared-`(A,B)`
+structure, not on PSD-ness of `M0` by itself. The exact numbers are pinned by
+`tests/test_math_foundations.py::test_structural_link_required_for_ceiling`,
+which also checks that the legitimate family `u² = F∞·m` respects the bound on
+a dense `b`-grid. (Per-light verification for the multi-light direction-parameterized
+`ΔF(t)` is the same argument applied per block.)
 
 ## 8. What the library does not claim
 

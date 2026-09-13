@@ -249,3 +249,36 @@ def test_calibration_value_ceiling():
                 D = 1.0 - JK / J1
                 assert D <= 1.0 - 1.0 / kap + 1e-9, (seed, scale, kap, D)
 
+
+# ------------------------------------------------- H2b 结构假设与反例
+def _scalar_ceiling(u2, m, finf, lam, kap):
+    """单灯标量模型 ΔF(t) = finf − u2/(m + t·lam);返回 (D, DF1, DFK)。
+    合法结构 u2 = finf·m(u = w·s·B, M0 = B^T·w·B 同源)。"""
+    DF1 = finf - u2 / (m + lam)
+    DFK = finf - u2 / (m + kap * lam)
+    return 1.0 - DF1 / DFK, DF1, DFK
+
+
+def test_structural_link_required_for_ceiling():
+    """H2b · 天花板需要结构假设 u·u^T = F∞·M0(同源 (A,B));脱离则反例成立。
+
+    Scalar sanity: 合法 u2 = finf·m(如 u=a·b, m=b^2, finf=a^2)时
+    D ≤ 1−1/κ 恒成立;把 u 与 M0 解耦(u2=1, m=0.01, finf=1)时
+    D ≈ 0.98 > 0.5(κ=2)——该 (u, M0) 组合不能由任何 whitened 模型
+    产生,故是"非合法反例",证明结构假设是 ceiling 的必要条件。
+    """
+    kap, ceiling = 2.0, 1.0 - 1.0 / 2.0
+
+    # 合法标量族:u2 = finf·m,扫 b
+    for b in (0.1, 0.5, 1.0, 2.0, 10.0, 100.0):
+        u2, m, finf, lam = b * b, b * b, 1.0, 1.0
+        D, DF1, DFK = _scalar_ceiling(u2, m, finf, lam, kap)
+        assert DF1 > 0 and DFK > 0
+        assert D <= ceiling + 1e-9, (b, D)
+
+    # 非合法反例:u2 与 m 解耦但仍在 ΔF 良态域内
+    D, DF1, DFK = _scalar_ceiling(1.0, 0.01, 1.0, 1.0, kap)
+    assert DF1 > 0 and DFK > 0                  # ΔF(1), ΔF(κ) 均正定
+    assert D > ceiling + 1e-2                   # 显著突破天花板
+    assert abs(D - 0.980296) < 1e-3             # 钉死数值(与 docs §7 一致)
+
