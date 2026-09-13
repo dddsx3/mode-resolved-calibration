@@ -30,6 +30,25 @@ def test_config_hash_sensitivity():
     assert config_hash({"m": 40, "q": 3, "seed": 7, "extra": ""}) != a
 
 
+def test_config_hash_default_repr_not_str():
+    """T9 · canonical 序列化必须用 repr 而非 str:T9 前 default=str 会把
+    __str__ 相同但 __repr__ 不同的对象塌成同一 hash。"""
+
+    class _Collider:
+        def __init__(self, val):
+            self.val = val
+
+        def __str__(self):
+            return "<collider>"          # 故意让 str 相同
+
+        def __repr__(self):
+            return f"_Collider({self.val!r})"
+
+    h1 = config_hash({"x": _Collider(1)})
+    h2 = config_hash({"x": _Collider(2)})
+    assert h1 != h2                     # 值不同 ⇒ repr 不同 ⇒ hash 不同
+
+
 def test_git_sha_present_in_repo():
     from pathlib import Path
     repo_root = str(Path(__file__).resolve().parents[1])

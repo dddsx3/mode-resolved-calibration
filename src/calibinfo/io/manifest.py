@@ -28,9 +28,14 @@ def _git_info(repo_root):
 
 
 def config_hash(config):
-    """config → sha256（规范化 JSON，键排序；对空白/键序差异不敏感，对内容差异敏感）。"""
+    """config → sha256(规范化 JSON,键排序;对空白/键序差异不敏感,对内容差异敏感)。
+
+    `default=repr`而非 `default=str`:str 会把 `__str__` 相同但值不同的对象
+    塌成同一字符串,导致两个不同 config 得到同一 hash;repr 保留对象身份,
+    且返回的是 JSON 可序列化的 str。
+    """
     canonical = json.dumps(config, sort_keys=True, ensure_ascii=True,
-                           default=str, separators=(",", ":"))
+                           default=repr, separators=(",", ":"))
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 

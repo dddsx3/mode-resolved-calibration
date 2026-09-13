@@ -24,7 +24,7 @@ in the README to appear verbatim under `results/**`.
 | M7 | Singular-covariance semantics | factor/marginal = 0.5, pseudoinverse-precision shortcut = 0 (never equivalent) | unit assertion | `pytest tests/test_math_gates.py` |
 | M8 | Retention-covariance theorem | F∞^{1/2} Cov F∞^{1/2}/σ² = R⁻¹ (matched GLS) | unit assertion | `pytest tests/test_math_gates.py` |
 | M9 | A-opt selection function is α-approximately supermodular (CR17-style bound) | γ ≥ 1/(1+α), α = max_x λmax(ΔF(1)^{-1} W_x), W_x = u_x[K_x(1)−K_x(κ)]u_x^T ⪰ 0; α is nominal-design-only; the bound is conservative (~1.6× looser than the measured γ_min) — its value is a-priori computability, not tightness | `results/submodularity/alpha_bound.json` | `pytest tests/test_alpha_bound.py` |
-| M10 | Universal ceiling on the calibration-budget value | D = 1 − J_A(κ·1)/J_A(1) ≤ 1 − 1/κ; met to ≤ 1e-4 at level 64 | `results/magnitude/calibration_value_ceiling.json` | `pytest tests/test_math_foundations.py::test_calibration_value_ceiling` |
+| M10 | Universal ceiling on the calibration-budget value | D = 1 − J_A(κ·1)/J_A(1) ≤ 1 − 1/κ; met to ≤ 1e-4 at level 64. **Structural assumptions** (methods.md §7): u_k = A^T B_k, M0_k = B_k^T B_k, F∞ = A^T A from one shared (A,B); a decoupled (u, M0) triple violates the bound (non-legitimate counterexample, D ≈ 0.98 > 0.5 @ κ=2) | `results/magnitude/calibration_value_ceiling.json` | `pytest tests/test_math_foundations.py::test_calibration_value_ceiling` + `::test_structural_link_required_for_ceiling` |
 
 ## Real-data benchmark claims (11 held-out OpenIllumination objects)
 

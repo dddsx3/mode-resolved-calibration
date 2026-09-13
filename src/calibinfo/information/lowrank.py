@@ -52,9 +52,23 @@ def retention_spectrum_lowrank(finf_diag, u, M0, lam, active, t,
                                unit_tol=1e-9):
     """L5 恒等式全谱：spec(R) = {1}^{P−rank(V)} ⊕ (1 − spec(VᵀV))。
 
-    返回 dict(rho (P,) 升序, n_unit（=P−rank(V)）, n_active_blocks=3|active|,
-    eig_VtV (3L,))。与稠密路线的对拍见 tests/test_lowrank_identity.py
-    （≤1e-10）。"""
+    **API 契约（T8）**：
+    - 输入：`finf_diag` (P,) = `diag(F∞)`, `u` (L,P,q), `M0` (L,q,q), `lam` (L,q,q),
+      `active` (L,), `t` (L,). `F∞` 要求严格为正；零像素须由调用方截断。
+    - 返回 `dict(rho (P,) 升序, n_unit, n_active_blocks, eig_VtV)`。
+    - `rho` 包含 n_unit 个 ρ=1 单元（不可辨识模），这与稠密路线不同：
+      `retention_spectrum` 返回 `(k,)` 仅限于可辨识子空间。
+    - 此 API 与 `information.retention_spectrum`、`metrics.retention_spectrum_full`
+      返回 **相同长度** 的 `rho` 吗？不能直接换用！
+      使用任一 API 前请核对：稠密路线返回 `(n_identifiable,)`；低秩路线返回
+      `(P,)` 包含 ρ=1 单元；两者的值在 `k=n` 时等价。
+
+    **数值纪律**（与稠密路线一致）：
+      - K^{1/2} 用 eigh 对称平方根；
+      - G = I − VᵀD⁻¹V 的 PD ⇔ ΔF ≻ 0；破坏抛错。
+
+    绑定测试：`tests/test_lowrank_identity.py`（≤1e-10）、
+    `tests/test_retention_contract.py``（k-维分支等价性）。"""
     finf_diag = np.asarray(finf_diag, float)
     P = finf_diag.shape[0]
     V, idx = _build_V(finf_diag, u, M0, lam, active, t, whiten=True)

@@ -255,6 +255,16 @@ Three structural findings anchor it (verified by
    0.7% at level 0.025 rising to 89.85% at level 8.0 (37× span), with
    median 62.87% at the P-CERT operating point level = 0.5 — see the
    certified-value curve below.
+   **Read the `level` axis correctly:** `level` is the **injected synthetic
+   calibration-uncertainty scale** added to the nominal whitened system in
+   `experiments/` — it is a controlled operating point, **not** an
+   uncertainty estimated from real calibration data, and has **no physical
+   calibration anchor**. Every headline above (62.87%, γ ≥ 0.635, D ≤
+   1−1/κ) is conditional on this `level`; the curve is the honest way to
+   state the dependence rather than a single point. This is the answer to
+   "how would this change if the true calibration uncertainty were
+   different?" — see `docs/claims.md` and `docs/methods.md` §7 for the
+   conditional-variable discipline.
 
 
    **Figure 5. Certified optimality gaps.** Left: the J_A landscape over the

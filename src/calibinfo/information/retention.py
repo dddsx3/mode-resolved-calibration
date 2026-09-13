@@ -1,11 +1,24 @@
 """B1 · retention：归一化 calibration-retention spectrum R(Λ)（Lemma 2）。
 
-定义：R(Λ) = F∞^{-1/2} ΔF(Λ) F∞^{-1/2}，0 ≼ R ≼ I ⇒ 0 ≤ ρⱼ ≤ 1
+定义：R(Λ) = F∞^{-1/2} ΔF(Λ) F∞^{1/2}，0 ≼ R ≼ I ⇒ 0 ≤ ρⱼ ≤ 1
 （可识别子空间 range(F∞) 上）。
 retention whitening：F∞^{-1/2} = 正定平方根
 （eigh 构造），禁 F∞^{-1/4} 等错误形式；F∞=diag(s²) 时才可写 diag(1/s)。
 ρⱼ 只作 within-scene 归一化读出，禁用于 λ⋆/跨场景逐模式比较。
 绑定测试：test_information_modules.py + test_v3_retention_bounds.py / test_v5_scale.py。
+
+**API 契约（T8）** — 三个 retention API 的对比：
+
+| API | 输入 | rho 长度 | 域 | 边界处理 |
+|---|---|---|---|---|
+| `information.retention_spectrum` | DeltaF, Finf (n,n) | k = rank(F∞) | rank-deficient 安全 | ρ∈[−1e-9,1+1e-9] 自检 |
+| `information.retention_spectrum_lowrank` | finf_diag + per-light | P (含 ρ≡1 单元) | F∞ 需严格正 | 数值 clip μ≤1 |
+| `metrics.spectral_criteria.retention_spectrum_full` | DeltaF, F_inf (n,n) | q = rank(F∞) | 别名同 route 1 | **越界抛错** (T5.5) |
+
+- route 1 与 route 3 接受同一签名（矩阵），但 route 3 **越界即抛错**而非
+  返回 `bounds_ok` 布尔。
+- route 2 返回 `(P,)` 含 ρ=1 单元，**不等长**于 route 1/3 的 `(k,)`。
+- 互换会静默改变结果：使用任一 API 前核对其返回长度约定。
 """
 
 from __future__ import annotations
