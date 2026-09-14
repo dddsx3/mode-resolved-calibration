@@ -719,6 +719,44 @@ per (object, level) — every anchor is runtime- or test-asserted.
   reduced design (level 0.5, regime 10, budgets {14, 28} which carry
   100% of the dp ≠ 0 pairs, 4 informed policies, 10 seeds, 3 arms).
 
+**21b. E arm — informed-only ordering across the family (S2-4 E).**
+Reduced design, preregistered in `configs/decision_quality_family.yaml`
+(commit 5b31b73) BEFORE the run: level 0.5, regime 10, budgets {14, 28}
+— chosen on POWER, not outcome: in the frozen artifact the predicted
+differences dp ≠ 0 live exclusively at k = 14 (62/66 pairs) and k = 28
+(63/66); at k ≥ 57 all four informed orderings coincide — the two
+budgets carry 100% of the distinguishable pairs. 4 informed policies,
+10 seeds (frozen seed spec, level-index 1), 3 arms: anchor (0.5, 0.5°)
+control, dir_heavy (0.5, 5°), het (0.5, 0.5°, het = 1.0). Statistics =
+the frozen E statistic (pooled informed pairwise sign agreement on
+ang_mean_deg + binomial CI), computed by the same code path as the
+frozen pipeline (the anchor arm's 88 rows are BIT-IDENTICAL to the
+frozen decision_quality.json subset — runtime-asserted).
+
+Findings (`results/openillumination/decision_quality_family.json`):
+
+| arm | agree/total | rate [95% CI] | per-cell informed Spearman (median) |
+|---|---|---|---|
+| anchor (control) | 88/125 | 0.704 [0.616, 0.782] | +0.789 |
+| dir_heavy (σ_dir = 5°) | 104/117 | 0.889 [0.817, 0.939] | +1.000 |
+| het (het = 1.0) | 42/119 | 0.353 [0.268, 0.446] | −0.778 |
+
+Outcome (preregistered rule): **parameterization-specific** — the het arm
+(0.353 < 0.60) fails the robustness bar. Two readings, both carried by
+the artifact: (i) the frozen 0.687 informed-ordering validity is NOT a
+pipeline invariant — it moves by ±2σ across corruption *shapes*;
+(ii) the direction of the movement is diagnostic. Making the corruption
+direction-heavier (variance 100× the anchor in the direction channel)
+makes the predicted orderings MORE faithful (0.889, per-cell Spearman
+median +1.0) — direction perturbation hits the normal endpoint in a way
+J_A ranks correctly; the intensity channel that dominates the budget
+value is the one the angular endpoint ranks worst. Per-light
+heterogeneity (het = 1.0) breaks the ordering *below chance* (0.353,
+median Spearman −0.778, worst cells 0/5): the uniform-σ J_A model
+mis-ranks which lights matter when the corruption scale varies 5×
+across lights (e^(±1)·0.5). Frozen references: all-cells 678/987 =
+0.687 [0.657, 0.716]; this subset 88/125 = 0.704.
+
 **Bug found and fixed by the first run (documented in-repo).** The v1
 rank-one coupling `ρ·σI·σR·e eᵀ` modified the diagonal and drove Σ_22 <
 0 at the anchor channel ratio — the family constructor itself emitted a

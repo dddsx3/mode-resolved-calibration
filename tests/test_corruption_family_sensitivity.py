@@ -191,3 +191,59 @@ def test_c_manifest_integrity():
     assert art["manifest"]["config_sha256"] == hashlib.sha256(
         cfg.read_bytes()).hexdigest()
     assert len(art["manifest"]["git_sha"]) == 40
+
+
+# ---------------- E 臂(reduced decision quality) ----------------
+ART_E = REPO / "results/openillumination/decision_quality_family.json"
+FROZEN_DQ = REPO / "results/openillumination/decision_quality.json"
+
+
+def test_e_control_rows_bit_identical_to_frozen_subset():
+    """anchor 臂的行(存档值)== 冻结 decision_quality.json 的
+    (level 0.5, regime 10, k∈{14,28}, 4 informed) 子集,逐位。"""
+    art, frz = _load(ART_E), _load(FROZEN_DQ)
+    frz_rows = {(r["object"], r["unit"], r["k"]): r for r in frz["rows"]
+                if r["level"] == 0.5 and r["regime"] == 10
+                and r["k"] in (14, 28)}
+    n = 0
+    for r in art["rows"]:
+        if r["arm"] != "anchor":
+            continue
+        f = frz_rows[(r["object"], r["unit"], r["k"])]
+        for field in ("pred_J_A", "ang_mean_deg", "mse_aligned",
+                      "dual_mean"):
+            assert r[field] == f[field], (r["object"], r["unit"], r["k"],
+                                          field)
+        n += 1
+    assert n == 88                    # 11 obj x 4 units x 2 budgets
+
+
+def test_e_outcome_consistency():
+    """结局字段必须与预注册判据作用于存档值的结果一致(判据本身受测)。"""
+    art = _load(ART_E)
+    assert art["gate"] == "P-SIGMA-FAMILY"
+    arms = art["arms"]
+    assert set(arms) == {"anchor", "dir_heavy", "het"}
+    rates = {a: d["informed_pairwise_sign"]["rate"] for a, d in arms.items()}
+    assert all(r is not None for r in rates.values())
+    expected = ("robust" if (art["control_reproduces_subset"]
+                             and all(r >= 0.60 for r in rates.values()))
+                else "parameterization-specific")
+    assert art["outcome"] == expected
+    # 控制臂必须精确复现冻结子集 88/125
+    assert art["control_reproduces_subset"] is True
+    comp = art["frozen_reference"]["subset_level05_regime10_k1428"]
+    a = arms["anchor"]["informed_pairwise_sign"]
+    assert (a["agree"], a["total"]) == (comp["agree"], comp["total"])
+    assert a["total"] == 125
+    # 每臂配对统计的算术自洽
+    for d in arms.values():
+        s = d["informed_pairwise_sign"]
+        assert 0 <= s["agree"] <= s["total"]
+        assert abs(s["rate"] - s["agree"] / s["total"]) < 5e-7
+    # manifest
+    import hashlib
+    cfg = REPO / "configs/decision_quality_family.yaml"
+    assert art["manifest"]["config_sha256"] == hashlib.sha256(
+        cfg.read_bytes()).hexdigest()
+    assert len(art["manifest"]["git_sha"]) == 40

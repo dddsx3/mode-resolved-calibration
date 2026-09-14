@@ -207,6 +207,23 @@ def test_readme_numeric_claims_traceable():
         assert _approx(tok, val, dec), (tok, val)
         traced[tok] = val
 
+    # E arm bullet: per-arm informed-ordering rates (+ the het median
+    # Spearman, printed as -0.78 in README prose)
+    fame = json.loads((REPO / "results/openillumination/"
+                       "decision_quality_family.json")
+                      .read_text(encoding="utf-8"))
+    for tok, val, dec in (
+            ("0.704", fame["arms"]["anchor"]["informed_pairwise_sign"]
+             ["rate"], 3),
+            ("0.889", fame["arms"]["dir_heavy"]["informed_pairwise_sign"]
+             ["rate"], 3),
+            ("0.353", fame["arms"]["het"]["informed_pairwise_sign"]
+             ["rate"], 3),
+            ("-0.78", fame["arms"]["het"]["spearman_informed_per_cell"]
+             ["median"], 2)):
+        assert _approx(tok, val, dec), (tok, val)
+        traced[tok] = val
+
     # generic sweep: every other number printed in README must appear as a
     # *token* under results/** (claim-tracing rule, guideline section 4).
     # Two hardening points over the original sweep:
