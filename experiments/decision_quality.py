@@ -80,6 +80,7 @@ def run(config_path=REPO / "configs/decision_quality.yaml",
     数值——逐对象独立播种,determinism 与并行度解耦;不进 manifest)。"""
     cfg = yaml.safe_load(Path(config_path).read_text(encoding="utf-8"))
     t_start = time.time()
+    sha_at_launch = _git_sha()   # manifest 同时记录启动/完成身份(审计建议)
 
     rows = []            # per (obj, level, regime, unit, k) means
     scatter = []         # per (obj, level, regime, unit, k): pred J_A + endpoints
@@ -350,6 +351,7 @@ def _aggregate_and_write(cfg, rows, scatter, out_path, img_path, t_start,
         manifest=dict(
             config_sha256=_sha(Path(config_path)),
             git_sha=_git_sha(),
+            git_sha_at_launch=sha_at_launch,
             scene_rng_spec=cfg["scene_rng_spec"],
             elapsed_s=round(time.time() - t_start, 1)),
         note="predicted-vs-realized closed loop on the corrected-convention "

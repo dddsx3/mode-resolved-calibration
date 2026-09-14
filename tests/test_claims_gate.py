@@ -214,8 +214,11 @@ def test_readme_numeric_claims_traceable():
 #       (|n − v| ≤ 0.5·10^-dec,dec = token 小数位);
 #   (b) 同 (a) 但按百分比换算(|n·100 − v| ≤ 0.5·10^-dec);
 #   (c) 在白名单里(派生量/日期/版本号,逐项注明理由)。
-# 注意:舍入匹配只能防"数字不存在于证据层"(如 102 这种抓错字段只有在
-# 恰好无相近数时才被抓;本测试的价值是把 docs 纳入追溯纪律本身)。
+# 鉴别力(审计实测,2026-09-14):236 个 docs token 中仅 8 个(3.4%)唯一
+# 匹配;整数/2 位小数 token 的随机错值通过率 ~99-100%;4 位小数在密集
+# 值域(≈1.0 附近)误放行 64.8%。本测试是**漂移绊线**,不是正确性检查;
+# 头条数字(M9/B9 级)需要字段级绑定(README 的 traced map 模式,投稿前
+# 待办),不应依赖本门禁背书。
 DOCS_NON_CLAIM = {
     # 年份(related work 引用、changelog、provenance)
     "2017": "Chamon & Ribeiro NeurIPS 2017 citation year",
@@ -233,6 +236,14 @@ DOCS_NON_CLAIM = {
     "102": "REMOVED - the wrong emp/pred value is now 15.98 (E-1a); "
            "kept here so it can NEVER re-enter docs",
     "100": "percentages/counts in prose (e.g. '100% of the advantage')",
+}
+
+# 主动禁用(P1-c):这些值在 docs 中出现即失败——它们是历史错值,靠白名单
+# 豁免是逻辑倒置(白名单=跳过检查=允许),且删白名单也不够(102 会经
+# 舍入匹配命中池里的 102.19 而通过)。唯一正确的语义是显式拒绝。
+DOCS_BANNED_TOKENS = {
+    "102": "E-1a historical wrong value (emp/pred; correct median is 15.98) "
+           "- must never re-enter docs",
 }
 
 
@@ -259,6 +270,9 @@ def test_docs_numeric_claims_traceable():
         tokens = set(re.findall(r"-?\d+\.\d+|-?\d+", text))
         untraced = []
         for tk in sorted(tokens):
+            if tk in DOCS_BANNED_TOKENS:
+                untraced.append(tk)          # banned: fail regardless
+                continue
             if tk in DOCS_NON_CLAIM:
                 continue
             v = float(tk)

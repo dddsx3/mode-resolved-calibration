@@ -39225,10 +39225,12 @@
   }
  ],
  "manifest": {
-  "config_sha256": "045b36d34570d3c9a4a78ea7d2035d621da4996da85fd31c80ad19bff2cff66d",
+  "config_sha256": "b76eafa56ea6aeb2e789624625c05b1e06865541f93f9a646d40fbb541b36d6b",
   "git_sha": "a3d5cae5623314baa31a0c04207ec71692b52763",
   "scene_rng_spec": "default_rng([20260910, obj_idx])  # identical to P-CERT",
-  "elapsed_s": 15161.4
+  "elapsed_s": 15161.4,
+  "config_sha256_at_run": "045b36d34570d3c9a4a78ea7d2035d621da4996da85fd31c80ad19bff2cff66d",
+  "config_drift_note": "v1.0 grid (mode_aware/a_opt + 5 universe randoms) superseded by the v1.1 grid (4 informed + 3U/2A48) in configs/decision_quality.yaml; the v1.0 run-time input is archived verbatim at configs/decision_quality_v1.0.yaml (sha256 045b36d34570d3c9...). Data fields untouched; only this manifest annotation was added."
  },
  "note": "predicted-vs-realized closed loop on the corrected-convention frame; single residual pipeline (arm_metrics: same corruption + fixed-n-hat GLS as arm_energy, plus the calibrated_ps one-step normal refit); predicted side is J_A of the same allocation on the same state. dAUC = policy AUC minus mean-random AUC (negative = policy better). Descriptive, no sign gate."
 }

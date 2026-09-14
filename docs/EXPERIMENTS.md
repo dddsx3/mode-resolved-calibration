@@ -617,10 +617,12 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
   forest）。
 - **Outcome**: cf. `docs/claims.md` B9.
 - **v1→v1.1 重用等价(审计记录)**: `results/openillumination/provenance/dq_v1_reuse_equivalence.json`
-  (`experiments/verify_dq_v1_reuse_equivalence.py`)——未变单元
-  (mode_aware/a_opt/randomU_0..2)从 git 历史的 v1 产物抽样重推导,
-  18/18 位级一致(pred_J_A 12 + 实测端点 6);重用/全量重跑等价的
-  机器可查证据。
+  (`experiments/verify_dq_v1_reuse_equivalence.py`)——**代码路径同一性
+  (未变单元的 selection/J_A/arm 代码 v1→v1.1 逐字节相同)+ obj_03 上的
+  18 点抽样验证**(pred_J_A 12 + 实测端点 6,含 v1 dual 聚合顺序),
+  18/18 位级一致。**非全量验证**——全量等价由"逻辑论证(种子携带
+  object+level+seed 索引)+ 本抽样 + v1.1 全量重跑对未变单元的隐式复现"
+  三层构成;证据 JSON 的 v1_artifact_sha256 锚定被验证的 git blob。
 
 
 ---

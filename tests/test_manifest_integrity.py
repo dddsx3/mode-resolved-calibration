@@ -21,7 +21,9 @@ PAIRS = [("configs/certified_gaps.yaml", "results/certification/certified_gaps.j
          ("configs/allocation_mode_tail.yaml",
           "results/mode_tail/allocation_mode_tail.json"),
          ("configs/goal_orientation.yaml",
-          "results/goal_oriented/goal_orientation.json")]
+          "results/goal_oriented/goal_orientation.json"),
+         ("configs/decision_quality.yaml",
+          "results/openillumination/decision_quality.json")]
 
 
 def test_config_hash_matches_manifest():
