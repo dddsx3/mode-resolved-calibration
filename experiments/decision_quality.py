@@ -75,35 +75,78 @@ def _trapezoid_auc(Es, fracs):
 def run(config_path=REPO / "configs/decision_quality.yaml",
         out_path=REPO / "results/openillumination/decision_quality.json",
         img_path=REPO / "docs/img/decision_quality.png",
-        workers_override=None):
+        workers_override=None, ckpt_dir=None):
     """workers_override:CLI 覆盖 config 的 workers(只影响墙钟,不影响
-    数值——逐对象独立播种,determinism 与并行度解耦;不进 manifest)。"""
+    数值——逐对象独立播种,determinism 与并行度解耦;不进 manifest)。
+
+    ckpt_dir:逐对象 checkpoint 目录(崩溃可恢复)。每物体完成即原子
+    落盘 {obj_name}.json;重跑时已存在且 config/代码身份匹配的物体
+    **直接复用 checkpoint,不重算**——严格不改数值结构:checkpoint 的
+    rows/scatter 与该物体在完整运行中产出的逐字节相同(同一函数、
+    同一种子;恢复只是跳过重算)。缺省 = out_path 同级 .dq_checkpoints
+    (聚合成功写盘后自动清理)。"""
     cfg = yaml.safe_load(Path(config_path).read_text(encoding="utf-8"))
     t_start = time.time()
     sha_at_launch = _git_sha()   # manifest 同时记录启动/完成身份(审计建议)
 
+    ckpt = Path(ckpt_dir) if ckpt_dir else (
+        Path(out_path).parent / ".dq_checkpoints")
+    ckpt.mkdir(parents=True, exist_ok=True)
+    cfg_hash = _sha(Path(config_path))
+    identity = dict(config_sha256=cfg_hash, code_git_sha=sha_at_launch)
+
     rows = []            # per (obj, level, regime, unit, k) means
     scatter = []         # per (obj, level, regime, unit, k): pred J_A + endpoints
     payloads = [(i, n, cfg) for i, n in enumerate(cfg["cohort"])]
+    todo = []
+    done_objs = []
+    for pl in payloads:
+        cp = ckpt / f"{pl[1]}.json"
+        if cp.exists():
+            try:
+                rec = json.loads(cp.read_text(encoding="utf-8"))
+                if rec["identity"] == identity:
+                    rows.extend(rec["rows"])
+                    scatter.extend(rec["scatter"])
+                    done_objs.append(pl[1])
+                    print(f"[dq] {pl[1]}: resumed from checkpoint", flush=True)
+                    continue
+            except Exception:
+                pass        # 损坏/不匹配的 checkpoint 一律重算
+        todo.append(pl)
     import multiprocessing
     ctx = multiprocessing.get_context("spawn")
     workers = int(workers_override or cfg.get("workers", 1))
-    if workers > 1 and len(payloads) > 1:
-        with ctx.Pool(processes=min(workers, len(payloads))) as pool:
-            for obj_name, rws, sc in pool.imap_unordered(_run_object, payloads):
-                rows.extend(rws)
-                scatter.extend(sc)
-                print(f"[dq] {obj_name} done ({time.time()-t_start:.0f}s)",
-                      flush=True)
+
+    def _collect(obj_name, rws, sc):
+        rows.extend(rws)
+        scatter.extend(sc)
+        # 原子写 checkpoint(先临时文件再 rename;崩溃不留半文件)。
+        # mkdir 幂等防御:目录可能被先前成功运行的清理步骤移除。
+        ckpt.mkdir(parents=True, exist_ok=True)
+        cp = ckpt / f"{obj_name}.json"
+        tmp = cp.with_suffix(".tmp")
+        tmp.write_bytes(json.dumps(
+            dict(identity=identity, rows=rws, scatter=sc),
+            ensure_ascii=False).encode("utf-8"))
+        tmp.replace(cp)
+        print(f"[dq] {obj_name} done ({time.time()-t_start:.0f}s)", flush=True)
+
+    if todo and workers > 1 and len(todo) > 1:
+        with ctx.Pool(processes=min(workers, len(todo))) as pool:
+            for obj_name, rws, sc in pool.imap_unordered(_run_object, todo):
+                _collect(obj_name, rws, sc)
     else:
-        for pl in payloads:
+        for pl in todo:
             obj_name, rws, sc = _run_object(pl)
-            rows.extend(rws)
-            scatter.extend(sc)
-            print(f"[dq] {obj_name} done ({time.time()-t_start:.0f}s)",
-                  flush=True)
+            _collect(obj_name, rws, sc)
     _aggregate_and_write(cfg, rows, scatter, out_path, img_path, t_start,
-                         Path(config_path))
+                         Path(config_path), sha_at_launch=sha_at_launch)
+    # 聚合成功:清理 checkpoints(下次运行从头算,避免陈旧复用)
+    for cp in ckpt.glob("*.json"):
+        cp.unlink()
+    if ckpt.exists() and not any(ckpt.iterdir()):
+        ckpt.rmdir()
 
 
 def rng_perm(ids, rng):
@@ -216,7 +259,8 @@ def _run_object(payload):
 
 
 def _aggregate_and_write(cfg, rows, scatter, out_path, img_path, t_start,
-                        config_path=REPO / "configs/decision_quality.yaml"):
+                        config_path=REPO / "configs/decision_quality.yaml",
+                        sha_at_launch=None):
     levels = [float(x) for x in cfg["levels"]]
     regimes = [int(x) for x in cfg["regimes"]]
     budgets = list(cfg["budgets_k"])
@@ -425,5 +469,9 @@ if __name__ == "__main__":
     ap.add_argument("--workers", type=int, default=None,
                     help="override config workers (wall-clock only; values "
                          "are per-object seeded and worker-count invariant)")
+    ap.add_argument("--ckpt-dir", default=None,
+                    help="per-object checkpoint dir (default: alongside the "
+                         "artifact, auto-cleaned after successful aggregation)")
     a = ap.parse_args()
-    run(a.config, a.out, a.img, workers_override=a.workers)
+    run(a.config, a.out, a.img, workers_override=a.workers,
+        ckpt_dir=a.ckpt_dir)
