@@ -177,7 +177,15 @@ class NominalScene:
         if sig.ndim == 1:
             sig = np.diag(sig)
         if sig.ndim == 3:
-            # 逐灯块:每灯一个 (3,3) 精度,移入循环取 Lam_k
+            # 逐灯块:每灯一个 (3,3) 精度,移入循环取 Lam_k。
+            # 契约:第一维 = 场景灯序(len(s_hat) = 48 个 active 灯),
+            # **不是** 142 灯全域——传全域块须先 [scen.sel] 对齐
+            # (het=0 时二者不可分;het≠0 时错位会静默出错)。
+            if sig.shape[0] != L:
+                raise ValueError(
+                    f"per-light sig has {sig.shape[0]} blocks but the scene "
+                    f"has {L} lights; pass sigma_phi_block()[scen.sel] "
+                    f"(universe -> active-light order)")
             per_light = True
             Lam_arr = np.linalg.inv(sig)                    # (L,3,3)
         else:

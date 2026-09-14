@@ -1,0 +1,67 @@
+# P-SIGMA-FAMILY (C arm) -- linearization validity radius across the
+# Sigma_phi family. PREREGISTERED: committed BEFORE the run.
+#
+# Question (conclusion C / claim B6): is the linearization validity radius
+# (amplitude-side envelope: q(level) = dev(level)/(level/level_ref)^2 first
+# crossing 2x / 10x) a property of the corruption GEOMETRY, or an artifact
+# of the joint parameterization (sigma_logI = sigma_dir_deg = level, forced
+# variance ratio ~3283 @ level 0.5)?
+#
+# Shapes (each swept over the SAME frozen level grid [0.05 .. 8.0], same
+# 20 seeds, same seed spec [20260916, 4242, obj_idx, int(level*1000), s]):
+#   joint           (level, level, het=0)   -- CONTROL: must reproduce the
+#                                             frozen linearization_radius.json
+#                                             rows BIT-EXACTLY (v2 metric
+#                                             domain, observation-side
+#                                             injection; runtime anchor).
+#   intensity_only  (level, 1e-3 deg)       -- closed direction channel
+#                                             (frozen closed-channel
+#                                             convention, both sides).
+#   direction_only  (1e-6, level deg)       -- closed intensity channel.
+#   joint_het       (level, level, het=1.0) -- per-light lognormal
+#                                             heterogeneity (seed 20260915).
+#
+# Preregistered outcome rule (no gate; both outcomes are findings):
+#   robust:          every shape's median radius_2x and radius_10x stay
+#                    within a factor 4 of the frozen joint medians
+#                    (1.0 / 1.5) -- i.e. in [0.25, 4.0] and [0.375, 6.0].
+#   channel-dependent: some shape leaves that band (radius collapses to the
+#                    grid floor 0.05 or explodes past 8.0, or shifts >4x);
+#                    the envelope claim is then scoped to the joint shape
+#                    and the per-shape tables carry the finding.
+
+gate: P-SIGMA-FAMILY
+analysis_status: linearization_radius_family_v1
+run_name: linearization_radius_family_v1
+
+data_root: D:/data/OpenIllumination
+data_meta: D:/data/OpenIllumination_meta
+cohort: [obj_03_pumpkin, obj_04_dolphin, obj_07_pumpkin2, obj_09_ball, obj_10_pumpkin3, obj_11_pine, obj_13_mushroom, obj_16_friends_cup, obj_17_pumpkin5, obj_18_fabric_hat, obj_19_cylinder]
+n_objects: 11
+noise_fit_convention: corrected
+scene_rng_spec: "default_rng([20260910, obj_idx])  # identical to P-RADIUS v2"
+K_lights: 142
+
+levels: [0.05, 0.1, 0.2, 0.35, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 4.0, 8.0]
+reference_level: 0.05
+seeds: 20
+crossings: [2.0, 10.0]
+
+# family shapes (swept: sig_logI, sig_dir_deg as functions of level)
+shapes:
+  joint:          {sig_logI: level, sig_dir_deg: level, het_sigma: 0.0}
+  intensity_only: {sig_logI: level, sig_dir_deg: 0.001, het_sigma: 0.0}
+  direction_only: {sig_logI: 0.000001, sig_dir_deg: level, het_sigma: 0.0}
+  joint_het:      {sig_logI: level, sig_dir_deg: level, het_sigma: 1.0}
+
+family_seed: 20260915
+
+outcome_rule: >
+  robust: every shape's median radius_2x / radius_10x within a factor 4
+  of the frozen joint medians (1.0 / 1.5). channel-dependent: otherwise;
+  per-shape tables carry the finding either way.
+
+outcome_independence: >
+  Descriptive/measurement protocol: radii are reported as measured,
+  regardless of size. No sign-based gate. The only hard runtime check is
+  the control arm's bit-identity with the frozen v2 artifact.
