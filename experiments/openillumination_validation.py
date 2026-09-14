@@ -167,20 +167,28 @@ class NominalScene:
     def delta_f_injected(self, sig_phi_diag):
         """Σ_c(物理单位) → 白化逐灯 delta_f 求和（V1b：block-diag nuisance）。
 
-        sig_phi_diag: (3,) 或 (3,3) φ 空间方差（log²I, rad², rad²）。
+        sig_phi_diag: (3,) / (3,3) / **(L,3,3)**——第三种是逐灯异质 Σ_φ
+        (S0-1:家族敏感性分析用;退化到共享 (3,3) 时与旧实现逐位一致)。
         返回 ΔF (P,P) 与弱模式退化比（相对 F∞ 基线）。
         """
         P = self.I.shape[1]
         L = self.s_hat.shape[0]
-        sig = (np.diag(np.asarray(sig_phi_diag, float))
-               if np.ndim(sig_phi_diag) == 1
-               else np.asarray(sig_phi_diag, float))
-        Lam = np.linalg.inv(sig)                            # σ'²=1（白化后）
+        sig = np.asarray(sig_phi_diag, float)
+        if sig.ndim == 1:
+            sig = np.diag(sig)
+        if sig.ndim == 3:
+            # 逐灯块:每灯一个 (3,3) 精度,移入循环取 Lam_k
+            per_light = True
+            Lam_arr = np.linalg.inv(sig)                    # (L,3,3)
+        else:
+            per_light = False
+            Lam_arr = np.linalg.inv(sig)                    # (3,3)
         DF = np.zeros((P, P))
         for k in range(L):
             A_k = np.diag(np.sqrt(self.w[k]) * self.s_hat[k])             # 白化 A
             B_k = np.sqrt(self.w[k])[:, None] * self.B_phi[k]            # 白化 B (P,3)
-            DFk, _, _ = delta_f(A_k, B_k, Lam)
+            Lam_k = Lam_arr[k] if per_light else Lam_arr
+            DFk, _, _ = delta_f(A_k, B_k, Lam_k)
             DF += DFk
         return DF
 
