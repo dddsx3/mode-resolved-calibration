@@ -37,7 +37,7 @@ during the 2026-09-09 repository reorganization. The complete ledger:
 | `7f7094b20c7a` | `openillumination/active_set_ablation.json` | yes (ancestor of HEAD) | P-ACTIVE-SET-ABLATION v1 run (2026-09-14) |
 | `d5765bf1ef8c` | `magnitude/validity_map.json` | yes (ancestor of HEAD) | P-VALIDITY-MAP v1.0.1 run: resolvable source-path labels (2026-09-14) |
 | `caeca8a3c8c0` | `openillumination/provenance/dq_v1_reuse_equivalence.json` | yes (ancestor of HEAD) | P-REUSE-EQUIV v1: v1->v1.1 unchanged units bit-exact (18/18) (2026-09-14) |
-| `a3d5cae56233` | `openillumination/decision_quality.json` | yes (ancestor of HEAD) | P-DECISION-QUALITY v1 run (2026-09-14) |
+| `42bc299fb744` | `openillumination/decision_quality.json` | yes (ancestor of HEAD) | P-DECISION-QUALITY v1.1 run: 4 informed + 3U/2A48 dual baselines (2026-09-14) |
 | `ddfccf1dc7e5` | `magnitude/calibration_value_ceiling.json` | yes (ancestor of HEAD) | P-CEILING v1 run (2026-09-13) |
 | `e67a8bf51c8e` | `certification/certified_gaps_levels.json` | yes (ancestor of HEAD) | P-CERT-LEVELS v1 run (2026-09-13) |
 | `f878dc41cca1` | `openillumination/channel_decomposition.json` | yes (ancestor of HEAD) | P-CHANNEL-DECOMP v1 run (2026-09-13) |

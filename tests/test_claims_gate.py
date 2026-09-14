@@ -183,6 +183,14 @@ def test_readme_numeric_claims_traceable():
             ) + gm_entry:
         assert _approx(tok, val, dec), (tok, val)
         traced[tok] = val
+    # decision-quality bullet: informed-only pooled sign agreement (+CI)
+    dq = json.loads((REPO / "results/openillumination/decision_quality.json")
+                    .read_text(encoding="utf-8"))
+    _ip = dq["informed_pairwise_sign_pooled"]
+    for tok, val in (("0.687", _ip["rate"]), ("0.657", _ip["ci95"][0]),
+                     ("0.716", _ip["ci95"][1])):
+        assert -0.5e-3 <= float(tok) - val <= 0.5e-3, (tok, val)
+        traced[tok] = val
 
     # generic sweep: every other number printed in README must appear as a
     # *token* under results/** (claim-tracing rule, guideline section 4).

@@ -592,21 +592,24 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
   5 random perms,冻结 rng 规范）× 10 seeds/level;corrected 口径;
   predicted 侧 = 同分配在同一状态上的 J_A。逐对象多进程（workers=2;
   a_opt 排序 ~230s/次,冻结贪心语义不可改）。
-- **核心结果（B9）**: 法线角误差端点——dAUC vs random:a_opt
-  **−4.04°** [−6.06, −2.57] @10、**−5.29°** [−7.71, −3.55] @100;
-  mode_aware **−3.82°** [−6.00, −2.46] @10、**−5.12°** [−7.87, −3.45]
-  @100（对象层配对 bootstrap B=10000,全部 CI 不含 0）;
-  Spearman(predicted J_A, realized 法线误差) **88/88 cell 为正**
-  （median +0.750, min +0.357）。gauge 对齐端点则呈再分配现象
-  （dual Spearman median −0.375、albedo-MSE −0.518;dAUC_dual 为正）
-  ——与 C8 的 E(k) 驼峰同一机制。**决策层有效域包络**:信息论预测对
-  物理重建误差方向有效;弱模式族端点需覆盖度警告。
-- **诚实披露（验收 G-1/G-2）**: informed 族内判别(仅 mode_aware vs
-  a_opt 两个单元)的符号一致率为 **130/175 = 0.743** [二项 CI 0.67,
-  0.81]——排序力非纯构造主导,但远弱于含 universe-random 的 88/88 头条
-  (后者中 random 单元在两轴上天然处于差角)。本网格的随机对照仅
-  universe-random,无 active-set-restricted 臂(冻结 AUC 层的 B5 已给出
-  该警告)。
+- **核心结果（B9,v1.1 双基线）**: 法线角误差端点——dAUC vs
+  **universe-random**:a_opt −3.90 [−6.52, −2.45] @10、−5.03
+  [−7.92, −3.51] @100;mode_aware −3.68/−4.84;e_opt −3.88/−5.14;
+  d_opt −3.61/−4.75（全部 CI 不含 0）。dAUC vs **active48-restricted
+  random**（诚实检验）:**−0.17 ~ −0.55°**,8 个 policy×regime 全部
+  CI 不含 0——数度级头条主要是 active-set 效应（C8）,active-set 内
+  优势真实但小一个数量级。Spearman(predicted J_A, realized)
+  **88/88 为正**（median +0.917, min +0.681）;informed 族内
+  （n=4）池化符号一致 **678/987 = 0.687** [0.657, 0.716],中位
+  Spearman +0.800。gauge 对齐端点仍呈再分配（MSE −0.575 / dual
+  −0.525）。**验证**: 2200 未变单元 rows 与已提交 v1 产物**逐位一致**
+  （免费全量对拍:同种子同代码路径）;新单元（e/d-opt, A48 randoms）
+  1760 行全有限。
+- **诚实披露（v1.1 已内嵌对照）**: informed 族内判别（n=4）池化符号
+  一致率 **678/987 = 0.687** [CI 0.657, 0.716]——排序力非纯构造主导,
+  但远弱于含 random 的 88/88 头条（random 单元在两轴上天然处于差角）。
+  active-set-restricted 随机对照已在本网格内（3U+2A48）,双基线 dAUC
+  见上——v1 报告中的 "网格无 A48 臂" 警告已由 v1.1 关闭。
 - **量级说明**: dual 端点以原始能量单位报告(物体间量级 1e2–1e5),
   与 mse_aligned(1e-3)差约 7 个量级——只在同一端点内比较,勿跨端点
   比较效应大小;运行代价 4.2 h(workers=2;逐物体独立播种,

@@ -396,24 +396,23 @@ attempted here and not claimed.
 different granularities combine into one boundary statement. At the
 *budget-aggregate* level the A-opt criterion is predictive:
 Spearman(predicted `J_A`, realized normal angular error) is positive in
-88/88 object×level×regime cells (median +0.750), and even **within the
-informed family alone** (mode_aware vs a_opt, the two units the grid
-carries) the predicted ordering agrees with the realized ordering in
-130/175 = 0.743 [binomial 95% CI 0.67, 0.81] of (cell, budget) pairs —
-well above chance, though far weaker than the all-units headline (the
-88/88 includes universe-random units, which sit at the bad corner of
-both axes by construction). At the *single-light* level the criterion is
-**not** predictive (C8: the stable 100-seed oracle ranking
+88/88 object×level×regime cells (median +0.917), and **within the
+informed family alone** (n=4: mode_aware/e/a/d-opt) the pooled pairwise
+sign agreement is 678/987 = 0.687 [binomial 95% CI 0.657, 0.716], median
+per-cell Spearman +0.800 — well above chance, though far weaker than the
+all-units headline (which includes random units sitting at the bad
+corner of both axes by construction). At the *single-light* level the
+criterion is **not** predictive (C8: the stable 100-seed oracle ranking
 anti-correlates with single-light `J_A` gains, −0.36/−0.82). **A-opt
 ranks how much budget to spend, not which light to spend it on** — which
-is exactly the C8 decomposition's mechanism: the greedy advantage over
-universe-random is entirely the active-set restriction (dilution median
-0.063 `J_A` units vs mode-ordering gap ≤ 0.004), because per-light
-ordering does not transfer to the realized endpoint. Caveat: the 88/88
-headline is measured against universe-random only; the frozen AUC
-layer's active-set control shows the advantage disappears within the
-active set (B5), and this grid does not carry an active-set-restricted
-random arm.
+is exactly the C8 decomposition's mechanism. The v1.1 grid carries the
+active-set-restricted random control, and the decomposition closes
+quantitatively: against universe-random the informed policies win
+~3.6–5.1° of mean normal error, while against active48-random they win
+only 0.17–0.55° — real (all 16 bootstrap CIs exclude zero) but an order
+of magnitude smaller. The several-degree headline is mostly the
+active-set effect; within the active set the ordering advantage is
+genuine but modest.
 
 ## Tests binding these statements
 

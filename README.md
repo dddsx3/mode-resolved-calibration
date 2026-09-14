@@ -169,11 +169,15 @@ reference record.
   (`results/magnitude/validity_map.json`, methods.md §4 scope note);
 - **Decision quality**: on the physical reconstruction endpoint (normal
   angular error from the single frozen residual pipeline, extended with a
-  one-step normal refit), the information-theoretic allocation beats
-  random by several degrees of mean error with bootstrap CIs excluding
-  zero, and the predicted J_A ordering predicts the realized ordering in
-  88/88 object×level×regime cells — while the gauge-aligned weak-mode
-  endpoints show the error-redistribution phenomenon instead
+  one-step normal refit), the information-theoretic allocation beats BOTH
+  random baselines with bootstrap CIs excluding zero — by several degrees
+  against universe-random, but only 0.2–0.6° against active-set-restricted
+  random (the honest control): the headline is mostly the active-set
+  effect, the within-active-set advantage is real but modest. The
+  predicted J_A ordering predicts the realized ordering in 88/88
+  object×level×regime cells (informed-only pooled sign agreement 0.687
+  [0.657, 0.716]) — while the gauge-aligned weak-mode endpoints show the
+  error-redistribution phenomenon instead
   (`results/openillumination/decision_quality.json`);
 - preregistered allocation evaluation: mode-aware guidance improves
   reconstruction over random allocation for 11/11 objects (Δ AUC −0.150 at 10×,
