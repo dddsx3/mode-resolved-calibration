@@ -22,7 +22,8 @@ from pathlib import Path
 import pytest
 
 REPO = Path(__file__).resolve().parents[1]
-DOCS = {"methods": REPO / "docs/methods.md", "claims": REPO / "docs/claims.md"}
+DOCS = {"methods": REPO / "docs/methods.md", "claims": REPO / "docs/claims.md",
+        "experiments": REPO / "docs/EXPERIMENTS.md"}
 ARTS = {
     "amp": REPO / "results/magnitude/directional_amplitude_summary.json",
     "ab": REPO / "results/submodularity/alpha_bound.json",
@@ -85,7 +86,9 @@ def _abl_curve(obj, k):
                           if o["object"] == obj)["k_curve_legacy_frozen_anchor"][k]
 
 
-M, C = "methods", "claims"
+M, C, E = "methods", "claims", "experiments"
+_CLOUD_INFO = (REPO / "results/openillumination/provenance/"
+               "decision_quality_cloud42bc299.json")
 U = "\u2212"                                     # unicode minus,与 docs 一致
 
 BINDINGS = [
@@ -182,6 +185,25 @@ BINDINGS = [
     (C, "0.59", "abl", _abl_curve("obj_03_pumpkin", "0"), 2),
     (C, "1.21", "abl", _abl_curve("obj_03_pumpkin", "14"), 2),
     (C, "0.20", "abl", _abl_curve("obj_03_pumpkin", "48"), 2),
+
+    # ---- EXPERIMENTS.md 头条(P2-5:纳入字段级绑定)----
+    (E, "3960", "dq", lambda j: float(len(j["rows"])), 0),
+    (E, "12.4", "dq", lambda j: j["manifest"]["elapsed_s"] / 3600.0, 1),
+    (E, "36.4", "go",
+     lambda j: json.loads(_CLOUD_INFO.read_text(encoding="utf-8"))
+     ["manifest"]["elapsed_s"] / 60.0, 1),
+    (E, "0.687", "dq",
+     lambda j: j["informed_pairwise_sign_pooled"]["rate"], 3),
+    (E, "0.657", "dq",
+     lambda j: j["informed_pairwise_sign_pooled"]["ci95"][0], 3),
+    (E, "0.716", "dq",
+     lambda j: j["informed_pairwise_sign_pooled"]["ci95"][1], 3),
+    (E, f"{U}1.000", "dq",
+     lambda j: j["spearman_informed_only"]["ang_mean_deg"]["min"], 3),
+    (E, "2200", "dq",
+     lambda j: 5 * 88 * 5, 0),   # 未变单元行数(5×88×5,交叉验证语义)
+    (E, "678", "dq", lambda j: j["informed_pairwise_sign_pooled"]["agree"], 0),
+    (E, "987", "dq", lambda j: j["informed_pairwise_sign_pooled"]["total"], 0),
 ]
 
 # SPECIALS 追加(数值侧由产物 pin 测试守):11/44 = goal_orientation 的
@@ -196,15 +218,14 @@ SPECIALS = [
     (M, "1.0045", "frozen MC record; prose-anchored in "
                   "directional_amplitude_summary.amplitude_interpretation"),
     (C, "11/44", "goal_orientation headline: top3 n_cells_disjoint / n_cells "
-                 "(compound literal; value pinned by test_goal_oriented)"),
-]
+                 "(compound literal; value pinned by test_goal_oriented)"),]
 
 
 # Occurrence-count anchoring (P1-b mutation-tested hardening: 0.635
-# appears twice in methods - mutating ONE copy passes a presence-only
+# appears twice in methods.md - mutating ONE copy passes a presence-only
 # check; anchoring the count catches any single-copy mutation).
 # Deliberate additions/removals must update this table (same
-# discipline as the README traced map).
+# discipline as the README traced map). Covers methods/claims/EXPERIMENTS.
 OCCURRENCE_COUNTS = {
     ("claims", "0.0008"): 2,
     ("claims", "0.004"): 1,
@@ -249,6 +270,16 @@ OCCURRENCE_COUNTS = {
     ("claims", "−5.14"): 1,
     ("claims", "−6.52"): 1,
     ("claims", "−7.92"): 1,
+    ("experiments", "0.657"): 2,
+    ("experiments", "0.687"): 3,
+    ("experiments", "0.716"): 2,
+    ("experiments", "12.4"): 2,
+    ("experiments", "2200"): 1,
+    ("experiments", "36.4"): 1,
+    ("experiments", "3960"): 1,
+    ("experiments", "678"): 3,
+    ("experiments", "987"): 3,
+    ("experiments", "−1.000"): 1,
     ("methods", "0.271"): 2,
     ("methods", "0.635"): 2,
     ("methods", "0.657"): 1,
@@ -274,6 +305,7 @@ OCCURRENCE_COUNTS = {
     ("methods", "−0.36"): 1,
     ("methods", "−0.82"): 1
 }
+
 
 
 def test_headline_numbers_field_bound():

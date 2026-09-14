@@ -244,6 +244,9 @@ DOCS_NON_CLAIM = {
     "102": "REMOVED - the wrong emp/pred value is now 15.98 (E-1a); "
            "kept here so it can NEVER re-enter docs",
     "100": "percentages/counts in prose (e.g. '100% of the advantage')",
+    "1.0368": "historical pre-T3 value quoted as drift history in "
+              "EXPERIMENTS s20's E-1b note; the corrected 1.001011 is "
+              "field-bound in test_headline_binding",
 }
 
 # 主动禁用(P1-c):这些值在 docs 中出现即失败——它们是历史错值,靠白名单
@@ -272,7 +275,8 @@ def test_docs_numeric_claims_traceable():
     """E-1b: docs(methods/claims)的每个数字可追溯到 results/**(舍入
     匹配 + 百分比换算),否则必须在带理由的白名单里。"""
     numbers = _results_numbers()
-    for doc in (REPO / "docs/methods.md", REPO / "docs/claims.md"):
+    for doc in (REPO / "docs/methods.md", REPO / "docs/claims.md",
+                REPO / "docs/EXPERIMENTS.md"):
         text = doc.read_text(encoding="utf-8")
         text = re.sub(r"\d+e-\d+", " ", text.replace("\u2212", "-"))
         tokens = set(re.findall(r"-?\d+\.\d+|-?\d+", text))
