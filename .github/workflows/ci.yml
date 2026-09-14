@@ -13,6 +13,8 @@ jobs:
         python-version: ["3.10", "3.12"]
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0        # 台账可达性门禁需要完整历史(merge-base)
       - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
