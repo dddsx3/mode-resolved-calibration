@@ -602,9 +602,9 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
   **88/88 为正**（median +0.917, min +0.681）;informed 族内
   （n=4）池化符号一致 **678/987 = 0.687** [0.657, 0.716],中位
   Spearman +0.800。gauge 对齐端点仍呈再分配（MSE −0.575 / dual
-  −0.525）。**验证**: 2200 未变单元 rows 与已提交 v1 产物**逐位一致**
-  （免费全量对拍:同种子同代码路径）;新单元（e/d-opt, A48 randoms）
-  1760 行全有限。
+  −0.525）。**验证**: 2200 未变单元 rows / 8800 值与 v1 产物（git 历史读取）
+  **逐位一致**（免费全量对拍:同种子同代码路径;`full_comparison` 字段
+  登记 8800/8800）;新单元（e/d-opt, A48 randoms）1760 行全有限。
 - **诚实披露（v1.1 已内嵌对照）**: informed 族内判别（n=4）池化符号
   一致率 **678/987 = 0.687** [CI 0.657, 0.716]——排序力非纯构造主导,
   但远弱于含 random 的 88/88 头条（random 单元在两轴上天然处于差角）。
@@ -646,7 +646,10 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
   (`experiments/verify_dq_resume_equivalence.py` 可复跑)——2 物体缩减
   网格:run A 在第一个 checkpoint 落盘后 SIGKILL;run B 同目录重启
   (obj_03 从 checkpoint 恢复、obj_19 新算);run C 干净跑。**B vs C
-  位级一致**(rows 32/32 + bootstrap/spearman/informed/auc 全同)。
+  位级一致**(rows 32/32 + bootstrap/spearman/informed/auc 全同),且
+  **workers=4 vs workers=1 也位级一致**(同网格、逐对象播种——worker
+  维度从论证升级为实证);两个产物的文件哈希仅差 manifest 元数据
+  (elapsed_s)——这正是 verdict bit-identical 的语义。
   此前该证据仅存于 42bc299 的 commit message(验收 P1-d:最强声明
   不得只靠散文支撑)。
 - **v1→v1.1 重用等价(审计记录)**: `results/openillumination/provenance/dq_v1_reuse_equivalence.json`

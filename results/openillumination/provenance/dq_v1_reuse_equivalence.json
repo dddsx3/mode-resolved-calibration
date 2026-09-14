@@ -29,6 +29,20 @@
  "n_checks": 18,
  "n_bit_exact": 18,
  "verdict": "pass",
+ "full_comparison": {
+  "n_rows_compared": 2200,
+  "n_values": 8800,
+  "n_bit_exact": 8800,
+  "fields": [
+   "pred_J_A",
+   "ang_mean_deg",
+   "mse_aligned",
+   "dual_mean"
+  ],
+  "v11_artifact_sha256": "ecb10a13b09c87a545a334be8405270d61b5b0bb8247fb2a9f2852a90bd0d395",
+  "v11_manifest_git_sha": "42bc299fb744732fe589557d0ca4beaf87b148df",
+  "semantics": "v1.1 rows for the 5 unchanged units vs the v1 rows read from git history (same seeds, byte-identical code path) - the full-magnitude counterpart of the 18-point spot check above"
+ },
  "checks": [
   {
    "kind": "pred_J_A",
@@ -200,8 +214,8 @@
   }
  ],
  "manifest": {
-  "git_sha": "a850a106acd0456f4c76e761b0c93521eeb5f4ba",
-  "elapsed_s": 660.6
+  "git_sha": "1b6cf9afb80ca49d1b2270e4e8f5bf72a63d9e18",
+  "elapsed_s": 525.7
  },
  "note": "seed-determinism: these units' selection, J_A, and arm code paths are byte-identical between the v1 and v1.1 commits, and all per-unit seeds carry object+level+seed indices - the values are worker-count invariant. Evidence for the reuse decision recorded in d877355's commit trail."
 }

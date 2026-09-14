@@ -1,7 +1,7 @@
 {
  "gate": "P-RESUME-EQUIV",
  "analysis_status": "dq_resume_vs_clean_v1",
- "question": "is a crash-resumed run (checkpoint reuse) bit-identical to an uninterrupted run of the same grid, on the same machine - i.e. same-machine worker/crash invariance?",
+ "question": "on the same machine: (a) is a crash-resumed run (checkpoint reuse) bit-identical to an uninterrupted run, and (b) is a workers=4 run bit-identical to a workers=1 run - i.e. same-machine crash/resume AND worker-count invariance?",
  "method": "2-object reduced grid (v1.1 code path): run A killed with SIGKILL after the first per-object checkpoint lands; run B restarted from the same checkpoint dir (object 1 resumed, object 2 computed); run C clean from scratch; B vs C compared field-by-field",
  "resumed_objects": [
   "obj_03_pumpkin"
@@ -17,9 +17,27 @@
   "informed_pairwise_sign_pooled": true,
   "auc_rows": true
  },
+ "worker_invariance": {
+  "workers": [
+   1,
+   4
+  ],
+  "rows": {
+   "n_total": 32,
+   "n_bit_exact": 32
+  },
+  "top_level_identical": {
+   "bootstrap_dAUC": true,
+   "spearman_pred_vs_realized": true,
+   "spearman_informed_only": true,
+   "informed_pairwise_sign_pooled": true,
+   "auc_rows": true
+  },
+  "note": "same reduced grid, workers=4 (objects in parallel) vs workers=1; per-object seeding makes each object's values worker-count invariant"
+ },
  "artifacts": {
-  "resumed_sha256": "c9e4eb28206617db65bd10050acd556eaa823066b8d8aec4f3825447375e4b96",
-  "clean_sha256": "b951dec0ef0f4ee991db2a9aa6377a5c3eb8d149891e8434fb754708849c0ba4"
+  "resumed_sha256": "62bb3cac4e390dc5d7a5c8720e947921583a5f1d507785a1c31fe5f76cbce60b",
+  "clean_sha256": "4d56e3ea5caac79189140ea757c4aba78e6b564c6eebbc82d41beb96ca837776"
  },
  "grid": {
   "cohort": [
@@ -61,9 +79,9 @@
   "analysis_status": "resume_equiv_internal"
  },
  "manifest": {
-  "git_sha": "77e08539bfe8dc2f76661804bdb095a58979c1eb",
-  "elapsed_s": 1304.1
+  "git_sha": "2a365b6a38462b95aa719f8f0d776504d3299a97",
+  "elapsed_s": 1539.1
  },
- "note": "in-repo promotion of the evidence previously recorded only in 42bc299's commit message (acceptance P1-d). Same-machine property; cross-machine is covered by dq_cross_env_repro.json. Reduced grid: the claim is about the checkpoint-resume mechanism, which is grid-size independent (per-object seeding + atomic per-object serialization).",
+ "note": "in-repo promotion of the evidence previously recorded only in 42bc299's commit message (acceptance P1-d). Same-machine property; cross-machine is covered by dq_cross_env_repro.json. Reduced grid: the claim is about the checkpoint-resume mechanism and the worker-count invariance, both of which are grid-size independent (per-object seeding + atomic per-object serialization). artifacts.resumed_sha256 and clean_sha256 DIFFER at the file level only through manifest metadata (elapsed_s / git_sha timing); every compared data field is identical - that is the meaning of verdict bit-identical.",
  "verdict": "bit-identical"
 }

@@ -58,7 +58,7 @@
   "verdict": "statistically-identical"
  },
  "manifest": {
-  "git_sha": "a850a106acd0456f4c76e761b0c93521eeb5f4ba",
+  "git_sha": "1b6cf9afb80ca49d1b2270e4e8f5bf72a63d9e18",
   "elapsed_s": 0.1
  },
  "note": "cloud package: decision_quality_42bc299f_20260914_120403.zip (RUN_INFO: git_sha=launch=42bc299..., config_sha256=b76eafa..., elapsed 2183.5s = 36.4 min on 32 cores / 11 workers, Linux-6.6.98 tl4, numpy 2.4.6). The cloud artifact is archived alongside this record for full auditability. Same-machine worker-invariance is proven separately (resume-vs-clean bit-exact test in the 42bc299 commit trail); this record covers the CROSS-environment property."

@@ -151,6 +151,10 @@ def test_reuse_equivalence_record():
     for c in j["checks"]:
         assert c["bit_exact"] is True
     assert j["manifest"]["git_sha"]
+    # P2-9 全量分支:2200 行 / 8800 值逐位(B9 的同量级证据)
+    fc = j["full_comparison"]
+    assert fc["n_rows_compared"] == 2200
+    assert fc["n_bit_exact"] == fc["n_values"] == 8800
 
 
 def test_cross_env_repro_record():
@@ -194,4 +198,9 @@ def test_resume_vs_clean_record():
     assert j["rows"]["n_bit_exact"] == j["rows"]["n_total"] > 0
     assert all(j["top_level_identical"].values())
     assert j["resumed_objects"] == ["obj_03_pumpkin"]
+    # P1-d 验收:worker 维度同样位级(workers=1 vs 4)
+    wi = j["worker_invariance"]
+    assert wi["workers"] == [1, 4]
+    assert wi["rows"]["n_bit_exact"] == wi["rows"]["n_total"] > 0
+    assert all(wi["top_level_identical"].values())
     assert j["manifest"]["git_sha"]

@@ -36,9 +36,9 @@ during the 2026-09-09 repository reorganization. The complete ledger:
 | `f289a2d2a5b1` | `goal_oriented/goal_orientation.json` | yes (ancestor of HEAD) | P-GOAL-ORIENTED v1.1 run: rho_mean gauge-mechanism extension (2026-09-13) |
 | `7f7094b20c7a` | `openillumination/active_set_ablation.json` | yes (ancestor of HEAD) | P-ACTIVE-SET-ABLATION v1 run (2026-09-14) |
 | `d5765bf1ef8c` | `magnitude/validity_map.json` | yes (ancestor of HEAD) | P-VALIDITY-MAP v1.0.1 run: resolvable source-path labels (2026-09-14) |
-| `a850a106acd0` | `openillumination/provenance/dq_v1_reuse_equivalence.json` | yes (ancestor of HEAD) | P-REUSE-EQUIV v1 rerun with pinned_blob_at (18/18 bit-exact) (2026-09-14) |
-| `a850a106acd0` | `openillumination/provenance/dq_cross_env_repro.json` | yes (ancestor of HEAD) | P-CROSS-ENV v1 rerun with headline reorder: 1/792 diverged, statistically identical (2026-09-14) |
-| `77e08539bfe8` | `openillumination/provenance/dq_resume_vs_clean.json` | yes (ancestor of HEAD) | P-RESUME-EQUIV v1: crash-resumed = clean run, bit-identical (2026-09-14) |
+| `1b6cf9afb80c` | `openillumination/provenance/dq_v1_reuse_equivalence.json` | yes (ancestor of HEAD) | P-REUSE-EQUIV v2: 18-point spot check + FULL 2200-row/8800-value comparison vs the v1 git blob, all bit-exact (2026-09-14) |
+| `1b6cf9afb80c` | `openillumination/provenance/dq_cross_env_repro.json` | yes (ancestor of HEAD) | P-CROSS-ENV v1.1: headline reorder, 1/792 diverged, statistically identical (2026-09-14) |
+| `2a365b6a3846` | `openillumination/provenance/dq_resume_vs_clean.json` | yes (ancestor of HEAD) | P-RESUME-EQUIV v2: crash/resume AND workers 1v4, both bit-identical (2026-09-14) |
 | `42bc299fb744` | `openillumination/decision_quality.json` | yes (ancestor of HEAD) | P-DECISION-QUALITY v1.1 run: 4 informed + 3U/2A48 dual baselines (2026-09-14) |
 | `ddfccf1dc7e5` | `magnitude/calibration_value_ceiling.json` | yes (ancestor of HEAD) | P-CEILING v1 run (2026-09-13) |
 | `e67a8bf51c8e` | `certification/certified_gaps_levels.json` | yes (ancestor of HEAD) | P-CERT-LEVELS v1 run (2026-09-13) |
