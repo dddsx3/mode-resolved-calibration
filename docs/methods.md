@@ -399,7 +399,8 @@ Spearman(predicted `J_A`, realized normal angular error) is positive in
 88/88 object×level×regime cells (median +0.917), and **within the
 informed family alone** (n=4: mode_aware/e/a/d-opt) the pooled pairwise
 sign agreement is 678/987 = 0.687 [binomial 95% CI 0.657, 0.716], median
-per-cell Spearman +0.800 — well above chance, though far weaker than the
+per-cell Spearman +0.800 (min −1.000: at least one cell fully
+rank-reversed) — well above chance, though far weaker than the
 all-units headline (which includes random units sitting at the bad
 corner of both axes by construction). At the *single-light* level the
 criterion is **not** predictive (C8: the stable 100-seed oracle ranking

@@ -612,10 +612,11 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
   见上——v1 报告中的 "网格无 A48 臂" 警告已由 v1.1 关闭。
 - **量级说明**: dual 端点以原始能量单位报告(物体间量级 1e2–1e5),
   与 mse_aligned(1e-3)差约 7 个量级——只在同一端点内比较,勿跨端点
-  比较效应大小;运行代价 4.2 h(workers=2;逐物体独立播种,
-  determinism 与并行度解耦)。
-- **Output**: `results/openillumination/decision_quality.json`（3080 rows
-  + 88 AUC cells + bootstrap + within-cell Spearman）+
+  比较效应大小;运行代价 v1.0 4.2 h、v1.1 12.4 h(均 workers=2,本机;
+  逐物体独立播种,**同机** determinism 与并行度解耦——跨机不逐位,
+  见下方复现段)。
+- **Output**: `results/openillumination/decision_quality.json`（v1.1:
+  3960 rows + 88 AUC cells + 48 bootstrap keys + within-cell Spearman）+
   `docs/img/decision_quality.png`（predicted-vs-realized 散点 + dAUC
   forest）。
 - **Outcome**: cf. `docs/claims.md` B9.
@@ -627,9 +628,19 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
   cell-unit 中 791 个信息侧一致（≤1e-9 rel）,唯一分歧 = obj_19_cylinder
   @ level 1.0/regime 10 的 **e_opt 贪心近平局翻转**（两个候选灯的 J_A
   差 ~1e-6,贪心任选其一均有效）;全部 16 个 ang bootstrap CI 同号且
-  显著,informed 统计 **678/987 逐位相同**。**不声称跨机逐位一致**——
+  显著,informed 统计 **678/987 逐位相同**。informed-only 的下限在此
+  披露:per-cell Spearman **min = −1.000**(n=4 族内至少一个 cell 排序
+  完全反向——这正是排序力主张落在 0.687 而非 88/88 的直接证据)。
+  **不声称跨机逐位一致**——
   末位 ULP 的 BLAS 差异会翻转近平局,这是期望行为;同机 worker-不变性
-  由 resume-vs-clean 位级测试单独证明（42bc299 提交链）。
+  由 resume-vs-clean 位级测试单独证明（`dq_resume_vs_clean.json`,见下）。
+- **平坦性实证（唯一分歧的科学读法）**: 那次 e_opt 翻转发生在两个
+  候选灯 **J_A 差 ~1e-6** 上——比认证间隙中位 **7.8e-5(C2)** 小两个
+  数量级。即:连 1e-6 的扰动都会改变"选哪盏灯",说明该选择落在证书
+  保证的次优性之内,换一盏灯统计上无差别。这把"跨环境不逐位"从瑕疵
+  变为**对"landscape 在最优附近平坦"的独立实证**,并与"策略间差异
+  在证书精度内不可分辨"(B4/C8)闭合——一次回答"为何不逐位一致"与
+  "证书有什么用"两个问题。
 - **v1→v1.1 重用等价(审计记录)**: `results/openillumination/provenance/dq_v1_reuse_equivalence.json`
   (`experiments/verify_dq_v1_reuse_equivalence.py`)——**代码路径同一性
   (未变单元的 selection/J_A/arm 代码 v1→v1.1 逐字节相同)+ obj_03 上的
