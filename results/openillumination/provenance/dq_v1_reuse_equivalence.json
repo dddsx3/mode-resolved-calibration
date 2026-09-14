@@ -1,0 +1,205 @@
+{
+ "gate": "P-REUSE-EQUIV",
+ "analysis_status": "dq_v1_reuse_equivalence_v1",
+ "question": "are the v1->v1.1 unchanged selection units (mode_aware, a_opt, randomU_0..2 = v1 random_0..2, same rng spec) bit-exact reproducible from the committed v1 artifact, so their rows are reusable and a full v1.1 rerun cross-validates instead of duplicating?",
+ "method": "re-derive orderings + J_A + 10-seed arm means on the sample points from scratch and compare to the v1 rows read from git history (immune to working-tree overwrites); dual uses the v1 aggregation order (per-arm mean-of-5, then mean over seeds)",
+ "v1_ref": "fc38e9d",
+ "v1_artifact_sha256": "b45039cd7a9de76581c42d841c616fc5955d077f29035860d9b368c62f5dd203",
+ "sample": {
+  "object": "obj_03_pumpkin",
+  "regime": 10,
+  "levels": [
+   0.2,
+   0.5
+  ],
+  "units": [
+   "mode_aware",
+   "a_opt",
+   "random_0"
+  ],
+  "pred_ks": [
+   14,
+   57
+  ],
+  "arm_level": 0.2,
+  "seeds": 10
+ },
+ "n_checks": 18,
+ "n_bit_exact": 18,
+ "verdict": "pass",
+ "checks": [
+  {
+   "kind": "pred_J_A",
+   "level": 0.2,
+   "unit": "mode_aware",
+   "k": 14,
+   "recomputed": "0.4518646502465341",
+   "v1": "0.4518646502465341",
+   "bit_exact": true
+  },
+  {
+   "kind": "pred_J_A",
+   "level": 0.2,
+   "unit": "mode_aware",
+   "k": 57,
+   "recomputed": "0.43498262212375005",
+   "v1": "0.43498262212375005",
+   "bit_exact": true
+  },
+  {
+   "kind": "pred_J_A",
+   "level": 0.2,
+   "unit": "a_opt",
+   "k": 14,
+   "recomputed": "0.45176865746825784",
+   "v1": "0.45176865746825784",
+   "bit_exact": true
+  },
+  {
+   "kind": "pred_J_A",
+   "level": 0.2,
+   "unit": "a_opt",
+   "k": 57,
+   "recomputed": "0.43498262212375005",
+   "v1": "0.43498262212375005",
+   "bit_exact": true
+  },
+  {
+   "kind": "pred_J_A",
+   "level": 0.2,
+   "unit": "random_0",
+   "k": 14,
+   "recomputed": "0.48399171379095973",
+   "v1": "0.48399171379095973",
+   "bit_exact": true
+  },
+  {
+   "kind": "pred_J_A",
+   "level": 0.2,
+   "unit": "random_0",
+   "k": 57,
+   "recomputed": "0.4469161757531987",
+   "v1": "0.4469161757531987",
+   "bit_exact": true
+  },
+  {
+   "kind": "arm_mean",
+   "level": 0.2,
+   "unit": "mode_aware",
+   "k": 14,
+   "endpoint": "ang_mean_deg",
+   "recomputed": "1.8856141873476315",
+   "v1": "1.8856141873476315",
+   "bit_exact": true
+  },
+  {
+   "kind": "arm_mean",
+   "level": 0.2,
+   "unit": "mode_aware",
+   "k": 14,
+   "endpoint": "mse_aligned",
+   "recomputed": "0.0017609691099066994",
+   "v1": "0.0017609691099066994",
+   "bit_exact": true
+  },
+  {
+   "kind": "arm_mean",
+   "level": 0.2,
+   "unit": "mode_aware",
+   "k": 14,
+   "endpoint": "dual_mean",
+   "recomputed": "996.5003627444312",
+   "v1": "996.5003627444312",
+   "bit_exact": true
+  },
+  {
+   "kind": "arm_mean",
+   "level": 0.2,
+   "unit": "mode_aware",
+   "k": 57,
+   "endpoint": "ang_mean_deg",
+   "recomputed": "1.0164716802044498",
+   "v1": "1.0164716802044498",
+   "bit_exact": true
+  },
+  {
+   "kind": "arm_mean",
+   "level": 0.2,
+   "unit": "mode_aware",
+   "k": 57,
+   "endpoint": "mse_aligned",
+   "recomputed": "0.0015785480794417532",
+   "v1": "0.0015785480794417532",
+   "bit_exact": true
+  },
+  {
+   "kind": "arm_mean",
+   "level": 0.2,
+   "unit": "mode_aware",
+   "k": 57,
+   "endpoint": "dual_mean",
+   "recomputed": "824.4768740038144",
+   "v1": "824.4768740038144",
+   "bit_exact": true
+  },
+  {
+   "kind": "pred_J_A",
+   "level": 0.5,
+   "unit": "mode_aware",
+   "k": 14,
+   "recomputed": "0.5981792998960747",
+   "v1": "0.5981792998960747",
+   "bit_exact": true
+  },
+  {
+   "kind": "pred_J_A",
+   "level": 0.5,
+   "unit": "mode_aware",
+   "k": 57,
+   "recomputed": "0.490315767807156",
+   "v1": "0.490315767807156",
+   "bit_exact": true
+  },
+  {
+   "kind": "pred_J_A",
+   "level": 0.5,
+   "unit": "a_opt",
+   "k": 14,
+   "recomputed": "0.5981082010738539",
+   "v1": "0.5981082010738539",
+   "bit_exact": true
+  },
+  {
+   "kind": "pred_J_A",
+   "level": 0.5,
+   "unit": "a_opt",
+   "k": 57,
+   "recomputed": "0.490315767807156",
+   "v1": "0.490315767807156",
+   "bit_exact": true
+  },
+  {
+   "kind": "pred_J_A",
+   "level": 0.5,
+   "unit": "random_0",
+   "k": 14,
+   "recomputed": "0.7885455501363745",
+   "v1": "0.7885455501363745",
+   "bit_exact": true
+  },
+  {
+   "kind": "pred_J_A",
+   "level": 0.5,
+   "unit": "random_0",
+   "k": 57,
+   "recomputed": "0.5633932053115691",
+   "v1": "0.5633932053115691",
+   "bit_exact": true
+  }
+ ],
+ "manifest": {
+  "git_sha": "caeca8a3c8c0c0bec40eaa02f03a75cfd1fc83d7",
+  "elapsed_s": 774.0
+ },
+ "note": "seed-determinism: these units' selection, J_A, and arm code paths are byte-identical between the v1 and v1.1 commits, and all per-unit seeds carry object+level+seed indices - the values are worker-count invariant. Evidence for the reuse decision recorded in d877355's commit trail."
+}
