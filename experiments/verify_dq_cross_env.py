@@ -119,9 +119,25 @@ def run(path_a, path_b, out_path):
     t0 = time.time()
     path_a, path_b = Path(path_a), Path(path_b)
     res = compare(path_a, path_b)
+    # P2-8: 摘要头条 = 结构性分歧数 + 最大相对偏差(有信息量);
+    # n_bit_exact 是浮点末位语义,保留在 results.rows 内(脚注地位)。
+    headline = dict(
+        n_cell_units=res["cell_units"]["n_total"],
+        n_structurally_diverged=res["cell_units"]["n_diverged"],
+        fraction_diverged=round(res["cell_units"]["n_diverged"]
+                                / max(res["cell_units"]["n_total"], 1), 6),
+        max_rel_pred_J_A=res["rows"]["max_rel"]["pred_J_A"],
+        max_rel_ang=res["rows"]["max_rel"]["ang_mean_deg"],
+        all_ang_ci_same_sign_and_significant=res["conclusions"]
+        ["all_ang_ci_same_sign_and_significant"],
+        verdict=res["verdict"],
+        note="n_bit_exact in results.rows counts FLOATING-POINT last-ULP "
+             "agreement only (cross-machine BLAS kernels differ in the last "
+             "bits); the informative quantity is n_structurally_diverged.")
     rec = dict(
         gate="P-CROSS-ENV",
         analysis_status="dq_cross_env_repro_v1",
+        headline=headline,
         question="does the decision-quality grid reproduce across "
                  "environments (local 2-workers AMD/numpy-2.4.1 vs cloud "
                  "11-workers x86/numpy-2.4.6)? Expectation: NOT bit-exact "

@@ -122,7 +122,7 @@ def run(out_path=REPO / "results/openillumination/provenance/"
     assert rc_r == 0, log_r[-2000:]
     assert "resumed from checkpoint" in log_r, \
         "resumed run did NOT reuse the checkpoint"
-    resumed_objs = [l.split()[1] for l in log_r.splitlines()
+    resumed_objs = [l.split()[1].rstrip(":") for l in log_r.splitlines()
                     if "resumed from checkpoint" in l]
 
     # 3) clean(空 checkpoint 目录)

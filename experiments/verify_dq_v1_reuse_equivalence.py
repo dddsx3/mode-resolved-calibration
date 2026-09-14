@@ -163,6 +163,12 @@ def run(v1_ref="fc38e9d",
                "then mean over seeds)",
         v1_ref=v1_ref,
         v1_artifact_sha256=hashlib.sha256(v1_bytes).hexdigest(),
+        # P2-7: 显式锚定——该 sha256 对应 v1_ref 提交处的 git blob
+        # (后续手工 drift 注记会改变工作树文件,但不改变 git 历史中的 blob;
+        #  规则:drift 注记放 sidecar/台账,不写进已冻结产物——见
+        #  CONTRIBUTING.md "Regenerating checksums" 节)
+        pinned_blob_at=v1_ref,
+        pinned_blob_readable_via=f"git show {v1_ref}:{V1_PATH}",
         sample=dict(object=obj_name, regime=regime, levels=levels,
                     units=["mode_aware", "a_opt", "random_0"],
                     pred_ks=[14, 57], arm_level=0.2, seeds=10),

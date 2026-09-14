@@ -46,6 +46,18 @@ regenerate → `git add` → `git stash pop`; then verify with a clean
 `git worktree add /tmp/wt HEAD && (cd /tmp/wt && sha256sum -c
 checksums.sha256)` before pushing.
 
+### Drift annotations never go into frozen artifacts
+
+Provenance annotations for an already-committed artifact (config drift,
+supersession notes, hash clarifications) belong in a SIDEcar - this file,
+`docs/REPRODUCIBILITY.md`, or a fresh provenance JSON - never edited into
+the artifact itself. Hand-editing a frozen artifact changes its sha256 and
+silently invalidates every pin that references it (acceptance P2-7: the
+hand-added manifest annotation shifted the blob so the reuse-record's
+v1_artifact_sha256 only resolved to git history, not the working tree).
+Regenerate-and-recommit via the producing script if the annotation must
+live in the artifact.
+
 ## Pull requests
 
 - one purpose per PR; reference the issue it closes;
