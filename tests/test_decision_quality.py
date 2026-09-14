@@ -151,3 +151,32 @@ def test_reuse_equivalence_record():
     for c in j["checks"]:
         assert c["bit_exact"] is True
     assert j["manifest"]["git_sha"]
+
+
+def test_cross_env_repro_record():
+    """P-CROSS-ENV 记录:云(11 workers/Linux/numpy 2.4.6) vs 本地
+    (2 workers/AMD/numpy 2.4.1)统计同一,唯一分歧 = 1 个贪心近平局。"""
+    rec = (REPO / "results/openillumination/provenance/"
+           "dq_cross_env_repro.json")
+    if not rec.exists():
+        pytest.skip("record not committed")
+    j = json.loads(rec.read_text(encoding="utf-8"))
+    assert j["analysis_status"] == "dq_cross_env_repro_v1"
+    r = j["results"]
+    assert r["verdict"] == "statistically-identical"
+    assert r["struct_ok"] is True
+    assert r["cell_units"]["n_total"] == 792
+    assert r["cell_units"]["n_diverged"] == 1            # 唯一:e_opt 近平局
+    assert r["cell_units"]["diverged"] == [["obj_19_cylinder", 1.0, 10,
+                                            "e_opt"]]
+    c = r["conclusions"]
+    assert c["all_ang_ci_same_sign_and_significant"] is True
+    assert c["informed_pooled_identical"] is True
+    assert c["spearman_summaries_identical"] is True
+    # 云产物归档在库(可复查)
+    cloud = (REPO / "results/openillumination/provenance/"
+             "decision_quality_cloud42bc299.json")
+    assert cloud.exists()
+    import hashlib
+    assert (hashlib.sha256(cloud.read_bytes()).hexdigest()
+            == j["inputs"]["b_sha256"])

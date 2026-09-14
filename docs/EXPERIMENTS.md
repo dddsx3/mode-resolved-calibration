@@ -619,6 +619,17 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
   `docs/img/decision_quality.png`（predicted-vs-realized 散点 + dAUC
   forest）。
 - **Outcome**: cf. `docs/claims.md` B9.
+- **跨环境复现（P2-1,云跑对拍）**: `results/openillumination/provenance/
+  dq_cross_env_repro.json` + 归档云产物
+  `decision_quality_cloud42bc299.json`（`experiments/verify_dq_cross_env.py`
+  可复跑）。云（32 核/11 workers/Linux/numpy 2.4.6,全程 36.4 min）vs
+  本地（2 workers/AMD/numpy 2.4.1,12.4 h）:**统计同一**——792 个
+  cell-unit 中 791 个信息侧一致（≤1e-9 rel）,唯一分歧 = obj_19_cylinder
+  @ level 1.0/regime 10 的 **e_opt 贪心近平局翻转**（两个候选灯的 J_A
+  差 ~1e-6,贪心任选其一均有效）;全部 16 个 ang bootstrap CI 同号且
+  显著,informed 统计 **678/987 逐位相同**。**不声称跨机逐位一致**——
+  末位 ULP 的 BLAS 差异会翻转近平局,这是期望行为;同机 worker-不变性
+  由 resume-vs-clean 位级测试单独证明（42bc299 提交链）。
 - **v1→v1.1 重用等价(审计记录)**: `results/openillumination/provenance/dq_v1_reuse_equivalence.json`
   (`experiments/verify_dq_v1_reuse_equivalence.py`)——**代码路径同一性
   (未变单元的 selection/J_A/arm 代码 v1→v1.1 逐字节相同)+ obj_03 上的

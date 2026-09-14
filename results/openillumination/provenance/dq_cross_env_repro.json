@@ -1,0 +1,55 @@
+{
+ "gate": "P-CROSS-ENV",
+ "analysis_status": "dq_cross_env_repro_v1",
+ "question": "does the decision-quality grid reproduce across environments (local 2-workers AMD/numpy-2.4.1 vs cloud 11-workers x86/numpy-2.4.6)? Expectation: NOT bit-exact (last-ULP BLAS differences flip greedy near-ties); the registered claim is statistical identity",
+ "method": "layered comparison: structure, row-level four-quantity tolerances, (cell,unit) divergence attribution via pred_J_A > 1e-9 rel, and conclusion robustness (16 ang CI signs+significance, informed pooled, spearman summaries)",
+ "inputs": {
+  "a": "C:\\Users\\35702\\publication\\mode-resolved-calibration\\results\\openillumination\\decision_quality.json",
+  "a_sha256": "ecb10a13b09c87a545a334be8405270d61b5b0bb8247fb2a9f2852a90bd0d395",
+  "b": "results\\openillumination\\provenance\\decision_quality_cloud42bc299.json",
+  "b_sha256": "e4d6b9745303a6cd5299d429ba6d0da814749220d5f423e188f682701c4df422"
+ },
+ "results": {
+  "struct_ok": true,
+  "rows": {
+   "n_total": 15840,
+   "n_bit_exact": 1457,
+   "n_within_1e9": 14379,
+   "max_abs": {
+    "pred_J_A": "8.669e-08",
+    "ang_mean_deg": "8.117e-01",
+    "mse_aligned": "1.977e-05",
+    "dual_mean": "2.490e+03"
+   },
+   "max_rel": {
+    "pred_J_A": "1.161e-06",
+    "ang_mean_deg": "5.653e-02",
+    "mse_aligned": "3.278e-02",
+    "dual_mean": "3.402e-02"
+   }
+  },
+  "cell_units": {
+   "n_total": 792,
+   "n_diverged": 1,
+   "diverged": [
+    [
+     "obj_19_cylinder",
+     1.0,
+     10,
+     "e_opt"
+    ]
+   ]
+  },
+  "conclusions": {
+   "all_ang_ci_same_sign_and_significant": true,
+   "informed_pooled_identical": true,
+   "spearman_summaries_identical": true
+  },
+  "verdict": "statistically-identical"
+ },
+ "manifest": {
+  "git_sha": "cdeb0192fd419c818daeea708c6f870fc89249c5",
+  "elapsed_s": 0.1
+ },
+ "note": "cloud package: decision_quality_42bc299f_20260914_120403.zip (RUN_INFO: git_sha=launch=42bc299..., config_sha256=b76eafa..., elapsed 2183.5s = 36.4 min on 32 cores / 11 workers, Linux-6.6.98 tl4, numpy 2.4.6). The cloud artifact is archived alongside this record for full auditability. Same-machine worker-invariance is proven separately (resume-vs-clean bit-exact test in the 42bc299 commit trail); this record covers the CROSS-environment property."
+}
