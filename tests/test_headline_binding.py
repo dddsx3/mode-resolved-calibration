@@ -32,6 +32,8 @@ ARTS = {
     "dq": REPO / "results/openillumination/decision_quality.json",
     "abl": REPO / "results/openillumination/active_set_ablation.json",
     "cv": REPO / "results/magnitude/calibration_value_ceiling.json",
+    "fam": REPO / "results/openillumination/corruption_family_sensitivity.json",
+    "famc": REPO / "results/magnitude/linearization_radius_family.json",
 }
 
 
@@ -204,6 +206,39 @@ BINDINGS = [
      lambda j: 5 * 88 * 5, 0),   # 未变单元行数(5×88×5,交叉验证语义)
     (E, "678", "dq", lambda j: j["informed_pairwise_sign_pooled"]["agree"], 0),
     (E, "987", "dq", lambda j: j["informed_pairwise_sign_pooled"]["total"], 0),
+
+    # ---- Σ_φ parameter-family sensitivity (C9 / P-SIGMA-FAMILY) ----
+    (C, "0.07", "fam",
+     lambda j: j["s21_direction_share"]["share_at_anchor_median"] * 100.0, 2),
+    (E, "0.07", "fam",
+     lambda j: j["s21_direction_share"]["share_at_anchor_median"] * 100.0, 2),
+    (C, "0.0076", "fam",
+     lambda j: j["s22_two_term_law"]["overall"]["median_abs_dV"], 4),
+    (E, "0.0076", "fam",
+     lambda j: j["s22_two_term_law"]["overall"]["median_abs_dV"], 4),
+    (C, "0.464", "fam",
+     lambda j: j["s22_two_term_law"]["overall"]["max_abs_dV"], 3),
+    (E, "0.464", "fam",
+     lambda j: j["s22_two_term_law"]["overall"]["max_abs_dV"], 3),
+    (C, f"{U}0.0028", "fam",
+     lambda j: j["s23_ceiling"]["max_violation"], 4),
+    (M, f"{U}0.0028", "fam",
+     lambda j: j["s23_ceiling"]["max_violation"], 4),
+    (C, "0.863", "fam",
+     lambda j: min(v["min"] for v in
+                   j["s21_reverse_control"]["share_int_by_sigma_logI"]
+                   .values()), 3),
+    (C, "495", "fam", lambda j: float(len(j["rows"])), 0),
+    (M, "495", "fam", lambda j: float(len(j["rows"])), 0),
+    (E, "495", "fam", lambda j: float(len(j["rows"])), 0),
+    (M, "45", "fam", lambda j: float(len(j["grid"])), 0),
+    (E, "45", "fam", lambda j: float(len(j["grid"])), 0),
+    (C, "0.35", "famc",
+     lambda j: j["shapes_summary"]["joint_het"]["radius_10x"]
+     ["median_over_crossed_subset"], 2),
+    (E, "0.35", "famc",
+     lambda j: j["shapes_summary"]["joint_het"]["radius_10x"]
+     ["median_over_crossed_subset"], 2),
 ]
 
 # SPECIALS 追加(数值侧由产物 pin 测试守):11/44 = goal_orientation 的
@@ -227,6 +262,26 @@ SPECIALS = [
 # Deliberate additions/removals must update this table (same
 # discipline as the README traced map). Covers methods/claims/EXPERIMENTS.
 OCCURRENCE_COUNTS = {
+    # ---- Σ_φ family sensitivity (C9 / P-SIGMA-FAMILY) ----
+    ("claims", "0.07"): 1,
+    ("experiments", "0.07"): 1,
+    ("claims", "0.0076"): 1,
+    ("experiments", "0.0076"): 1,
+    ("claims", "0.464"): 1,
+    ("experiments", "0.464"): 2,
+    ("claims", "−0.0028"): 1,
+    ("methods", "−0.0028"): 1,
+    ("claims", "0.863"): 1,
+    ("claims", "495"): 1,
+    ("methods", "495"): 1,
+    ("experiments", "495"): 3,
+    ("methods", "45"): 1,
+    ("experiments", "45"): 2,
+    ("claims", "0.35"): 1,
+    ("experiments", "0.35"): 3,
+    ("claims", "3283"): 1,
+    ("methods", "3283"): 1,
+    ("experiments", "3283"): 2,
     ("claims", "0.0008"): 2,
     ("claims", "0.004"): 1,
     ("claims", "0.063"): 1,

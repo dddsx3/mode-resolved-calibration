@@ -661,6 +661,74 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
   三层构成;证据 JSON 的 v1_artifact_sha256 锚定被验证的 git blob。
 
 
+## 21. Σ_φ parameter-family sensitivity（P-SIGMA-FAMILY, `experiments/corruption_family_sensitivity.py` + `linearization_radius_family.py` + `decision_quality_family.py`）
+
+**Question.** Which frozen conclusions are properties of the physics and
+which are artifacts of the single-line corruption parameterization
+(`CorruptionGenerator` joint level: σ_logI = σ_dir_deg = level, forcing a
+logI/dir variance ratio of ~3283 at the 0.5 operating point)?
+
+**Family.** Three axes, preregistered in
+`configs/corruption_family_sensitivity.yaml` before the run: independent
+channel ratio (σ_dir ∈ {0.1…25}° at σ_logI = 0.5 and σ_logI ∈ {0.05…1.0}
+at σ_dir = 0.5°/1°), per-light lognormal heterogeneity (het ∈ {0.25, 0.5,
+1.0}, seed 20260915), channel coupling (ρ_c ∈ {−0.5, +0.5}; corrected
+PSD form: off-diagonals ρ·σI·σR/√2, Corr(logI, angle amplitude) = ρ
+exactly, PSD for all |ρ| ≤ 1). 45 unique grid points × 11 objects = 495
+rows; tier-2 worst-case combos and a σ_dir × het 4×4 complete tier-3.
+
+**Anchors (S0, commit ec2058f).** The degenerate family reproduces the
+frozen machinery bit-exactly: all 264 `channel_decomposition.json` rows
+(J_A_1, J_A_kappa, D — float ==) through the family path; the anchor /
+intensity-only / direction-only points of the new artifact equal the
+frozen joint/intensity/direction @ level 0.5 rows exactly; the anchor's
+two-term-law quantities equal `goal_orientation.json`'s frozen gauge
+mechanism; the C-arm joint control equals `linearization_radius.json`
+per (object, level) — every anchor is runtime- or test-asserted.
+
+**Findings (preregistered outcome rules, all numbers reported).**
+- **S2-1 / claim C7 (D, intensity dominance): ROBUST.** Direction share
+  of the budget value at the operating point: 0.07% (median). r*
+  (σ_dir where the share first reaches 2%, log-interpolated): > 25° on
+  **all 11 objects** — censored high; the share curve peaks at ~0.2%
+  near σ_dir = 1° and declines beyond. Direction-only D ≤ 1.68% over
+  the whole family sweep (the frozen max, at the same 0.2° hump peak).
+  Reverse control (fixed σ_dir = 1°, σ_logI swept): intensity share ≥
+  0.863 everywhere. The 3283 ratio was never the mechanism — the
+  direction channel is intrinsically weakly coupled to the budget value.
+- **S2-2 / two-term law (A): PARAMETERIZATION-SPECIFIC.** Median |dV| =
+  0.0076 across all 495 rows (within the preregistered 0.01 robustness
+  bar), but max |dV| = 0.464 — the law's worst case degrades an order of
+  magnitude beyond the frozen envelope (max 0.039) at channel-isolated
+  direction shapes (dir_only tag: max 0.464) and extreme tier-2 combos
+  (max 0.319). The identity part (gauge alignment A·a = B·c̄) is
+  Σ-free: residual < 1e-9 per object.
+- **S2-3 / ceiling (B): guard clean.** Max violation −0.0028 over all
+  495 rows (theorem M10/M10′ — zero Σ-dependence; stated in methods §7
+  as holding across the family, run as a guard, not billed as evidence).
+- **S2-4 C / linearization radius (B6): CHANNEL-DEPENDENT.** Joint
+  control: radius_2x/10x medians 1.0/1.5 (bit-exact frozen rerun);
+  intensity_only: identical (1.0/1.5); direction_only: **never crosses**
+  on [0.05, 8] (0/11 objects — bounded rotations stay within first-order
+  scaling); joint_het (het = 1.0): radius shrinks to 0.2/0.35 (the
+  heavy-tailed per-light variance brings second-order effects in 5×
+  earlier). The amplitude-side envelope is a property of the corruption
+  shape, not of the geometry alone.
+- **S2-4 E / informed-only ordering (B9): see the E arm artifact**
+  (`results/openillumination/decision_quality_family.json`, §21b) —
+  reduced design (level 0.5, regime 10, budgets {14, 28} which carry
+  100% of the dp ≠ 0 pairs, 4 informed policies, 10 seeds, 3 arms).
+
+**Bug found and fixed by the first run (documented in-repo).** The v1
+rank-one coupling `ρ·σI·σR·e eᵀ` modified the diagonal and drove Σ_22 <
+0 at the anchor channel ratio — the family constructor itself emitted a
+non-PSD covariance, which crashed the woodbury Schur gate at t = κ
+(obj_11_pine). Corrected to the PSD form above (commit 909bd2a); no
+artifact had been written before the crash; preregistered rules
+unchanged. Regression: `tests/test_corruption_family_degeneracy.py::
+test_rho_c_psd_and_exact_correlation`.
+
+
 ---
 
 **Reproduction contract**: every experiment script writes only statistical values and

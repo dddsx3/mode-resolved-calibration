@@ -347,6 +347,27 @@ Three structural findings anchor it (verified by
    magnitude, to the calibration-budget value.
 
    ![channel decomposition](docs/img/channel_decomposition.png)
+
+   **Σ_φ parameter-family sensitivity (P-SIGMA-FAMILY).** Replacing the
+   single-line parameterization (forced logI/dir variance ratio ~3283)
+   with a preregistered 3-axis family — independent channel ratio
+   (σ_dir up to 25°), per-light heterogeneity (het up to 1.0), channel
+   coupling (|ρ| ≤ 1, PSD-valid) — separates the robust conclusions from
+   the parameterization-specific ones
+   (`results/openillumination/corruption_family_sensitivity.json`,
+   `results/magnitude/linearization_radius_family.json`): the
+   **intensity dominance is robust** (direction share at the operating
+   point 0.07%; the 2% threshold is never reached even at σ_dir = 25°,
+   11/11 objects censored); the **universal ceiling holds across the
+   family** (theorem, runtime-guarded: max violation −0.0028 over 495
+   rows); the **two-term law's typical accuracy survives** (median
+   |dV| 0.0076) but its worst case is parameterization-specific (max
+   0.464 at channel-isolated extremes); and the **linearization radius
+   is channel-dependent** (joint and intensity-only: 1.0/1.5, frozen
+   values bit-exact; direction-only never leaves first-order scaling;
+   het = 1.0 shrinks the radius 5×). All family machinery reproduces the
+   frozen artifacts bit-exactly in the degenerate anchor (264/264
+   channel-decomposition rows, plus per-point anchors).
 4. **Mode-tail targeted intervention: no detectable advantage over scalar
    targeting** — the preregistered three-arm comparison (`P-ALLOC2 v1.1`,
    `results/mode_tail/allocation_mode_tail.json`) finds that the

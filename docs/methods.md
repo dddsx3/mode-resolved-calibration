@@ -178,6 +178,18 @@ ceiling 0.9. The ceiling is a property of the functional, not an empirical
 saturation artifact. The bound holds on every instance/admissible level
 (machine-checked, CI-safe: `tests/test_math_foundations.py`).
 
+**The bound holds across the Σ_φ family.** The ceiling has *zero*
+Σ_φ-dependence: it is a theorem about the functional under the structural
+model, valid for **any** per-light prior precision `Λ0 ≻ 0` — not a
+property of the joint parameterization (logI/dir variance ratio ~3283 at
+level 0.5) used to measure it. The 45-point three-axis family sweep
+(independent channel ratio σ_dir ∈ [0.1°, 25°] at fixed σ_logI, per-light
+lognormal heterogeneity het ∈ [0, 1], channel coupling |ρ| ≤ 0.999; 11
+objects, 495 rows) therefore runs the ceiling as a **runtime guard, not
+as evidence**: the maximum violation over all family rows is −0.0028 —
+every D stays below the bound by at least 0.0028
+(`results/openillumination/corruption_family_sensitivity.json`, S2-3).
+
 **Non-legitimate counterexample (why the structure is necessary).** In the
 single-light scalar model `ΔF(t) = F∞ − u²/(m + t·λ)` the ceiling ``D ≤ 1−1/κ``
 is *not* implied by `M0 ⪰ 0` alone. If `u` and `m` are decoupled — e.g.

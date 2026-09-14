@@ -192,6 +192,21 @@ def test_readme_numeric_claims_traceable():
         assert -0.5e-3 <= float(tok) - val <= 0.5e-3, (tok, val)
         traced[tok] = val
 
+    # Σ_φ family sensitivity bullet (C9 / P-SIGMA-FAMILY): direction
+    # share at the operating point, two-term-law accuracy, ceiling guard
+    fam = json.loads((REPO / "results/openillumination/"
+                      "corruption_family_sensitivity.json")
+                     .read_text(encoding="utf-8"))
+    for tok, val, dec in (
+            ("0.07", fam["s21_direction_share"]["share_at_anchor_median"]
+             * 100.0, 2),
+            ("0.0076", fam["s22_two_term_law"]["overall"]["median_abs_dV"],
+             4),
+            ("0.464", fam["s22_two_term_law"]["overall"]["max_abs_dV"], 3),
+            ("-0.0028", fam["s23_ceiling"]["max_violation"], 4)):
+        assert _approx(tok, val, dec), (tok, val)
+        traced[tok] = val
+
     # generic sweep: every other number printed in README must appear as a
     # *token* under results/** (claim-tracing rule, guideline section 4).
     # Two hardening points over the original sweep:

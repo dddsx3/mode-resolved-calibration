@@ -19,7 +19,7 @@ re-derives the value. The binding table (claim → evidence file → field) is
 
 ### 1.1 Provenance note: git SHAs recorded in result manifests
 
-Sixteen distinct `git_sha` values are recorded across the committed result
+Eighteen distinct `git_sha` values are recorded across the committed result
 manifests. They are not all the current HEAD: results are produced from an
 earlier working-tree state, and two of the recorded commits were replaced
 during the 2026-09-09 repository reorganization. The complete ledger:
@@ -43,6 +43,8 @@ during the 2026-09-09 repository reorganization. The complete ledger:
 | `ddfccf1dc7e5` | `magnitude/calibration_value_ceiling.json` | yes (ancestor of HEAD) | P-CEILING v1 run (2026-09-13) |
 | `e67a8bf51c8e` | `certification/certified_gaps_levels.json` | yes (ancestor of HEAD) | P-CERT-LEVELS v1 run (2026-09-13) |
 | `f878dc41cca1` | `openillumination/channel_decomposition.json` | yes (ancestor of HEAD) | P-CHANNEL-DECOMP v1 run (2026-09-13) |
+| `909bd2a5eee1` | `openillumination/corruption_family_sensitivity.json` | yes (ancestor of HEAD) | P-SIGMA-FAMILY predictor-side run (S1 grid + S2-1/2/3, 2026-09-15): preregistration commit 6cf3485; launch state 909bd2a = prereg + the PSD-coupling fix (the v1 rank-one bug crashed the first run before any artifact was written) |
+| `70def9f393ad` | `magnitude/linearization_radius_family.json` | yes (ancestor of HEAD) | P-SIGMA-FAMILY C-arm run (S2-4 C, 2026-09-15): joint control bit-identical to the frozen P-RADIUS v2 rows |
 
 The two unreachable SHAs are the ones the repo reorganization replaced. All
 seventeen artifacts remain byte-for-byte as committed and are pinned by
@@ -101,6 +103,8 @@ protocol (same objects, pixel subsets, levels, seeds).
 | Gauge closed form vs direct | max rel 2.55e-8 over 25 decades | `python scripts/run_experiments.py --experiment gauge_spectrum --config configs/gauge_spectrum.yaml` | `results/gauge_spectrum/ci02_formal_summary.json` | `tests/test_reproduction.py::test_N6_gauge_closed_form` |
 | Nonlinear validity envelope | weak-mode median deviation < 10% gate | `python scripts/run_experiments.py --experiment nonlinear --config configs/nonlinear.yaml` | `results/nonlinear/ci03nl_nl_formal_summary.json` | collected by `tests/test_reproduction.py` |
 | DiLiGenT sanity taxonomy | weak-mode taxonomy median ≈ 273× | `python scripts/run_experiments.py --experiment diligent --config configs/diligent.yaml` | `results/diligent/ci05_formal_summary.json` | `tests/test_reproduction.py::test_N8_taxonomy` |
+| Σ_φ parameter-family sensitivity, predictor side (P-SIGMA-FAMILY) | D robust: direction share 0.07% at the operating point, r* > 25° (11/11 censored); two-term law parameterization-specific (median \|dV\| 0.0076, max 0.464); ceiling guard −0.0028 over 495 rows | `python experiments/corruption_family_sensitivity.py` | `results/openillumination/corruption_family_sensitivity.json` | `tests/test_corruption_family_sensitivity.py` |
+| Σ_φ family, linearization radius (C arm) | channel-dependent: joint/intensity_only 1.0/1.5 (bit-exact frozen control); direction_only never crosses on [0.05, 8] (0/11); joint_het 0.2/0.35 | `python experiments/linearization_radius_family.py` | `results/magnitude/linearization_radius_family.json` | `tests/test_corruption_family_sensitivity.py` |
 
 Full per-experiment protocols (dataset → sampling → corruption → estimator →
 metric → seed → output) are in `docs/EXPERIMENTS.md`; raw-data sourcing in
