@@ -616,6 +616,11 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
   `docs/img/decision_quality.png`（predicted-vs-realized 散点 + dAUC
   forest）。
 - **Outcome**: cf. `docs/claims.md` B9.
+- **v1→v1.1 重用等价(审计记录)**: `results/openillumination/provenance/dq_v1_reuse_equivalence.json`
+  (`experiments/verify_dq_v1_reuse_equivalence.py`)——未变单元
+  (mode_aware/a_opt/randomU_0..2)从 git 历史的 v1 产物抽样重推导,
+  18/18 位级一致(pred_J_A 12 + 实测端点 6);重用/全量重跑等价的
+  机器可查证据。
 
 
 ---

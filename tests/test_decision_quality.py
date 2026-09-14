@@ -136,3 +136,18 @@ def test_decision_quality_artifact():
         (REPO / "configs/decision_quality.yaml").read_bytes()).hexdigest()
     assert j["manifest"]["config_sha256"] == cfg_hash
     assert j["manifest"]["git_sha"]
+
+
+def test_reuse_equivalence_record():
+    """P-REUSE-EQUIV 证据记录(初步审计入口):v1 未变单元位级可复用。"""
+    rec = REPO / "results/openillumination/provenance/dq_v1_reuse_equivalence.json"
+    if not rec.exists():
+        pytest.skip("record not committed")
+    j = json.loads(rec.read_text(encoding="utf-8"))
+    assert j["analysis_status"] == "dq_v1_reuse_equivalence_v1"
+    assert j["verdict"] == "pass"
+    assert j["n_bit_exact"] == j["n_checks"] == 18
+    assert j["v1_ref"] == "fc38e9d"
+    for c in j["checks"]:
+        assert c["bit_exact"] is True
+    assert j["manifest"]["git_sha"]
