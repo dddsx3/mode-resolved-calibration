@@ -74,7 +74,10 @@ def _trapezoid_auc(Es, fracs):
 
 def run(config_path=REPO / "configs/decision_quality.yaml",
         out_path=REPO / "results/openillumination/decision_quality.json",
-        img_path=REPO / "docs/img/decision_quality.png"):
+        img_path=REPO / "docs/img/decision_quality.png",
+        workers_override=None):
+    """workers_override:CLI 覆盖 config 的 workers(只影响墙钟,不影响
+    数值——逐对象独立播种,determinism 与并行度解耦;不进 manifest)。"""
     cfg = yaml.safe_load(Path(config_path).read_text(encoding="utf-8"))
     t_start = time.time()
 
@@ -83,7 +86,7 @@ def run(config_path=REPO / "configs/decision_quality.yaml",
     payloads = [(i, n, cfg) for i, n in enumerate(cfg["cohort"])]
     import multiprocessing
     ctx = multiprocessing.get_context("spawn")
-    workers = int(cfg.get("workers", 1))
+    workers = int(workers_override or cfg.get("workers", 1))
     if workers > 1 and len(payloads) > 1:
         with ctx.Pool(processes=min(workers, len(payloads))) as pool:
             for obj_name, rws, sc in pool.imap_unordered(_run_object, payloads):
@@ -417,5 +420,8 @@ if __name__ == "__main__":
                     default=str(REPO / "results/openillumination/decision_quality.json"))
     ap.add_argument("--img",
                     default=str(REPO / "docs/img/decision_quality.png"))
+    ap.add_argument("--workers", type=int, default=None,
+                    help="override config workers (wall-clock only; values "
+                         "are per-object seeded and worker-count invariant)")
     a = ap.parse_args()
-    run(a.config, a.out, a.img)
+    run(a.config, a.out, a.img, workers_override=a.workers)
