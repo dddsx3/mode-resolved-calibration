@@ -65,10 +65,11 @@ def _sha(p: Path) -> str:
     return hashlib.sha256(p.read_bytes()).hexdigest()
 
 
-def _run(tag, ckpt, out_json, kill_after_first=False):
+def _run(tag, ckpt, out_json, kill_after_first=False, workers=1):
     """跑一次 decision_quality(缩减 config),返回 (log_text, exit_code)。"""
     import yaml
     cfg = dict(CFG)
+    cfg["workers"] = workers
     cfg_path = ckpt.parent / f"cfg_{tag}.yaml"
     yaml.safe_dump(cfg, open(cfg_path, "w", encoding="utf-8"),
                    allow_unicode=True)
@@ -135,6 +136,27 @@ def run(out_path=REPO / "results/openillumination/provenance/"
     log_c, rc_c = _run("clean", ckpt_c, stage / "c_clean.json")
     assert rc_c == 0, log_c[-2000:]
 
+    # 3b) workers=1 vs workers=4(P1-d 验收:question 声称 "worker/crash
+    # invariance" 而三跑全是 workers=1——补上 worker 维度的实证)
+    ckpt_w = stage / "ck_w4"
+    if ckpt_w.exists():
+        for f in ckpt_w.glob("*"):
+            f.unlink()
+    else:
+        ckpt_w.mkdir()
+    log_w, rc_w = _run("w4", ckpt_w, stage / "d_w4.json", workers=4)
+    assert rc_w == 0, log_w[-2000:]
+    w = json.loads((stage / "d_w4.json").read_text(encoding="utf-8"))
+    rw = {(x["object"], x["level"], x["regime"], x["unit"], x["k"]): x
+          for x in w["rows"]}
+    assert set(rw) == set(rc)
+    nw = okw = 0
+    for key in rw:
+        for f in FIELDS:
+            nw += 1
+            okw += int(rw[key][f] == rc[key][f])
+    worker_top_same = {k: (w[k] == c[k]) for k in TOP_KEYS}
+
     # 4) bit-exact comparison
     b = json.loads((stage / "b_resumed.json").read_text(encoding="utf-8"))
     c = json.loads((stage / "c_clean.json").read_text(encoding="utf-8"))
@@ -153,9 +175,11 @@ def run(out_path=REPO / "results/openillumination/provenance/"
     record = dict(
         gate="P-RESUME-EQUIV",
         analysis_status="dq_resume_vs_clean_v1",
-        question="is a crash-resumed run (checkpoint reuse) bit-identical "
-                 "to an uninterrupted run of the same grid, on the same "
-                 "machine - i.e. same-machine worker/crash invariance?",
+        question="on the same machine: (a) is a crash-resumed run "
+                 "(checkpoint reuse) bit-identical to an uninterrupted "
+                 "run, and (b) is a workers=4 run bit-identical to a "
+                 "workers=1 run - i.e. same-machine crash/resume AND "
+                 "worker-count invariance?",
         method="2-object reduced grid (v1.1 code path): run A killed "
                "with SIGKILL after the first per-object checkpoint lands; "
                "run B restarted from the same checkpoint dir (object 1 "
@@ -164,6 +188,14 @@ def run(out_path=REPO / "results/openillumination/provenance/"
         resumed_objects=resumed_objs,
         rows=dict(n_total=n, n_bit_exact=ok),
         top_level_identical={k: bool(v) for k, v in top_same.items()},
+        worker_invariance=dict(
+            workers=(1, 4),
+            rows=dict(n_total=nw, n_bit_exact=okw),
+            top_level_identical={k: bool(v)
+                                 for k, v in worker_top_same.items()},
+            note="same reduced grid, workers=4 (objects in parallel) vs "
+                 "workers=1; per-object seeding makes each object's values "
+                 "worker-count invariant"),
         artifacts=dict(
             resumed_sha256=_sha(stage / "b_resumed.json"),
             clean_sha256=_sha(stage / "c_clean.json")),
@@ -174,10 +206,15 @@ def run(out_path=REPO / "results/openillumination/provenance/"
              "in 42bc299's commit message (acceptance P1-d). Same-machine "
              "property; cross-machine is covered by dq_cross_env_repro.json. "
              "Reduced grid: the claim is about the checkpoint-resume "
-             "mechanism, which is grid-size independent (per-object "
-             "seeding + atomic per-object serialization).")
+             "mechanism and the worker-count invariance, both of which are "
+             "grid-size independent (per-object seeding + atomic per-object "
+             "serialization). artifacts.resumed_sha256 and clean_sha256 "
+             "DIFFER at the file level only through manifest metadata "
+             "(elapsed_s / git_sha timing); every compared data field is "
+             "identical - that is the meaning of verdict bit-identical.")
     verdict = (ok == n and all(top_same.values())
-               and "obj_03_pumpkin" in resumed_objs)
+               and "obj_03_pumpkin" in resumed_objs
+               and okw == nw and all(worker_top_same.values()))
     record["verdict"] = "bit-identical" if verdict else "FAILED"
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_bytes(json.dumps(record, ensure_ascii=False,
@@ -186,7 +223,8 @@ def run(out_path=REPO / "results/openillumination/provenance/"
     for f in stage.glob("*"):
         f.unlink()
     stage.rmdir()
-    print(f"rows {ok}/{n} bit-exact; top-level identical: {top_same}; "
+    print(f"resume rows {ok}/{n}; workers(1v4) rows {okw}/{nw}; "
+          f"top-level: {top_same} / {worker_top_same}; "
           f"resumed: {resumed_objs}")
     print(f"verdict: {record['verdict']}; wrote {out_path}")
     if verdict is False:

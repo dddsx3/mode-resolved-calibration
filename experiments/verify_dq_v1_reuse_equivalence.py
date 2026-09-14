@@ -147,7 +147,42 @@ def run(v1_ref="fc38e9d",
               f"bit-exact so far", flush=True)
 
     n_ok = sum(c["bit_exact"] for c in checks)
-    verdict = "pass" if n_ok == len(checks) else "FAIL"
+
+    # ---- P2-9: 全量分支——B9 的 "2200 rows BIT-EXACT" 需要同量级证据。
+    # 未变单元(mode_aware, a_opt, randomU_0..2 = v1 的 random_0..2,同一
+    # rng 规范)的 v1.1 rows(当前工作树,已提交)逐值对比 v1 rows(git)。
+    v11 = json.loads(
+        (REPO / "results/openillumination/decision_quality.json")
+        .read_text(encoding="utf-8"))
+    pair = {"mode_aware": "mode_aware", "a_opt": "a_opt",
+            "randomU_0": "random_0", "randomU_1": "random_1",
+            "randomU_2": "random_2"}
+    r11 = {(x["object"], x["level"], x["regime"], x["unit"], x["k"]): x
+           for x in v11["rows"]}
+    r1_full = {(x["object"], x["level"], x["regime"], x["unit"], x["k"]): x
+               for x in v1["rows"]}
+    n_rows = n_vals = n_exact = 0
+    for (obj, lv, rg, u11, k), row11 in r11.items():
+        if u11 not in pair:
+            continue
+        ref = r1_full[(obj, lv, rg, pair[u11], k)]
+        n_rows += 1
+        for f in ("pred_J_A", "ang_mean_deg", "mse_aligned", "dual_mean"):
+            n_vals += 1
+            n_exact += int(row11[f] == ref[f])
+    full_comparison = dict(
+        n_rows_compared=n_rows, n_values=n_vals, n_bit_exact=n_exact,
+        fields=["pred_J_A", "ang_mean_deg", "mse_aligned", "dual_mean"],
+        v11_artifact_sha256=hashlib.sha256(
+            (REPO / "results/openillumination/decision_quality.json")
+            .read_bytes()).hexdigest(),
+        v11_manifest_git_sha=v11["manifest"]["git_sha"],
+        semantics="v1.1 rows for the 5 unchanged units vs the v1 rows "
+                  "read from git history (same seeds, byte-identical code "
+                  "path) - the full-magnitude counterpart of the 18-point "
+                  "spot check above")
+
+    verdict = "pass" if n_ok == len(checks) and n_exact == n_vals else "FAIL"
     out = dict(
         gate="P-REUSE-EQUIV",
         analysis_status="dq_v1_reuse_equivalence_v1",
@@ -173,6 +208,7 @@ def run(v1_ref="fc38e9d",
                     units=["mode_aware", "a_opt", "random_0"],
                     pred_ks=[14, 57], arm_level=0.2, seeds=10),
         n_checks=len(checks), n_bit_exact=n_ok, verdict=verdict,
+        full_comparison=full_comparison,
         checks=checks,
         manifest=dict(git_sha=_git_sha(),
                       elapsed_s=round(time.time() - t_start, 1)),
@@ -184,7 +220,8 @@ def run(v1_ref="fc38e9d",
     Path(out_path).parent.mkdir(parents=True, exist_ok=True)
     Path(out_path).write_bytes(json.dumps(out, ensure_ascii=False,
                                           indent=1).encode("utf-8"))
-    print(f"[equiv] {n_ok}/{len(checks)} bit-exact -> {verdict}; "
+    print(f"[equiv] spot {n_ok}/{len(checks)}; full "
+          f"{n_exact}/{n_vals} values over {n_rows} rows -> {verdict}; "
           f"wrote {out_path}")
     if verdict != "pass":
         raise SystemExit(1)
