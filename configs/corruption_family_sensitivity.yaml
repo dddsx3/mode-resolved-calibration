@@ -1,0 +1,104 @@
+# P-SIGMA-FAMILY -- Sigma_phi parameter-family sensitivity (S1 grid + S2-1/2/3,
+# predictor side). PREREGISTERED: committed BEFORE the run; the artifact's
+# manifest records this commit as git_sha_at_launch.
+#
+# Question: do conclusions A (two-term law), B (universal ceiling) and D
+# (intensity-channel dominance, C7) survive replacing the single-line
+# parameterization (CorruptionGenerator joint level -- logI/dir variance ratio
+# pinned at ~3283 @ level 0.5) with a 3-axis family: independent channel ratio
+# (sig_logI vs sig_dir_deg), per-light heterogeneity (het_sigma), channel
+# coupling (rho_c)?
+#
+# Machinery anchors (S0, commit ec2058f): het=0/rho_c=0 family blocks are
+# bit-identical to CorruptionGenerator.sigma_phi_diag; all 264 frozen
+# channel-decomposition rows reproduce EXACTLY through the family path
+# (tests/test_corruption_family_degeneracy.py).
+
+gate: P-SIGMA-FAMILY
+analysis_status: corruption_family_sensitivity_v1
+run_name: corruption_family_sensitivity_v1
+
+data_root: D:/data/OpenIllumination
+data_meta: D:/data/OpenIllumination_meta
+cohort: [obj_03_pumpkin, obj_04_dolphin, obj_07_pumpkin2, obj_09_ball, obj_10_pumpkin3, obj_11_pine, obj_13_mushroom, obj_16_friends_cup, obj_17_pumpkin5, obj_18_fabric_hat, obj_19_cylinder]
+n_objects: 11
+noise_fit_convention: corrected
+scene_rng_spec: "default_rng([20260910, obj_idx])  # identical to P-CERT"
+K_lights: 142
+kappa: 10.0
+
+# anchor: bit-identical to CorruptionGenerator("joint", 0.5) (S0-3 anchor)
+anchor: {sig_logI: 0.5, sig_dir_deg: 0.5, het_sigma: 0.0, rho_c: 0.0}
+
+# closed-channel convention: identical to channel_decomposition.yaml
+closed_direction_sigma_deg: 0.001
+closed_intensity_sigma_logI: 0.000001
+
+# family het seed (fixed; see src/calibinfo/models/corruption_family.py)
+family_seed: 20260915
+
+# ---------------- Tier 1: single-axis sweeps around the anchor ----------------
+dir_sweep_sigma_deg: [0.1, 0.2, 0.5, 1.0, 2.0, 5.0, 10.0, 25.0]  # sig_logI = 0.5
+logI_sweep_sigma: [0.05, 0.1, 0.25, 0.5, 1.0]                     # sig_dir = 0.5 deg
+reverse_control_sigma_dir_deg: 1.0   # logI sweep repeated at sig_dir = 1 deg
+het_sweep: [0.25, 0.5, 1.0]          # at the anchor (0.5, 0.5)
+rho_sweep: [-0.5, 0.5]               # at the anchor
+
+# ---------------- Tier 2: worst-case combos (preregistered) ----------------
+tier2_combos:
+  - {sig_logI: 0.05, sig_dir_deg: 25.0, het_sigma: 0.0, rho_c: 0.0}
+  - {sig_logI: 0.05, sig_dir_deg: 10.0, het_sigma: 1.0, rho_c: 0.0}
+  - {sig_logI: 0.5,  sig_dir_deg: 10.0, het_sigma: 1.0, rho_c: -0.5}
+  - {sig_logI: 1.0,  sig_dir_deg: 25.0, het_sigma: 0.5, rho_c: 0.5}
+  - {sig_logI: 0.25, sig_dir_deg: 5.0,  het_sigma: 0.5, rho_c: 0.0}
+
+# ---------------- Tier 3: sigma_dir x het 4x4 at sig_logI = 0.5 ----------------
+tier3_sigma_dir_deg: [0.5, 2.0, 5.0, 10.0]
+tier3_het: [0.0, 0.25, 0.5, 1.0]
+
+# -------- channel-isolation references (direct C7 generalization) --------
+dir_only_sigma_dir_deg: [0.1, 0.2, 0.5, 1.0, 2.0, 5.0, 10.0, 25.0]  # sig_logI = closed
+intensity_only: {sig_logI: 0.5, sig_dir_deg: 0.001}  # == frozen intensity@0.5 row
+both_closed: {sig_logI: 0.000001, sig_dir_deg: 0.001}
+
+# ---------------- S2-1 preregistered rules (D: intensity dominance) ----------------
+s21_direction_share: >
+  share_dir(sigma_dir) = [D(0.5, sigma_dir) - D(0.5, closed_dir)] /
+  D(0.5, sigma_dir), per object, on the dir sweep grid with the closed point
+  (1e-3 deg, share = 0 by construction) prepended. r* = log10-linear
+  interpolated sigma_dir at which share_dir FIRST reaches 0.02 scanning
+  ascending (censored: "<0.1" if already above at 0.1 deg, ">25" if never).
+  Outcome robust (C7 upgraded): median r* > 4 deg (beyond the original
+  direction-grid max). Outcome artifact (C7 downgraded): median r* <= 1 deg
+  (within the original grid). Otherwise scoped: report the per-object r*
+  table and narrow C7 accordingly.
+s21_reverse_control: >
+  share_int(sigma_logI) = [D(sigma_logI, 1 deg) - D(closed_logI, 1 deg)] /
+  D(sigma_logI, 1 deg) at fixed sigma_dir = 1 deg (a physically plausible
+  direction uncertainty): shows the intensity channel still carries the value
+  when the direction channel is held at a fixed plausible size.
+
+# ---------------- S2-2 preregistered rule (A: two-term law) ----------------
+s22_two_term_law: >
+  Per family point, rho_mean task (a = rho/||rho||, exactly gauge-aligned;
+  the identity A a = B cbar is Sigma-independent -- recorded once per object
+  as align_residual control): q = sum_{k active} Lambda0_k[0,0]/||rho||^2,
+  r = ||rho||^2 / sum(rho^2 * finf), V_pred = (1 - 1/kappa)/(1 + q*r),
+  V_meas = 1 - J_a(kappa)/J_a(1) via woodbury_quad_risk. Law robust:
+  median |dV| <= 0.01 AND max |dV| <= 0.05 across ALL family points
+  (frozen joint-parameterization reference: median 0.0008, max 0.039).
+  Otherwise: the law's accuracy is parameterization-specific (report per-tier
+  breakdown).
+
+# ---------------- S2-3 (B: universal ceiling) ----------------
+s23_ceiling: >
+  Theorem (M10/M10'): D <= 1 - 1/kappa for any per-light Lambda0 ≻ 0 under
+  the structural model -- ZERO Sigma-dependence. Recorded as a runtime GUARD
+  (max violation over all rows must be <= 1e-9), NOT as experimental
+  evidence; the docs statement is "the bound holds across the family".
+
+# -- reporting discipline --
+outcome_independence: >
+  Every D / share / dV per point/object is reported regardless of shape;
+  the outcome rules above are findings from the numbers, not gates. The only
+  hard runtime guard is the ceiling theorem check (S2-3).
