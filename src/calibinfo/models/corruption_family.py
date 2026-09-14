@@ -43,17 +43,26 @@ class CorruptionFamily:
         sI = self.sig_logI
         sR = np.radians(self.sig_dir_deg)
         r = float(np.clip(self.rho_c, -0.999, 0.999))
-        # Σ_φ:对角 (sI², sR², sR²);耦合在 (log I, θ-幅值) 之间。
-        # 角度有两个自由度,耦合作用在抽取侧(raw_innovations_family 的
-        # angles 总幅值);矩阵侧用秩一形式:非对角 = r·sI·sR·e₁e₂ᵀ。
-        # 对角项与 channel_decomposition._sigma_phi_diag 逐算子一致(li**2 /
-        # radians(sd)**2),保证退化锚点逐位复现(勿改成乘法形式)。
+        # Σ_φ:对角 (sI², sR², sR²);对角项与 channel_decomposition.
+        # _sigma_phi_diag 逐算子一致(li**2 / radians(sd)**2),保证退化
+        # 锚点逐位复现(勿改成乘法形式)。
+        # 耦合(修正版):非对角 Σ_01 = Σ_02 = r·sI·sR/√2,对角不动 ——
+        # Corr(logI, 角度幅度 (θ+ψ)/√2) = r 精确成立,且 |r| ≤ 1 时块
+        # 恒 PSD(任意通道比)。
+        # (v1 bug:原秩一加法 r·sI·sR·eeᵀ 会改对角,大通道比下把
+        #  Σ_22 = sR² + r·sI·sR/2 加成负值 → Σ_φ 非 PSD → Λ0 不定 →
+        #  t=κ 处 Schur 检查崩溃;S1 首跑在 obj_11_pine 暴露。)
         S = np.diag([sI ** 2, sR ** 2, sR ** 2])
         if r != 0.0:
-            e = np.zeros((3, 2))
-            e[0, 0] = 1.0
-            e[1:, 1] = 1.0 / np.sqrt(2.0)     # 角度幅值方向(θ,ψ 等权)
-            S = S + r * sI * sR * (e @ e.T)
+            c = r * sI * sR / np.sqrt(2.0)
+            S[0, 1] = S[1, 0] = c
+            S[0, 2] = S[2, 0] = c
+        w = np.linalg.eigvalsh(0.5 * (S + S.T))
+        if w.min() <= 0.0:
+            raise ValueError(
+                f"CorruptionFamily: Sigma_phi not PD (min eig {w.min():.3e}) "
+                f"for sig_logI={sI}, sig_dir_deg={self.sig_dir_deg}, "
+                f"rho_c={self.rho_c}")
         return S
 
     def sigma_phi_block(self):

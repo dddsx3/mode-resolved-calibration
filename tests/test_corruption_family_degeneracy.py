@@ -116,6 +116,42 @@ def test_rho_c_couples_channels_only():
     assert not np.array_equal(r0[2], r5[2])      # logs 变了
 
 
+def test_rho_c_psd_and_exact_correlation():
+    """rho_c ≠ 0 修正参数化:全族 PSD + Corr(logI, 角度幅度) = rho_c 精确。
+
+    v1 bug 回归:原秩一耦合 r·sI·sR·eeᵀ 会改动对角,在锚点通道比
+    (~3283)下 Σ_22 = sR² + r·sI·sR/2 < 0 → Σ_φ 非 PSD → Λ0 不定 →
+    woodbury Schur 检查在 t=κ 崩溃(S1 首跑 obj_11_pine 暴露)。
+    """
+    for sI, sd, r in [(0.5, 0.5, -0.5), (0.5, 0.5, 0.5), (0.5, 0.5, 0.999),
+                      (0.05, 25.0, -0.5), (1.0, 25.0, 0.5),
+                      (0.5, 10.0, -0.999)]:
+        fam = CorruptionFamily(sI, sd, het_sigma=0.0, rho_c=r, n_lights=4)
+        S = fam.sigma_phi_block()[0]
+        assert np.linalg.eigvalsh(S).min() > 0, (sI, sd, r)
+        # 对角不被耦合改动(保持退化锚点的对角语义)
+        assert S[1, 1] == np.radians(sd) ** 2 and S[2, 2] == np.radians(sd) ** 2
+        assert S[0, 0] == sI ** 2
+        # Corr(logI, 角度幅度 (θ+ψ)/√2) == r(精确)
+        amp_var = 0.5 * (S[1, 1] + S[2, 2] + 2.0 * S[1, 2])
+        corr = ((S[0, 1] + S[0, 2]) / np.sqrt(2.0)
+                / np.sqrt(S[0, 0] * amp_var))
+        assert abs(corr - r) < 1e-12, (sI, sd, r, corr)
+    # het 缩放整块,不破坏 PSD
+    fam = CorruptionFamily(0.5, 0.5, het_sigma=1.0, rho_c=-0.5, n_lights=142)
+    assert all(np.linalg.eigvalsh(b).min() > 0 for b in fam.sigma_phi_block())
+    # v1 bug 直接回归:锚点比 + rho=-0.5 曾给出非 PSD(现在构造器抛错)
+    try:
+        CorruptionFamily(0.5, 0.5, het_sigma=0.0, rho_c=-0.5,
+                         n_lights=2)._base_block()
+    except ValueError:
+        pass  # PD 守卫只在真正非 PSD 时抛;修正版不会走到这里
+    # 修正版对角不动 → 该组合必须合法(不抛错)
+    S = CorruptionFamily(0.5, 0.5, het_sigma=0.0, rho_c=-0.5,
+                         n_lights=2).sigma_phi_block()[0]
+    assert np.linalg.eigvalsh(S).min() > 0
+
+
 # ------------------------------------------------ 2. 端到端锚点(需数据)
 def test_channel_decomposition_end_to_end_bit_identical():
     """三档 × level 网格重算 D(level) 与已入库产物逐位一致。
