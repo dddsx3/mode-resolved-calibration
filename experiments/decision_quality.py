@@ -102,6 +102,11 @@ def run(config_path=REPO / "configs/decision_quality.yaml",
                          Path(config_path))
 
 
+def rng_perm(ids, rng):
+    """ids 的一个随机排列(list;active48-restricted 随机用)。"""
+    return [int(i) for i in rng.permutation(np.asarray(ids))]
+
+
 def _run_object(payload):
     """单对象全网格(对象间零耦合;picklable,供 spawn Pool)。"""
     obj_idx, obj_name, cfg = payload
@@ -109,7 +114,6 @@ def _run_object(payload):
     regimes = [int(x) for x in cfg["regimes"]]
     budgets = list(cfg["budgets_k"])
     policies = list(cfg["policies"])
-    n_rand = int(cfg["n_random_perms"])
     n_seeds = int(cfg["seeds_per_level"])
     rows = []
     scatter = []
@@ -152,11 +156,20 @@ def _run_object(payload):
                 else:
                     ords[pol] = select_ordering(state, pol,
                                                 float(regime))[0]
-            for p_i in range(n_rand):
+            n_ru = int(cfg["random_units"]["universe"])
+            n_ra = int(cfg["random_units"]["active48"])
+            act_ids = np.flatnonzero(state.active)
+            inact_ids = np.flatnonzero(~state.active)
+            for p_i in range(n_ru):
                 rperm = np.random.default_rng(
                     [20260911, obj_idx, regimes.index(regime), p_i])
-                ords[f"random_{p_i}"] = select_ordering(
+                ords[f"randomU_{p_i}"] = select_ordering(
                     state, "random", rng=rperm)[0]
+            for p_i in range(n_ra):
+                rperm = np.random.default_rng(
+                    [20260911, obj_idx, regimes.index(regime), 100 + p_i])
+                ords[f"randomA48_{p_i}"] = (
+                    rng_perm(act_ids, rperm) + rng_perm(inact_ids, rperm))
             # ---- predicted J_A(同分配,同状态)----
             pred_J = {}
             for unit, ordr in ords.items():
@@ -205,10 +218,13 @@ def _aggregate_and_write(cfg, rows, scatter, out_path, img_path, t_start,
     budgets = list(cfg["budgets_k"])
     fracs = [float(x) for x in cfg["budget_fractions"]]
     policies = list(cfg["policies"])
-    n_rand = int(cfg["n_random_perms"])
-    # ---- AUC + dAUC ----
+    n_ru = int(cfg["random_units"]["universe"])
+    n_ra = int(cfg["random_units"]["active48"])
+    # ---- AUC + dAUC(双基线:universe 与 active48)----
     units_det = list(policies)
-    units_rand = [f"random_{i}" for i in range(n_rand)]
+    units_randU = [f"randomU_{i}" for i in range(n_ru)]
+    units_randA = [f"randomA48_{i}" for i in range(n_ra)]
+    units_rand = units_randU + units_randA
     auc_rows = []
     by_olr = {}
     for r in rows:
@@ -221,8 +237,10 @@ def _aggregate_and_write(cfg, rows, scatter, out_path, img_path, t_start,
                 ep: _trapezoid_auc(
                     [cell[(unit, k)][ep] for k in budgets], fracs)
                 for ep in ENDPOINTS}
-        rand_auc = {ep: float(np.mean([aucs[u][ep] for u in units_rand]))
+        rand_auc = {ep: float(np.mean([aucs[u][ep] for u in units_randU]))
                     for ep in ENDPOINTS}
+        randA_auc = {ep: float(np.mean([aucs[u][ep] for u in units_randA]))
+                     for ep in ENDPOINTS}
         # 9 单元内 predicted-vs-realized 排序一致(每端点)
         units_all = units_det + units_rand
         preds = [cell[(u, budgets[0])]["pred_J_A"] for u in units_all]
@@ -234,6 +252,24 @@ def _aggregate_and_write(cfg, rows, scatter, out_path, img_path, t_start,
             ep: float(spearmanr(pred_unit,
                                 [aucs[u][ep] for u in units_all]).statistic)
             for ep in ENDPOINTS}
+        # informed-only(n=4):单元级 Spearman + 逐 (cell,k) 逐对符号一致
+        pred_det = [float(np.mean([cell[(u, k)]["pred_J_A"]
+                                   for k in budgets])) for u in units_det]
+        spearmans_det = {
+            ep: float(spearmanr(pred_det,
+                                [aucs[u][ep] for u in units_det]).statistic)
+            for ep in ENDPOINTS}
+        agree = tot = 0
+        for k in budgets:
+            for i, ua in enumerate(units_det):
+                for ub in units_det[i + 1:]:
+                    dp = (cell[(ua, k)]["pred_J_A"]
+                          - cell[(ub, k)]["pred_J_A"])
+                    da = (cell[(ua, k)]["ang_mean_deg"]
+                          - cell[(ub, k)]["ang_mean_deg"])
+                    if dp != 0:
+                        tot += 1
+                        agree += int(np.sign(dp) == np.sign(da))
         auc_rows.append(dict(
             object=obj_name, level=level, regime=regime,
             aucs={u: {ep: round(v, 6) for ep, v in d.items()}
@@ -241,28 +277,37 @@ def _aggregate_and_write(cfg, rows, scatter, out_path, img_path, t_start,
             dAUC={u: {ep: round(aucs[u][ep] - rand_auc[ep], 6)
                       for ep in ENDPOINTS}
                   for u in units_det},
+            dAUC_vs_active48={u: {ep: round(aucs[u][ep] - randA_auc[ep], 6)
+                                  for ep in ENDPOINTS}
+                              for u in units_det},
             spearman_pred_vs_realized={ep: round(v, 6)
-                                       for ep, v in spearmans.items()}))
+                                       for ep, v in spearmans.items()},
+            spearman_informed_only={ep: round(v, 6)
+                                    for ep, v in spearmans_det.items()},
+            informed_pairwise_sign=dict(agree=agree, total=tot)))
 
-    # ---- 对象级配对 bootstrap(每 policy x regime x 端点)----
+    # ---- 对象级配对 bootstrap(每 policy x regime x 端点 x 双基线)----
     boot = {}
     for regime in regimes:
         for pol in policies:
             for ep in ENDPOINTS:
-                objs = [(r["object"], r["dAUC"][pol][ep]) for r in auc_rows
-                        if r["regime"] == regime]
-                payload = [(o, v) for o, v in objs]
+                for base_key, base_tag in (("dAUC", "vs_randomU"),
+                                           ("dAUC_vs_active48",
+                                            "vs_randomA48")):
+                    objs = [(r["object"], r[base_key][pol][ep])
+                            for r in auc_rows if r["regime"] == regime]
+                    payload = [(o, v) for o, v in objs]
 
-                def stat(items, _ep=ep):
-                    return float(np.median([v for _, v in items]))
+                    def stat(items):
+                        return float(np.median([v for _, v in items]))
 
-                point, (lo, hi), _b = cluster_bootstrap(
-                    payload, stat, int(cfg["bootstrap"]["B"]),
-                    int(cfg["bootstrap"]["seed"]))
-                boot[f"{pol}|{regime}|{ep}"] = dict(
-                    median_dAUC=round(point, 6),
-                    ci95=[round(lo, 6), round(hi, 6)],
-                    n_objects=len(payload))
+                    point, (lo, hi), _b = cluster_bootstrap(
+                        payload, stat, int(cfg["bootstrap"]["B"]),
+                        int(cfg["bootstrap"]["seed"]))
+                    boot[f"{pol}|{regime}|{ep}|{base_tag}"] = dict(
+                        median_dAUC=round(point, 6),
+                        ci95=[round(lo, 6), round(hi, 6)],
+                        n_objects=len(payload))
 
     # ---- 汇总 ----
     sp_all = [r["spearman_pred_vs_realized"] for r in auc_rows]
@@ -272,13 +317,30 @@ def _aggregate_and_write(cfg, rows, scatter, out_path, img_path, t_start,
                  max=round(max(s[ep] for s in sp_all), 6),
                  n_cells=len(sp_all))
         for ep in ENDPOINTS}
+    sp_det = [r["spearman_informed_only"] for r in auc_rows]
+    summary_stats_informed = {
+        ep: dict(min=round(min(s[ep] for s in sp_det), 6),
+                 median=round(float(np.median([s[ep] for s in sp_det])), 6),
+                 max=round(max(s[ep] for s in sp_det), 6),
+                 n_cells=len(sp_det))
+        for ep in ENDPOINTS}
+    from scipy.stats import binomtest
+    _ag = sum(r["informed_pairwise_sign"]["agree"] for r in auc_rows)
+    _to = sum(r["informed_pairwise_sign"]["total"] for r in auc_rows)
+    _ci = binomtest(_ag, _to, 0.5).proportion_ci(0.95)
+    informed_pooled = dict(
+        agree=_ag, total=_to, rate=round(_ag / _to, 6),
+        ci95=[round(float(_ci.low), 6), round(float(_ci.high), 6)])
     summary = dict(
         gate=cfg["gate"], analysis_status=cfg["analysis_status"],
         n_objects=len(cfg["cohort"]), levels=levels, regimes=regimes,
-        budgets_k=budgets, policies=policies, n_random_perms=n_rand,
+        budgets_k=budgets, policies=policies,
+        random_units=dict(universe=n_ru, active48=n_ra),
         noise_fit_convention=cfg["noise_fit_convention"],
         endpoints=list(ENDPOINTS),
         spearman_pred_vs_realized=summary_stats,
+        spearman_informed_only=summary_stats_informed,
+        informed_pairwise_sign_pooled=informed_pooled,
         bootstrap_dAUC=boot,
         auc_rows=auc_rows,
         rows=rows,
@@ -307,9 +369,11 @@ def _aggregate_and_write(cfg, rows, scatter, out_path, img_path, t_start,
                              gridspec_kw={"width_ratios": [1.4, 1]})
     colors = {"mode_aware": "tab:purple", "e_opt": "tab:blue",
               "a_opt": "tab:green", "d_opt": "tab:orange", "random": "0.6"}
+    _POLICY_OF = {"randomU": "random", "randomA48": "random"}
     for s in scatter:
+        pol = _POLICY_OF.get(s["policy"], s["policy"])
         axes[0].scatter(s["pred_J_A"], s["ang_mean_deg"], s=10, alpha=0.45,
-                        c=colors.get(s["policy"], "0.6"), edgecolors="none")
+                        c=colors.get(pol, "0.6"), edgecolors="none")
     for pol, c in colors.items():
         axes[0].scatter([], [], c=c, label=pol)
     axes[0].set_xlabel("predicted J_A = tr ΔF(t)^{-1} (allocation)")
@@ -322,13 +386,15 @@ def _aggregate_and_write(cfg, rows, scatter, out_path, img_path, t_start,
     ylabels, ypos = [], []
     for regime in regimes:
         for pol in policies:
-            b = boot[f"{pol}|{regime}|ang_mean_deg"]
-            yp = len(ylabels)
-            axes[1].plot([b["ci95"][0], b["ci95"][1]], [yp, yp],
-                         lw=2, color=colors[pol])
-            axes[1].plot(b["median_dAUC"], yp, "o", color=colors[pol])
-            ylabels.append(f"{pol} @{regime}x")
-            ypos.append(yp)
+            for base_tag, ls in (("vs_randomU", "-"), ("vs_randomA48", ":")):
+                b = boot[f"{pol}|{regime}|ang_mean_deg|{base_tag}"]
+                yp = len(ylabels)
+                axes[1].plot([b["ci95"][0], b["ci95"][1]], [yp, yp],
+                             lw=2, color=colors[pol], ls=ls)
+                axes[1].plot(b["median_dAUC"], yp, "o", color=colors[pol],
+                             ms=4)
+                ylabels.append(f"{pol} @{regime}x {base_tag[3:]}")
+                ypos.append(yp)
     axes[1].axvline(0.0, color="k", ls="--", lw=0.8)
     axes[1].set_yticks(ypos)
     axes[1].set_yticklabels(ylabels, fontsize=8)

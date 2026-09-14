@@ -112,18 +112,26 @@ def test_decision_quality_artifact():
         pytest.skip("artifact not committed")
     import hashlib
     j = json.loads(ART.read_text(encoding="utf-8"))
-    assert j["analysis_status"] == "decision_quality_v1"
+    if j["analysis_status"] != "decision_quality_v1_1":
+        pytest.skip("artifact predates the v1.1 grid (4 informed + 3U/2A48)")
     assert j["n_objects"] == 11
-    # rows: 11 obj x 4 levels x 2 regimes x 7 units (2 det + 5 random) x 5 budgets
-    assert len(j["rows"]) == 11 * 4 * 2 * 7 * 5
+    # rows: 11 obj x 4 levels x 2 regimes x 9 units (4 det + 3U + 2A48) x 5 budgets
+    assert len(j["rows"]) == 11 * 4 * 2 * 9 * 5
     assert len(j["auc_rows"]) == 11 * 4 * 2
-    # bootstrap: 2 policies x 2 regimes x 3 endpoints
-    assert len(j["bootstrap_dAUC"]) == 2 * 2 * 3
+    # bootstrap: 4 policies x 2 regimes x 3 endpoints x 2 baselines
+    assert len(j["bootstrap_dAUC"]) == 4 * 2 * 3 * 2
     for key, b in j["bootstrap_dAUC"].items():
         assert b["ci95"][0] <= b["median_dAUC"] <= b["ci95"][1] + 1e-12
     for ep in ("ang_mean_deg", "mse_aligned", "dual_mean"):
         s = j["spearman_pred_vs_realized"][ep]
         assert -1.0 <= s["min"] <= s["max"] <= 1.0 and s["n_cells"] == 88
+        si = j["spearman_informed_only"][ep]
+        assert -1.0 <= si["min"] <= si["max"] <= 1.0 and si["n_cells"] == 88
+    ip = j["informed_pairwise_sign_pooled"]
+    assert 0.0 <= ip["rate"] <= 1.0 and ip["total"] > 0
+    assert ip["ci95"][0] <= ip["rate"] <= ip["ci95"][1] + 1e-9
+    # 随机拆分元数据
+    assert j["random_units"] == {"universe": 3, "active48": 2}
     cfg_hash = hashlib.sha256(
         (REPO / "configs/decision_quality.yaml").read_bytes()).hexdigest()
     assert j["manifest"]["config_sha256"] == cfg_hash

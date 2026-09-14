@@ -15,10 +15,13 @@
 # gauge-aligned albedo MSE + unaligned MAE. No second residual pipeline.
 #
 # Grid: 11 objects x 4 levels x 2 regimes x 5 budgets (the frozen
-# BUDGET_COUNTS) x 9 selection units (mode_aware / e_opt / a_opt / d_opt +
-# 5 random permutations, frozen rng spec). Corrected convention throughout
-# (the arm frame; the legacy AUC benchmark is NOT reused here -- the
-# convention split is documented in EXPERIMENTS s18).
+# BUDGET_COUNTS) x 9 selection units = 4 informed (mode_aware / e_opt /
+# a_opt / d_opt) + 3 universe-random permutations + 2 active48-restricted
+# random permutations (acceptance G-1/G-2: the active-set control is IN
+# the grid, and the informed family has n=4 so the ordering test is not
+# random-dilution-dominated). Corrected convention throughout (the arm
+# frame; the legacy AUC benchmark is NOT reused here -- the convention
+# split is documented in EXPERIMENTS s18).
 #
 # Predicted side: J_A = tr DeltaF(t)^{-1} of each unit's allocation on the
 # same corrected state (t = regime on the selected lights).
@@ -28,16 +31,19 @@
 # energy (continuity with the frozen endpoint family).
 #
 # Statistics: trapezoid AUC over the frozen budget fractions per endpoint;
-# dAUC (policy - mean random) per (object, level, regime); object-cluster
-# paired bootstrap (B=10000, seed 20260910) of the median dAUC per policy;
-# within-cell Spearman(predicted J_A, realized endpoint) across the 9
-# units (does the information ordering predict the realized ordering?).
+# dAUC (policy - mean random) against BOTH random baselines (universe and
+# active48-restricted) per (object, level, regime); object-cluster paired
+# bootstrap (B=10000, seed 20260910) of the median dAUC per policy;
+# within-cell Spearman(predicted J_A, realized endpoint) across all 9
+# units AND across the 4 informed units only (n=4; the honest ordering
+# test), plus the pooled informed pairwise sign agreement with a binomial
+# CI.
 #
 # outcome_independence: descriptive, no sign gate -- every dAUC / Spearman
 # is reported regardless of direction.
 
 gate: P-DECISION-QUALITY
-analysis_status: decision_quality_v1
+analysis_status: decision_quality_v1_1
 run_name: decision_quality_v1
 
 data_root: D:/data/OpenIllumination
@@ -52,10 +58,13 @@ levels: [0.2, 0.5, 1.0, 2.0]
 regimes: [10, 100]
 budgets_k: [14, 28, 57, 85, 114]        # frozen BUDGET_COUNTS
 budget_fractions: [0.1, 0.2, 0.4, 0.6, 0.8]
-policies: [mode_aware, a_opt]   # the decision contrast that matters;
-                                  # e/d-opt are redundant with a_opt here (frozen benchmark
-                                  # showed they improve similarly) and each ordering costs ~230s
-n_random_perms: 5                        # frozen spec; rng [20260911, obj, r, p]
+policies: [mode_aware, e_opt, a_opt, d_opt]   # v1.1: e/d-opt restored (G-1) so
+                                              # the informed family has n=4; each e/a/d-opt
+                                              # ordering costs ~230s (frozen greedy semantics)
+random_units:                           # v1.1 split (G-2): the active-set control
+  universe: 3                           # frozen-style perms; rng [20260911, obj, r, p]
+  active48: 2                           # permute the 48 Fisher-active lights only;
+                                        # rng [20260911, obj, r, 100+p]
 seeds_per_level: 10                      # frozen spec; rng [20260910, 7777, obj, lv, s]
 
 workers: 2                            # per-object multiprocessing; the host has 15 GB RAM
