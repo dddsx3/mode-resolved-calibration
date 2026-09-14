@@ -5,6 +5,8 @@
  "method": "re-derive orderings + J_A + 10-seed arm means on the sample points from scratch and compare to the v1 rows read from git history (immune to working-tree overwrites); dual uses the v1 aggregation order (per-arm mean-of-5, then mean over seeds)",
  "v1_ref": "fc38e9d",
  "v1_artifact_sha256": "b45039cd7a9de76581c42d841c616fc5955d077f29035860d9b368c62f5dd203",
+ "pinned_blob_at": "fc38e9d",
+ "pinned_blob_readable_via": "git show fc38e9d:results/openillumination/decision_quality.json",
  "sample": {
   "object": "obj_03_pumpkin",
   "regime": 10,
@@ -198,8 +200,8 @@
   }
  ],
  "manifest": {
-  "git_sha": "caeca8a3c8c0c0bec40eaa02f03a75cfd1fc83d7",
-  "elapsed_s": 774.0
+  "git_sha": "a850a106acd0456f4c76e761b0c93521eeb5f4ba",
+  "elapsed_s": 660.6
  },
  "note": "seed-determinism: these units' selection, J_A, and arm code paths are byte-identical between the v1 and v1.1 commits, and all per-unit seeds carry object+level+seed indices - the values are worker-count invariant. Evidence for the reuse decision recorded in d877355's commit trail."
 }

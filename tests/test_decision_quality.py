@@ -180,3 +180,18 @@ def test_cross_env_repro_record():
     import hashlib
     assert (hashlib.sha256(cloud.read_bytes()).hexdigest()
             == j["inputs"]["b_sha256"])
+
+
+def test_resume_vs_clean_record():
+    """P-RESUME-EQUIV 记录(P1-d 入库证据):崩溃恢复 = 干净跑,位级。"""
+    rec = (REPO / "results/openillumination/provenance/"
+           "dq_resume_vs_clean.json")
+    if not rec.exists():
+        pytest.skip("record not committed")
+    j = json.loads(rec.read_text(encoding="utf-8"))
+    assert j["analysis_status"] == "dq_resume_vs_clean_v1"
+    assert j["verdict"] == "bit-identical"
+    assert j["rows"]["n_bit_exact"] == j["rows"]["n_total"] > 0
+    assert all(j["top_level_identical"].values())
+    assert j["resumed_objects"] == ["obj_03_pumpkin"]
+    assert j["manifest"]["git_sha"]

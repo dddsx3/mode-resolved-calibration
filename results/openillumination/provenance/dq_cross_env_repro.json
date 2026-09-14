@@ -1,6 +1,16 @@
 {
  "gate": "P-CROSS-ENV",
  "analysis_status": "dq_cross_env_repro_v1",
+ "headline": {
+  "n_cell_units": 792,
+  "n_structurally_diverged": 1,
+  "fraction_diverged": 0.001263,
+  "max_rel_pred_J_A": "1.161e-06",
+  "max_rel_ang": "5.653e-02",
+  "all_ang_ci_same_sign_and_significant": true,
+  "verdict": "statistically-identical",
+  "note": "n_bit_exact in results.rows counts FLOATING-POINT last-ULP agreement only (cross-machine BLAS kernels differ in the last bits); the informative quantity is n_structurally_diverged."
+ },
  "question": "does the decision-quality grid reproduce across environments (local 2-workers AMD/numpy-2.4.1 vs cloud 11-workers x86/numpy-2.4.6)? Expectation: NOT bit-exact (last-ULP BLAS differences flip greedy near-ties); the registered claim is statistical identity",
  "method": "layered comparison: structure, row-level four-quantity tolerances, (cell,unit) divergence attribution via pred_J_A > 1e-9 rel, and conclusion robustness (16 ang CI signs+significance, informed pooled, spearman summaries)",
  "inputs": {
@@ -48,7 +58,7 @@
   "verdict": "statistically-identical"
  },
  "manifest": {
-  "git_sha": "cdeb0192fd419c818daeea708c6f870fc89249c5",
+  "git_sha": "a850a106acd0456f4c76e761b0c93521eeb5f4ba",
   "elapsed_s": 0.1
  },
  "note": "cloud package: decision_quality_42bc299f_20260914_120403.zip (RUN_INFO: git_sha=launch=42bc299..., config_sha256=b76eafa..., elapsed 2183.5s = 36.4 min on 32 cores / 11 workers, Linux-6.6.98 tl4, numpy 2.4.6). The cloud artifact is archived alongside this record for full auditability. Same-machine worker-invariance is proven separately (resume-vs-clean bit-exact test in the 42bc299 commit trail); this record covers the CROSS-environment property."

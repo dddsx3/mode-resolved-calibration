@@ -641,6 +641,14 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
   变为**对"landscape 在最优附近平坦"的独立实证**,并与"策略间差异
   在证书精度内不可分辨"(B4/C8)闭合——一次回答"为何不逐位一致"与
   "证书有什么用"两个问题。
+- **同机 worker/崩溃不变性（P1-d 入库证据）**: `results/openillumination/
+  provenance/dq_resume_vs_clean.json`
+  (`experiments/verify_dq_resume_equivalence.py` 可复跑)——2 物体缩减
+  网格:run A 在第一个 checkpoint 落盘后 SIGKILL;run B 同目录重启
+  (obj_03 从 checkpoint 恢复、obj_19 新算);run C 干净跑。**B vs C
+  位级一致**(rows 32/32 + bootstrap/spearman/informed/auc 全同)。
+  此前该证据仅存于 42bc299 的 commit message(验收 P1-d:最强声明
+  不得只靠散文支撑)。
 - **v1→v1.1 重用等价(审计记录)**: `results/openillumination/provenance/dq_v1_reuse_equivalence.json`
   (`experiments/verify_dq_v1_reuse_equivalence.py`)——**代码路径同一性
   (未变单元的 selection/J_A/arm 代码 v1→v1.1 逐字节相同)+ obj_03 上的
