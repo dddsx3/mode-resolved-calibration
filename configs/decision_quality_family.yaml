@@ -1,0 +1,81 @@
+# P-SIGMA-FAMILY (E arm) -- reduced decision quality across the family.
+# PREREGISTERED: committed BEFORE the run.
+#
+# Question (conclusion E / claim B9 informed-only): is the informed-policy
+# ordering validity (pooled pairwise sign agreement 678/987 = 0.687
+# [0.657, 0.716] over the full frozen grid) a property of the pipeline or
+# of the joint corruption shape (forced logI/dir variance ratio 3283)?
+#
+# Reduced design (task-book scope): level 0.5 only, regime [10], 2 budgets.
+# Budget choice is POWER-based, not outcome-based: in the frozen artifact
+# the predicted-J differences dp are nonzero ONLY at k=14 (62/66 pairs)
+# and k=28 (63/66); at k>=57 all four informed orderings coincide
+# (dp = 0 for all 66 pairs) -- budgets [14, 28] carry 100% of the
+# distinguishable pairs. Frozen subset comparator (level 0.5, regime 10,
+# k in {14,28}): 88/125 = 0.7040.
+#
+# Arms (same seeds as the frozen run: [20260910, 7777, obj, 1, s] -- the
+# level-index 1 is 0.5's index in the frozen levels grid [0.2,0.5,1.0,2.0]):
+#   anchor     (sig_logI 0.5, sig_dir 0.5 deg, het 0)   -- CONTROL: rows
+#              must be BIT-IDENTICAL to the frozen decision_quality.json
+#              subset (orderings + seeds + injection path are all
+#              degenerate-identical; runtime-asserted).
+#   dir_heavy  (0.5, 5.0 deg, het 0)  -- direction std 10x the anchor
+#              (variance 100x; upper-middle of the S2-1 sweep grid):
+#              maximizes the direction load on the realized normal
+#              endpoint within the preregistered sweep.
+#   het        (0.5, 0.5 deg, het 1.0) -- per-light lognormal
+#              heterogeneity (seed 20260915).
+#
+# Statistic per arm: pooled informed pairwise sign agreement over
+# (object, k in {14, 28}) pairs with dp != 0 on the ang_mean_deg endpoint
+# (the frozen E statistic) + binomial CI (same scipy call as the frozen
+# pipeline); per-object breakdown; per-cell informed-only Spearman for
+# continuity. Random arms are OUT of scope (the E statistic is
+# informed-only; dAUC baselines are frozen).
+#
+# Preregistered outcome rule (no gate; both are findings):
+#   robust:                 every arm rate >= 0.60 (chance = 0.5) and the
+#                           control arm reproduces the frozen subset
+#                           88/125 exactly.
+#   parameterization-specific: any arm rate < 0.60 -- the informed-ordering
+#                           validity does not survive the family shape;
+#                           per-arm tables carry the finding.
+
+gate: P-SIGMA-FAMILY
+analysis_status: decision_quality_family_v1
+run_name: decision_quality_family_v1
+
+data_root: D:/data/OpenIllumination
+data_meta: D:/data/OpenIllumination_meta
+cohort: [obj_03_pumpkin, obj_04_dolphin, obj_07_pumpkin2, obj_09_ball, obj_10_pumpkin3, obj_11_pine, obj_13_mushroom, obj_16_friends_cup, obj_17_pumpkin5, obj_18_fabric_hat, obj_19_cylinder]
+n_objects: 11
+noise_fit_convention: corrected
+scene_rng_spec: "default_rng([20260910, obj_idx])  # identical to the frozen DQ"
+K_lights: 142
+
+levels: [0.5]                 # frozen seed level-index: 1
+seed_level_index: 1
+regimes: [10]
+budgets_k: [14, 28]
+budget_fractions: [0.1, 0.2]
+policies: [mode_aware, e_opt, a_opt, d_opt]   # informed family n=4
+seeds_per_level: 10
+
+family_seed: 20260915
+arms:
+  anchor:    {sig_logI: 0.5, sig_dir_deg: 0.5, het_sigma: 0.0}
+  dir_heavy: {sig_logI: 0.5, sig_dir_deg: 5.0, het_sigma: 0.0}
+  het:       {sig_logI: 0.5, sig_dir_deg: 0.5, het_sigma: 1.0}
+
+frozen_subset_comparator: {agree: 88, total: 125, rate: 0.7040}
+
+outcome_rule: >
+  robust: every arm rate >= 0.60 and the control arm reproduces the frozen
+  subset 88/125 exactly. parameterization-specific: any arm rate < 0.60.
+
+outcome_independence: >
+  Descriptive: every per-arm rate / per-object breakdown is reported
+  regardless of direction. The only hard runtime checks are the control
+  arm's bit-identity with the frozen subset (rows) and the exact 88/125
+  reproduction.
