@@ -147,15 +147,20 @@ def run(out_path=REPO / "results/openillumination/provenance/"
     log_w, rc_w = _run("w4", ckpt_w, stage / "d_w4.json", workers=4)
     assert rc_w == 0, log_w[-2000:]
     w = json.loads((stage / "d_w4.json").read_text(encoding="utf-8"))
+    c_rows = {(x["object"], x["level"], x["regime"], x["unit"], x["k"]): x
+              for x in json.loads((stage / "c_clean.json")
+                                  .read_text(encoding="utf-8"))["rows"]}
     rw = {(x["object"], x["level"], x["regime"], x["unit"], x["k"]): x
           for x in w["rows"]}
-    assert set(rw) == set(rc)
+    assert set(rw) == set(c_rows)
     nw = okw = 0
     for key in rw:
         for f in FIELDS:
             nw += 1
-            okw += int(rw[key][f] == rc[key][f])
-    worker_top_same = {k: (w[k] == c[k]) for k in TOP_KEYS}
+            okw += int(rw[key][f] == c_rows[key][f])
+    worker_top_same = {k: (w[k] == json.loads(
+        (stage / "c_clean.json").read_text(encoding="utf-8"))[k])
+        for k in TOP_KEYS}
 
     # 4) bit-exact comparison
     b = json.loads((stage / "b_resumed.json").read_text(encoding="utf-8"))
