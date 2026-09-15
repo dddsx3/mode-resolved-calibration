@@ -1,0 +1,86 @@
+# P-BASELINE -- literature-style selection baselines on the same light
+# sets (TCI gap 3). PREREGISTERED: committed BEFORE the run.
+#
+# Question: does GEOMETRY-ONLY light selection (the classic
+# well-conditioned-configuration idea, Drbohlav & Chantler ICCV 2005)
+# capture the allocation value that the calibrated prediction model
+# captures? Same lights, same budget frame, same realized endpoint
+# (normal angular error) as the frozen E-arm -- only the selection
+# rule differs.
+#
+# Baseline (DC05, operationalized): greedy farthest-point sampling on
+# the unit sphere of light DIRECTIONS -- seed = the light closest to
+# the camera axis (max z; ties -> lowest index), then iteratively add
+# the light MINIMIZING the max dot-product with the selected set (=
+# maximizing the min great-circle distance; ties -> lowest index),
+# extended greedily to a full permutation. Corruption-model-free,
+# prediction-model-free: pure geometry. This is the classical
+# "well-spread configuration" surrogate for PS well-posedness.
+#
+# Frame (identical to the frozen E-arm wherever shared):
+#   - OI cohort (11 objects, 142 lights): units = 4 informed policies
+#     (mode_aware / e_opt / a_opt / d_opt) + DC05 + 3 universe-random
+#     permutations; budgets k in {14, 28} (the power-maximal pair);
+#     regime 10; corruption level 0.5 (uniform joint, scalar sigma,
+#     rho=0); seeds [20260910, 7777, obj, 1, s] (E-anchor spec);
+#     random rng [20260911, obj, 0, p] (frozen DQ spec).
+#     HARD ANCHOR: the 4 informed units' rows (pred_J_A / ang_mean_deg
+#     / mse_aligned / dual_mean) must be BIT-IDENTICAL to the frozen
+#     decision_quality_family.json anchor-arm subset -- the baseline
+#     rerun shares the E-arm's orderings and seeds by construction.
+#   - DiLiGenT cohort (10 objects, 96 lights): minimal comparable trio
+#     = a_opt + DC05 + 3 random (same seeds shape; new queue).
+#
+# Comparability statement (for Gardi 2022 / ReLeaPS 2023, NOT
+# reimplemented): they optimize light POSITIONS / next-light selection
+# under their own objectives; we allocate calibration PRECISION among
+# EXISTING lights under a Fisher-risk objective. Objectives differ ->
+# numbers are not directly comparable; DC05 is the one implementable
+# same-lights geometry baseline. Registered in docs, not measured.
+#
+# Preregistered reading rule (descriptive; both outcomes findings):
+#   DC05-informative: DC05's median per-object realized-ang deviation
+#                     from the random mean is <= the informed family's
+#                     median deviation (geometry alone captures the
+#                     allocation value within the informed band).
+#   geometry-insufficient: DC05's median deviation is > the informed
+#                     family's (geometry-only selection leaves value
+#                     on the table that the calibrated model captures).
+#   Evaluated per cohort at each budget; all per-object numbers
+#   reported regardless.
+
+gate: P-BASELINE
+analysis_status: baseline_comparison_v1
+run_name: baseline_comparison_v1
+
+oi_data_root: D:/data/OpenIllumination
+oi_data_meta: D:/data/OpenIllumination_meta
+oi_cohort: [obj_03_pumpkin, obj_04_dolphin, obj_07_pumpkin2, obj_09_ball, obj_10_pumpkin3, obj_11_pine, obj_13_mushroom, obj_16_friends_cup, obj_17_pumpkin5, obj_18_fabric_hat, obj_19_cylinder]
+diligent_data_root: D:/data/DiLiGenT/pmsData
+diligent_cohort: [ballPNG, bearPNG, buddhaPNG, catPNG, cowPNG, gobletPNG, harvestPNG, pot1PNG, pot2PNG, readingPNG]
+
+noise_fit_convention: corrected
+oi_scene_rng_spec: "default_rng([20260910, obj_idx])  # identical to P-CERT / E-arm"
+dq_scene_rng_spec: "default_rng([20260915, obj_idx])  # identical to P-DILIGENT-QUEUE"
+K_oi: 142
+K_dq: 96
+kappa: 10.0
+level: 0.5
+regime: 10
+budgets_k: [14, 28]
+seeds: 10
+random_units: 3
+family_seed: 20260915
+
+oi_units: [mode_aware, e_opt, a_opt, d_opt, dc05, randomU_0, randomU_1, randomU_2]
+dq_units: [a_opt, dc05, randomU_0, randomU_1, randomU_2]
+
+outcome_rule: >
+  DC05-informative: DC05 median per-object ang deviation from random
+  <= informed median deviation. geometry-insufficient: greater. Per
+  cohort x budget; descriptive, no sign gate.
+
+outcome_independence: >
+  Every per-object realized endpoint and predicted J_A is reported for
+  every unit regardless of outcome. The OI hard anchor (bit-identity
+  with the frozen E-arm subset) is the only runtime gate.
