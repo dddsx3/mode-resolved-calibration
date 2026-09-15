@@ -35,6 +35,7 @@ ARTS = {
     "fam": REPO / "results/openillumination/corruption_family_sensitivity.json",
     "famc": REPO / "results/magnitude/linearization_radius_family.json",
     "fame": REPO / "results/openillumination/decision_quality_family.json",
+    "ediag": REPO / "results/openillumination/corruption_family_e_diag.json",
 }
 
 
@@ -261,6 +262,19 @@ BINDINGS = [
      lambda j: float(j["arms"]["anchor"]["informed_pairwise_sign"]["total"]), 0),
     (E, "125", "fame",
      lambda j: float(j["arms"]["anchor"]["informed_pairwise_sign"]["total"]), 0),
+
+    # ---- E cross-diagnosis (P-SIGMA-FAMILY-E-DIAG) ----
+    (C, "0.949", "ediag", lambda j: j["summary"]["s_pred"], 3),
+    (E, "0.949", "ediag", lambda j: j["summary"]["s_pred"], 3),
+    (C, f"{U}0.325", "ediag", lambda j: j["summary"]["s_real"], 3),
+    (E, f"{U}0.325", "ediag", lambda j: j["summary"]["s_real"], 3),
+    (E, "0.789", "ediag", lambda j: j["summary"]["fit_anc"], 3),
+    (C, f"{U}0.778", "ediag", lambda j: j["summary"]["fit_het"], 3),
+    (E, f"{U}0.778", "ediag", lambda j: j["summary"]["fit_het"], 3),
+    (C, f"{U}0.738", "ediag", lambda j: j["summary"]["cross_ah"], 3),
+    (E, f"{U}0.738", "ediag", lambda j: j["summary"]["cross_ah"], 3),
+    (C, "0.738", "ediag", lambda j: j["summary"]["cross_ha"], 3),
+    (E, "0.738", "ediag", lambda j: j["summary"]["cross_ha"], 3),
 ]
 
 # SPECIALS 追加(数值侧由产物 pin 测试守):11/44 = goal_orientation 的
@@ -304,6 +318,18 @@ OCCURRENCE_COUNTS = {
     ("claims", "3283"): 1,
     ("methods", "3283"): 1,
     ("experiments", "3283"): 2,
+    # ---- E cross-diagnosis (21b / E-DIAG) ----
+    ("claims", "0.949"): 1,
+    ("experiments", "0.949"): 1,
+    ("claims", "−0.325"): 1,
+    ("experiments", "−0.325"): 1,
+    ("claims", "−0.738"): 1,
+    ("experiments", "−0.738"): 1,
+    ("claims", "0.738"): 1,
+    ("experiments", "0.738"): 2,
+    ("experiments", "0.789"): 2,
+    ("claims", "−0.778"): 1,
+    ("experiments", "−0.778"): 3,
     # ---- E arm (21b) ----
     ("claims", "0.704"): 2,
     ("experiments", "0.704"): 2,
@@ -311,7 +337,7 @@ OCCURRENCE_COUNTS = {
     ("experiments", "0.889"): 2,
     ("claims", "0.353"): 1,
     ("experiments", "0.353"): 3,
-    ("claims", "88"): 6,
+    ("claims", "88"): 5,
     ("experiments", "88"): 10,
     ("claims", "125"): 2,
     ("experiments", "125"): 2,
@@ -330,7 +356,7 @@ OCCURRENCE_COUNTS = {
     ("claims", "0.59"): 1,
     ("claims", "0.6"): 1,
     ("claims", "0.657"): 1,
-    ("claims", "0.687"): 2,
+    ("claims", "0.687"): 1,
     ("claims", "0.7"): 3,
     ("claims", "0.716"): 1,
     ("claims", "0.8"): 1,

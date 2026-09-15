@@ -375,9 +375,14 @@ Three structural findings anchor it (verified by
    subset exactly (88/125 = 0.704); direction-heavier corruption makes
    the predicted orderings MORE faithful (0.889), but per-light
    heterogeneity breaks them below chance (0.353, per-cell Spearman
-   median −0.78) — the frozen 0.687 is a property of the uniform-σ
-   shape, not the pipeline
-   (`results/openillumination/decision_quality_family.json`).
+   median −0.78) — and the zero-cost cross diagnosis excludes
+   σ misspecification as the cause: handing the predictor the true
+   per-light σ moves its ordering by only 0.05 (S_pred = 0.949) while
+   the realized-benefit ordering is fully re-ordered (S_real = −0.325)
+   — truth-end decoupling, so the per-light ordering loses validity
+   under heterogeneity regardless of σ specification
+   (`results/openillumination/decision_quality_family.json` +
+   `corruption_family_e_diag.json`).
 4. **Mode-tail targeted intervention: no detectable advantage over scalar
    targeting** — the preregistered three-arm comparison (`P-ALLOC2 v1.1`,
    `results/mode_tail/allocation_mode_tail.json`) finds that the

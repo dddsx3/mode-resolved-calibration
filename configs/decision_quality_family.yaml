@@ -1,29 +1,4 @@
 # P-SIGMA-FAMILY (E arm) -- reduced decision quality across the family.
-# v1.1 (acceptance report ee74bcf section 3): the v1 het arm was ALREADY
-# sigma-MATCHED (its predictor state/W_dual/orderings were built from the
-# per-light heterogeneous sigma_phi_block, NOT a uniform model) -- the v1
-# commit message's "Uniform-sigma J_A mis-ranks" mechanism claim was
-# WRONG, and the 0.353 below-chance result is the DEEPER finding: even a
-# correctly specified per-light sigma model fails. v1.1 completes the
-# 2x2 with the one missing cell -- het truth + UNIFORM predictor
-# (het_mismatched) -- to separate the sigma-specification penalty from
-# the intrinsic heterogeneity effect. The three unchanged arms are rerun
-# in the same process (same seeds); anchor must stay bit-identical to
-# the frozen subset and het/dir_heavy must stay value-identical to v1.
-#
-# Preregistered 2x2 reading (mismatch penalty Delta = rate(het) -
-# rate(het_mismatched)):
-#   Delta >= 0.10  -> sigma SPECIFICATION matters (conditional validity:
-#                     correct per-light specification partially rescues
-#                     the ordering; uniform predictor is worse)
-#   |Delta| < 0.10 -> heterogeneity ITSELF breaks the per-light ordering
-#                     (deep negative; consistent with C8: J_A gains
-#                     predict total information, not angular-error
-#                     relief)
-# The uniform predictor of het_mismatched uses the NOMINAL sigma
-# (0.5, 0.5 deg) = the frozen DQ parameterization exactly (the analyst
-# who ignores the heterogeneity), not the lognormal mean.
-
 # PREREGISTERED: committed BEFORE the run.
 #
 # Question (conclusion E / claim B9 informed-only): is the informed-policy
@@ -68,8 +43,8 @@
 #                           per-arm tables carry the finding.
 
 gate: P-SIGMA-FAMILY
-analysis_status: decision_quality_family_v1_1
-run_name: decision_quality_family_v1_1
+analysis_status: decision_quality_family_v1
+run_name: decision_quality_family_v1
 
 data_root: D:/data/OpenIllumination
 data_meta: D:/data/OpenIllumination_meta
@@ -92,22 +67,12 @@ arms:
   anchor:    {sig_logI: 0.5, sig_dir_deg: 0.5, het_sigma: 0.0}
   dir_heavy: {sig_logI: 0.5, sig_dir_deg: 5.0, het_sigma: 0.0}
   het:       {sig_logI: 0.5, sig_dir_deg: 0.5, het_sigma: 1.0}
-  het_mismatched:                    # 2x2 missing cell: het truth, uniform predictor
-    sig_logI: 0.5
-    sig_dir_deg: 0.5
-    het_sigma: 1.0
-    predictor: {sig_logI: 0.5, sig_dir_deg: 0.5, het_sigma: 0.0}
 
 frozen_subset_comparator: {agree: 88, total: 125, rate: 0.7040}
 
 outcome_rule: >
   robust: every arm rate >= 0.60 and the control arm reproduces the frozen
   subset 88/125 exactly. parameterization-specific: any arm rate < 0.60.
-
-mismatch_rule_v1_1: >
-  Delta = rate(het) - rate(het_mismatched). Delta >= 0.10: sigma
-  specification matters (conditional validity). |Delta| < 0.10:
-  heterogeneity itself breaks the per-light ordering (deep negative).
 
 outcome_independence: >
   Descriptive: every per-arm rate / per-object breakdown is reported

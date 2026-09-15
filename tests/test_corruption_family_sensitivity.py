@@ -247,3 +247,38 @@ def test_e_outcome_consistency():
     assert art["manifest"]["config_sha256"] == hashlib.sha256(
         cfg.read_bytes()).hexdigest()
     assert len(art["manifest"]["git_sha"]) == 40
+
+
+# ---------------- E 臂交叉诊断(P-SIGMA-FAMILY-E-DIAG) ----------------
+ART_E_DIAG = (REPO / "results/openillumination/"
+              "corruption_family_e_diag.json")
+
+
+def test_e_diag_consistency():
+    """交叉诊断:六量自洽 + 判读规则机械正确 + 源产物锚定。"""
+    import hashlib
+    diag = _load(ART_E_DIAG)
+    assert diag["gate"] == "P-SIGMA-FAMILY-E-DIAG"
+    s = diag["summary"]
+    # 判读规则的两条条件与 reading 字段自洽
+    decoupled = s["s_pred"] >= 0.9 and s["s_real"] <= 0.0
+    symmetric = (abs(s["fit_het"] - s["cross_ah"]) <= 0.15
+                 and abs(s["fit_anc"] - s["cross_ha"]) <= 0.15)
+    expected = ("failure is truth-end decoupling, NOT sigma "
+                "misspecification" if (decoupled and symmetric)
+                else "diagnostic inconclusive (see per-series values)")
+    assert diag["reading"] == expected
+    assert decoupled and symmetric
+    # 核心量的数值钉死
+    assert s["s_pred"] == 0.948683
+    assert s["s_real"] == -0.324781
+    assert s["fit_anc"] == 0.788889
+    assert s["fit_het"] == -0.777778
+    assert s["cross_ah"] == -0.737865
+    assert s["cross_ha"] == 0.737865
+    # 源产物锚定:sha256 与当前入库的 E 臂产物一致
+    src = REPO / "results/openillumination/decision_quality_family.json"
+    assert diag["source_manifest_sha256"] == hashlib.sha256(
+        src.read_bytes()).hexdigest()
+    # 源行数语义:11 对象 × 2 预算 = 22 cell/系列
+    assert len(diag["per_object"]) == 11

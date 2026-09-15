@@ -757,7 +757,28 @@ Findings (`results/openillumination/decision_quality_family.json`):
 | het (het = 1.0) | 42/119 | 0.353 [0.268, 0.446] | −0.778 |
 
 Outcome (preregistered rule): **parameterization-specific** — the het arm
-(0.353 < 0.60) fails the robustness bar. Two readings, both carried by
+(0.353 < 0.60) fails the robustness bar. A follow-up 2x2 arm (het_mismatched, prereg
+93f45a1) was OOM-blocked on the memory-starved host and superseded by a
+zero-cost cross diagnosis on the committed rows
+(`experiments/family_e_diag.py` ->
+`results/openillumination/corruption_family_e_diag.json`,
+P-SIGMA-FAMILY-E-DIAG):
+
+| quantity | value | meaning |
+|---|---|---|
+| S_pred | 0.949 | anchor-pred vs het-pred policy rankings (the predictor barely moves) |
+| S_real | −0.325 | anchor-realized vs het-realized rankings (the truth re-orders) |
+| fit_anc / fit_het | 0.789 / −0.778 | within-arm pred-vs-realized validity |
+| cross_ah / cross_ha | −0.738 / 0.738 | anchor-pred→het-truth; het-pred→anchor-truth |
+
+The symmetric cross failure (fit_het ≈ cross_ah, fit_anc ≈ cross_ha)
+excludes the sigma-misspecification explanation: a wrong-σ predictor
+would be the thing that moved, but the predictor's ordering changes by
+only 0.05 while the realized benefits fully re-order. **The failure is
+truth-end decoupling — the criterion's policy ordering is insensitive
+to per-light heterogeneity, the realized-benefit ordering is highly
+sensitive to it, and the per-light J_A ordering loses decision validity
+under heterogeneity regardless of σ specification.** Two readings, both carried by
 the artifact: (i) the frozen 0.687 informed-ordering validity is NOT a
 pipeline invariant — it moves by ±2σ across corruption *shapes*;
 (ii) the direction of the movement is diagnostic. Making the corruption

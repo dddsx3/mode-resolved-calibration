@@ -223,6 +223,15 @@ def test_readme_numeric_claims_traceable():
              ["median"], 2)):
         assert _approx(tok, val, dec), (tok, val)
         traced[tok] = val
+    # E cross-diagnosis: S_real printed as -0.325 in README prose
+    ediag = json.loads((REPO / "results/openillumination/"
+                        "corruption_family_e_diag.json")
+                       .read_text(encoding="utf-8"))
+    for tok, val, dec in (
+            ("-0.325", ediag["summary"]["s_real"], 3),
+            ("0.949", ediag["summary"]["s_pred"], 3)):
+        assert _approx(tok, val, dec), (tok, val)
+        traced[tok] = val
     # A-arm failure-region alignment: worst intensity-carrying cell
     # (reverse_control tag max) printed as 0.048 in README prose
     for tok, val, dec in (("0.048",

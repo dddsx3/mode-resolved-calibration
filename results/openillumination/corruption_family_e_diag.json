@@ -1,0 +1,110 @@
+{
+ "gate": "P-SIGMA-FAMILY-E-DIAG",
+ "analysis_status": "e_cross_diagnosis_v1",
+ "source_artifact": "results/openillumination/decision_quality_family.json",
+ "source_manifest_sha256": "1819794dda2cbb1e2b6cfee76a23a4200d9242a8cb873c9b1953a09d42bcf81e",
+ "source_git_sha": "5b31b734138b0325bfd2c50c5310a12c5294b123",
+ "budgets": [
+  14,
+  28
+ ],
+ "units": [
+  "mode_aware",
+  "e_opt",
+  "a_opt",
+  "d_opt"
+ ],
+ "definition": {
+  "s_pred": "per-(object,k) Spearman(anchor pred ranking, het pred ranking); median over cells",
+  "s_real": "per-(object,k) Spearman(anchor realized ang ranking, het realized ang ranking); median over cells",
+  "fit_arm": "per-(object,k) Spearman(pred, realized) within arm; median over cells",
+  "cross_ah": "Spearman(anchor pred, het realized); median",
+  "cross_ha": "Spearman(het pred, anchor realized); median",
+  "cell_note": "n=4 informed units per cell; degenerate (all-tie) cells skipped"
+ },
+ "summary": {
+  "s_pred": 0.948683,
+  "s_real": -0.324781,
+  "fit_anc": 0.788889,
+  "fit_het": -0.777778,
+  "fit_dir_heavy": 1.0,
+  "cross_ah": -0.737865,
+  "cross_ha": 0.737865
+ },
+ "per_object": {
+  "obj_03_pumpkin": {
+   "s_pred": 1.0,
+   "s_real": -0.2,
+   "fit_anc": 0.2,
+   "fit_het": -0.6
+  },
+  "obj_04_dolphin": {
+   "s_pred": 0.737865,
+   "s_real": -0.843274,
+   "fit_anc": 0.7,
+   "fit_het": -1.0
+  },
+  "obj_07_pumpkin2": {
+   "s_pred": 0.737865,
+   "s_real": -0.316228,
+   "fit_anc": 0.5,
+   "fit_het": -0.111111
+  },
+  "obj_09_ball": {
+   "s_pred": 0.888889,
+   "s_real": 0.222222,
+   "fit_anc": 0.888889,
+   "fit_het": 0.222222
+  },
+  "obj_10_pumpkin3": {
+   "s_pred": 0.868932,
+   "s_real": -0.041886,
+   "fit_anc": 0.3,
+   "fit_het": 0.1
+  },
+  "obj_11_pine": {
+   "s_pred": 1.0,
+   "s_real": 0.2,
+   "fit_anc": 0.6,
+   "fit_het": -0.4
+  },
+  "obj_13_mushroom": {
+   "s_pred": 0.768932,
+   "s_real": -0.474342,
+   "fit_anc": 0.7,
+   "fit_het": 0.111111
+  },
+  "obj_16_friends_cup": {
+   "s_pred": 0.974342,
+   "s_real": 0.757821,
+   "fit_anc": -0.888889,
+   "fit_het": -0.788889
+  },
+  "obj_17_pumpkin5": {
+   "s_pred": 0.974342,
+   "s_real": -0.558114,
+   "fit_anc": 0.333333,
+   "fit_het": -0.7
+  },
+  "obj_18_fabric_hat": {
+   "s_pred": 1.0,
+   "s_real": -0.888889,
+   "fit_anc": 0.333333,
+   "fit_het": -0.222222
+  },
+  "obj_19_cylinder": {
+   "s_pred": 0.737865,
+   "s_real": -0.632456,
+   "fit_anc": 0.9,
+   "fit_het": -0.333333
+  }
+ },
+ "reading": "failure is truth-end decoupling, NOT sigma misspecification",
+ "reading_rule": "decoupled: s_pred >= 0.9 AND s_real <= 0.0; symmetric: |fit_het - cross_ah| <= 0.15 AND |fit_anc - cross_ha| <= 0.15; both -> the failure is truth-end (heterogeneity re-orders the realized benefits while the predicted orderings barely move), NOT sigma misspecification (a misspecified-sigma predictor would have moved: its ranking is the thing that would be wrong)",
+ "conclusion_text": "The het-arm 0.353 below-chance result is NOT a sigma-model misspecification artifact: handing the predictor the TRUE per-light sigma changes its policy ordering by only 0.051 in rank correlation (S_pred = 0.948683), and the matched predictor (fit_het -0.777778) performs the same as the anchor's uniform one on het truth (cross_ah -0.737865). The criterion's policy ordering is insensitive to heterogeneity while the realized-benefit ordering is highly sensitive to it (S_real = -0.324781) -- the two decouple, and the per-light J_A ordering loses its decision validity under per-light heterogeneity regardless of sigma specification.",
+ "manifest": {
+  "config_sha256": null,
+  "git_sha": "20d5fbe585e1834b5940590aca1b2791472a5585",
+  "note": "zero-cost cross diagnosis: pure arithmetic on the committed E-arm rows (no injection, no rerun); replaces the OOM-blocked het_mismatched 2x2 arm as the misspecification-exclusion evidence (prereg 93f45a1 superseded by acceptance-report guidance, run stopped before any artifact)"
+ }
+}
