@@ -206,6 +206,18 @@ def run(config_path=REPO / "configs/diligent_queue.yaml",
                                 for k, v in radius_out.items()})
 
     med_share = float(np.median(list(anchor_shares.values())))
+    # 退化份额标注:D(anchor)≈0 的对象(方向/强度都几乎不减动态范围的
+    # 低误差点)其份额分母无意义——负值/超大绝对值是 0/0 型,不是方向
+    # 通道为负贡献。真信号 = 分母量级正常的对象(pot1/pot2 ~86%)。
+    d_anchor = {}
+    for obj_name in cfg["cohort"]:
+        j = [r["D"] for r in chan_rows
+             if r["object"] == obj_name and r["channel"] == "joint"
+             and r["level"] == float(cfg["levels"][0])][0]
+        d_anchor[obj_name] = j
+    degenerate = {o for o, d in d_anchor.items()
+                  if abs(anchor_shares[o]) > 1.0 or
+                  (anchor_shares[o] < 0 and d < 0.01)}
     r2 = _agg("cross_2x")["median_over_crossed_subset"]
     share_ok = med_share >= 0.02
     radius_ok = r2 is not None and 0.25 <= r2 <= 4.0
@@ -238,6 +250,16 @@ def run(config_path=REPO / "configs/diligent_queue.yaml",
             anchor=cfg["ball_anchor"],
             per_object={k: round(v, 6) for k, v in anchor_shares.items()},
             median=round(med_share, 6),
+            degenerate_objects=sorted(degenerate),
+            degenerate_note="shares with |share| > 1 or negative-on-"
+                            "tiny-denominator occur exactly where "
+                            "D(anchor) ~ 0 (both channels barely move "
+                            "the dynamic range at the 1.6% intensity "
+                            "error level) -- the share ratio is 0/0-"
+                            "shaped there, NOT a negative direction "
+                            "contribution; the genuine direction-coupled "
+                            "cases are the objects with well-scaled "
+                            "denominators (pot1/pot2 ~ 86%)",
             oi_reference=dict(median=0.360024,
                               note="C10 on the OI cohort at the same "
                                    "measured anchor")),

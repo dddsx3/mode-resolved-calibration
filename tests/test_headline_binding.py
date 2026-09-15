@@ -37,6 +37,7 @@ ARTS = {
     "fame": REPO / "results/openillumination/decision_quality_family.json",
     "ediag": REPO / "results/openillumination/corruption_family_e_diag.json",
     "ba": REPO / "results/openillumination/ball_anchor.json",
+    "dq2": REPO / "results/diligent/diligent_queue.json",
 }
 
 
@@ -296,6 +297,21 @@ BINDINGS = [
          / j["measured_anchor"]["sig_logI"]) ** 2, 1),
     (E, "4.47", "ba",
      lambda j: j["gt_comparison"]["max_direction_error_deg"], 2),
+    # ---- DiLiGenT queue (C11 / P-DILIGENT-QUEUE) ----
+    (C, "51.2", "dq2",
+     lambda j: j["channel_decomposition"]["direction_max_pct"], 1),
+    (E, "51.2", "dq2",
+     lambda j: j["channel_decomposition"]["direction_max_pct"], 1),
+    (C, "86", "dq2",
+     lambda j: round(max(j["ball_anchor_share"]["per_object"]["pot1PNG"],
+                         j["ball_anchor_share"]["per_object"]["pot2PNG"])
+                     * 100.0), 0),
+    (E, "0.75", "dq2",
+     lambda j: min(j["linearization_radius"]["radius_2x"]
+                   ["per_object"].values()), 2),
+    (E, "1.5", "dq2",
+     lambda j: max(j["linearization_radius"]["radius_2x"]
+                   ["per_object"].values()), 1),
     (C, "71.4", "ba",
      lambda j: max(j["direction_share_at_anchor"]["per_object"].values())
      * 100.0, 1),
@@ -342,11 +358,19 @@ OCCURRENCE_COUNTS = {
     ("claims", "3283"): 2,
     ("methods", "3283"): 1,
     ("experiments", "3283"): 3,
+    # ---- DiLiGenT queue (23 / C11) ----
+    ("claims", "51.2"): 1,
+    ("experiments", "51.2"): 1,
+    ("claims", "86"): 1,
+    ("experiments", "86"): 1,
+    ("claims", "0.75"): 1,
+    ("experiments", "0.75"): 5,
+    ("experiments", "433"): 1,
     # ---- ball anchor (22 / C10) ----
     ("claims", "2.96"): 2,
-    ("experiments", "2.96"): 3,
+    ("experiments", "2.96"): 4,
     ("claims", "0.0159"): 1,
-    ("experiments", "0.0159"): 2,
+    ("experiments", "0.0159"): 3,
     ("claims", "36.0"): 1,
     ("experiments", "36.0"): 1,
     ("claims", "10.6"): 2,

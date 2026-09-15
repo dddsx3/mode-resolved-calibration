@@ -235,6 +235,18 @@ def test_readme_numeric_claims_traceable():
                       / ba["measured_anchor"]["sig_logI"]) ** 2, 1)):
         assert _approx(tok, val, dec), (tok, val)
         traced[tok] = val
+    # DiLiGenT queue numbers (en README prose)
+    dq2 = json.loads((REPO / "results/diligent/diligent_queue.json")
+                     .read_text(encoding="utf-8"))
+    for tok, val, dec in (
+            ("51.2", dq2["channel_decomposition"]["direction_max_pct"], 1),
+            ("86", round(max(dq2["ball_anchor_share"]["per_object"]
+                             ["pot1PNG"],
+                             dq2["ball_anchor_share"]["per_object"]
+                             ["pot2PNG"]) * 100.0), 0)):
+        assert _approx(tok, val, dec), (tok, val)
+        traced[tok] = val
+
     # anchor coverage numbers (en README prose)
     for tok, val, dec in (
             ("3.1", 0.05 / ba["measured_anchor"]["sig_logI"], 1),

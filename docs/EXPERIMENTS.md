@@ -875,6 +875,46 @@ the family analysis was designed to expose.
   does not replace; per-object values are in the artifact.
 
 
+## 23. DiLiGenT queue: second-dataset transfer（P-DILIGENT-QUEUE, `experiments/diligent_queue.py`）
+
+**Question (the second-dataset gap).** Do the three core findings
+transfer from OpenIllumination (11 objects, 142 lights) to DiLiGenT
+(10 objects, 96 lights — an independent published benchmark with its
+own capture rig)? Adapter: `diligent_oi_adapter.py` + `n_lights_total`
+(96-light draw space = a NEW queue by construction, not bit-comparable
+to the frozen OI artifacts).
+
+**Findings** (`results/diligent/diligent_queue.json`, preregistered
+outcome rule, 433 s):
+
+1. **Linearization radius: TRANSFERS EXACTLY.** radius_2x median 1.0
+   (per-object 0.75–1.5), radius_10x median 1.5 — the same values as
+   OpenIllumination. The amplitude-side envelope is a property of the
+   corruption geometry, replicated across two acquisition systems.
+2. **Channel decomposition: the direction channel is far larger on
+   DiLiGenT.** direction-only max D = 51.2% (OI: 1.68%); the
+   direction hump is broader and taller. Joint D saturates the ceiling
+   faster (median 89.5% at level 0.5 — DiLiGenT's cleaner data has
+   larger Finf, so the dynamic range sits near the ceiling).
+3. **Ball-anchor direction share: SPLITS BY OBJECT, not by dataset.**
+   At the measured anchor (σ_logI 0.0159, σ_dir 2.96°): pot1/pot2 ≈
+   86%, ball/bear/buddha/cat/cow/goblet ≈ 0–2%, harvest −40% (finite
+   small denominator), reading degenerate (D(anchor) ≈ 0, share is
+   0/0-shaped — annotated in the artifact, not a negative
+   contribution). Median −0.7%: the OI cohort's 36% flip does NOT
+   reproduce as a dataset-level statement.
+
+**Outcome (preregistered): transfer-partial** — radius confirmed,
+share not confirmed as a dataset flip. Read through the
+channel-conditionality criterion (C10): the criterion survives and
+GAINS an axis — the direction share is conditioned on (i) the
+procedure's error profile (measured, C10), (ii) the dataset/scene
+geometry (OI 36% vs DiLiGenT split), and (iii) the object (pot1/pot2
+vs ball/cow within DiLiGenT). A dataset-level recommendation is
+therefore impossible without measuring the error profile AND the
+object — which is precisely what the criterion prescribes.
+
+
 ---
 
 **Reproduction contract**: every experiment script writes only statistical values and

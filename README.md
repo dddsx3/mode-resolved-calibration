@@ -400,6 +400,17 @@ Three structural findings anchor it (verified by
    held the intensity dominance up — the anchor sits 3.1× below the
    sweep floor; the flip also spans 4.8%–71.4% across objects)
    (`results/openillumination/ball_anchor.json`).
+
+   **Second dataset (P-DILIGENT-QUEUE).** On DiLiGenT (10 objects, 96
+   lights, independent capture rig): the **linearization envelope
+   transfers exactly** (radius_2x median 1.0, all objects in
+   [0.75, 1.5] — same values as OpenIllumination), while the channel
+   split **does not transfer as a dataset statement** — the
+   direction-only max D is 51.2% (vs OI's 1.68%) and the ball-anchor
+   direction share splits by object (pot1/pot2 ≈ 86%, six objects ≈
+   0–2%). The channel-conditionality criterion gains a third axis:
+   procedure error profile × dataset geometry × object
+   (`results/diligent/diligent_queue.json`).
 4. **Mode-tail targeted intervention: no detectable advantage over scalar
    targeting** — the preregistered three-arm comparison (`P-ALLOC2 v1.1`,
    `results/mode_tail/allocation_mode_tail.json`) finds that the
