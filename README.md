@@ -411,6 +411,18 @@ Three structural findings anchor it (verified by
    0–2%). The channel-conditionality criterion gains a third axis:
    procedure error profile × dataset geometry × object
    (`results/diligent/diligent_queue.json`).
+
+   **Baseline (P-BASELINE).** A Drbohlav–Chantler-style
+   well-conditioned-configuration selection (greedy farthest-point
+   direction sampling — pure geometry, no corruption or prediction
+   model) on the same lights, budgets, and realized endpoint:
+   **geometry-insufficient in all four cohort × budget cells** — DC05
+   sits inside the random band (OI k=14 median 6.22° vs random
+   6.18–6.32°) while every informed policy beats it (OI k=28 e_opt
+   2.89° vs DC05 6.10°). Direction spread does not capture the
+   allocation value; the calibrated prediction model does (88 OI rows
+   bit-anchored to the frozen E-arm;
+   `results/baseline/baseline_comparison.json`).
 4. **Mode-tail targeted intervention: no detectable advantage over scalar
    targeting** — the preregistered three-arm comparison (`P-ALLOC2 v1.1`,
    `results/mode_tail/allocation_mode_tail.json`) finds that the

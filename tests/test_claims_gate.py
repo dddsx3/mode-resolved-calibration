@@ -235,6 +235,23 @@ def test_readme_numeric_claims_traceable():
                       / ba["measured_anchor"]["sig_logI"]) ** 2, 1)):
         assert _approx(tok, val, dec), (tok, val)
         traced[tok] = val
+    # baseline comparison numbers (en README prose)
+    bcmp = json.loads((REPO / "results/baseline/"
+                       "baseline_comparison.json")
+                      .read_text(encoding="utf-8"))
+    for tok, val, dec in (
+            ("6.22", bcmp["oi"]["14"]["median_ang_by_unit"]["dc05"], 2),
+            ("6.10", bcmp["oi"]["28"]["median_ang_by_unit"]["dc05"], 2),
+            ("2.89", bcmp["oi"]["28"]["median_ang_by_unit"]["e_opt"], 2),
+            ("6.18", min(bcmp["oi"]["14"]["median_ang_by_unit"][u]
+                         for u in bcmp["oi"]["14"]["median_ang_by_unit"]
+                         if u.startswith("randomU_")), 2),
+            ("6.32", max(bcmp["oi"]["14"]["median_ang_by_unit"][u]
+                         for u in bcmp["oi"]["14"]["median_ang_by_unit"]
+                         if u.startswith("randomU_")), 2)):
+        assert _approx(tok, val, dec), (tok, val)
+        traced[tok] = val
+
     # DiLiGenT queue numbers (en README prose)
     dq2 = json.loads((REPO / "results/diligent/diligent_queue.json")
                      .read_text(encoding="utf-8"))

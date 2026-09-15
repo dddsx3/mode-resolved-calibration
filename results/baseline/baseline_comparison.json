@@ -1,0 +1,88 @@
+{
+ "gate": "P-BASELINE",
+ "analysis_status": "baseline_comparison_v1",
+ "level": 0.5,
+ "regime": 10,
+ "budgets_k": [
+  14,
+  28
+ ],
+ "seeds": 10,
+ "oi": {
+  "14": {
+   "median_ang_by_unit": {
+    "a_opt": 4.745156,
+    "randomU_2": 6.177151,
+    "d_opt": 4.919686,
+    "randomU_1": 6.323691,
+    "dc05": 6.221846,
+    "e_opt": 4.519638,
+    "randomU_0": 6.253736,
+    "mode_aware": 5.058163
+   },
+   "median_dev_from_random": {
+    "dc05": -0.137122,
+    "informed": -1.225116
+   },
+   "reading": "geometry-insufficient"
+  },
+  "28": {
+   "median_ang_by_unit": {
+    "a_opt": 2.934844,
+    "randomU_2": 5.943968,
+    "d_opt": 3.578368,
+    "randomU_1": 6.060925,
+    "dc05": 6.096166,
+    "e_opt": 2.894235,
+    "randomU_0": 6.078101,
+    "mode_aware": 3.462629
+   },
+   "median_dev_from_random": {
+    "dc05": 0.074738,
+    "informed": -2.635916
+   },
+   "reading": "geometry-insufficient"
+  }
+ },
+ "diligent": {
+  "14": {
+   "median_ang_by_unit": {
+    "a_opt": 8.718606,
+    "randomU_2": 9.719481,
+    "randomU_1": 9.303884,
+    "dc05": 9.826542,
+    "randomU_0": 9.006982
+   },
+   "median_dev_from_random": {
+    "dc05": 0.250829,
+    "informed": -0.658494
+   },
+   "reading": "geometry-insufficient"
+  },
+  "28": {
+   "median_ang_by_unit": {
+    "a_opt": 7.003548,
+    "randomU_2": 9.222026,
+    "randomU_1": 8.645752,
+    "dc05": 8.85809,
+    "randomU_0": 9.021766
+   },
+   "median_dev_from_random": {
+    "dc05": 0.186449,
+    "informed": -0.97827
+   },
+   "reading": "geometry-insufficient"
+  }
+ },
+ "baseline_definition": {
+  "dc05": "greedy farthest-point direction sampling (seed = max-z light; add argmin max-dot to selected; ties -> lowest index); corruption-model-free, prediction-model-free",
+  "comparability": "Gardi 2022 (OED light-position optimization) and ReLeaPS 2023 (RL next-light selection) optimize different objectives (positions / sequences, not per-light calibration precision) -- not reimplemented; not numerically comparable. DC05 is the implementable same-lights geometry baseline."
+ },
+ "oi_anchor": "88 informed rows BIT-IDENTICAL to the frozen E-arm anchor subset (shared orderings + seeds)",
+ "manifest": {
+  "config_sha256": "89c7ef00e32fca607fb65024fc500fb8bb007ad2ee7e491ebf17d5c31a3dd3e0",
+  "git_sha": "d8e3dfc8b3f2059f4e551e34f8a9e2430066869e",
+  "elapsed_s": 4854.7
+ },
+ "note": "Literature-style selection baselines on the same light sets: geometry-only (DC05) vs the calibrated prediction model vs random, at the frozen E-arm operating point (level 0.5, regime 10, budgets 14/28), realized endpoint = normal angular error. OI cohort carries the full frame with a bit-identity anchor; DiLiGenT the minimal comparable trio."
+}

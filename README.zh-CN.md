@@ -168,6 +168,15 @@ spec = retention_spectrum(DeltaF, A.T @ A) # 逐模式保留率
   按物体分裂(pot1/pot2 ≈ 86%,六个物体 ≈ 0–2%)。通道条件性判据增加
   第三个条件轴:流程误差剖面 × 数据集几何 × 物体
   (`results/diligent/diligent_queue.json`)。
+
+  **基线对照(P-BASELINE)**:Drbohlav–Chantler 式良构配置选择
+  (方向球面贪心最远点采样——纯几何,无腐蚀/预测模型)在同一套灯、
+  同预算、同实现端点下:**四个队列×预算单元格全部
+  geometry-insufficient**——DC05 落在 random 带内(OI k=14 中位
+  6.22° vs random 6.18–6.32°),而每个 informed 策略都优于它
+  (OI k=28 e_opt 2.89° vs DC05 6.10°)。方向铺开度捕获不了分配
+  价值;校准预测模型才能(88 行 OI 锚点与冻结 E 臂逐位一致;
+  `results/baseline/baseline_comparison.json`)。
 - **靶向干预无可检出增量**：预注册三臂对照发现，模式靶向臂与标量 OED
   靶向臂统计不可区分——模式分解提供诊断洞察（哪些方向脆弱），但在简单
   标量准则之上没有增量分配价值（诚实负结果）；

@@ -915,6 +915,48 @@ therefore impossible without measuring the error profile AND the
 object — which is precisely what the criterion prescribes.
 
 
+## 24. Baselines: literature-style selection on the same lights（P-BASELINE, `experiments/baseline_comparison.py`）
+
+**Question (the baseline gap).** TCI reviewers expect a baseline table.
+The implementable same-lights baseline is the classic
+well-conditioned-configuration idea (Drbohlav & Chantler, ICCV 2005),
+operationalized as greedy farthest-point direction sampling (DC05):
+seed = the max-z light, then add the light minimizing the max
+dot-product with the selected set — pure geometry, no corruption
+model, no prediction model.
+
+**Frame.** Identical to the frozen E-arm wherever shared (level 0.5,
+regime 10, budgets {14, 28}, 10 seeds, ang_mean_deg endpoint). OI
+cohort: 4 informed + DC05 + 3 random, with a HARD BIT-ANCHOR — the
+informed rows are bit-identical to the frozen E-arm anchor subset
+(88/88, shared orderings + seeds). DiLiGenT: a_opt + DC05 + 3 random.
+
+**Result: geometry-insufficient in all four cohort × budget cells.**
+
+| cell | DC05 dev from random | informed dev | reading |
+|---|---|---|---|
+| OI k=14 | −0.137° | −1.225° | geometry-insufficient |
+| OI k=28 | +0.075° | −2.636° | geometry-insufficient |
+| DQ k=14 | +0.251° | −0.658° | geometry-insufficient |
+| DQ k=28 | +0.186° | −0.978° | geometry-insufficient |
+
+DC05's median angular error sits inside the random band on both
+cohorts (OI k=14: 6.222° vs random 6.177–6.324°; DQ k=28: 8.858° vs
+random 8.646–9.222°), and every informed policy beats it (OI k=28:
+e_opt 2.894° vs DC05 6.096°). **Direction spread — the classical
+well-posedness surrogate — does not capture the allocation value; the
+calibrated prediction model does.** (Consistent with the E-arm
+finding that the criterion's orderings, not the geometry, carry the
+validity.)
+
+**Comparability (Gardi 2022 / ReLeaPS 2023).** They optimize light
+POSITIONS / next-light selection sequences under their own objectives;
+we allocate per-light calibration PRECISION under a Fisher-risk
+objective. Objectives differ — numbers are not directly comparable;
+DC05 is the one implementable same-lights geometry baseline. The
+statement is registered in the artifact's `baseline_definition`.
+
+
 ---
 
 **Reproduction contract**: every experiment script writes only statistical values and
