@@ -1,0 +1,77 @@
+# P-DILIGENT-QUEUE -- the three core experiments on the DiLiGenT cohort
+# (TCI gap 2: second dataset). PREREGISTERED: committed BEFORE the run.
+#
+# Question: do the three core findings transfer across acquisition
+# systems? OpenIllumination: 11 objects, 142 lights, OLAT laboratory
+# capture. DiLiGenT: 10 objects, 96 lights, a DIFFERENT published
+# benchmark with its own capture rig. Together: 21 objects, 238 lights.
+#
+# Experiments ported (same code paths, DiLiGenT adapter +
+# n_lights_total=96; the rng draw space differs from the 142-light
+# cohort by construction -- this is a NEW queue, not bit-comparable to
+# the frozen artifacts):
+#   1. channel_decomposition: D(level) per channel (joint / intensity /
+#      direction) -- the C7/C9-D channel split on a second dataset,
+#      read jointly with the ball anchor (C10): DiLiGenT's measured
+#      calibration-error profile is direction-heavy, so the prediction
+#      of the channel-conditionality criterion is that the direction
+#      channel carries MORE here than in the OI cohort.
+#   2. linearization_radius: q(level) = dev/first-order-scaling, 2x/10x
+#      crossings -- the B6/C-arm envelope on a second dataset.
+#   3. direction_share at the BALL ANCHOR (the measured (sig_logI
+#      0.0159, sig_dir 2.96 deg) point from P-BALL-ANCHOR): the C10
+#      flip test on DiLiGenT objects -- does the direction-coupled
+#      region reproduce across datasets?
+#
+# Cohort: all 10 DiLiGenT objects (ballPNG bearPNG buddhaPNG catPNG
+# cowPNG gobletPNG harvestPNG pot1PNG pot2PNG readingPNG).
+#
+# Preregistered outcome rules (no sign gate; all numbers reported):
+#   transfer-confirmed:  median direction_share at the ball anchor
+#                        >= 2% (the flip reproduces) AND the joint
+#                        radius_2x median is within a factor 4 of the
+#                        OI value (1.0).
+#   transfer-partial:    exactly one of the two holds.
+#   transfer-failed:     neither (the findings are dataset-specific).
+#   channel_decomposition is reported descriptively in all cases (the
+#   C7 table was descriptive by design).
+
+gate: P-DILIGENT-QUEUE
+analysis_status: diligent_queue_v1
+run_name: diligent_queue_v1
+
+data_root: D:/data/DiLiGenT/pmsData
+cohort: [ballPNG, bearPNG, buddhaPNG, catPNG, cowPNG, gobletPNG, harvestPNG, pot1PNG, pot2PNG, readingPNG]
+n_objects: 10
+n_lights: 96
+noise_fit_convention: corrected
+scene_rng_spec: "default_rng([20260915, obj_idx])  # NEW queue (draw space differs from the OI 142-light cohort)"
+K_lights: 96
+kappa: 10.0
+
+# ---- experiment 1: channel decomposition ----
+levels: [0.05, 0.1, 0.2, 0.35, 0.5, 1.0, 2.0, 4.0]
+channels: [joint, intensity, direction]
+closed_direction_sigma_deg: 0.001
+closed_intensity_sigma_logI: 0.000001
+
+# ---- experiment 2: linearization radius (v2 metric domain) ----
+radius_levels: [0.05, 0.1, 0.2, 0.35, 0.5, 0.75, 1.0, 1.5, 2.0, 3.0, 4.0, 8.0]
+radius_reference_level: 0.05
+radius_seeds: 20
+radius_seed_spec: "default_rng([20260916, 4242, obj_idx, int(level*1000), s])  # same spec shape as OI"
+radius_crossings: [2.0, 10.0]
+
+# ---- experiment 3: direction share at the ball anchor ----
+ball_anchor: {sig_logI: 0.0159079094301168, sig_dir_deg: 2.9644001216106344}
+family_seed: 20260915
+
+outcome_rule: >
+  transfer-confirmed: median direction_share at the ball anchor >= 2%
+  AND joint radius_2x median within a factor 4 of the OI value (1.0).
+  transfer-partial: exactly one. transfer-failed: neither.
+  Descriptive reporting regardless of outcome.
+
+outcome_independence: >
+  Every D / share / radius per object/level/channel is reported
+  regardless of shape. No sign-based gate.

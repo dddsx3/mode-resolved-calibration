@@ -125,16 +125,21 @@ class NominalScene:
     allocation 锚点）依赖 legacy，factorial rerun（M0-3）显式传 corrected。
     """
 
-    def __init__(self, obj, rng, noise_fit_convention="legacy", selections=None):
-        img = obj["images"][..., 0]                          # 灰度 (142,H,W)
+    def __init__(self, obj, rng, noise_fit_convention="legacy", selections=None,
+                 n_lights_total=None):
+        img = obj["images"][..., 0]                          # 灰度 (L,H,W)
         mask = obj["mask"]
-        I_all = img[:, mask]                                  # (142, P_full)
+        L_tot = int(n_lights_total) if n_lights_total is not None \
+            else img.shape[0]
+        I_all = img[:, mask]                                  # (L,P_full)
         dirs_all = obj["light_directions"]
         # 固定分析子集（跨 level/seed 复用；预注册）。
         # selections=(sel, pidx) 显式给入时不消耗 rng（factorial 双场景复用
         # 同一冻结子集）；默认按原 run 消耗 rng 流。
+        # n_lights_total:DiLiGenT 队列(96 灯)适配——rng 流与 142 灯口径
+        # 不同(选择空间不同),这是有意的新队列,不与冻结产物对拍。
         if selections is None:
-            sel = np.sort(rng.choice(142, N_ANALYSIS_LIGHTS, replace=False))
+            sel = np.sort(rng.choice(L_tot, N_ANALYSIS_LIGHTS, replace=False))
             P_full = I_all.shape[1]
             pidx = np.sort(rng.choice(P_full, min(P_full, N_PIXEL_SUB),
                                       replace=False))
