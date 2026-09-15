@@ -172,7 +172,7 @@ def run(config_path=REPO / "configs/ball_anchor.yaml",
     c = np.mean(log_e - log_g)                                 # 最优标量(log域)
     logI_dev = (log_e - log_g) - c                             # (K,)
     rms_dir = float(np.sqrt(np.mean(dir_err_deg ** 2)))
-    rms_int = float(np.sqrt(np.mean(np.exp(logI_dev) - 1.0) ** 2))
+    rms_int = float(np.sqrt(np.mean((np.exp(logI_dev) - 1.0) ** 2)))
 
     # 硬守卫(不过 = 实现错,不是流程差)
     if rms_dir > float(cfg["max_direction_error_deg_rms"]):

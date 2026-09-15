@@ -394,7 +394,11 @@ Three structural findings anchor it (verified by
    (D-flipped, preregistered rule): the intensity-dominance conclusion
    is parameterization-robust but not empirically universal — the value
    of better calibration depends on where the calibration procedure's
-   errors actually live
+   errors actually live (a **channel-conditionality criterion**, both
+   regions empirically instantiated: synthetic family sweep + real
+   measured anchor; the S1 sweep's fixed σ_logI ∈ {0.05…1.0} is what
+   held the intensity dominance up — the anchor sits 3.1× below the
+   sweep floor; the flip also spans 4.8%–71.4% across objects)
    (`results/openillumination/ball_anchor.json`).
 4. **Mode-tail targeted intervention: no detectable advantage over scalar
    targeting** — the preregistered three-arm comparison (`P-ALLOC2 v1.1`,

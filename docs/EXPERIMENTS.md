@@ -838,14 +838,41 @@ region.
 
 **Outcome (preregistered): D-flipped.** At the measured operating point
 of a standard sphere calibration the direction channel carries a third
-of the budget value. The intensity-dominance conclusion (C7/C9-D) is
-parameterization-robust but NOT empirically universal — it holds in the
-intensity-carried region of the family and fails at the real
-calibration's anchor. The paper's practical recommendation therefore
-reads: the value of better calibration is channel-dependent on WHERE
-your calibration procedure's errors live; a real sphere calibration
-sits in the direction-coupled region, and direction-channel precision
-matters there far more than the synthetic operating point suggested.
+of the budget value. Read as a **channel-conditionality criterion**
+(positive contribution): the share of the calibration-budget value
+carried by each nuisance channel is a function of the procedure's error
+profile — measurable per procedure by a sphere calibration, not a
+universal constant. C7's intensity dominance is the criterion's value
+in the intensity-dominated region; the sphere anchor instantiates the
+direction-coupled region. Both regions are now empirically grounded
+(synthetic family sweep + real measured anchor).
+
+**Relation to the family grid (why C9 and C10 do not contradict).**
+The S1 sweep pinned σ_logI ∈ {0.05 … 1.0} — i.e. 5–100% intensity
+error, physically implausible magnitudes — so intensity variance
+dominated every swept point and the direction share stayed small there
+(C9's "robust"). The measured anchor sits at σ_logI = 0.0159, **3.1×
+below the sweep's smallest non-degenerate grid value** (0.05), at
+log10-distance 0.686 from the nearest grid point (the reverse-control
+cell 0.05/1.0°). C9 sampled the intensity-dominated region and found
+invariance there; C10 measured the real procedure's location outside
+it. Together: "intensity dominance" was never robust — it was the
+sweep's fixed σ_logI holding it up, exactly the single-knob artifact
+the family analysis was designed to expose.
+
+**Scope of the anchor (do not over-read).**
+- One object (ballPNG), one procedure (alternating-LSQ sphere
+  calibration): it instantiates *a* standard procedure, not all real
+  calibrations.
+- The measured 2.96° RMS direction error is consistent with the
+  published observation that DiLiGenT's own light directions carry
+  degree-level inaccuracies (the benchmark's authors note GT light
+  directions are approximate); the anchor measures the *procedure +
+  data* error, not an implementation defect.
+- The flip is **object-conditional as well as channel-conditional**:
+  direction_share spans 4.8% (obj_04_dolphin) to 71.4% (obj_11_pine) —
+  a 15× object-to-object spread that the median 36% summarizes but
+  does not replace; per-object values are in the artifact.
 
 
 ---

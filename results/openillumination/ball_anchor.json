@@ -226,7 +226,7 @@
   "rms_direction_error_deg": 2.9644001216106344,
   "max_direction_error_deg": 4.466226165270096,
   "median_direction_error_deg": 2.957624717305615,
-  "rms_relative_intensity_error": 0.00012574574285734394,
+  "rms_relative_intensity_error": 0.0157621610209308,
   "log_domain_scalar": 1.3513610297020824
  },
  "family_placement": {
@@ -263,8 +263,8 @@
  "outcome_rule": "D-confirmed: median direction share at the measured anchor < 2%. D-flipped: >= 2%. Both are findings; no sign gate. Hard guards: RMS direction error <= 5 deg, RMS relative intensity error <= 10%.",
  "manifest": {
   "config_sha256": "19119eb837a8846a6e09390a7e064fa37d01527c251ea2ce6e7f23f34b016a29",
-  "git_sha": "a21d5cf49d3362fe46cba3d3e77962ea5799a971",
-  "elapsed_s": 44.6
+  "git_sha": "c1ceba833dc8611b47d3ef569e716a8eab0ebd31",
+  "elapsed_s": 39.3
  },
  "note": "Anchors Sigma_phi to the measured errors of a standard sphere photometric-stereo calibration on DiLiGenT ballPNG (96 lights, GT normals): alternating LSQ rank-1 factorization on unsaturated lit pixels; the estimator never sees GT (GT enters only the preregistered lit mask and the final comparison). The measured anchor is then read through the frozen family machinery for the direction-share (C7/C9-D) judgment."
 }

@@ -30,12 +30,42 @@ def _load():
 
 
 def test_ball_anchor_guards():
+    """预注册硬守卫。P1 修复:此前断言的是括号错位的 rms_int(σ²/2,
+    低估 125 倍)→ 门禁永远通过。现在断言正确量,且数值来自独立复算
+    (std→RMS 一致性),变异验证见 test_ball_anchor_rms_mutation_guard。"""
+    import numpy as np
     art = _load()
     assert art["gate"] == "P-BALL-ANCHOR"
     g = art["gt_comparison"]
     assert g["rms_direction_error_deg"] <= 5.0
     assert g["max_direction_error_deg"] <= 10.0
     assert g["rms_relative_intensity_error"] <= 0.10
+    # 数值自洽:RMS 必须等于从逐灯 logI_deviation 独立复算的值
+    # (钉死括号错位回归:错版本 = 1.26e-4,正确 = 1.58e-2;复算用
+    # 舍入后的逐灯表,容差在舍入层级)
+    dev = np.array(art["per_light"]["logI_deviation"])
+    rms = float(np.sqrt(np.mean((np.exp(dev) - 1.0) ** 2)))
+    assert abs(g["rms_relative_intensity_error"] - rms) < 1e-6
+
+
+def test_ball_anchor_rms_mutation_guard():
+    """变异验证(验收 §六-2):括号错位版本必须在数值上可被此测试区分。
+
+    对存档的 per-light 数据跑【正确】与【错位】两个公式,断言
+    (a) 正确公式 == 存档 rms_relative_intensity_error;
+    (b) 错位公式 != 存档值(差 > 100 倍)——即若回归发生,一致性
+        断言必然失败,门禁不是空的。
+    """
+    import numpy as np
+    art = _load()
+    dev = np.array(art["per_light"]["logI_deviation"])
+    correct = float(np.sqrt(np.mean((np.exp(dev) - 1.0) ** 2)))
+    buggy = float(np.sqrt(np.mean(np.exp(dev) - 1.0) ** 2))
+    stored = art["gt_comparison"]["rms_relative_intensity_error"]
+    # 逐灯表存的是 6 位小数舍入值,复算与存档差 < 1e-6(舍入层级);
+    # 括号错位版本差 > 100 倍,远在阈值之外
+    assert abs(stored - correct) < 1e-6
+    assert stored / buggy > 100.0          # 错位版本低估 >100 倍
 
 
 def test_ball_anchor_values():

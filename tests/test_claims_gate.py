@@ -235,6 +235,16 @@ def test_readme_numeric_claims_traceable():
                       / ba["measured_anchor"]["sig_logI"]) ** 2, 1)):
         assert _approx(tok, val, dec), (tok, val)
         traced[tok] = val
+    # anchor coverage numbers (en README prose)
+    for tok, val, dec in (
+            ("3.1", 0.05 / ba["measured_anchor"]["sig_logI"], 1),
+            ("4.8", min(ba["direction_share_at_anchor"]["per_object"]
+                        .values()) * 100.0, 1),
+            ("71.4", max(ba["direction_share_at_anchor"]["per_object"]
+                         .values()) * 100.0, 1)):
+        assert _approx(tok, val, dec), (tok, val)
+        traced[tok] = val
+
 
     # E cross-diagnosis: S_real printed as -0.325 in README prose
     ediag = json.loads((REPO / "results/openillumination/"
