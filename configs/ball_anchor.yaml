@@ -1,0 +1,120 @@
+# P-BALL-ANCHOR -- anchor Sigma_phi to the errors of a REAL standard
+# sphere calibration (DiLiGenT ballPNG). PREREGISTERED: committed BEFORE
+# the run; the artifact's manifest records this commit.
+#
+# Question (TCI gap 1, decisive): every quantitative conclusion in the
+# repo lives on Sigma_phi = diag(level^2, radians(level)^2, ...) with a
+# SYNTHETIC level knob (0.025..8, 37x span). A reviewer asks: "what is
+# level=0.5 in a real system?" This experiment measures the ACTUAL
+# per-light, per-channel calibration error of the standard
+# sphere-photometric-stereo calibration PROCEDURE on real captured data
+# (DiLiGenT ballPNG: 96 images of a known sphere with GT normals), and
+# anchors Sigma_phi to that measured distribution.
+#
+# Procedure (standard sphere calibration, per light k):
+#   Model: I_k(p) = e_k * rho(p) * max(n(p) . l_k, 0), unknowns per light
+#   (e_k relative intensity, l_k direction), known n(p) (GT sphere
+#   normals, masked). Per light, solve the rank-1 factorization:
+#     minimize sum_p w_p (I_k(p) - e_k rho(p) (n_p . l_k))^2
+#   Implementation: alternate LSQ --
+#     (a) given (e_k, l_k): rho(p) = sum_k' I_k'(p) e_k' (n_p.l_k') /
+#         sum_k' (e_k' (n_p.l_k'))^2   (per-pixel LSQ albedo, all lights)
+#     (b) given rho: per light, I_k(p)/(rho(p)) = e_k (n_p . l_k) is
+#         bilinear in (e_k, l_k); solve by 3-parameter LSQ on the
+#         normalized product y_k = e_k l_k (linear LSQ in 3 unknowns:
+#         y_k = argmin || I_k/rho - n y_k ||^2 over lit pixels), then
+#         e_k = ||y_k||, l_k = y_k/||y_k||.
+#     Iterate (a)<->(b) from rho init = mean over lights of I_k/max(n.l_k)
+#     until max relative change of rho < 1e-10 (<= 200 iters).
+#   Estimate on UNSATURATED, WELL-LIT pixels only:
+#     - drop pixels with any image at 255 (saturation, all lights);
+#     - per-light lit set: n_p . l_k^GT > 0.1 (use GT dir for the lit
+#       mask only -- a fixed, preregistered choice; the ESTIMATE of l_k
+#       itself never sees GT);
+#     - per-pixel weight w_p = 1 (unweighted; preregistered).
+#
+# Conventions (frozen):
+#   - grayscale = PIL convert("L") (matches the repo's DiLiGenT loader,
+#     B3/exp8r lineage, bit-consistent);
+#   - the loader's I_norm convention is NOT used here (it divides by GT
+#     intensities -- that would erase exactly the intensity error we
+#     want to measure); raw grayscale in [0,255] is used;
+#   - e_k is RELATIVE intensity (scale-free): the GT comparison for the
+#     intensity channel uses log(e_k / e_k^GT) with e^GT scaled to the
+#     best-fit scalar (least-squares in log domain) -- only the
+#     per-light DEVIATIONS carry information;
+#   - direction error: angle(l_k, l_k^GT) in degrees per light.
+#
+# Deliverables:
+#   1. per-light table: direction error (deg), log-intensity deviation;
+#   2. the measured Sigma_phi anchor:
+#        sig_logI = std(log(e/e^GT)), sig_dir_deg = RMS(direction error)
+#      (RMS over lights; per-light errors are the "true" per-light
+#      heterogeneity -- het_anchor = std of the per-light log sigma
+#      equivalents, reported);
+#   3. the family placement: where does the measured (sig_logI,
+#      sig_dir_deg, het) point sit on the S1 grid axes? Which tier-1
+#      sweep point is nearest (log-distance)?
+#   4. the C7/D reading at the measured anchor: direction share of the
+#      budget value D(sig_logI, sig_dir_deg) on the OpenIllumination
+#      cohort via the frozen family machinery (CorruptionFamily,
+#      channel_decomposition functional), reported per object as a
+#      distribution.
+#
+# Preregistered outcome rules (BOTH outcomes are publishable; no gate):
+#   D-confirmed:  direction share at the measured anchor < 2% for the
+#                 median object -> the intensity dominance (C7/C9-D)
+#                 upgrades from parameterization-robust to
+#                 empirically-anchored: the real calibration procedure's
+#                 error profile sits in the region where the direction
+#                 channel does not carry the budget value.
+#   D-flipped:    direction share >= 2% for the median object -> the
+#                 practical recommendation is rewritten (the operating
+#                 point of a real sphere calibration lands in the
+#                 direction-coupled region); the validity-boundary
+#                 framing of the paper carries it either way.
+#   Numerical sanity guard (hard): the calibration must RECOVER the GT
+#   directions to within 5 deg RMS (a standard sphere calibration on
+#   this data is expected at sub-degree; failing 5 deg means the
+#   implementation is wrong, not that the procedure is bad) and GT
+#   intensities to within 10% RMS after scalar rescale.
+
+gate: P-BALL-ANCHOR
+analysis_status: ball_anchor_v1
+run_name: ball_anchor_v1
+
+data_root: D:/data/DiLiGenT/pmsData
+object: ballPNG
+n_lights: 96
+
+# estimator conventions (preregistered; see above)
+saturation_threshold: 255        # drop pixels with ANY image at 255
+lit_mask_gt_dot: 0.1             # per-light lit mask uses GT dirs (fixed)
+rho_convergence_tol: 1.0e-10
+rho_max_iters: 200
+grayscale: PIL_L
+
+# sanity guards (hard)
+max_direction_error_deg_rms: 5.0
+max_intensity_error_rel_rms: 0.10
+
+# family placement + D reading (uses the frozen OpenIllumination machinery)
+oi_data_root: D:/data/OpenIllumination
+oi_data_meta: D:/data/OpenIllumination_meta
+oi_cohort: [obj_03_pumpkin, obj_04_dolphin, obj_07_pumpkin2, obj_09_ball, obj_10_pumpkin3, obj_11_pine, obj_13_mushroom, obj_16_friends_cup, obj_17_pumpkin5, obj_18_fabric_hat, obj_19_cylinder]
+noise_fit_convention: corrected
+scene_rng_spec: "default_rng([20260910, obj_idx])  # identical to P-CERT"
+K_lights: 142
+kappa: 10.0
+family_seed: 20260915
+closed_direction_sigma_deg: 0.001
+closed_intensity_sigma_logI: 0.000001
+
+outcome_rule: >
+  D-confirmed: median direction share at the measured anchor < 2%.
+  D-flipped: >= 2%. Both are findings; no sign gate. Hard guards: RMS
+  direction error <= 5 deg, RMS relative intensity error <= 10%.
+
+outcome_independence: >
+  Every per-light error, the full Sigma_phi anchor, and the per-object
+  direction-share distribution are reported regardless of outcome.
