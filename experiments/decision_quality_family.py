@@ -2,11 +2,17 @@
 
 冻结结论 E(claim B9 informed-only):4 个 informed 策略的预测序 vs 实现
 端点序逐对符号一致 678/987 = 0.687(全网格)。本实验把腐蚀形状换成
-三轴族成员(anchor 控制 / dir_heavy / het),在缩减网格
-(level 0.5, regime 10, budgets [14,28], 4 informed, 10 seeds)上重测
-同一统计量。预算选择是功效性的:冻结产物中 dp≠0 只出现在 k=14/28
-(k≥57 四序完全重合),[14,28] 承载 100% 可判别对;冻结子集对照
-88/125 = 0.7040。
+三轴族成员,在缩减网格(level 0.5, regime 10, budgets [14,28],
+4 informed, 10 seeds)上重测同一统计量。预算选择是功效性的:冻结产物
+中 dp≠0 只出现在 k=14/28(k≥57 四序完全重合),[14,28] 承载 100%
+可判别对;冻结子集对照 88/125 = 0.7040。
+
+v1.1(验收报告 §3):v1 的 het 臂**本来就是 σ 匹配的**(预测侧状态/
+W_dual/排序都来自逐灯异质 sigma_phi_block——v1 commit message 的
+"uniform-σ J_A" 机制解释是错的);其 0.353 跌破随机因此是**匹配模型
+仍失败**的更深负结果。v1.1 补上 2×2 缺的失配格 het_mismatched
+(异质真相 + 均匀 σ 预测器,预测器 = 冻结 DQ 参数化),把"σ 失配代价"
+与"异质性本身效应"分开;判读规则预注册在 config 的 mismatch_rule_v1_1。
 
 控制臂锚点:anchor 臂的行(orderings + seeds + 注入路径全部退化一致)
 必须与冻结 decision_quality.json 子集**逐位一致**——运行时断言;且
@@ -119,12 +125,19 @@ def _run_arm_object(payload):
     het = float(arm_cfg["het_sigma"])
     fam = CorruptionFamily(sI, sd, het_sigma=het, rho_c=0.0,
                            seed=fam_seed, n_lights=K)
+    # v1.1: predictor 侧可独立指定(2x2 的失配格:真相异质、预测器均匀)。
+    # 无 predictor 键时预测器 == 真相族(匹配;v1 全部臂即此路径,逐位不变)。
+    pred_cfg = arm_cfg.get("predictor", arm_cfg)
+    pfam = (fam if pred_cfg is arm_cfg else
+            CorruptionFamily(pred_cfg["sig_logI"], pred_cfg["sig_dir_deg"],
+                             het_sigma=pred_cfg["het_sigma"], rho_c=0.0,
+                             seed=fam_seed, n_lights=K))
     # 预测侧状态:镜像冻结 build_structure(非 active 灯 eye(3);
     # active 灯位级一致——批量 inv == 单次 inv,S0 探针钉死)
     lam0142 = np.stack([np.eye(3)] * K)
-    lam0142[scen.sel] = np.linalg.inv(fam.sigma_phi_block())[scen.sel]
+    lam0142[scen.sel] = np.linalg.inv(pfam.sigma_phi_block())[scen.sel]
     _deg, W_dual = scen.predicted_degradation(
-        fam.sigma_phi_block()[scen.sel], mode_coordinate="dual")
+        pfam.sigma_phi_block()[scen.sel], mode_coordinate="dual")
 
     state = SelectionState(u=u142, M0=M0142, lam0=lam0142.copy(),
                            finf=finf, active=active142)
@@ -289,6 +302,25 @@ def run(config_path=REPO / "configs/decision_quality_family.yaml",
     outcome = ("robust" if (control_ok and all_ge)
                else "parameterization-specific")
 
+    # ---- v1.1: 2x2 失配判读(mismatch_rule_v1_1,预注册)----
+    r_het = arms_out["het"]["informed_pairwise_sign"]["rate"]
+    r_mis = arms_out["het_mismatched"]["informed_pairwise_sign"]["rate"]
+    delta = round(r_het - r_mis, 6)
+    mismatch_2x2 = dict(
+        design="truth {uniform, het} x predictor {uniform, het}; "
+               "anchor=matched-uniform, het=matched-het (v1 arms), "
+               "het_mismatched=het truth + uniform predictor (v1.1)",
+        rate_het_matched=r_het,
+        rate_het_mismatched=r_mis,
+        delta=delta,
+        reading=("sigma-specification matters (conditional validity: "
+                 "correct per-light specification partially rescues)"
+                 if delta >= 0.10 else
+                 "heterogeneity itself breaks the per-light ordering "
+                 "(deep negative; consistent with C8: J_A gains predict "
+                 "total information, not angular-error relief)"),
+        rule=cfg.get("mismatch_rule_v1_1", "").strip())
+
     summary = dict(
         gate=cfg["gate"], analysis_status=cfg["analysis_status"],
         n_objects=len(cfg["cohort"]),
@@ -310,6 +342,7 @@ def run(config_path=REPO / "configs/decision_quality_family.yaml",
         control_reproduces_subset=control_ok,
         outcome=outcome,
         outcome_rule=cfg["outcome_rule"].strip(),
+        mismatch_2x2=mismatch_2x2,
         rows=all_rows,
         manifest=dict(
             config_sha256=_sha(Path(config_path)),
@@ -329,6 +362,8 @@ def run(config_path=REPO / "configs/decision_quality_family.yaml",
         print(f"[famE] {a}: {st['agree']}/{st['total']} = {st['rate']} "
               f"ci95 {st['ci95']}")
     print(f"[famE] control reproduces 88/125: {control_ok}")
+    print(f"[famE] 2x2: matched-het {r_het} vs mismatched {r_mis} "
+          f"(delta {delta}) -> {mismatch_2x2['reading']}")
     print(f"[famE] outcome: {outcome}")
     print(f"[famE] wrote {out_path}")
 
