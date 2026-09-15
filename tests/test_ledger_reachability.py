@@ -75,14 +75,20 @@ def test_results_git_shas_all_in_ledger():
 def test_ledger_distinct_count_consistent():
     """头部 'N distinct' = 台账行不同 SHA 数 = results 实际数。"""
     text = LEDGER.read_text(encoding="utf-8")
-    m = re.search(r"(\w+) distinct `git_sha` values are recorded", text)
+    m = re.search(r"([\w-]+) distinct `git_sha` values are recorded", text)
     assert m, "header count sentence not found"
     words = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6,
              "seven": 7, "eight": 8, "nine": 9, "ten": 10, "eleven": 11,
              "twelve": 12, "thirteen": 13, "fourteen": 14, "fifteen": 15,
              "sixteen": 16, "seventeen": 17, "eighteen": 18, "nineteen": 19,
-             "twenty": 20}
-    claimed = words.get(m.group(1).lower())
+             "twenty": 20, "thirty": 30, "forty": 40, "fifty": 50}
+    # 复合数词(twenty-one):逐段求和
+    parts = re.split(r"[-\s]+", m.group(1).lower())
+    claimed = 0
+    for part in parts:
+        v = words.get(part)
+        assert v is not None, f"unparsed count word: {part}"
+        claimed += v
     assert claimed is not None, f"unparsed count word: {m.group(1)}"
     ledger_distinct = len({sha for sha, _ in ledger_rows()})
     assert ledger_distinct == claimed, \
