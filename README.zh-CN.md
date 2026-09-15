@@ -148,6 +148,14 @@ spec = retention_spectrum(DeltaF, A.T @ A) # 逐模式保留率
   失效源于真值端脱钩,逐灯排序在异质性下失去决策有效性,与 σ 规格无关
   (`results/openillumination/decision_quality_family.json` +
   `corruption_family_e_diag.json`)。
+
+  **物理锚点(P-BALL-ANCHOR)**:在 DiLiGenT ballPNG(96 灯,GT 法向)上跑
+  标准球光度立体重标定,把 Σ_φ 锚到**实测**误差——方向 RMS 2.96°、
+  log 强度 std 0.0159——真实流程的方向方差是其强度方差的 ~10.6 倍,
+  与 joint 参数化强制的 3283 **相反**。在该实测锚点上方向通道承载
+  预算价值的中位 **36%**(预注册规则判 D-flipped):强度主导结论
+  参数化稳健但**并非经验普适**——更好标定的价值取决于标定流程的
+  误差实际落在哪个通道(`results/openillumination/ball_anchor.json`)。
 - **靶向干预无可检出增量**：预注册三臂对照发现，模式靶向臂与标量 OED
   靶向臂统计不可区分——模式分解提供诊断洞察（哪些方向脆弱），但在简单
   标量准则之上没有增量分配价值（诚实负结果）；

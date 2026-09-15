@@ -19,7 +19,7 @@ re-derives the value. The binding table (claim → evidence file → field) is
 
 ### 1.1 Provenance note: git SHAs recorded in result manifests
 
-Twenty distinct `git_sha` values are recorded across the committed result
+Twenty-one distinct `git_sha` values are recorded across the committed result
 manifests. They are not all the current HEAD: results are produced from an
 earlier working-tree state, and two of the recorded commits were replaced
 during the 2026-09-09 repository reorganization. The complete ledger:
@@ -47,6 +47,7 @@ during the 2026-09-09 repository reorganization. The complete ledger:
 | `70def9f393ad` | `magnitude/linearization_radius_family.json` | yes (ancestor of HEAD) | P-SIGMA-FAMILY C-arm run (S2-4 C, 2026-09-15): joint control bit-identical to the frozen P-RADIUS v2 rows |
 | `5b31b734138b` | `openillumination/decision_quality_family.json` | yes (ancestor of HEAD) | P-SIGMA-FAMILY E-arm run (S2-4 E, 2026-09-15): anchor control BIT-IDENTICAL to the frozen decision_quality.json subset (88/125 = 0.704 reproduced exactly); reduced power-maximal design (budgets 14/28 carry 100% of dp!=0 pairs) |
 | `20d5fbe585e1` | `openillumination/corruption_family_e_diag.json` | yes (ancestor of HEAD) | P-SIGMA-FAMILY-E-DIAG zero-cost cross diagnosis on the committed E-arm rows (2026-09-15): S_pred 0.949 / S_real -0.325, symmetric cross fits -- sigma misspecification excluded (supersedes the OOM-blocked het_mismatched 2x2 prereg 93f45a1) |
+| `a21d5cf4?????` | `openillumination/ball_anchor.json` | yes (ancestor of HEAD) | P-BALL-ANCHOR run (2026-09-15): measured sphere-calibration anchor (2.96 deg / 0.0159), D-flipped at 36% median direction share |
 
 The two unreachable SHAs are the ones the repo reorganization replaced. All
 seventeen artifacts remain byte-for-byte as committed and are pinned by
@@ -119,6 +120,7 @@ protocol (same objects, pixel subsets, levels, seeds).
 | DiLiGenT sanity taxonomy | weak-mode taxonomy median ≈ 273× | `python scripts/run_experiments.py --experiment diligent --config configs/diligent.yaml` | `results/diligent/ci05_formal_summary.json` | `tests/test_reproduction.py::test_N8_taxonomy` |
 | Σ_φ parameter-family sensitivity, predictor side (P-SIGMA-FAMILY) | D robust: direction share 0.07% at the operating point, r* > 25° (11/11 censored); two-term law parameterization-specific (median \|dV\| 0.0076, max 0.464); ceiling guard −0.0028 over 495 rows | `python experiments/corruption_family_sensitivity.py` | `results/openillumination/corruption_family_sensitivity.json` | `tests/test_corruption_family_sensitivity.py` |
 | Σ_φ family, linearization radius (C arm) | channel-dependent: joint/intensity_only 1.0/1.5 (bit-exact frozen control); direction_only never crosses on [0.05, 8] (0/11); joint_het 0.2/0.35 | `python experiments/linearization_radius_family.py` | `results/magnitude/linearization_radius_family.json` | `tests/test_corruption_family_sensitivity.py` |
+| Ball-anchor: Σ_φ from a real sphere calibration (P-BALL-ANCHOR) | measured anchor sig_dir 2.96 deg / sig_logI 0.0159; direction share at anchor median 36.0% -> D-flipped (preregistered rule) | `python experiments/ball_anchor.py` | `results/openillumination/ball_anchor.json` | `tests/test_ball_anchor.py` |
 
 Full per-experiment protocols (dataset → sampling → corruption → estimator →
 metric → seed → output) are in `docs/EXPERIMENTS.md`; raw-data sourcing in

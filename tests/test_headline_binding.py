@@ -36,6 +36,7 @@ ARTS = {
     "famc": REPO / "results/magnitude/linearization_radius_family.json",
     "fame": REPO / "results/openillumination/decision_quality_family.json",
     "ediag": REPO / "results/openillumination/corruption_family_e_diag.json",
+    "ba": REPO / "results/openillumination/ball_anchor.json",
 }
 
 
@@ -275,6 +276,29 @@ BINDINGS = [
     (E, f"{U}0.738", "ediag", lambda j: j["summary"]["cross_ah"], 3),
     (C, "0.738", "ediag", lambda j: j["summary"]["cross_ha"], 3),
     (E, "0.738", "ediag", lambda j: j["summary"]["cross_ha"], 3),
+
+    # ---- ball anchor (C10 / P-BALL-ANCHOR) ----
+    (C, "2.96", "ba",
+     lambda j: j["measured_anchor"]["sig_dir_deg"], 2),
+    (E, "2.96", "ba",
+     lambda j: j["measured_anchor"]["sig_dir_deg"], 2),
+    (C, "0.0159", "ba",
+     lambda j: j["measured_anchor"]["sig_logI"], 4),
+    (E, "0.0159", "ba",
+     lambda j: j["measured_anchor"]["sig_logI"], 4),
+    (C, "36.0", "ba",
+     lambda j: j["direction_share_at_anchor"]["median"] * 100.0, 1),
+    (E, "36.0", "ba",
+     lambda j: j["direction_share_at_anchor"]["median"] * 100.0, 1),
+    (C, "10.6", "ba",
+     lambda j: (__import__("math").radians(
+         j["measured_anchor"]["sig_dir_deg"])
+         / j["measured_anchor"]["sig_logI"]) ** 2, 1),
+    (E, "4.47", "ba",
+     lambda j: j["gt_comparison"]["max_direction_error_deg"], 2),
+    (C, "71.4", "ba",
+     lambda j: max(j["direction_share_at_anchor"]["per_object"].values())
+     * 100.0, 1),
 ]
 
 # SPECIALS 追加(数值侧由产物 pin 测试守):11/44 = goal_orientation 的
@@ -318,6 +342,20 @@ OCCURRENCE_COUNTS = {
     ("claims", "3283"): 1,
     ("methods", "3283"): 1,
     ("experiments", "3283"): 2,
+    # ---- ball anchor (22 / C10) ----
+    ("claims", "2.96"): 2,
+    ("experiments", "2.96"): 2,
+    ("claims", "0.0159"): 1,
+    ("experiments", "0.0159"): 1,
+    ("claims", "36.0"): 1,
+    ("experiments", "36.0"): 1,
+    ("claims", "10.6"): 1,
+    ("experiments", "10.6"): 1,
+    ("claims", "4.47"): 1,
+    ("experiments", "4.47"): 1,
+    ("claims", "71.4"): 1,
+    ("experiments", "71.4"): 1,
+    ("experiments", "192"): 1,
     # ---- E cross-diagnosis (21b / E-DIAG) ----
     ("claims", "0.949"): 1,
     ("experiments", "0.949"): 1,

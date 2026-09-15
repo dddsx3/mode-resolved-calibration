@@ -383,6 +383,19 @@ Three structural findings anchor it (verified by
    under heterogeneity regardless of σ specification
    (`results/openillumination/decision_quality_family.json` +
    `corruption_family_e_diag.json`).
+
+   **Physical anchor (P-BALL-ANCHOR).** Running a standard sphere
+   photometric-stereo calibration on DiLiGenT ballPNG (96 lights, GT
+   normals) and anchoring Σ_φ to its MEASURED errors — direction RMS
+   2.96°, log-intensity std 0.0159 — shows the real procedure's
+   direction variance is ~10.6× its intensity variance, the OPPOSITE of
+   the joint parameterization's forced 3283. At that measured anchor the
+   direction channel carries a median 36% of the budget value
+   (D-flipped, preregistered rule): the intensity-dominance conclusion
+   is parameterization-robust but not empirically universal — the value
+   of better calibration depends on where the calibration procedure's
+   errors actually live
+   (`results/openillumination/ball_anchor.json`).
 4. **Mode-tail targeted intervention: no detectable advantage over scalar
    targeting** — the preregistered three-arm comparison (`P-ALLOC2 v1.1`,
    `results/mode_tail/allocation_mode_tail.json`) finds that the

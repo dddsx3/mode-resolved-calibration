@@ -803,6 +803,51 @@ unchanged. Regression: `tests/test_corruption_family_degeneracy.py::
 test_rho_c_psd_and_exact_correlation`.
 
 
+## 22. Ball-anchor: Σ_φ anchored to a real sphere calibration（P-BALL-ANCHOR, `experiments/ball_anchor.py`）
+
+**Question (the "physical anchor" gap).** Every quantitative conclusion
+lives on Σ_φ = diag(level², radians(level)², radians(level)²) with a
+synthetic level knob. What is level=0.5 in a real system?
+
+**Procedure.** Standard sphere photometric-stereo calibration on
+DiLiGenT ballPNG (96 real images of a known sphere, GT normals):
+alternating-LSQ rank-1 factorization — per-pixel albedo LSQ over all
+lights ↔ per-light 3-parameter LSQ of the bilinear product — on
+unsaturated (327/15791 px dropped), lit pixels (GT-direction lit mask,
+the only place GT enters before the comparison; the estimator itself
+never sees GT). Convergence 192 iterations.
+
+**Measured anchor.**
+
+| channel | error | value |
+|---|---|---|
+| direction | RMS over 96 lights | **2.96°** (median 2.96, max 4.47) |
+| intensity | std of log e/e_GT (after log-domain scalar rescale) | **0.0159** (1.6%) |
+
+The real procedure's direction variance is **~10.6× its intensity
+variance** (radians vs logI) — the OPPOSITE of the joint
+parameterization's forced 3283. Real sphere calibrations are
+direction-error dominated.
+
+**Direction share at the measured anchor** (frozen family machinery on
+the OpenIllumination cohort, same functional as §21): median **36.0%**,
+per-object 4.8% (obj_04_dolphin) to 71.4% (obj_11_pine). Nearest frozen
+S1 grid point: (σ_logI 0.05, σ_dir 1.0°) at log-distance 0.69 — between
+the reverse-control and dir-sweep cells, in the direction-coupled
+region.
+
+**Outcome (preregistered): D-flipped.** At the measured operating point
+of a standard sphere calibration the direction channel carries a third
+of the budget value. The intensity-dominance conclusion (C7/C9-D) is
+parameterization-robust but NOT empirically universal — it holds in the
+intensity-carried region of the family and fails at the real
+calibration's anchor. The paper's practical recommendation therefore
+reads: the value of better calibration is channel-dependent on WHERE
+your calibration procedure's errors live; a real sphere calibration
+sits in the direction-coupled region, and direction-channel precision
+matters there far more than the synthetic operating point suggested.
+
+
 ---
 
 **Reproduction contract**: every experiment script writes only statistical values and

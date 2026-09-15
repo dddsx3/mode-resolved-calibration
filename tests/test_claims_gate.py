@@ -14,6 +14,7 @@ scan).
 
 import csv
 import json
+import math
 import re
 from pathlib import Path
 
@@ -223,6 +224,18 @@ def test_readme_numeric_claims_traceable():
              ["median"], 2)):
         assert _approx(tok, val, dec), (tok, val)
         traced[tok] = val
+    # ball anchor: measured errors printed in README prose
+    ba = json.loads((REPO / "results/openillumination/ball_anchor.json")
+                    .read_text(encoding="utf-8"))
+    for tok, val, dec in (
+            ("2.96", ba["measured_anchor"]["sig_dir_deg"], 2),
+            ("0.0159", ba["measured_anchor"]["sig_logI"], 4),
+            ("36", ba["direction_share_at_anchor"]["median"] * 100.0, 0),
+            ("10.6", (math.radians(ba["measured_anchor"]["sig_dir_deg"])
+                      / ba["measured_anchor"]["sig_logI"]) ** 2, 1)):
+        assert _approx(tok, val, dec), (tok, val)
+        traced[tok] = val
+
     # E cross-diagnosis: S_real printed as -0.325 in README prose
     ediag = json.loads((REPO / "results/openillumination/"
                         "corruption_family_e_diag.json")
