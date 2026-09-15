@@ -5,16 +5,20 @@ level 网格上与已入库的 `results/openillumination/channel_decomposition.j
 **逐位比对**。任何一位不一致 => 后面所有家族数字建立在未确认的改写上,
 全部作废。
 
-两个层次:
+两个层次(验收报告 §5 的拆分):
 1. **单元锚点**(CI-safe,无原始数据):预测侧 delta_f_injected 的共享
    (3,3) 路径在改造前后逐位一致(共享块堆叠 (L,3,3) == 共享 (3,3) 单次
    调用);注入侧标量退化 == apply_scaled_corruption 逐位一致;构造器
    het=0/rho=0 == CorruptionGenerator.sigma_phi_diag() 逐位一致。
-2. **端到端锚点**(需原始数据,本地跑):三档 × level 网格重算
+   **Σ_φ 换源的精确性(Σ 与 Λ₀ 逐位,全部 24 个 (通道,level) 组合)在
+   tests/test_sigma_source_exchange.py 单独钉死**——这才是 S0-3 的核心
+   保证,且不依赖原始数据/生产 BLAS。
+2. **端到端锚点**(需原始数据,本机,层 2):三档 × level 网格重算
    channel-decomposition 的 D(level) 表——镜像原实验真实生成路径
-   (build_state + J_A,关闭通道极小正方差),唯一替换点 Σ_φ 来源换
-   成 CorruptionFamily。产物 264 行的 J_A_1 / J_A_kappa / D 与已入库
-   值浮点全等(==)。数据缺失时 skip。
+   (build_state + J_A,关闭通道极小正方差),唯一替换点 Σ_φ 来源换成
+   CorruptionFamily。判据 rtol=1e-9(**逐位只在生产环境 numpy 2.4.1
+   成立**;验收方在 numpy 2.5.3 实测未改动路径也无法逐位复现——ULP
+   放大是浮点条件数效应,非代码回归)。数据缺失时 skip。
 """
 
 import json
@@ -154,14 +158,21 @@ def test_rho_c_psd_and_exact_correlation():
 
 # ------------------------------------------------ 2. 端到端锚点(需数据)
 def test_channel_decomposition_end_to_end_bit_identical():
-    """三档 × level 网格重算 D(level) 与已入库产物逐位一致。
+    """三档 × level 网格重算 D(level) 与已入库产物一致(层 2,本机)。
 
     镜像原实验的真实生成路径(experiments/channel_decomposition.py 的
     build_state + J_A):场景装配、关闭通道极小正方差(radians(1e-3)² /
     (1e-6)²)、κ=10 端点全部相同,**唯一替换点是 Σ_φ 来源**——从
-    `_sigma_phi_diag` 换成 CorruptionFamily(het=0, rho_c=0) 的
-    sigma_phi_block() → (K,3,3) → 批量 inv。对产物 264 行的
-    J_A_1 / J_A_kappa / D 做浮点全等(==)比对;任何一位不一致即失败。
+    `_sigma_phi_diag` 换成 CorruptionFamily(het=0, rho=0) 的
+    sigma_phi_block() → (K,3,3) → 批量 inv。
+
+    判据(rtols=1e-9,验收报告 §5 修正):**逐位**比对只在生产环境
+    成立(numpy 2.4.1 + 生产 BLAS;冻结产物即此环境产出)。验收方
+    在 numpy 2.5.3 下实测未改动路径也无法逐位复现(ULP 差随 level
+    放大至 ~1e6,joint@4.0 最坏相对偏差 3.1e-11)——浮点条件数效应,
+    非代码回归。Σ_φ 换源本身的**精确性**(Σ 与 Λ₀ 逐位)由层 1 的
+    CI-safe 测试 tests/test_sigma_source_exchange.py 在无数据环境下
+    逐位钉死。数据缺失时 skip。
     """
     import yaml
     from calibinfo.datasets.openillumination import load_object
@@ -222,11 +233,11 @@ def test_channel_decomposition_end_to_end_bit_identical():
                 J1 = cd.J_A(blk, t_one)                 # 原实验的目标函数
                 Jk = cd.J_A(blk, t_all)
                 row = art_rows[(obj_name, ctype, lv)]
-                assert J1 == row["J_A_1"], \
+                assert J1 == pytest.approx(row["J_A_1"], rel=1e-9), \
                     (obj_name, ctype, lv, "J_A_1", J1, row["J_A_1"])
-                assert Jk == row["J_A_kappa"], \
+                assert Jk == pytest.approx(row["J_A_kappa"], rel=1e-9), \
                     (obj_name, ctype, lv, "J_A_kappa", Jk, row["J_A_kappa"])
-                assert (J1 - Jk) / J1 == row["D"], \
+                assert (J1 - Jk) / J1 == pytest.approx(row["D"], rel=1e-9), \
                     (obj_name, ctype, lv, "D", (J1 - Jk) / J1, row["D"])
                 n_checked += 1
         print(f"[anchor] {obj_name}: {n_checked}/{len(art['rows'])} rows",

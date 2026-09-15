@@ -62,6 +62,18 @@ python -m pytest               # full suite; data-dependent tests skip when raw 
 sha256sum -c checksums.sha256  # artifact integrity
 ```
 
+Bit-exactness environment note: the frozen artifacts were produced under
+**numpy 2.4.1** on Windows (the production environment). ULP-level
+differences in `eigh`/`inv` accumulate through the scene assembly, so
+bit-exact reproduction of the end-to-end anchors requires the same
+numpy/BLAS build (verified empirically by the acceptance reviewer: under
+numpy 2.5.3 even the UNCHANGED frozen code path drifts to ~3e-11 relative
+at level 4.0 — an environment effect, not a code regression; see
+`tests/test_sigma_source_exchange.py` for the CI-safe, environment-
+independent part of the anchors). `pyproject.toml` pins `numpy>=1.24`
+(no upper bound) deliberately; record your numpy version when producing
+new artifacts.
+
 Determinism: all experiments are seeded (`numpy.random.default_rng` with
 committed seeds), all reductions are deterministic (eigh/cholesky/solve —
 no iterative randomness), and every run writes a manifest (git SHA, config

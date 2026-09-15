@@ -360,12 +360,15 @@ Three structural findings anchor it (verified by
    point 0.07%; the 2% threshold is never reached even at σ_dir = 25°,
    11/11 objects censored); the **universal ceiling holds across the
    family** (theorem, runtime-guarded: max violation −0.0028 over 495
-   rows); the **two-term law's typical accuracy survives** (median
-   |dV| 0.0076) but its worst case is parameterization-specific (max
-   0.464 at channel-isolated extremes); and the **linearization radius
+   rows); the **two-term law is valid exactly where the value lives** —
+   median |dV| 0.0076, and the worst intensity-carrying cell (0.048)
+   stays at the frozen envelope; the blow-ups (max 0.464) sit in the
+   direction-only region that the D finding already excludes; and the **linearization radius
    is channel-dependent** (joint and intensity-only: 1.0/1.5, frozen
    values bit-exact; direction-only never leaves first-order scaling;
-   het = 1.0 shrinks the radius 5×). All family machinery reproduces the
+   het = 1.0 shrinks the radius 5× — per-light calibration
+   heterogeneity breaks the nominal linearization ~5× earlier than any
+   uniform-scale corruption of the same total variance). All family machinery reproduces the
    frozen artifacts bit-exactly in the degenerate anchor (264/264
    channel-decomposition rows, plus per-point anchors). The **informed-ordering validity
    (E) is parameterization-specific**: the control reproduces the frozen

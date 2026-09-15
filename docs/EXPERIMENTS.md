@@ -696,12 +696,21 @@ per (object, level) — every anchor is runtime- or test-asserted.
   Reverse control (fixed σ_dir = 1°, σ_logI swept): intensity share ≥
   0.863 everywhere. The 3283 ratio was never the mechanism — the
   direction channel is intrinsically weakly coupled to the budget value.
-- **S2-2 / two-term law (A): PARAMETERIZATION-SPECIFIC.** Median |dV| =
+- **S2-2 / two-term law (A): PARAMETERIZATION-SPECIFIC — and the
+  failure region is exactly the direction-only region.** Median |dV| =
   0.0076 across all 495 rows (within the preregistered 0.01 robustness
-  bar), but max |dV| = 0.464 — the law's worst case degrades an order of
-  magnitude beyond the frozen envelope (max 0.039) at channel-isolated
-  direction shapes (dir_only tag: max 0.464) and extreme tier-2 combos
-  (max 0.319). The identity part (gauge alignment A·a = B·c̄) is
+  bar), but max |dV| = 0.464. The tag decomposition locates the failure:
+  wherever the **intensity channel carries the nuisance** the law stays
+  at its frozen accuracy (anchor 0.0081, intensity_only 0.0081, dir_sweep
+  0.020, logI_sweep 0.040, reverse_control 0.048 — the last is the worst
+  intensity-carrying cell, within the frozen envelope's 0.039 × O(1)),
+  while the **direction-only** shapes blow past it (dir_only max 0.464,
+  median 0.040; tier-2 combos mixing heavy direction + heterogeneity max
+  0.319). Read together with S2-1: **D proves the direction channel is
+  not the operating region, and A's law fails precisely there** — the
+  two-term law is valid in the region that carries the budget value and
+  degrades only in the degenerate direction-dominated limit that D
+  already excludes. The identity part (gauge alignment A·a = B·c̄) is
   Σ-free: residual < 1e-9 per object.
 - **S2-3 / ceiling (B): guard clean.** Max violation −0.0028 over all
   495 rows (theorem M10/M10′ — zero Σ-dependence; stated in methods §7
@@ -713,7 +722,13 @@ per (object, level) — every anchor is runtime- or test-asserted.
   scaling); joint_het (het = 1.0): radius shrinks to 0.2/0.35 (the
   heavy-tailed per-light variance brings second-order effects in 5×
   earlier). The amplitude-side envelope is a property of the corruption
-  shape, not of the geometry alone.
+  shape, not of the geometry alone. **The het=1.0 shrinkage is this
+  round's genuinely new physical finding**: per-light calibration
+  heterogeneity (a 5× spread in effective corruption scale across
+  lights) makes the nominal linearization break ~5× earlier than any
+  uniform-scale corruption of the same total variance — uniform-σ
+  level grids systematically overestimate the linearization radius
+  whenever the true per-light scales are heterogeneous.
 - **S2-4 E / informed-only ordering (B9): see the E arm artifact**
   (`results/openillumination/decision_quality_family.json`, §21b) —
   reduced design (level 0.5, regime 10, budgets {14, 28} which carry

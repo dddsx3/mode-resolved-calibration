@@ -223,6 +223,13 @@ def test_readme_numeric_claims_traceable():
              ["median"], 2)):
         assert _approx(tok, val, dec), (tok, val)
         traced[tok] = val
+    # A-arm failure-region alignment: worst intensity-carrying cell
+    # (reverse_control tag max) printed as 0.048 in README prose
+    for tok, val, dec in (("0.048",
+                           fam["s22_two_term_law"]["by_tag"]
+                           ["reverse_control"]["max_abs_dV"], 3),):
+        assert _approx(tok, val, dec), (tok, val)
+        traced[tok] = val
 
     # generic sweep: every other number printed in README must appear as a
     # *token* under results/** (claim-tracing rule, guideline section 4).
