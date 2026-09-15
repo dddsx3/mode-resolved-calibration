@@ -49,7 +49,7 @@ during the 2026-09-09 repository reorganization. The complete ledger:
 | `20d5fbe585e1` | `openillumination/corruption_family_e_diag.json` | yes (ancestor of HEAD) | P-SIGMA-FAMILY-E-DIAG zero-cost cross diagnosis on the committed E-arm rows (2026-09-15): S_pred 0.949 / S_real -0.325, symmetric cross fits -- sigma misspecification excluded (supersedes the OOM-blocked het_mismatched 2x2 prereg 93f45a1) |
 | `c1ceba833dc8` | `openillumination/ball_anchor.json` | yes (ancestor of HEAD) | P-BALL-ANCHOR run (2026-09-15): measured sphere-calibration anchor (2.96 deg / 0.0159), D-flipped at 36% median direction share |
 | `95f15ad647c9` | `diligent/diligent_queue.json` | yes (ancestor of HEAD) | P-DILIGENT-QUEUE run (2026-09-15): second-dataset transfer, radius exact / channel split object-conditional |
-| `d8e3dfc?????` | `baseline/baseline_comparison.json` | yes (ancestor of HEAD) | P-BASELINE run (2026-09-15): DC05 vs informed vs random, geometry-insufficient in all 4 cells; 88 OI rows bit-anchored to the E-arm |
+| `d8e3dfc8b3f2` | `baseline/baseline_comparison.json` | yes (ancestor of HEAD) | P-BASELINE run (2026-09-15): DC05 vs informed vs random, geometry-insufficient in all 4 cells; 88 OI rows bit-anchored to the E-arm |
 
 The two unreachable SHAs are the ones the repo reorganization replaced. All
 seventeen artifacts remain byte-for-byte as committed and are pinned by
