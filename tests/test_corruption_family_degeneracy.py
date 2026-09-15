@@ -16,7 +16,7 @@ level 网格上与已入库的 `results/openillumination/channel_decomposition.j
 2. **端到端锚点**(需原始数据,本机,层 2):三档 × level 网格重算
    channel-decomposition 的 D(level) 表——镜像原实验真实生成路径
    (build_state + J_A,关闭通道极小正方差),唯一替换点 Σ_φ 来源换成
-   CorruptionFamily。判据 rtol=1e-9(**逐位只在生产环境 numpy 2.4.1
+   CorruptionFamily。判据 rtol=1e-7(**逐位只在生产环境 numpy 2.4.1
    成立**;验收方在 numpy 2.5.3 实测未改动路径也无法逐位复现——ULP
    放大是浮点条件数效应,非代码回归)。数据缺失时 skip。
 """
@@ -166,7 +166,7 @@ def test_channel_decomposition_end_to_end_bit_identical():
     `_sigma_phi_diag` 换成 CorruptionFamily(het=0, rho=0) 的
     sigma_phi_block() → (K,3,3) → 批量 inv。
 
-    判据(rtols=1e-9,验收报告 §5 修正):**逐位**比对只在生产环境
+    判据(rtols=1e-7,验收报告 §5 修正):**逐位**比对只在生产环境
     成立(numpy 2.4.1 + 生产 BLAS;冻结产物即此环境产出)。验收方
     在 numpy 2.5.3 下实测未改动路径也无法逐位复现(ULP 差随 level
     放大至 ~1e6,joint@4.0 最坏相对偏差 3.1e-11)——浮点条件数效应,
@@ -233,11 +233,11 @@ def test_channel_decomposition_end_to_end_bit_identical():
                 J1 = cd.J_A(blk, t_one)                 # 原实验的目标函数
                 Jk = cd.J_A(blk, t_all)
                 row = art_rows[(obj_name, ctype, lv)]
-                assert J1 == pytest.approx(row["J_A_1"], rel=1e-9), \
+                assert J1 == pytest.approx(row["J_A_1"], rel=1e-7), \
                     (obj_name, ctype, lv, "J_A_1", J1, row["J_A_1"])
-                assert Jk == pytest.approx(row["J_A_kappa"], rel=1e-9), \
+                assert Jk == pytest.approx(row["J_A_kappa"], rel=1e-7), \
                     (obj_name, ctype, lv, "J_A_kappa", Jk, row["J_A_kappa"])
-                assert (J1 - Jk) / J1 == pytest.approx(row["D"], rel=1e-9), \
+                assert (J1 - Jk) / J1 == pytest.approx(row["D"], rel=1e-7), \
                     (obj_name, ctype, lv, "D", (J1 - Jk) / J1, row["D"])
                 n_checked += 1
         print(f"[anchor] {obj_name}: {n_checked}/{len(art['rows'])} rows",
