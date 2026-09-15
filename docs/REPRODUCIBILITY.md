@@ -48,7 +48,7 @@ during the 2026-09-09 repository reorganization. The complete ledger:
 | `5b31b734138b` | `openillumination/decision_quality_family.json` | yes (ancestor of HEAD) | P-SIGMA-FAMILY E-arm run (S2-4 E, 2026-09-15): anchor control BIT-IDENTICAL to the frozen decision_quality.json subset (88/125 = 0.704 reproduced exactly); reduced power-maximal design (budgets 14/28 carry 100% of dp!=0 pairs) |
 | `20d5fbe585e1` | `openillumination/corruption_family_e_diag.json` | yes (ancestor of HEAD) | P-SIGMA-FAMILY-E-DIAG zero-cost cross diagnosis on the committed E-arm rows (2026-09-15): S_pred 0.949 / S_real -0.325, symmetric cross fits -- sigma misspecification excluded (supersedes the OOM-blocked het_mismatched 2x2 prereg 93f45a1) |
 | `c1ceba833dc8` | `openillumination/ball_anchor.json` | yes (ancestor of HEAD) | P-BALL-ANCHOR run (2026-09-15): measured sphere-calibration anchor (2.96 deg / 0.0159), D-flipped at 36% median direction share |
-| `95f15ad?????` | `diligent/diligent_queue.json` | yes (ancestor of HEAD) | P-DILIGENT-QUEUE run (2026-09-15): second-dataset transfer, radius exact / channel split object-conditional |
+| `95f15ad647c9` | `diligent/diligent_queue.json` | yes (ancestor of HEAD) | P-DILIGENT-QUEUE run (2026-09-15): second-dataset transfer, radius exact / channel split object-conditional |
 
 The two unreachable SHAs are the ones the repo reorganization replaced. All
 seventeen artifacts remain byte-for-byte as committed and are pinned by
