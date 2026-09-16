@@ -19,7 +19,7 @@ re-derives the value. The binding table (claim → evidence file → field) is
 
 ### 1.1 Provenance note: git SHAs recorded in result manifests
 
-Twenty-five distinct `git_sha` values are recorded across the committed result
+Twenty-four distinct `git_sha` values are recorded across the committed result
 manifests. They are not all the current HEAD: results are produced from an
 earlier working-tree state, and two of the recorded commits were replaced
 during the 2026-09-09 repository reorganization. The complete ledger:
@@ -48,9 +48,8 @@ during the 2026-09-09 repository reorganization. The complete ledger:
 | `5b31b734138b` | `openillumination/decision_quality_family.json` | yes (ancestor of HEAD) | P-SIGMA-FAMILY E-arm run (S2-4 E, 2026-09-15): anchor control BIT-IDENTICAL to the frozen decision_quality.json subset (88/125 = 0.704 reproduced exactly); reduced power-maximal design (budgets 14/28 carry 100% of dp!=0 pairs) |
 | `20d5fbe585e1` | `openillumination/corruption_family_e_diag.json` | yes (ancestor of HEAD) | P-SIGMA-FAMILY-E-DIAG zero-cost cross diagnosis on the committed E-arm rows (2026-09-15): S_pred 0.949 / S_real -0.325, symmetric cross fits -- sigma misspecification excluded (supersedes the OOM-blocked het_mismatched 2x2 prereg 93f45a1) |
 | `c1ceba833dc8` | `openillumination/ball_anchor.json` | yes (ancestor of HEAD) | P-BALL-ANCHOR run (2026-09-15): measured sphere-calibration anchor (2.96 deg / 0.0159), D-flipped at 36% median direction share |
-| `95f15ad647c9` | `diligent/diligent_queue.json` | yes (ancestor of HEAD) | P-DILIGENT-QUEUE run (2026-09-15): second-dataset transfer, radius exact / channel split object-conditional |
-| `951503954d45` | `baseline/baseline_comparison.json` | yes (ancestor of HEAD) | P-BASELINE v1.1 run (2026-09-16): active-set-controlled (dc05_active + randomA48 + overlap), OI geometry-insufficient / DQ geometry-informative via the informed policy's failure; 88 OI rows bit-anchored |
 | `951503954d45` | `openillumination/decision_quality_feasible.json` | yes (ancestor of HEAD) | P-DQ-FEASIBLE zero-cost diagnostic (2026-09-16): budget-grid saturation (k=57/85/114 > |active|=48) + feasible-interval dAUC |
+| `29f9b9d239dc` | `diligent/diligent_queue.json`, `diligent/provenance/loader_normalization_fix.json`, `baseline/baseline_comparison.json` | yes (ancestor of HEAD) | P-DILIGENT-QUEUE + P-BASELINE v1.2 (loader-corrected rerun, 2026-09-16): DiLiGenT per-light intensity normalization restored (nominal-vs-GT 15.6–26.3° → 2.56–6.34°); channel split now transfers, both baselines beat active-random; supersedes the launch rows `95f15ad647c9` (v1 queue) and `951503954d45` (v1.1 baseline), whose versions remain in git history |
 | `665d01ed88a9` | `openillumination/active_set_ablation_feasible.json` | yes (ancestor of HEAD) | P-ABLATION-FEASIBLE zero-cost diagnostic (2026-09-16): budget-axis degeneracy marking for the C8 ablation (k=48 = |active| kills the ordering sub-term only) + the two calibers (1364x / 1001x) |
 | `29f9b9d239dc` | `diligent/diligent_queue.json`, `diligent/provenance/loader_normalization_fix.json`, `baseline/baseline_comparison.json` | yes (ancestor of HEAD) | P-DILIGENT-LOADER-FIX reruns (2026-09-16): DiLiGenT loader intensity normalization restored; queue + DQ-half baseline recomputed, OI rows unchanged |
 
