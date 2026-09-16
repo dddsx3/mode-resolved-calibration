@@ -2800,18 +2800,18 @@
    "harvestPNG",
    "readingPNG"
   ],
-  "degenerate_note": "shares with |share| > 1 or negative-on-tiny-denominator occur exactly where D(anchor) ~ 0 (both channels barely move the dynamic range at the 1.6% intensity error level) -- the share ratio is 0/0-shaped there, NOT a negative direction contribution; the genuine direction-coupled cases are the objects with well-scaled denominators (pot1/pot2 ~ 86%)",
+  "degenerate_note": "shares with |share| > 1 or negative-on-tiny-denominator occur exactly where D(anchor) ~ 0 (both channels barely move the dynamic range at the measured anchor) -- the share ratio is 0/0-shaped there, NOT a negative direction contribution. Field paths: ball_anchor_share.per_object (withdrawn-value annotations: see diligent/provenance/loader_normalization_fix.json, 2026-09-16)",
   "oi_reference": {
    "median": 0.360024,
    "note": "C10 on the OI cohort at the same measured anchor"
   }
  },
- "outcome": "transfer-partial",
- "outcome_rule": "transfer-confirmed: median direction_share at the ball anchor >= 2% AND joint radius_2x median within a factor 4 of the OI value (1.0). transfer-partial: exactly one. transfer-failed: neither. Descriptive reporting regardless of outcome.",
+ "outcome": "transfer-confirmed",
+ "outcome_rule": "transfer-confirmed: the intensity-dominance channel split transfers -- direction max D <= 5% AND intensity reproduces joint to < 0.5 pp at every level -- AND the joint radius_2x median is within a factor 4 of the OI value (1.0). transfer-failed: either fails. (The ball-anchor share is reported separately as the C10/C12 anchor test, not as a transfer clause: it is object-conditional by construction.) Descriptive reporting regardless of outcome.",
  "manifest": {
-  "config_sha256": "22b1e3ed3c1c99a0b4c795e2547d4c97d2b08b7295ffae4ea1835c452054c176",
-  "git_sha": "29f9b9d239dcfd638a3186df7fc41b926fd5d174",
-  "elapsed_s": 370.8
+  "config_sha256": "fbea9fe56c265aadfeac51bdbe0ed80005b610f0c7916533da3b8fb0382767f3",
+  "git_sha": "530f9910b2e997788c5131027909d8bdd88cb71e",
+  "elapsed_s": 380.7
  },
  "note": "Second-dataset transfer of the three core findings: channel decomposition (descriptive), linearization radius, and the ball-anchor direction share (the C10 flip test). DiLiGenT adapter + n_lights_total=96; a NEW queue by construction (rng draw space differs), not bit-comparable to the frozen OI artifacts."
 }

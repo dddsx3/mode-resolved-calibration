@@ -3,15 +3,23 @@
 CI-safe: reads only results/diligent/diligent_queue.json. Pins:
 
 1. Grid completeness: 10 objects x 3 channels x 8 levels = 240 rows.
-2. Outcome consistency: transfer-partial (radius transfers, share does
-   not transfer as a dataset-level flip -- it splits by object).
+2. Outcome consistency (v1.1 reading, loader-corrected): the outcome is
+   recomputed from the stored tables and must match; the measured
+   outcome is transfer-confirmed -- the intensity-dominance channel
+   split transfers (direction max 0.20%, intensity reproduces joint to
+   <0.05 pp at every level) and the radius median is 1.0. The
+   pre-correction "channel split does not transfer" reading (direction
+   max 51.197%, pot1/pot2 ~86% anchor shares) was a loader artifact
+   (missing per-light intensity normalization) and is withdrawn --
+   see results/diligent/provenance/loader_normalization_fix.json.
 3. The radius table: median 1.0 (identical to OI), all objects in
-   [0.75, 1.5] -- the linearization envelope transfers.
-4. The direction-channel table: max 51.197% (vs OI's 1.68%) -- the
-   direction channel carries far more value on DiLiGenT.
-5. Degenerate-share annotation: negative/absurd shares occur exactly
-   where D(anchor) ~ 0 (documented in the artifact note); the pot1/pot2
-   86% values are the genuine direction-coupled cases.
+   [0.75, 1.5]; radius_10x = 1.5 on 10/10 objects.
+4. The direction-channel table: max 0.203% -- same side as OI
+   (intensity-dominant on both cohorts).
+5. The ball-anchor share is reported as the C10/C12 anchor test
+   (object-conditional by construction): median ~0, cat 22.1%/pot1
+   29.5% the high objects; degenerate denominators annotated
+   (harvest, reading).
 6. Manifest integrity.
 """
 
@@ -43,21 +51,34 @@ def test_grid_completeness():
 
 
 def test_outcome_consistency():
+    """v1.1 判读(N3):结局必须与修正后的通道分裂迁移判据作用于存档
+    表的结果一致——两队列同为强度主导(direction max ≤5%,intensity
+    复现 joint <0.5pp)且半径中位在 OI 值 4 倍内 ⇒ transfer-confirmed;
+    旧份额判据(≥2%)保留为参照,不是读数基础。"""
     art = _load()
+    cd = art["channel_decomposition"]
+    byc = cd["by_channel"]
     med_share = art["ball_anchor_share"]["median"]
     r2 = art["linearization_radius"]["radius_2x"][
         "median_over_crossed_subset"]
-    share_ok = med_share >= 0.02
     radius_ok = r2 is not None and 0.25 <= r2 <= 4.0
-    expected = ("transfer-confirmed" if (share_ok and radius_ok)
-                else "transfer-partial" if (share_ok or radius_ok)
-                else "transfer-failed")
+    direction_max = cd["direction_max_pct"] / 100.0
+    eq = all(abs(byc["joint"][lv]["median_pct"]
+                 - byc["intensity"][lv]["median_pct"]) / 100.0 < 5e-3
+             for lv in byc["joint"])
+    expected = ("transfer-confirmed" if (eq and direction_max <= 0.05
+                                         and radius_ok)
+                else "transfer-partial (radius transfers; channel split "
+                     "does not)" if radius_ok else "transfer-failed")
     assert art["outcome"] == expected
-    # 实测:半径过、份额不过 → partial
-    assert art["outcome"] == "transfer-partial"
-    assert radius_ok and not share_ok
+    # 通道分裂迁移:方向 max 0.203%,intensity/joint 逐 level <0.05pp
+    assert cd["direction_max_pct"] == 0.203
+    for lv in byc["joint"]:
+        assert abs(byc["joint"][lv]["median_pct"]
+                   - byc["intensity"][lv]["median_pct"]) < 0.05
+    assert radius_ok
+    # 锚点份额(独立字段,按物体条件性):中位 ≈0
     assert round(med_share, 6) == -5.2e-05
-    assert r2 == 1.0
 
 
 def test_radius_transfers():

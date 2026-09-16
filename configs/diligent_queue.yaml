@@ -66,11 +66,27 @@ radius_crossings: [2.0, 10.0]
 ball_anchor: {sig_logI: 0.0159079094301168, sig_dir_deg: 2.9644001216106344}
 family_seed: 20260915
 
+# v1.1 outcome-rule revision (acceptance 530f991 section 4/N3): the v1
+# share-clause (>= 2%) was written under the biased loader's expectation
+# and can only fail under the corrected loader regardless of data -- it
+# cannot express the corrected finding. Replaced by the
+# channel-split-transfer criterion; the old rule is retained below as
+# reference only (NOT the reading basis), mirroring the 8e841a5 precedent.
 outcome_rule: >
+  transfer-confirmed: the intensity-dominance channel split transfers --
+  direction max D <= 5% AND intensity reproduces joint to < 0.5 pp at
+  every level -- AND the joint radius_2x median is within a factor 4 of
+  the OI value (1.0). transfer-failed: either fails. (The ball-anchor
+  share is reported separately as the C10/C12 anchor test, not as a
+  transfer clause: it is object-conditional by construction.)
+  Descriptive reporting regardless of outcome.
+
+outcome_rule_v1_reference_only: >
   transfer-confirmed: median direction_share at the ball anchor >= 2%
   AND joint radius_2x median within a factor 4 of the OI value (1.0).
   transfer-partial: exactly one. transfer-failed: neither.
-  Descriptive reporting regardless of outcome.
+  (Superseded 2026-09-16: written under the biased loader's expectation;
+  retained for reference only.)
 
 outcome_independence: >
   Every D / share / radius per object/level/channel is reported

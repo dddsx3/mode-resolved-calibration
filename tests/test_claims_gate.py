@@ -335,14 +335,51 @@ def test_readme_numeric_claims_traceable():
     #       value "15.986150483597436").
     readme2 = re.sub(r"\d+e-\d+", " ", readme.replace("\u2212", "-"))
     tokens = set(re.findall(r"-?\d+\.\d+|-?\d+", readme2))
-    results_text = "\n".join(
-        q.read_text(encoding="utf-8", errors="ignore")
-        for q in sorted((REPO / "results").rglob("*")) if q.is_file())
+    # 撤回注记(N2,P1-b 根治):带 *_note / provenance 名的字段是
+    # "撤回/更正说明"的合法居所——它们会引用已撤回的数值,于是把旧值
+    # "洗"回可追溯池。数字必须命中**非说明字段**才算可追溯:构建池子时
+    # 剥离这些字段(而非整个文件),使注记不再为旧值背书。
+    WITHDRAWN_FIELD_MARKS = ("_note", "note_", "provenance")
+
+    def _pool(obj, path=""):
+        chunks = []
+        if isinstance(obj, dict):
+            for k, v in obj.items():
+                kp = f"{path}.{k}" if path else k
+                if isinstance(v, str) and any(
+                        m in k.lower() for m in WITHDRAWN_FIELD_MARKS):
+                    continue                      # 撤回/更正说明:不入池
+                chunks.append(_pool(v, kp))
+        elif isinstance(obj, list):
+            for i, v in enumerate(obj):
+                chunks.append(_pool(v, f"{path}[{i}]"))
+        elif isinstance(obj, str):
+            chunks.append(obj)
+        else:
+            chunks.append(json.dumps(obj))
+        return "\n".join(chunks)
+
+    def results_pool_text():
+        chunks = []
+        for q2 in sorted((REPO / "results").rglob("*")):
+            if not q2.is_file():
+                continue
+            try:
+                d = json.loads(q2.read_text(encoding="utf-8"))
+            except Exception:
+                chunks.append(q2.read_text(encoding="utf-8", errors="ignore"))
+                continue
+            chunks.append(_pool(d, q2.stem))
+        return "\n".join(chunks)
+
+    results_text = results_pool_text()
     untraced = [tk for tk in sorted(tokens)
                 if tk not in traced and tk not in NON_CLAIM_TOKENS
                 and re.search(r"(?<![\w.])" + re.escape(tk) + r"(?![\w])",
                               results_text) is None]
-    assert not untraced, f"README numbers not traceable to results/**: {untraced}"
+    assert not untraced, ("README numbers not traceable to results/** "
+                          "(withdrawn/correction note fields excluded from "
+                          f"the pool): {untraced}")
 
 
 # --------------------------------------------------------------- E-1b 加固

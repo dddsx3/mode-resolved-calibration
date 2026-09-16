@@ -66,6 +66,19 @@ version: open an issue first for anything semantic; keep PRs small; make sure
    (b) absolute-vs-GT checks belong in the routine gate set, not only in
    a side arm.
 
+7. **Withdrawing a conclusion means withdrawing every place it appears —
+   and withdrawal notes must not carry the withdrawn values.** A
+   retraction that only edits the claim layer leaves the citation layer
+   (artifact prose fields, the reproduction matrix, test docstrings, code
+   comments) still asserting the old result; worse, quoting the withdrawn
+   NUMBER inside a note makes it a legitimate source for the
+   numeric-traceability gates, laundering every document that cites it
+   (observed: the loader-fix round's `51.2%`/`~86%` notes whitewashing the
+   reproduction matrix). A withdrawal note records field paths + date +
+   the source of the replacement reading — not the values themselves. The
+   numeric gates exclude `*_note`/`provenance` fields from the
+   traceability pool to make this enforceable.
+
 ## Development setup
 
 ```bash
