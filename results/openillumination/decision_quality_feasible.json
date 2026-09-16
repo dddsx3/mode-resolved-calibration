@@ -1,0 +1,309 @@
+{
+ "gate": "P-DQ-FEASIBLE",
+ "analysis_status": "dq_feasible_v1",
+ "source_artifact": "results/openillumination/decision_quality.json",
+ "source_manifest_sha256": "ecb10a13b09c87a545a334be8405270d61b5b0bb8247fb2a9f2852a90bd0d395",
+ "source_git_sha": "42bc299fb744732fe589557d0ca4beaf87b148df",
+ "n_active": 48,
+ "budgets_k": [
+  14,
+  28,
+  57,
+  85,
+  114
+ ],
+ "degenerate_budgets": {
+  "14": {
+   "n_cells": 0,
+   "n_total": 88,
+   "degenerate": false,
+   "feasible": true,
+   "note": "informed and active48-random prefixes select the same lights when k > |active| = 48; endpoints then coincide bit-exactly and the comparison carries no information"
+  },
+  "28": {
+   "n_cells": 0,
+   "n_total": 88,
+   "degenerate": false,
+   "feasible": true,
+   "note": "informed and active48-random prefixes select the same lights when k > |active| = 48; endpoints then coincide bit-exactly and the comparison carries no information"
+  },
+  "57": {
+   "n_cells": 88,
+   "n_total": 88,
+   "degenerate": true,
+   "feasible": false,
+   "note": "informed and active48-random prefixes select the same lights when k > |active| = 48; endpoints then coincide bit-exactly and the comparison carries no information"
+  },
+  "85": {
+   "n_cells": 88,
+   "n_total": 88,
+   "degenerate": true,
+   "feasible": false,
+   "note": "informed and active48-random prefixes select the same lights when k > |active| = 48; endpoints then coincide bit-exactly and the comparison carries no information"
+  },
+  "114": {
+   "n_cells": 88,
+   "n_total": 88,
+   "degenerate": true,
+   "feasible": false,
+   "note": "informed and active48-random prefixes select the same lights when k > |active| = 48; endpoints then coincide bit-exactly and the comparison carries no information"
+  }
+ },
+ "full_grid_dAUC_vs_randomA48": {
+  "mode_aware|10": {
+   "median_dAUC": -0.268603,
+   "ci95": [
+    -0.349561,
+    -0.153764
+   ],
+   "n_objects": 44
+  },
+  "e_opt|10": {
+   "median_dAUC": -0.466073,
+   "ci95": [
+    -0.698077,
+    -0.353981
+   ],
+   "n_objects": 44
+  },
+  "a_opt|10": {
+   "median_dAUC": -0.44967,
+   "ci95": [
+    -0.684809,
+    -0.331794
+   ],
+   "n_objects": 44
+  },
+  "d_opt|10": {
+   "median_dAUC": -0.172353,
+   "ci95": [
+    -0.260282,
+    -0.087994
+   ],
+   "n_objects": 44
+  },
+  "mode_aware|100": {
+   "median_dAUC": -0.247846,
+   "ci95": [
+    -0.334993,
+    -0.123322
+   ],
+   "n_objects": 44
+  },
+  "e_opt|100": {
+   "median_dAUC": -0.552894,
+   "ci95": [
+    -1.000567,
+    -0.402127
+   ],
+   "n_objects": 44
+  },
+  "a_opt|100": {
+   "median_dAUC": -0.456331,
+   "ci95": [
+    -0.924581,
+    -0.313119
+   ],
+   "n_objects": 44
+  },
+  "d_opt|100": {
+   "median_dAUC": -0.192054,
+   "ci95": [
+    -0.3607,
+    -0.09331
+   ],
+   "n_objects": 44
+  }
+ },
+ "feasible_dAUC_vs_randomA48": {
+  "mode_aware|10": {
+   "median_dAUC": -0.712039,
+   "ci95": [
+    -1.029731,
+    -0.433533
+   ],
+   "n_objects": 44
+  },
+  "e_opt|10": {
+   "median_dAUC": -1.150885,
+   "ci95": [
+    -1.638724,
+    -0.783535
+   ],
+   "n_objects": 44
+  },
+  "a_opt|10": {
+   "median_dAUC": -1.14416,
+   "ci95": [
+    -1.70112,
+    -0.783535
+   ],
+   "n_objects": 44
+  },
+  "d_opt|10": {
+   "median_dAUC": -0.400189,
+   "ci95": [
+    -0.77081,
+    -0.128359
+   ],
+   "n_objects": 44
+  },
+  "mode_aware|100": {
+   "median_dAUC": -0.694817,
+   "ci95": [
+    -1.012408,
+    -0.365973
+   ],
+   "n_objects": 44
+  },
+  "e_opt|100": {
+   "median_dAUC": -1.404892,
+   "ci95": [
+    -2.272084,
+    -1.02247
+   ],
+   "n_objects": 44
+  },
+  "a_opt|100": {
+   "median_dAUC": -1.221627,
+   "ci95": [
+    -2.200721,
+    -0.86092
+   ],
+   "n_objects": 44
+  },
+  "d_opt|100": {
+   "median_dAUC": -0.384316,
+   "ci95": [
+    -0.9589,
+    -0.015308
+   ],
+   "n_objects": 44
+  }
+ },
+ "feasible_dAUC_vs_universeRandom": {
+  "mode_aware|10": {
+   "median_dAUC": -1.789916,
+   "ci95": [
+    -2.10826,
+    -1.148685
+   ],
+   "n_objects": 44
+  },
+  "e_opt|10": {
+   "median_dAUC": -2.401181,
+   "ci95": [
+    -3.060808,
+    -1.948434
+   ],
+   "n_objects": 44
+  },
+  "a_opt|10": {
+   "median_dAUC": -2.314829,
+   "ci95": [
+    -3.111155,
+    -1.948434
+   ],
+   "n_objects": 44
+  },
+  "d_opt|10": {
+   "median_dAUC": -1.505332,
+   "ci95": [
+    -1.865759,
+    -0.903321
+   ],
+   "n_objects": 44
+  },
+  "mode_aware|100": {
+   "median_dAUC": -1.6758,
+   "ci95": [
+    -2.218612,
+    -0.903852
+   ],
+   "n_objects": 44
+  },
+  "e_opt|100": {
+   "median_dAUC": -2.732047,
+   "ci95": [
+    -3.508964,
+    -2.123812
+   ],
+   "n_objects": 44
+  },
+  "a_opt|100": {
+   "median_dAUC": -2.379044,
+   "ci95": [
+    -3.197018,
+    -1.971528
+   ],
+   "n_objects": 44
+  },
+  "d_opt|100": {
+   "median_dAUC": -1.241923,
+   "ci95": [
+    -2.152462,
+    -0.951469
+   ],
+   "n_objects": 44
+  }
+ },
+ "dilution": {
+  "mode_aware|10": {
+   "full": -0.268603,
+   "feasible": -0.712039,
+   "ratio": 2.651
+  },
+  "e_opt|10": {
+   "full": -0.466073,
+   "feasible": -1.150885,
+   "ratio": 2.469
+  },
+  "a_opt|10": {
+   "full": -0.44967,
+   "feasible": -1.14416,
+   "ratio": 2.544
+  },
+  "d_opt|10": {
+   "full": -0.172353,
+   "feasible": -0.400189,
+   "ratio": 2.322
+  },
+  "mode_aware|100": {
+   "full": -0.247846,
+   "feasible": -0.694817,
+   "ratio": 2.803
+  },
+  "e_opt|100": {
+   "full": -0.552894,
+   "feasible": -1.404892,
+   "ratio": 2.541
+  },
+  "a_opt|100": {
+   "full": -0.456331,
+   "feasible": -1.221627,
+   "ratio": 2.677
+  },
+  "d_opt|100": {
+   "full": -0.192054,
+   "feasible": -0.384316,
+   "ratio": 2.001
+  }
+ },
+ "feasible_ratio_active48_over_universeRandom": {
+  "mode_aware|10": 0.398,
+  "e_opt|10": 0.479,
+  "a_opt|10": 0.494,
+  "d_opt|10": 0.266,
+  "mode_aware|100": 0.415,
+  "e_opt|100": 0.514,
+  "a_opt|100": 0.513,
+  "d_opt|100": 0.309
+ },
+ "reading": "the frozen full-grid dAUC vs active-restricted random is diluted by the three infeasible budgets (k=57/85/114 > |active|=48, endpoints bit-identical): on the feasible interval the within-active-set advantage is -1.40..-0.38 deg-AUC, ~2.0-2.8x larger than the frozen full-grid values -- 'an order of magnitude smaller' was the dilution artifact; the true ratio to the universe-random advantage is ~2.5x",
+ "manifest": {
+  "git_sha": "951503954d450d979cd09f2086ed28322d917375",
+  "B": 10000,
+  "seed": 20260910
+ },
+ "note": "Zero-cost arithmetic on the committed E-arm rows: non-degeneracy check per budget + feasible-interval dAUC (k <= |active|) with the frozen object-cluster bootstrap spec, plus the full-grid recomputation for cross-check."
+}

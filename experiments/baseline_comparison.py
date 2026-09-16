@@ -276,6 +276,7 @@ def run(config_path=REPO / "configs/baseline_comparison.yaml",
             # active48 random(v1.1 判读基础,C8 规定的诚实基线)
             devs = {"dc05": [], "dc05_active": [], "informed": []}
             overlap = {}
+            wasted = {}
             for obj in objs:
                 rU = [r["ang_mean_deg"] for r in all_rows
                       if r["cohort"] == cohort_tag and r["object"] == obj
@@ -307,21 +308,51 @@ def run(config_path=REPO / "configs/baseline_comparison.yaml",
                       if r["cohort"] == cohort_tag and r["object"] == obj
                       and r["k"] == k and r["unit"] == "dc05"]
                 overlap[obj] = ov[0] if ov else None
+                # P3:被浪费的预算份额 = 1 − overlap/k(由产物字段程序化
+                # 算出,文档引用而不是手抄)
+                if overlap[obj] is not None:
+                    wasted[obj] = round(1.0 - overlap[obj] / k, 6)
             med_dca = float(np.nanmedian(devs["dc05_active"]))
             med_inf = float(np.nanmedian(devs["informed"]))
             has_u = any(not np.isnan(x) for x in devs["dc05"])
             med_dcu = (float(np.nanmedian(devs["dc05"])) if has_u
                        else None)
-            reading = ("geometry-insufficient" if med_dca >= med_inf
-                       else "geometry-informative")
+            # P8:两个正交判据 + 组合读法(标注驱动因素)
+            geometry_vs_random = ("geometry-beats-randomA48"
+                                  if med_dca < 0 else "geometry-at-randomA48")
+            model_vs_random = ("model-beats-randomA48"
+                               if med_inf < 0 else "model-loses-to-randomA48")
+            if med_dca >= med_inf:
+                reading = "geometry-insufficient"
+            elif med_inf >= 0:
+                reading = ("geometry-informative (driven by informed "
+                           "failure, not geometry strength)")
+            else:
+                reading = "geometry-informative (both beat random)"
             out[str(k)] = dict(
                 median_ang_by_unit=per_unit,
+                dev_per_object=dict(
+                    dc05_active_vs_randomA48=[
+                        None if np.isnan(x) else round(float(x), 6)
+                        for x in devs["dc05_active"]],
+                    informed_vs_randomA48=[
+                        None if np.isnan(x) else round(float(x), 6)
+                        for x in devs["informed"]],
+                    dc05_vs_randomU=[
+                        None if np.isnan(x) else round(float(x), 6)
+                        for x in devs["dc05"]]),
                 median_dev_from=dict(
                     dc05_active_vs_randomA48=round(med_dca, 6),
                     informed_vs_randomA48=round(med_inf, 6),
                     dc05_vs_randomU=(round(med_dcu, 6)
                                      if med_dcu is not None else None)),
-                dc05_active_overlap_at_k=overlap,
+                dc05_allpool_overlap_at_k=overlap,
+                wasted_budget_share=wasted,
+                wasted_share_range=(
+                    [round(min(wasted.values()), 6),
+                     round(max(wasted.values()), 6)] if wasted else None),
+                geometry_vs_randomA48=geometry_vs_random,
+                model_vs_randomA48=model_vs_random,
                 reading=reading)
         return out
 

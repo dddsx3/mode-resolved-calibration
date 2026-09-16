@@ -5,11 +5,17 @@ CI-safe: reads only results/baseline/baseline_comparison.json. Pins:
 1. The OI hard anchor: 88 informed rows bit-identical to the frozen
    E-arm subset (the baseline shares orderings + seeds by construction;
    recorded in the artifact).
-2. Outcome consistency: geometry-insufficient in ALL four cohort x
-   budget cells (DC05's median deviation from random never enters the
-   informed band).
-3. The headline table: DC05's median angular error sits inside the
-   random band on both cohorts; every informed policy beats it.
+2. Outcome consistency (v1.1 reading, active-restricted): the combined
+   `reading` is recomputed from `median_dev_from` and must match; the
+   measured outcome is OI geometry-insufficient (both budgets) and
+   DiLiGenT geometry-informative (both budgets) -- the latter driven by
+   the informed policy LOSING to active-restricted random (dev > 0),
+   not by geometry beating it (pinned by
+   test_dq_informed_loses_to_active_random).
+3. The headline table: on OI, dc05_active beats randomA48 but no
+   informed policy loses to it; the v1 all-pool DC05's chance-level
+   performance is reproduced and self-documented via the recorded
+   active-set overlaps.
 4. Manifest integrity.
 """
 
@@ -51,11 +57,13 @@ def test_outcome_consistency():
                         if dev["dc05_active_vs_randomA48"]
                         >= dev["informed_vs_randomA48"]
                         else "geometry-informative")
-            assert d["reading"] == expected, (tag, k)
+            assert d["reading"].startswith(expected), (tag, k)
     assert art["oi"]["14"]["reading"] == "geometry-insufficient"
     assert art["oi"]["28"]["reading"] == "geometry-insufficient"
-    assert art["diligent"]["14"]["reading"] == "geometry-informative"
-    assert art["diligent"]["28"]["reading"] == "geometry-informative"
+    assert art["diligent"]["14"]["reading"].startswith(
+        "geometry-informative (driven by informed failure")
+    assert art["diligent"]["28"]["reading"].startswith(
+        "geometry-informative (driven by informed failure")
 
 
 def test_dq_informed_loses_to_active_random():
@@ -68,7 +76,7 @@ def test_dq_informed_loses_to_active_random():
         assert round(dev["informed_vs_randomA48"], 6) == want, k
         assert dev["informed_vs_randomA48"] > 0, k
     # v1 混淆自文档化:all-pool dc05 的 active 重合度远低于预算
-    ov14 = art["oi"]["14"]["dc05_active_overlap_at_k"]
+    ov14 = art["oi"]["14"]["dc05_allpool_overlap_at_k"]
     assert max(ov14.values()) <= 9 and min(ov14.values()) >= 2
 
 
@@ -105,6 +113,46 @@ def test_headline_numbers():
     m2 = art["diligent"]["28"]["median_ang_by_unit"]
     assert round(m2["dc05_active"], 3) == 6.686
     assert round(m2["a_opt"], 3) == 7.004
+
+
+def test_v1_1_fields_present_and_consistent():
+    """P3/P5/P6/P7/P8 字段:浪费份额由产物算出、逐物体偏差数组可重建
+    reading、正交判据、版本标记。"""
+    import numpy as np
+    art = _load()
+    assert art["analysis_status"] == "baseline_comparison_v1_1"
+    for tag in ("oi", "diligent"):
+        for k, d in art[tag].items():
+            assert "dc05_allpool_overlap_at_k" in d
+            assert "wasted_budget_share" in d
+            # wasted = 1 − overlap/k(逐物体算术自洽)
+            for obj, ov in d["dc05_allpool_overlap_at_k"].items():
+                assert abs(d["wasted_budget_share"][obj]
+                           - (1.0 - ov / int(k))) < 1e-6
+            assert d["wasted_share_range"] == [
+                min(d["wasted_budget_share"].values()),
+                max(d["wasted_budget_share"].values())]
+            # 逐物体偏差数组可重建 reading(P7)
+            devs = d["dev_per_object"]
+            med_a = float(np.median([x for x in
+                                     devs["dc05_active_vs_randomA48"]
+                                     if x is not None]))
+            med_i = float(np.median([x for x in
+                                     devs["informed_vs_randomA48"]
+                                     if x is not None]))
+            assert abs(med_a - d["median_dev_from"]
+                       ["dc05_active_vs_randomA48"]) < 1e-6
+            assert abs(med_i - d["median_dev_from"]
+                       ["informed_vs_randomA48"]) < 1e-6
+            # 正交判据与中位数符号一致
+            assert d["geometry_vs_randomA48"] == (
+                "geometry-beats-randomA48" if med_a < 0
+                else "geometry-at-randomA48")
+            assert d["model_vs_randomA48"] == (
+                "model-beats-randomA48" if med_i < 0
+                else "model-loses-to-randomA48")
+    # OI k=14 的浪费份额范围 = 产物给的 [0.357143, 0.857143]
+    assert art["oi"]["14"]["wasted_share_range"] == [0.357143, 0.857143]
 
 
 def test_manifest_integrity():

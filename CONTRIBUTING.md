@@ -31,8 +31,11 @@ version: open an issue first for anything semantic; keep PRs small; make sure
    random baseline (permute the illuminating set only), and baselines
    whose candidate pool spans all lights must either be restricted to
    the active set or report their active-set overlap. This rule was
-   learned three times (E-arm dAUC, C12 v1 DC05) — do not learn it a
-   fourth.
+   learned twice (the E-arm dAUC headline, C12 v1's DC05 baseline) — do not
+   learn it a third time. The E-arm budget-grid saturation (acceptance
+   9515039) is the same lesson in its budget-axis form: k > |active|
+   makes the two sides select identical sets, so cross-budget statistics
+   must be restricted to the feasible interval or flagged degenerate.
 
 ## Development setup
 

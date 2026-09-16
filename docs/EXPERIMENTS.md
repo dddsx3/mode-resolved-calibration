@@ -524,10 +524,13 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
   continuous (FW) / rounded (top-k of fw_t).
 - **Decomposition (J_A units, 55 rows)**: active-set dilution
   +0.011..+0.298 (median 0.063, 55/55 ≥ 0); mode-ordering |gap| ≤ 0.004
-  (median 5e-5); rounding loss ≤ 0.0005; certified gap ≤ 0.0008 — **the
-  entire advantage over universe-random is the active-set effect**;
-  ordering within the active set, rounding, and the certified gap are
-  orders smaller.
+  (median 5e-5); rounding loss ≤ 0.0005; certified gap ≤ 0.0008 — **on
+  the J_A functional the entire advantage over universe-random is the
+  active-set effect**; ordering within the active set, rounding, and the
+  certified gap are orders smaller. **泛函限定（可行性修正同步加入）**:在
+  realized 法向角误差端点上,排序承载 active-set 内增益的 40–45%
+  （可行区间 dAUC 比 0.27–0.51,B9）——两个泛函不共享同一比值,本条
+  声明只对 J_A 成立。
 - **Realized-value arm (the reframed M1-3)**: the weak-mode endpoint is
   NON-MONOTONE in refinement coverage — the E(k) hump along the a_opt
   ordering (legacy frame, frozen seed spec, **bit-exact frozen anchor**:
@@ -596,9 +599,16 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
   **universe-random**:a_opt −3.90 [−6.52, −2.45] @10、−5.03
   [−7.92, −3.51] @100;mode_aware −3.68/−4.84;e_opt −3.88/−5.14;
   d_opt −3.61/−4.75（全部 CI 不含 0）。dAUC vs **active48-restricted
-  random**（诚实检验）:**−0.17 ~ −0.55°**,8 个 policy×regime 全部
-  CI 不含 0——数度级头条主要是 active-set 效应（C8）,active-set 内
-  优势真实但小一个数量级。Spearman(predicted J_A, realized)
+  random**（诚实检验,冻结全网格）:**−0.17 ~ −0.55**,8 个 policy×regime
+  全部 CI 不含 0——但该全网格被预算饱和**稀释 2.0–2.8 倍**:k=57/85/114
+  **超过 active 集 48 盏**,双方前缀选同一批灯、端点逐位相同（逐预算
+  88/88 cell）,3/5 预算区间恒零。**可行区间（k ≤ 48,fraction
+  [0.1,0.2]）修正值:−0.38 ~ −1.40,全部 CI 不含 0;与可行区间
+  universe-random 优势之比 0.27–0.51(≈2–3.7 倍)——不是"一个数量级"**。
+  数度级头条主要是 active-set 效应（C8）,active-set 内优势真实且约为
+  头条的 1/2.5。诊断与复算:`results/openillumination/
+  decision_quality_feasible.json`（P-DQ-FEASIBLE:退化标记 + 可行/全
+  网格双列）。Spearman(predicted J_A, realized)
   **88/88 为正**（median +0.917, min +0.681）;informed 族内
   （n=4）池化符号一致 **678/987 = 0.687** [0.657, 0.716],中位
   Spearman +0.800。gauge 对齐端点仍呈再分配（MSE −0.575 / dual
@@ -932,7 +942,7 @@ informed rows are bit-identical to the frozen E-arm anchor subset
 (88/88, shared orderings + seeds). DiLiGenT: a_opt + DC05 + 3 random.
 
 **v1.1 (acceptance-corrected: active-set control).** The v1 DC05
-candidate pool spanned ALL lights — 57–86% of its budget fell on
+candidate pool spanned ALL lights — 36–86% of its budget fell on
 non-illuminating lights (per-object overlap 2–9 of 14 at k=14), so
 v1's "DC05 ≈ universe-random" merely replicated C8. v1.1 adds
 dc05_active (same geometry rule, pool restricted to the illuminating

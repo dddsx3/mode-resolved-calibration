@@ -71,8 +71,8 @@
 #   reported regardless.
 
 gate: P-BASELINE
-analysis_status: baseline_comparison_v1
-run_name: baseline_comparison_v1
+analysis_status: baseline_comparison_v1_1
+run_name: baseline_comparison_v1_1
 
 oi_data_root: D:/data/OpenIllumination
 oi_data_meta: D:/data/OpenIllumination_meta
@@ -96,6 +96,15 @@ family_seed: 20260915
 oi_units: [mode_aware, e_opt, a_opt, d_opt, dc05, dc05_active, randomU_0, randomU_1, randomU_2, randomA48_0, randomA48_1, randomA48_2]
 dq_units: [a_opt, dc05, dc05_active, randomU_0, randomU_1, randomU_2, randomA48_0, randomA48_1, randomA48_2]
 
+# v1.1 relabeling (acceptance 9515039 section 8, P8): the combined
+# `reading` now annotates its driver when the informative verdict comes
+# from the model losing to random rather than geometry winning; two
+# orthogonal fields (geometry_vs_randomA48 / model_vs_randomA48) are
+# stored alongside. Field additions (P3/P6/P7): the all-pool overlap
+# field is renamed dc05_allpool_overlap_at_k, wasted_budget_share +
+# wasted_share_range are computed from it (docs quote the artifact
+# instead of hand-copied ranges), and the per-object deviation arrays
+# backing the reading are stored.
 outcome_rule: >
   v1.1 (active-restricted): geometry-insufficient = dc05_active median
   deviation from the randomA48 mean >= informed median deviation (on

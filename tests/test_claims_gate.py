@@ -286,6 +286,17 @@ def test_readme_numeric_claims_traceable():
         traced[tok] = val
 
 
+    # feasible-interval DQ numbers (P-DQ-FEASIBLE) in README prose
+    dqf = json.loads((REPO / "results/openillumination/"
+                      "decision_quality_feasible.json")
+                     .read_text(encoding="utf-8"))
+    _fe = dqf["feasible_dAUC_vs_randomA48"]
+    for tok, val, dec in (
+            ("-0.38", max(v["median_dAUC"] for v in _fe.values()), 2),
+            ("-1.40", min(v["median_dAUC"] for v in _fe.values()), 2)):
+        assert _approx(tok, val, dec), (tok, val)
+        traced[tok] = val
+
     # E cross-diagnosis: S_real printed as -0.325 in README prose
     ediag = json.loads((REPO / "results/openillumination/"
                         "corruption_family_e_diag.json")

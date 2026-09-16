@@ -39,6 +39,7 @@ ARTS = {
     "ba": REPO / "results/openillumination/ball_anchor.json",
     "dq2": REPO / "results/diligent/diligent_queue.json",
     "bcmp": REPO / "results/baseline/baseline_comparison.json",
+    "dqf": REPO / "results/openillumination/decision_quality_feasible.json",
 }
 
 
@@ -335,6 +336,19 @@ BINDINGS = [
      ["informed_vs_randomA48"], 3),
     (E, "6.686", "bcmp",
      lambda j: j["diligent"]["28"]["median_ang_by_unit"]["dc05_active"], 3),
+    # ---- feasible-budget DQ diagnostic (P-DQ-FEASIBLE) ----
+    (C, "−1.40", "dqf",
+     lambda j: min(v["median_dAUC"] for v in
+                   j["feasible_dAUC_vs_randomA48"].values()), 2),
+    (E, "−1.40", "dqf",
+     lambda j: min(v["median_dAUC"] for v in
+                   j["feasible_dAUC_vs_randomA48"].values()), 2),
+    (C, "−0.38", "dqf",
+     lambda j: max(v["median_dAUC"] for v in
+                   j["feasible_dAUC_vs_randomA48"].values()), 2),
+    (E, "−0.38", "dqf",
+     lambda j: max(v["median_dAUC"] for v in
+                   j["feasible_dAUC_vs_randomA48"].values()), 2),
     (C, "71.4", "ba",
      lambda j: max(j["direction_share_at_anchor"]["per_object"].values())
      * 100.0, 1),
@@ -375,7 +389,7 @@ OCCURRENCE_COUNTS = {
     ("methods", "495"): 1,
     ("experiments", "495"): 3,
     ("methods", "45"): 1,
-    ("experiments", "45"): 2,
+    ("experiments", "45"): 3,
     ("claims", "0.35"): 1,
     ("experiments", "0.35"): 3,
     ("claims", "3283"): 2,
@@ -389,8 +403,8 @@ OCCURRENCE_COUNTS = {
     ("experiments", "6.096"): 0,
     ("experiments", "−2.636"): 0,
     ("experiments", "−0.658"): 0,
-    ("claims", "88"): 6,
-    ("experiments", "88"): 12,
+    ("claims", "88"): 8,
+    ("experiments", "88"): 14,
     # ---- DiLiGenT queue (23 / C11) ----
     ("claims", "51.2"): 1,
     ("experiments", "51.2"): 1,
@@ -432,8 +446,8 @@ OCCURRENCE_COUNTS = {
     ("experiments", "0.889"): 2,
     ("claims", "0.353"): 1,
     ("experiments", "0.353"): 3,
-    ("claims", "88"): 6,
-    ("experiments", "88"): 12,
+    ("claims", "88"): 8,
+    ("experiments", "88"): 14,
     ("claims", "125"): 2,
     ("experiments", "125"): 2,
     ("claims", "0.817"): 1,

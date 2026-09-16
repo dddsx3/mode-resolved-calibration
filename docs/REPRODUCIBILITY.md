@@ -19,7 +19,7 @@ re-derives the value. The binding table (claim → evidence file → field) is
 
 ### 1.1 Provenance note: git SHAs recorded in result manifests
 
-Twenty-three distinct `git_sha` values are recorded across the committed result
+Twenty-four distinct `git_sha` values are recorded across the committed result
 manifests. They are not all the current HEAD: results are produced from an
 earlier working-tree state, and two of the recorded commits were replaced
 during the 2026-09-09 repository reorganization. The complete ledger:
@@ -49,7 +49,8 @@ during the 2026-09-09 repository reorganization. The complete ledger:
 | `20d5fbe585e1` | `openillumination/corruption_family_e_diag.json` | yes (ancestor of HEAD) | P-SIGMA-FAMILY-E-DIAG zero-cost cross diagnosis on the committed E-arm rows (2026-09-15): S_pred 0.949 / S_real -0.325, symmetric cross fits -- sigma misspecification excluded (supersedes the OOM-blocked het_mismatched 2x2 prereg 93f45a1) |
 | `c1ceba833dc8` | `openillumination/ball_anchor.json` | yes (ancestor of HEAD) | P-BALL-ANCHOR run (2026-09-15): measured sphere-calibration anchor (2.96 deg / 0.0159), D-flipped at 36% median direction share |
 | `95f15ad647c9` | `diligent/diligent_queue.json` | yes (ancestor of HEAD) | P-DILIGENT-QUEUE run (2026-09-15): second-dataset transfer, radius exact / channel split object-conditional |
-| `8e841a5987f8` | `baseline/baseline_comparison.json` | yes (ancestor of HEAD) | P-BASELINE v1.1 run (2026-09-16): active-set-controlled (dc05_active + randomA48 + overlap), OI geometry-insufficient / DQ geometry-informative via the informed policy's failure; 88 OI rows bit-anchored |
+| `951503954d45` | `baseline/baseline_comparison.json` | yes (ancestor of HEAD) | P-BASELINE v1.1 run (2026-09-16): active-set-controlled (dc05_active + randomA48 + overlap), OI geometry-insufficient / DQ geometry-informative via the informed policy's failure; 88 OI rows bit-anchored |
+| `951503954d45` | `openillumination/decision_quality_feasible.json` | yes (ancestor of HEAD) | P-DQ-FEASIBLE zero-cost diagnostic (2026-09-16): budget-grid saturation (k=57/85/114 > |active|=48) + feasible-interval dAUC |
 
 The two unreachable SHAs are the ones the repo reorganization replaced. All
 seventeen artifacts remain byte-for-byte as committed and are pinned by
@@ -124,7 +125,8 @@ protocol (same objects, pixel subsets, levels, seeds).
 | Σ_φ family, linearization radius (C arm) | channel-dependent: joint/intensity_only 1.0/1.5 (bit-exact frozen control); direction_only never crosses on [0.05, 8] (0/11); joint_het 0.2/0.35 | `python experiments/linearization_radius_family.py` | `results/magnitude/linearization_radius_family.json` | `tests/test_corruption_family_sensitivity.py` |
 | Ball-anchor: Σ_φ from a real sphere calibration (P-BALL-ANCHOR) | measured anchor sig_dir 2.96 deg / sig_logI 0.0159; direction share at anchor median 36.0% -> D-flipped (preregistered rule) | `python experiments/ball_anchor.py` | `results/openillumination/ball_anchor.json` | `tests/test_ball_anchor.py` |
 | DiLiGenT queue: second-dataset transfer (P-DILIGENT-QUEUE) | radius_2x median 1.0 (all objects [0.75,1.5]); direction max D 51.2%; ball-anchor share splits by object (pot1/pot2 86%) -> transfer-partial | `python experiments/diligent_queue.py` | `results/diligent/diligent_queue.json` | `tests/test_diligent_queue.py` |
-| Baseline: literature-style selection on the same lights (P-BASELINE) | geometry-insufficient in all 4 cohort x budget cells (DC05 inside the random band); informed dev -0.66..-2.64 deg | `python experiments/baseline_comparison.py` | `results/baseline/baseline_comparison.json` | `tests/test_baseline_comparison.py` |
+| Baseline: literature-style selection on the same lights (P-BASELINE v1.1, active-set-controlled) | OI geometry-insufficient (dc05_active -0.438/-0.615 vs randomA48; every informed policy better); DiLiGenT geometry-informative via the informed policy losing to random (+0.242/+0.474) | `python experiments/baseline_comparison.py` | `results/baseline/baseline_comparison.json` | `tests/test_baseline_comparison.py` |
+| Feasible-budget DQ diagnostic (P-DQ-FEASIBLE) | degenerate budgets k=57/85/114 flagged (88/88 bit-identical cells); feasible dAUC −0.38..−1.40 vs active48-random, dilution 2.0–2.8×, ratio to universe-random 0.27–0.51 | `python experiments/decision_quality_feasible.py` | `results/openillumination/decision_quality_feasible.json` | `pytest tests/test_dq_feasible.py` |
 
 Full per-experiment protocols (dataset → sampling → corruption → estimator →
 metric → seed → output) are in `docs/EXPERIMENTS.md`; raw-data sourcing in

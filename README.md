@@ -171,9 +171,15 @@ reference record.
   angular error from the single frozen residual pipeline, extended with a
   one-step normal refit), the information-theoretic allocation beats BOTH
   random baselines with bootstrap CIs excluding zero — by several degrees
-  against universe-random, but only 0.2–0.6° against active-set-restricted
-  random (the honest control): the headline is mostly the active-set
-  effect, the within-active-set advantage is real but modest. The
+  against universe-random, and by 0.38–1.40° against active-set-restricted
+  random on the feasible budget interval (the honest control): the headline
+  is mostly the active-set
+  effect. On the **feasible budget interval** (k ≤ 48; the frozen grid's
+  k=57/85/114 exceed the active-set size, where both sides pick the same
+  lights and the comparison is vacuous — flagged degenerate in
+  `results/openillumination/decision_quality_feasible.json`) the
+  within-active-set advantage is −0.38…−1.40°, ~2.5× smaller than the
+  universe-random advantage. The
   predicted J_A ordering predicts the realized ordering in 88/88
   object×level×regime cells (informed-only pooled sign agreement 0.687
   [0.657, 0.716]) — while the gauge-aligned weak-mode endpoints show the
@@ -424,7 +430,7 @@ Three structural findings anchor it (verified by
    random, dev +0.24°/+0.47°, while dc05_active merely matches it) —
    the ordering's advantage is conditional on the same axes as every
    other finding. The v1 all-pool DC05's chance-level performance was
-   the visibility confound (57–86% of its budget on non-illuminating
+   the visibility confound (36–86% of its budget on non-illuminating
    lights, overlap recorded; 88 OI rows bit-anchored to the frozen
    E-arm; `results/baseline/baseline_comparison.json`).
 4. **Mode-tail targeted intervention: no detectable advantage over scalar

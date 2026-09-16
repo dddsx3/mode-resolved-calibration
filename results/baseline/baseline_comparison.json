@@ -1,6 +1,6 @@
 {
  "gate": "P-BASELINE",
- "analysis_status": "baseline_comparison_v1",
+ "analysis_status": "baseline_comparison_v1_1",
  "level": 0.5,
  "regime": 10,
  "budgets_k": [
@@ -11,25 +11,66 @@
  "oi": {
   "14": {
    "median_ang_by_unit": {
-    "randomU_0": 6.253736,
     "a_opt": 4.745156,
-    "dc05_active": 5.235004,
-    "randomA48_2": 5.842206,
-    "randomA48_1": 5.987409,
     "randomU_1": 6.323691,
-    "dc05": 6.221846,
     "e_opt": 4.519638,
+    "randomU_0": 6.253736,
     "mode_aware": 5.058163,
+    "dc05_active": 5.235004,
+    "randomA48_1": 5.987409,
+    "randomA48_2": 5.842206,
+    "d_opt": 4.919686,
     "randomA48_0": 5.779608,
-    "randomU_2": 6.177151,
-    "d_opt": 4.919686
+    "dc05": 6.221846,
+    "randomU_2": 6.177151
+   },
+   "dev_per_object": {
+    "dc05_active_vs_randomA48": [
+     -0.440716,
+     -0.623389,
+     -0.437886,
+     0.054945,
+     -0.806228,
+     -0.178026,
+     -0.330014,
+     0.093253,
+     -0.675479,
+     -0.294273,
+     -0.668245
+    ],
+    "informed_vs_randomA48": [
+     -1.584875,
+     -0.748754,
+     -0.548093,
+     -0.485215,
+     -0.638493,
+     -1.076511,
+     -1.482275,
+     -0.704099,
+     -1.262458,
+     -0.124725,
+     -0.424243
+    ],
+    "dc05_vs_randomU": [
+     0.399537,
+     -0.281107,
+     0.296526,
+     -0.393901,
+     -0.531659,
+     -0.317899,
+     -0.076839,
+     0.097451,
+     -0.137122,
+     -0.279814,
+     0.153682
+    ]
    },
    "median_dev_from": {
     "dc05_active_vs_randomA48": -0.437886,
     "informed_vs_randomA48": -0.704099,
     "dc05_vs_randomU": -0.137122
    },
-   "dc05_active_overlap_at_k": {
+   "dc05_allpool_overlap_at_k": {
     "obj_03_pumpkin": 3,
     "obj_04_dolphin": 5,
     "obj_07_pumpkin2": 3,
@@ -42,29 +83,89 @@
     "obj_18_fabric_hat": 9,
     "obj_19_cylinder": 5
    },
+   "wasted_budget_share": {
+    "obj_03_pumpkin": 0.785714,
+    "obj_04_dolphin": 0.642857,
+    "obj_07_pumpkin2": 0.785714,
+    "obj_09_ball": 0.5,
+    "obj_10_pumpkin3": 0.5,
+    "obj_11_pine": 0.714286,
+    "obj_13_mushroom": 0.714286,
+    "obj_16_friends_cup": 0.857143,
+    "obj_17_pumpkin5": 0.642857,
+    "obj_18_fabric_hat": 0.357143,
+    "obj_19_cylinder": 0.642857
+   },
+   "wasted_share_range": [
+    0.357143,
+    0.857143
+   ],
+   "geometry_vs_randomA48": "geometry-beats-randomA48",
+   "model_vs_randomA48": "model-beats-randomA48",
    "reading": "geometry-insufficient"
   },
   "28": {
    "median_ang_by_unit": {
-    "randomU_0": 6.078101,
     "a_opt": 2.934844,
-    "dc05_active": 4.004769,
-    "randomA48_2": 4.486589,
-    "randomA48_1": 5.24881,
     "randomU_1": 6.060925,
-    "dc05": 6.096166,
     "e_opt": 2.894235,
+    "randomU_0": 6.078101,
     "mode_aware": 3.462629,
+    "dc05_active": 4.004769,
+    "randomA48_1": 5.24881,
+    "randomA48_2": 4.486589,
+    "d_opt": 3.578368,
     "randomA48_0": 4.524084,
-    "randomU_2": 5.943968,
-    "d_opt": 3.578368
+    "dc05": 6.096166,
+    "randomU_2": 5.943968
+   },
+   "dev_per_object": {
+    "dc05_active_vs_randomA48": [
+     -1.588359,
+     -0.614981,
+     -0.475764,
+     -0.174639,
+     -0.751101,
+     0.267949,
+     -0.049922,
+     -0.128125,
+     -1.0216,
+     -0.688531,
+     -0.919528
+    ],
+    "informed_vs_randomA48": [
+     -2.751534,
+     -1.199918,
+     -0.930764,
+     -1.129652,
+     -1.090192,
+     -1.204196,
+     -1.252157,
+     -1.249795,
+     -1.736313,
+     -2.309713,
+     -1.177181
+    ],
+    "dc05_vs_randomU": [
+     0.506685,
+     0.159005,
+     0.074738,
+     -0.067562,
+     -0.435828,
+     -0.23464,
+     0.249109,
+     0.124898,
+     0.034473,
+     -0.42688,
+     0.270044
+    ]
    },
    "median_dev_from": {
     "dc05_active_vs_randomA48": -0.614981,
     "informed_vs_randomA48": -1.204196,
     "dc05_vs_randomU": 0.074738
    },
-   "dc05_active_overlap_at_k": {
+   "dc05_allpool_overlap_at_k": {
     "obj_03_pumpkin": 7,
     "obj_04_dolphin": 10,
     "obj_07_pumpkin2": 8,
@@ -77,28 +178,85 @@
     "obj_18_fabric_hat": 13,
     "obj_19_cylinder": 8
    },
+   "wasted_budget_share": {
+    "obj_03_pumpkin": 0.75,
+    "obj_04_dolphin": 0.642857,
+    "obj_07_pumpkin2": 0.714286,
+    "obj_09_ball": 0.571429,
+    "obj_10_pumpkin3": 0.678571,
+    "obj_11_pine": 0.714286,
+    "obj_13_mushroom": 0.642857,
+    "obj_16_friends_cup": 0.75,
+    "obj_17_pumpkin5": 0.607143,
+    "obj_18_fabric_hat": 0.535714,
+    "obj_19_cylinder": 0.714286
+   },
+   "wasted_share_range": [
+    0.535714,
+    0.75
+   ],
+   "geometry_vs_randomA48": "geometry-beats-randomA48",
+   "model_vs_randomA48": "model-beats-randomA48",
    "reading": "geometry-insufficient"
   }
  },
  "diligent": {
   "14": {
    "median_ang_by_unit": {
-    "randomU_0": 9.006982,
     "a_opt": 8.718606,
-    "dc05_active": 9.108547,
-    "randomA48_2": 8.44326,
-    "randomA48_1": 8.524482,
     "randomU_1": 9.303884,
-    "dc05": 9.826542,
+    "randomU_0": 9.006982,
+    "randomA48_1": 8.524482,
+    "randomA48_2": 8.44326,
+    "dc05_active": 9.108547,
     "randomA48_0": 9.010313,
+    "dc05": 9.826542,
     "randomU_2": 9.719481
+   },
+   "dev_per_object": {
+    "dc05_active_vs_randomA48": [
+     0.057622,
+     -0.090858,
+     -1.210955,
+     0.708345,
+     -0.709666,
+     0.405726,
+     -0.117515,
+     -2.461502,
+     -0.117846,
+     0.209018
+    ],
+    "informed_vs_randomA48": [
+     1.253827,
+     0.009099,
+     0.137109,
+     0.686135,
+     -0.381469,
+     0.346984,
+     0.80704,
+     -1.818981,
+     -1.391942,
+     0.610865
+    ],
+    "dc05_vs_randomU": [
+     0.439103,
+     -0.173272,
+     -0.812529,
+     0.41454,
+     0.823269,
+     -0.247615,
+     0.252641,
+     -0.653885,
+     0.249016,
+     0.62726
+    ]
    },
    "median_dev_from": {
     "dc05_active_vs_randomA48": -0.104187,
     "informed_vs_randomA48": 0.242046,
     "dc05_vs_randomU": 0.250829
    },
-   "dc05_active_overlap_at_k": {
+   "dc05_allpool_overlap_at_k": {
     "ballPNG": 5,
     "bearPNG": 6,
     "buddhaPNG": 9,
@@ -110,26 +268,82 @@
     "pot2PNG": 6,
     "readingPNG": 7
    },
-   "reading": "geometry-informative"
+   "wasted_budget_share": {
+    "ballPNG": 0.642857,
+    "bearPNG": 0.571429,
+    "buddhaPNG": 0.357143,
+    "catPNG": 0.428571,
+    "cowPNG": 0.428571,
+    "gobletPNG": 0.5,
+    "harvestPNG": 0.571429,
+    "pot1PNG": 0.571429,
+    "pot2PNG": 0.571429,
+    "readingPNG": 0.5
+   },
+   "wasted_share_range": [
+    0.357143,
+    0.642857
+   ],
+   "geometry_vs_randomA48": "geometry-beats-randomA48",
+   "model_vs_randomA48": "model-loses-to-randomA48",
+   "reading": "geometry-informative (driven by informed failure, not geometry strength)"
   },
   "28": {
    "median_ang_by_unit": {
-    "randomU_0": 9.021766,
     "a_opt": 7.003548,
-    "dc05_active": 6.686485,
-    "randomA48_2": 6.934296,
-    "randomA48_1": 6.71024,
     "randomU_1": 8.645752,
-    "dc05": 8.85809,
+    "randomU_0": 9.021766,
+    "randomA48_1": 6.71024,
+    "randomA48_2": 6.934296,
+    "dc05_active": 6.686485,
     "randomA48_0": 6.85003,
+    "dc05": 8.85809,
     "randomU_2": 9.222026
+   },
+   "dev_per_object": {
+    "dc05_active_vs_randomA48": [
+     1.192987,
+     -0.32647,
+     0.418791,
+     0.252965,
+     -0.77072,
+     0.691385,
+     0.690815,
+     -4.343342,
+     -0.189481,
+     -0.936057
+    ],
+    "informed_vs_randomA48": [
+     1.970369,
+     0.525396,
+     0.25669,
+     2.127394,
+     0.053865,
+     0.422469,
+     1.423068,
+     -3.27992,
+     -1.624986,
+     0.668427
+    ],
+    "dc05_vs_randomU": [
+     1.439413,
+     0.074174,
+     -0.469463,
+     -0.762564,
+     0.617543,
+     0.298723,
+     -0.281147,
+     -0.546965,
+     0.42532,
+     0.923265
+    ]
    },
    "median_dev_from": {
     "dc05_active_vs_randomA48": 0.031742,
     "informed_vs_randomA48": 0.473932,
     "dc05_vs_randomU": 0.186449
    },
-   "dc05_active_overlap_at_k": {
+   "dc05_allpool_overlap_at_k": {
     "ballPNG": 11,
     "bearPNG": 13,
     "buddhaPNG": 14,
@@ -141,7 +355,25 @@
     "pot2PNG": 11,
     "readingPNG": 12
    },
-   "reading": "geometry-informative"
+   "wasted_budget_share": {
+    "ballPNG": 0.607143,
+    "bearPNG": 0.535714,
+    "buddhaPNG": 0.5,
+    "catPNG": 0.428571,
+    "cowPNG": 0.5,
+    "gobletPNG": 0.535714,
+    "harvestPNG": 0.464286,
+    "pot1PNG": 0.535714,
+    "pot2PNG": 0.607143,
+    "readingPNG": 0.571429
+   },
+   "wasted_share_range": [
+    0.428571,
+    0.607143
+   ],
+   "geometry_vs_randomA48": "geometry-at-randomA48",
+   "model_vs_randomA48": "model-loses-to-randomA48",
+   "reading": "geometry-informative (driven by informed failure, not geometry strength)"
   }
  },
  "baseline_definition": {
@@ -150,9 +382,9 @@
  },
  "oi_anchor": "88 informed rows BIT-IDENTICAL to the frozen E-arm anchor subset (shared orderings + seeds)",
  "manifest": {
-  "config_sha256": "dc2a300d3ad57586633d778ab42dca860da631a2d3eb86b0d7c8fdf3328e7997",
-  "git_sha": "8e841a5987f85f9edf9a0bfb69db08f604487d00",
-  "elapsed_s": 5116.1
+  "config_sha256": "a8d0e8c332b28f5fce76cc5be7fbee73999006aedd0e390cb2967ad3de4d08ed",
+  "git_sha": "951503954d450d979cd09f2086ed28322d917375",
+  "elapsed_s": 4872.7
  },
  "note": "Literature-style selection baselines on the same light sets: geometry-only (DC05) vs the calibrated prediction model vs random, at the frozen E-arm operating point (level 0.5, regime 10, budgets 14/28), realized endpoint = normal angular error. OI cohort carries the full frame with a bit-identity anchor; DiLiGenT the minimal comparable trio."
 }
