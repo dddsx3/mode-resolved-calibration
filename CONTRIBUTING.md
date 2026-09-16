@@ -23,6 +23,16 @@ version: open an issue first for anything semantic; keep PRs small; make sure
    `experiments/` with a header
    `# status: experimental — NOT part of the published results`, and never
    into `src/calibinfo/` (the published library path).
+5. **Any claim of an advantage over random must carry the active-set
+   control.** Comparing against universe-random measures VISIBILITY, not
+   selection quality: a policy that cannot see which lights illuminate
+   the object is indistinguishable from universe-random for that reason
+   alone (C8). Every such claim must also report the active48-restricted
+   random baseline (permute the illuminating set only), and baselines
+   whose candidate pool spans all lights must either be restricted to
+   the active set or report their active-set overlap. This rule was
+   learned three times (E-arm dAUC, C12 v1 DC05) — do not learn it a
+   fourth.
 
 ## Development setup
 

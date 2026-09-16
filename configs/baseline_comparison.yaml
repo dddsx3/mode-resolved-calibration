@@ -1,6 +1,27 @@
 # P-BASELINE -- literature-style selection baselines on the same light
 # sets (TCI gap 3). PREREGISTERED: committed BEFORE the run.
 #
+# v1.1 (acceptance report d9eb9f2 section 2-3): the v1 DC05 candidate
+# pool was ALL lights -- 57-86% of its budget fell on non-illuminating
+# lights (measured overlap 3-5 of 14 at k=14), so "DC05 ~ universe-
+# random" merely replicated C8 (the active-set effect) and could NOT
+# support "geometry-insufficient". v1.1 adds:
+#   - dc05_active: the SAME geometry rule with the candidate pool
+#     RESTRICTED to the object's active (illuminating) lights;
+#   - randomA48 controls (permute the active set only) on both
+#     cohorts -- the C8-mandated honest baseline;
+#   - per-object overlap recording (dc05 overlap with the active set
+#     at each budget) so the v1 confound is self-documenting.
+# Preregistered reading rule (replaces v1's, evaluated on the
+# ACTIVE-RESTRICTED comparison):
+#   geometry-insufficient: dc05_active's median deviation from the
+#     randomA48 mean is >= the informed family's median deviation
+#     (i.e. geometry still does not beat random on equal effective
+#     budget) -- C12 stands, strengthened.
+#   geometry-informative: dc05_active's median deviation is BETTER
+#     (more negative) than the informed family's -- C12 must be
+#     downgraded to "DC05's v1 failure was the visibility confound".
+#
 # Question: does GEOMETRY-ONLY light selection (the classic
 # well-conditioned-configuration idea, Drbohlav & Chantler ICCV 2005)
 # capture the allocation value that the calibrated prediction model
@@ -72,13 +93,17 @@ seeds: 10
 random_units: 3
 family_seed: 20260915
 
-oi_units: [mode_aware, e_opt, a_opt, d_opt, dc05, randomU_0, randomU_1, randomU_2]
-dq_units: [a_opt, dc05, randomU_0, randomU_1, randomU_2]
+oi_units: [mode_aware, e_opt, a_opt, d_opt, dc05, dc05_active, randomU_0, randomU_1, randomU_2, randomA48_0, randomA48_1, randomA48_2]
+dq_units: [a_opt, dc05, dc05_active, randomU_0, randomU_1, randomU_2, randomA48_0, randomA48_1, randomA48_2]
 
 outcome_rule: >
-  DC05-informative: DC05 median per-object ang deviation from random
-  <= informed median deviation. geometry-insufficient: greater. Per
-  cohort x budget; descriptive, no sign gate.
+  v1.1 (active-restricted): geometry-insufficient = dc05_active median
+  deviation from the randomA48 mean >= informed median deviation (on
+  every cohort x budget cell); geometry-informative = dc05_active
+  strictly better than the informed family's median deviation on any
+  cell (C12 downgrades to visibility-confound). v1's universe-random
+  comparison is retained for reference but is NOT the reading basis.
+  Descriptive, no sign gate.
 
 outcome_independence: >
   Every per-object realized endpoint and predicted J_A is reported for

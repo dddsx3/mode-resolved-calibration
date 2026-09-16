@@ -112,10 +112,27 @@ def run_object(payload):
             ords[unit] = select_ordering_mode_aware(state, regime)[0]
         elif unit == "dc05":
             ords[unit] = dc05_ordering(dir_args["dirs_all"])
+        elif unit == "dc05_active":
+            # v1.1:同一几何规则,候选池限制在 active(照到物体)灯
+            act_ids = [int(i) for i in np.flatnonzero(dir_args["active"])]
+            act_dirs = dir_args["dirs_all"][act_ids]
+            ords[unit] = [act_ids[i]
+                          for i in dc05_ordering(act_dirs)] +                 [i for i in range(K) if i not in set(act_ids)]
         elif unit.startswith("randomU_"):
             p = int(unit.split("_")[1])
             rng = np.random.default_rng([20260911, obj_idx, 0, p])
             ords[unit] = [int(i) for i in rng.permutation(K)]
+        elif unit.startswith("randomA48_"):
+            # v1.1:C8 规定的诚实基线——只在 active 集内置换
+            # (rng spec 沿用冻结 DQ 的 active48 约定)
+            p = int(unit.split("_")[1])
+            rng = np.random.default_rng([20260911, obj_idx, 0, 100 + p])
+            act_ids = np.asarray([int(i) for i in
+                                  np.flatnonzero(dir_args["active"])])
+            inact_ids = np.asarray([int(i) for i in
+                                    np.flatnonzero(~dir_args["active"])])
+            ords[unit] = ([int(i) for i in rng.permutation(act_ids)]
+                          + [int(i) for i in rng.permutation(inact_ids)])
         else:
             ords[unit] = select_ordering(state, unit, regime)[0]
 
@@ -138,12 +155,15 @@ def run_object(payload):
                                        np.radians(level), W_dual)
                 acc[(unit, k)].append(m["ang_mean_deg"])
     rows = []
+    act_set = set(int(i) for i in np.flatnonzero(dir_args["active"]))
     for unit in ords:
         for k in budgets:
+            overlap = sum(1 for i in ords[unit][:k] if i in act_set)
             rows.append(dict(cohort=cohort_tag, object=obj_name,
                              unit=unit, k=k,
                              pred_J_A=pred_J[(unit, k)],
-                             ang_mean_deg=float(np.mean(acc[(unit, k)]))))
+                             ang_mean_deg=float(np.mean(acc[(unit, k)])),
+                             active_overlap=overlap))
     return cohort_tag, obj_name, rows
 
 
@@ -250,35 +270,58 @@ def run(config_path=REPO / "configs/baseline_comparison.yaml",
                         and r["k"] == k]
                 if vals:
                     per_unit[unit] = round(float(np.median(vals)), 6)
-            # 逐对象偏差(相对 random 均值)
             objs = sorted({r["object"] for r in all_rows
                            if r["cohort"] == cohort_tag})
-            devs = {"dc05": [], "informed": []}
+            # v1.1:两个参照系——universe-random(v1,仅参考)与
+            # active48 random(v1.1 判读基础,C8 规定的诚实基线)
+            devs = {"dc05": [], "dc05_active": [], "informed": []}
+            overlap = {}
             for obj in objs:
-                rands = [r["ang_mean_deg"] for r in all_rows
-                         if r["cohort"] == cohort_tag and r["object"] == obj
-                         and r["k"] == k and r["unit"].startswith("randomU")]
-                if not rands:
+                rU = [r["ang_mean_deg"] for r in all_rows
+                      if r["cohort"] == cohort_tag and r["object"] == obj
+                      and r["k"] == k and r["unit"].startswith("randomU")]
+                rA = [r["ang_mean_deg"] for r in all_rows
+                      if r["cohort"] == cohort_tag and r["object"] == obj
+                      and r["k"] == k and r["unit"].startswith("randomA48")]
+                if not rA:
                     continue
-                rm = float(np.mean(rands))
-                d = [r["ang_mean_deg"] - rm for r in all_rows
-                     if r["cohort"] == cohort_tag and r["object"] == obj
-                     and r["k"] == k and r["unit"] == "dc05"]
-                devs["dc05"].append(d[0] if d else np.nan)
-                di = [r["ang_mean_deg"] - rm for r in all_rows
+                rAm = float(np.mean(rA))
+                rUm = float(np.mean(rU)) if rU else np.nan
+                d_a = [r["ang_mean_deg"] - rAm for r in all_rows
+                       if r["cohort"] == cohort_tag and r["object"] == obj
+                       and r["k"] == k and r["unit"] == "dc05_active"]
+                devs["dc05_active"].append(d_a[0] if d_a else np.nan)
+                if rU:
+                    d_u = [r["ang_mean_deg"] - rUm for r in all_rows
+                           if r["cohort"] == cohort_tag
+                           and r["object"] == obj and r["k"] == k
+                           and r["unit"] == "dc05"]
+                    devs["dc05"].append(d_u[0] if d_u else np.nan)
+                di = [r["ang_mean_deg"] - rAm for r in all_rows
                       if r["cohort"] == cohort_tag and r["object"] == obj
                       and r["k"] == k and r["unit"] in units_informed]
                 devs["informed"].append(float(np.median(di)) if di
                                         else np.nan)
-            med_dc05 = float(np.nanmedian(devs["dc05"]))
+                # v1 混淆自文档化:dc05(全域池)在 active 集内的重合度
+                ov = [r["active_overlap"] for r in all_rows
+                      if r["cohort"] == cohort_tag and r["object"] == obj
+                      and r["k"] == k and r["unit"] == "dc05"]
+                overlap[obj] = ov[0] if ov else None
+            med_dca = float(np.nanmedian(devs["dc05_active"]))
             med_inf = float(np.nanmedian(devs["informed"]))
-            reading = ("DC05-informative" if med_dc05 <= med_inf
-                       else "geometry-insufficient")
+            has_u = any(not np.isnan(x) for x in devs["dc05"])
+            med_dcu = (float(np.nanmedian(devs["dc05"])) if has_u
+                       else None)
+            reading = ("geometry-insufficient" if med_dca >= med_inf
+                       else "geometry-informative")
             out[str(k)] = dict(
                 median_ang_by_unit=per_unit,
-                median_dev_from_random=dict(
-                    dc05=round(med_dc05, 6),
-                    informed=round(med_inf, 6)),
+                median_dev_from=dict(
+                    dc05_active_vs_randomA48=round(med_dca, 6),
+                    informed_vs_randomA48=round(med_inf, 6),
+                    dc05_vs_randomU=(round(med_dcu, 6)
+                                     if med_dcu is not None else None)),
+                dc05_active_overlap_at_k=overlap,
                 reading=reading)
         return out
 
@@ -320,9 +363,11 @@ def run(config_path=REPO / "configs/baseline_comparison.yaml",
                                           indent=1).encode("utf-8"))
     for tag, s in (("oi", oi_summary), ("dq", dq_summary)):
         for k, d in s.items():
+            m = d["median_dev_from"]
             print(f"[base] {tag} k={k}: {d['reading']} "
-                  f"(dc05 dev {d['median_dev_from_random']['dc05']}, "
-                  f"informed dev {d['median_dev_from_random']['informed']})")
+                  f"(dc05_active {m['dc05_active_vs_randomA48']}, "
+                  f"informed {m['informed_vs_randomA48']}, "
+                  f"v1 dc05-vs-U {m['dc05_vs_randomU']})")
     print(f"[base] wrote {out_path}")
 
 
