@@ -1,0 +1,70 @@
+# P-ANCHOR-MECHANISM -- why does the direction channel carry 36% of the
+# budget value on OpenIllumination but ~0 on DiLiGenT at the SAME measured
+# error profile? (acceptance 530f991 section 5: the one substantive
+# question C11 leaves open). PREREGISTERED: committed BEFORE the run.
+#
+# Setting: at the ball-anchor profile (sig_logI = 0.0159, sig_dir =
+# 2.964 deg, both cohorts) the direction share of the budget value is
+# OI median 36.0% (4.8-71.4%) vs DiLiGenT median ~0 (cat 22.1%, pot1
+# 29.5% the only high objects). Both cohorts share the anchor; the
+# difference must come from the SCENE.
+#
+# Candidate scene statistics (all computed from the nominal scene, NOT
+# from the D functional -- no circularity):
+#   finf_median_log10   Fisher-information level (log10 median of Finf)
+#   finf_spread         Finf p90/p10 (heterogeneity of the information)
+#   light_spread_deg    mean pairwise angle among the active light dirs
+#   light_isotropy      smallest/largest eigenvalue of sum d_k d_k^T / L
+#   dir_int_weak_ratio  the key candidate: (direction-nuisance energy in
+#                       the bottom-5 weak-mode subspace, per column) /
+#                       (intensity-nuisance energy in the same subspace,
+#                       per column), whitened, summed over active lights.
+#                       Mechanistic reading: the channel whose nuisance
+#                       projects MORE onto the weak modes is the channel
+#                       that carries the value.
+#   gauge_cos           mean |cos| between each light's whitened intensity
+#                       column and its 2D direction-nuisance subspace
+#                       (how much closing one channel also removes the
+#                       other's leverage)
+#
+# Preregistered reading rule:
+#   mechanism-supported: at least one statistic reaches |Spearman| >= 0.7
+#     on the pooled 21 objects AND keeps the same sign within each cohort
+#     (OI n=11, DiLiGenT n=10) -- then that statistic is reported as the
+#     mechanism and C11 gains a mechanism statement.
+#   otherwise: no single scene statistic explains the cohort gap; C11
+#     stays at object-level conditionality (explicitly acceptable --
+#     acceptance 530f991 section 5).
+# All per-object values and correlations are reported regardless.
+
+gate: P-ANCHOR-MECHANISM
+analysis_status: anchor_mechanism_v1
+run_name: anchor_mechanism_v1
+
+oi_data_root: D:/data/OpenIllumination
+oi_data_meta: D:/data/OpenIllumination_meta
+oi_cohort: [obj_03_pumpkin, obj_04_dolphin, obj_07_pumpkin2, obj_09_ball, obj_10_pumpkin3, obj_11_pine, obj_13_mushroom, obj_16_friends_cup, obj_17_pumpkin5, obj_18_fabric_hat, obj_19_cylinder]
+oi_shares_artifact: results/openillumination/ball_anchor.json
+oi_shares_path: [direction_share_at_anchor, per_object]
+
+diligent_data_root: D:/data/DiLiGenT/pmsData
+diligent_cohort: [ballPNG, bearPNG, buddhaPNG, catPNG, cowPNG, gobletPNG, harvestPNG, pot1PNG, pot2PNG, readingPNG]
+diligent_shares_artifact: results/diligent/diligent_queue.json
+diligent_shares_path: [ball_anchor_share, per_object]
+
+noise_fit_convention: corrected
+oi_scene_rng_spec: "default_rng([20260910, obj_idx])  # identical to P-CERT"
+diligent_scene_rng_spec: "default_rng([20260915, obj_idx])  # identical to P-DILIGENT-QUEUE"
+K_oi: 142
+K_dq: 96
+anchor: {sig_logI: 0.0159079094301168, sig_dir_deg: 2.9644001216106344}
+n_weak_modes: 5
+
+outcome_rule: >
+  mechanism-supported: some statistic has |Spearman| >= 0.7 pooled and
+  consistent sign within both cohorts. Otherwise: no single scene
+  statistic explains the cohort gap (C11 stays object-conditional).
+
+outcome_independence: >
+  Every statistic and correlation is reported regardless of outcome;
+  no sign gate.
