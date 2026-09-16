@@ -40,6 +40,7 @@ ARTS = {
     "dq2": REPO / "results/diligent/diligent_queue.json",
     "bcmp": REPO / "results/baseline/baseline_comparison.json",
     "dqf": REPO / "results/openillumination/decision_quality_feasible.json",
+    "ablf": REPO / "results/openillumination/active_set_ablation_feasible.json",
 }
 
 
@@ -349,6 +350,11 @@ BINDINGS = [
     (E, "−0.38", "dqf",
      lambda j: max(v["median_dAUC"] for v in
                    j["feasible_dAUC_vs_randomA48"].values()), 2),
+    # ---- ablation budget-axis caliber (P-ABLATION-FEASIBLE) ----
+    (C, "1364", "ablf",
+     lambda j: j["ratio_with_k48"]["as_multiple"], 0),
+    (C, "1001", "ablf",
+     lambda j: j["ratio_without_k48"]["as_multiple"], 0),
     (C, "71.4", "ba",
      lambda j: max(j["direction_share_at_anchor"]["per_object"].values())
      * 100.0, 1),

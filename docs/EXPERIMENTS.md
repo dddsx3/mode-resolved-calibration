@@ -527,7 +527,11 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
   (median 5e-5); rounding loss ≤ 0.0005; certified gap ≤ 0.0008 — **on
   the J_A functional the entire advantage over universe-random is the
   active-set effect**; ordering within the active set, rounding, and the
-  certified gap are orders smaller. **泛函限定（可行性修正同步加入）**:在
+  certified gap are orders smaller. **预算轴口径（P-ABLATION-FEASIBLE）**:
+  引用的 ~1370× 用含 k=48 的全网格,而 k=48 = |active| 处 ordering 子项
+  定义性零(11/11 行)会稀释比值——剔除后 ~1001×;两者都是数量级差,
+  结论不变（`active_set_ablation_feasible.json` 登记两种口径与逐预算
+  退化标记）。**泛函限定（可行性修正同步加入）**:在
   realized 法向角误差端点上,排序承载 active-set 内增益的 40–45%
   （可行区间 dAUC 比 0.27–0.51,B9）——两个泛函不共享同一比值,本条
   声明只对 J_A 成立。

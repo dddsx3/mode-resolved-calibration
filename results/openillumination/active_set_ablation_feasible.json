@@ -1,0 +1,69 @@
+{
+ "gate": "P-ABLATION-FEASIBLE",
+ "analysis_status": "ablation_feasible_v1",
+ "source_artifact": "results/openillumination/active_set_ablation.json",
+ "source_manifest_sha256": "c78aaacf3c40ef3b6823eb9f255e49b0fee56b03299a290cc152f5d4e45907c9",
+ "source_git_sha": "7f7094b20c7a439a455cf9398542ae3eb928da87",
+ "n_active": 48,
+ "budgets_k": [
+  5,
+  10,
+  14,
+  28,
+  48
+ ],
+ "degenerate_budgets": {
+  "5": {
+   "n_rows": 11,
+   "n_ordering_gap_zero": 0,
+   "ordering_subterm_degenerate": false,
+   "dilution_term_degenerate": false,
+   "note": "k < |active|: both terms measured normally"
+  },
+  "10": {
+   "n_rows": 11,
+   "n_ordering_gap_zero": 0,
+   "ordering_subterm_degenerate": false,
+   "dilution_term_degenerate": false,
+   "note": "k < |active|: both terms measured normally"
+  },
+  "14": {
+   "n_rows": 11,
+   "n_ordering_gap_zero": 0,
+   "ordering_subterm_degenerate": false,
+   "dilution_term_degenerate": false,
+   "note": "k < |active|: both terms measured normally"
+  },
+  "28": {
+   "n_rows": 11,
+   "n_ordering_gap_zero": 0,
+   "ordering_subterm_degenerate": false,
+   "dilution_term_degenerate": false,
+   "note": "k < |active|: both terms measured normally"
+  },
+  "48": {
+   "n_rows": 11,
+   "n_ordering_gap_zero": 11,
+   "ordering_subterm_degenerate": true,
+   "dilution_term_degenerate": false,
+   "note": "k = |active| = 48: both ordering prefixes select all 48 lights, so mode_ordering_gap is definitionally 0 (not a measurement); active_set_dilution remains valid at this budget"
+  }
+ },
+ "ratio_with_k48": {
+  "median_ordering_gap": 4.62299e-05,
+  "median_dilution": 0.063073,
+  "ratio": 0.0007329574,
+  "as_multiple": 1364.3
+ },
+ "ratio_without_k48": {
+  "median_ordering_gap": 6.70514e-05,
+  "median_dilution": 0.067131,
+  "ratio": 0.0009988211,
+  "as_multiple": 1001.2
+ },
+ "caliber_note": "C8's quoted ~1370x uses the full grid INCLUDING k=48, where the ordering sub-term is definitionally zero and therefore dilutes the ratio; excluding k=48 the ratio is ~1001x. Both are order-of-magnitude statements; the conclusion is unchanged. The caliber must be stated because the ordering sub-term at k=|active| carries no information.",
+ "manifest": {
+  "git_sha": "665d01ed88a9d5c62d57212d5d14883d5ee1590b"
+ },
+ "note": "Zero-cost arithmetic on the committed ablation rows: budget-axis degeneracy marking for the C8 decomposition (ordering sub-term dies at k=|active|=48; the dilution term stays valid there and dies only for k>48)."
+}

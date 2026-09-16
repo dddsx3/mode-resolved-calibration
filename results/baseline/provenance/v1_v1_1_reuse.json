@@ -6,7 +6,9 @@
   "new_sha256": "307b1811109e5e7a453c20903bd9b71ea4383c7dcb4df7790dec7c00ef77b75c",
   "old_ref": "7f91db0:results/baseline/baseline_comparison.json",
   "old_sha256": "b9cec209d90a44fc712021c6e8bee09adb19c83d67ca56ba4ac589634cf61f4d",
-  "numeric_leaves_common": 67,
+  "leaves_common": 67,
+  "n_numeric": 59,
+  "n_string": 8,
   "bit_identical": 65,
   "value_mismatches": [],
   "n_value_mismatches": 0,
@@ -99,7 +101,7 @@
  "renames": {
   "dc05_active_overlap_at_k": "dc05_allpool_overlap_at_k"
  },
- "reading": "all non-label numeric leaves are BIT-IDENTICAL between the v1.1 field-complete rerun and the previous artifact version; changes are structural only: the overlap field renamed (it always held the ALL-POOL dc05 overlap), wasted_budget_share / wasted_share_range / dev_per_object / geometry_vs_randomA48 / model_vs_randomA48 added, and the reading labels annotated with their driver (P8). No measurement changed.",
+ "reading": "all non-label leaves (numeric and string) are BIT-IDENTICAL between the v1.1 field-complete rerun and the previous artifact version; changes are structural only: the overlap field renamed (it always held the ALL-POOL dc05 overlap), wasted_budget_share / wasted_share_range / dev_per_object / geometry_vs_randomA48 / model_vs_randomA48 added, and the reading labels annotated with their driver (P8). No measurement changed.",
  "manifest": {
   "note": "git-blob comparison of summary trees; old version read from 7f91db0:results/baseline/baseline_comparison.json"
  }

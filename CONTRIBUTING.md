@@ -36,6 +36,17 @@ version: open an issue first for anything semantic; keep PRs small; make sure
    9515039) is the same lesson in its budget-axis form: k > |active|
    makes the two sides select identical sets, so cross-budget statistics
    must be restricted to the feasible interval or flagged degenerate.
+   **A rule is enforced globally or not written at all** (acceptance
+   665d01e section 7): every artifact that uses a cross-budget /
+   cross-sample integrated statistic must carry the degeneracy check
+   for EVERY budget it uses -- new artifacts in-file, already-committed
+   artifacts via a zero-cost sidecar diagnostic with its own gate
+   (`decision_quality_feasible.json` for the E arm, whose budgets
+   57/85/114 > 48 die entirely; `active_set_ablation_feasible.json`
+   for the C8 ablation, whose k=48 = |active| kills only the ordering
+   sub-term). `tests/test_reproduce_coverage.py` keeps the reproduction
+   entry point covering every registered experiment; the same
+   no-silent-locality principle applies to it.
 
 ## Development setup
 

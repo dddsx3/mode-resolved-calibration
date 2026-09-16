@@ -192,6 +192,12 @@ spec = retention_spectrum(DeltaF, A.T @ A) # 逐模式保留率
   确实是经验上更脆的方向），不验证幅值 `1/ρ_j`。
 
 ## 复现与完整性
+**入口**:`./reproduce_paper.sh` 分阶段复现整条链——`--stage synthetic`
+(无需原始数据)、`--stage diag`(对已提交产物的零成本诊断)、
+`--stage oi` / `--stage dq`(原始数据实验,长跑在 `--long` 后)、
+`--stage figures`。每步打印其产物的 `gate` 名便于与 `results/` 对账;
+数据缺失时显式 SKIP。`--list` 打印 runner 表。
+
 
 - `checksums.sha256` 钉住**每一个**提交文件的哈希（CI 强制校验）；
 - 每个认证分析在运行前提交 config、带 manifest（git SHA、种子、

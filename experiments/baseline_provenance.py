@@ -76,7 +76,10 @@ def run():
             new_sha256=hashlib.sha256(NEW.read_bytes()).hexdigest(),
             old_ref=OLD_REF,
             old_sha256=hashlib.sha256(raw.stdout).hexdigest(),
-            numeric_leaves_common=len(common),
+            leaves_common=len(common),
+            n_numeric=sum(1 for k in common
+                          if not isinstance(ln[k], str)),
+            n_string=sum(1 for k in common if isinstance(ln[k], str)),
             bit_identical=n_bit,
             value_mismatches=value_mismatch[:20],
             n_value_mismatches=len(value_mismatch),
@@ -84,7 +87,8 @@ def run():
             added_fields=added[:40],
             removed_fields=removed[:40]),
         renames=RENAMES,
-        reading=("all non-label numeric leaves are BIT-IDENTICAL between "
+        reading=("all non-label leaves (numeric and string) are "
+                 "BIT-IDENTICAL between "
                  "the v1.1 field-complete rerun and the previous artifact "
                  "version; changes are structural only: the overlap field "
                  "renamed (it always held the ALL-POOL dc05 overlap), "
