@@ -53,7 +53,7 @@ during the 2026-09-09 repository reorganization. The complete ledger:
 | `665d01ed88a9` | `openillumination/active_set_ablation_feasible.json` | yes (ancestor of HEAD) | P-ABLATION-FEASIBLE zero-cost diagnostic (2026-09-16): budget-axis degeneracy marking for the C8 ablation (k=48 = |active| kills the ordering sub-term only) + the two calibers (1364x / 1001x) |
 | `29f9b9d239dc` | `diligent/provenance/loader_normalization_fix.json`, `baseline/baseline_comparison.json` | yes (ancestor of HEAD) | P-DILIGENT-LOADER-FIX reruns (2026-09-16): DiLiGenT loader intensity normalization restored; DQ-half baseline recomputed, OI rows unchanged |
 | `530f9910b2e9` | `diligent/diligent_queue.json` | yes (ancestor of HEAD) | P-DILIGENT-QUEUE re-run with the corrected outcome rule (v1.1 share-clause superseded; transfer-confirmed) — see the withdrawal institutionalization commit |
-| `e42b3eabddbf` | `openillumination/anchor_mechanism.json` | yes (ancestor of HEAD) | P-ANCHOR-MECHANISM zero-cost scene-statistic correlation (2026-09-16): dir/int weak-subspace energy ratio explains the anchor-share gap (pooled rho -0.899) |
+| `533a27969ef8` | `openillumination/anchor_mechanism.json` | yes (ancestor of HEAD) | P-ANCHOR-MECHANISM zero-cost scene-statistic correlation (2026-09-16): dir/int weak-subspace energy ratio explains the anchor-share gap (pooled rho -0.899) |
 
 The two unreachable SHAs are the ones the repo reorganization replaced. All
 seventeen artifacts remain byte-for-byte as committed and are pinned by
