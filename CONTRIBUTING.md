@@ -73,11 +73,18 @@ version: open an issue first for anything semantic; keep PRs small; make sure
    comments) still asserting the old result; worse, quoting the withdrawn
    NUMBER inside a note makes it a legitimate source for the
    numeric-traceability gates, laundering every document that cites it
-   (observed: the loader-fix round's `51.2%`/`~86%` notes whitewashing the
+   (observed: the loader-fix round's retraction notes whitewashing the
    reproduction matrix). A withdrawal note records field paths + date +
-   the source of the replacement reading — not the values themselves. The
-   numeric gates exclude `*_note`/`provenance` fields from the
-   traceability pool to make this enforceable.
+   the source of the replacement reading — not the values themselves.
+   Enforcement (three layers, all needed): the traceability pool drops the
+   whole `provenance/` subtree, withdrawal-container keys
+   (`withdrawn`/`before_after`/`correction`/…), and any string whose
+   content marks it as a correction narrative; and a separate gate
+   (`test_withdrawn_values_not_stated_as_current`) hard-fails any
+   registered withdrawn token stated outside a withdrawal context —
+   because the rounding-based pool can still admit a withdrawn value
+   through coincidental matches with unrelated measurements, so pool
+   exclusion alone is NOT sufficient for values.
 
 ## Development setup
 

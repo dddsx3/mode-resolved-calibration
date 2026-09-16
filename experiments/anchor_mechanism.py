@@ -85,18 +85,16 @@ def scene_stats(scen):
         return None
     # 参数空间的弱方向:V = Uw 的右奇异向量 → 参数方向 = V
     Vw = Vt[:N_MODES].T                                      # (3L, 5)
-    # 每灯的白化 B 列(3 列/灯),投影到弱子空间的能量
+    # 弱子空间基 Vw 在参数轴上的**负载**(不是逐灯 nuisance 能量):
+    # 对每灯取 Vw 的 3 行(强度行 + 两方向行),比较方向行与强度行的
+    # 平方范数——即"弱模式承载的是哪一类参数"。
+    # (验收 533a279 §3.2:此处曾有一组逐灯白化列 cols/c_int/c_dir 的
+    #  死代码,而描述写的却是它们;已删除,描述与计算一致。)
     e_int, e_dir = [], []
     for k in range(L):
-        cols = Uw[:, 3 * k:3 * k + 3]                        # (P, 3)
         proj = Vw[3 * k:3 * k + 3]                           # (3, 5)
-        # 强度列(第 0 列)与方向列(1,2)
-        c_int = cols[:, 0]
-        c_dir = cols[:, 1:3]
-        # 白化空间中的弱模式能量:把每列投影到 Vw 定义的弱方向
-        # (注意:Vw 是参数空间方向,需在参数空间比较)
-        p_int = proj[0:1, :]                                 # (1,5)
-        p_dir = proj[1:3, :]                                 # (2,5)
+        p_int = proj[0:1, :]                                 # (1,5) 强度轴
+        p_dir = proj[1:3, :]                                 # (2,5) 方向轴
         e_int.append(float(np.sum(p_int ** 2)))
         e_dir.append(float(np.sum(p_dir ** 2)))
     e_int = np.asarray(e_int)

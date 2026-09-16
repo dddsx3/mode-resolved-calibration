@@ -475,6 +475,50 @@ def _results_numbers():
     return [float(m) for m in _re.findall(r"-?\d+\.?\d*(?:[eE]-?\d+)?", text)]
 
 
+# --------------------------------------------------------------- 撤回值硬门禁
+# 验收 df31bb3 §4:池排除只对"注记"成立,对"数值"不成立——已撤回值仍可能
+# 被无关测量巧合命中(docs 门禁是精度舍入匹配,短 token 在 32 万数的池里
+# 必然有落点)。因此对**已知撤回值**加独立硬断言:任何文档都不得把这些
+# token 当作当前值陈述。撤回值在此显式登记(来源:loader-fix 与
+# feasible-rule 两次修正),新增撤回值时同步登记。
+# 注意:只登记**唯一指向撤回读数**的 token。会与合法测量撞车的值
+# (如 86 也出现在"36-86% 浪费份额"、0.899 也出现在机制 all-21 口径的
+# 合法报告里)不登记——否则门禁变成误报机。
+WITHDRAWN_TOKENS = {
+    "51.2", "51.197",          # DiLiGenT 方向通道 max(loader 伪影)
+    "0.242", "0.474",          # DQ informed 偏离(loader 伪影)
+    "85.6", "86.1",            # pot1/pot2 锚点份额(loader 伪影)
+    "-1557.8",                 # readingPNG 退化份额
+}
+# 允许出现的语境:撤回/更正叙述所在的行(按行判定,不按全文档)
+WITHDRAWN_CONTEXT_MARKS = (
+    "withdrawn", "superseded", "pre-correction", "correction note",
+    "更正", "撤回", "artifact", "no longer", "was ", "old ",
+    "reference only", "reference_only", "not the reading basis")
+
+
+def test_withdrawn_values_not_stated_as_current():
+    """已撤回值不得作为**当前值**出现在任何扫描文档里(按行判定)。
+
+    判据:含撤回 token 的行,必须同时命中撤回语境标记;否则失败。
+    (这是 N1 的硬门禁:不依赖数字池的巧合命中与否。)
+    """
+    hits = []
+    for f in SCAN_FILES:
+        for ln, line in enumerate(f.read_text(encoding="utf-8").splitlines(),
+                                  1):
+            for tok in WITHDRAWN_TOKENS:
+                pat = r"(?<![\w.])" + re.escape(tok) + r"(?![\w])"
+                if not re.search(pat, line):
+                    continue
+                low = line.lower()
+                if any(m in low for m in WITHDRAWN_CONTEXT_MARKS):
+                    continue
+                hits.append(f"{f.name}:{ln} states withdrawn value "
+                            f"{tok!r} without a withdrawal context")
+    assert not hits, "\n".join(hits)
+
+
 def test_docs_numeric_claims_traceable():
     """E-1b: docs(methods/claims)的每个数字可追溯到 results/**(舍入
     匹配 + 百分比换算),否则必须在带理由的白名单里。"""
