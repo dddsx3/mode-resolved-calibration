@@ -19,7 +19,7 @@ re-derives the value. The binding table (claim → evidence file → field) is
 
 ### 1.1 Provenance note: git SHAs recorded in result manifests
 
-Twenty-four distinct `git_sha` values are recorded across the committed result
+Twenty-five distinct `git_sha` values are recorded across the committed result
 manifests. They are not all the current HEAD: results are produced from an
 earlier working-tree state, and two of the recorded commits were replaced
 during the 2026-09-09 repository reorganization. The complete ledger:
@@ -51,7 +51,8 @@ during the 2026-09-09 repository reorganization. The complete ledger:
 | `951503954d45` | `openillumination/decision_quality_feasible.json` | yes (ancestor of HEAD) | P-DQ-FEASIBLE zero-cost diagnostic (2026-09-16): budget-grid saturation (k=57/85/114 > |active|=48) + feasible-interval dAUC |
 | `29f9b9d239dc` | `diligent/diligent_queue.json`, `diligent/provenance/loader_normalization_fix.json`, `baseline/baseline_comparison.json` | yes (ancestor of HEAD) | P-DILIGENT-QUEUE + P-BASELINE v1.2 (loader-corrected rerun, 2026-09-16): DiLiGenT per-light intensity normalization restored (nominal-vs-GT 15.6–26.3° → 2.56–6.34°); channel split now transfers, both baselines beat active-random; supersedes the launch rows `95f15ad647c9` (v1 queue) and `951503954d45` (v1.1 baseline), whose versions remain in git history |
 | `665d01ed88a9` | `openillumination/active_set_ablation_feasible.json` | yes (ancestor of HEAD) | P-ABLATION-FEASIBLE zero-cost diagnostic (2026-09-16): budget-axis degeneracy marking for the C8 ablation (k=48 = |active| kills the ordering sub-term only) + the two calibers (1364x / 1001x) |
-| `29f9b9d239dc` | `diligent/diligent_queue.json`, `diligent/provenance/loader_normalization_fix.json`, `baseline/baseline_comparison.json` | yes (ancestor of HEAD) | P-DILIGENT-LOADER-FIX reruns (2026-09-16): DiLiGenT loader intensity normalization restored; queue + DQ-half baseline recomputed, OI rows unchanged |
+| `29f9b9d239dc` | `diligent/provenance/loader_normalization_fix.json`, `baseline/baseline_comparison.json` | yes (ancestor of HEAD) | P-DILIGENT-LOADER-FIX reruns (2026-09-16): DiLiGenT loader intensity normalization restored; DQ-half baseline recomputed, OI rows unchanged |
+| `530f9910b2e9` | `diligent/diligent_queue.json` | yes (ancestor of HEAD) | P-DILIGENT-QUEUE re-run with the corrected outcome rule (v1.1 share-clause superseded; transfer-confirmed) — see the withdrawal institutionalization commit |
 
 The two unreachable SHAs are the ones the repo reorganization replaced. All
 seventeen artifacts remain byte-for-byte as committed and are pinned by
