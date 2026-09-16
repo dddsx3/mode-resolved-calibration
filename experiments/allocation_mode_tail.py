@@ -78,7 +78,7 @@ def arm_metrics(scales48, raw, scen, sig_logI, sig_rad, W_dual):
 
       - normal angular error（度）：一步交替法线重估（calibrated_ps 的
         n-更新原样：掩码内无权重 LSQ + 归一化，口径 = corrupted d2/g）
-        后 arccos(n̂_est·n̂_gt) 的 mean/median/p95（n̂_gt = scen.n）；
+        后 arccos(n̂_est·n̂_nominal) 的 mean/median/p95（**nominal reference** = scen.n——由名义数据估计的法向,非数据集 GT;命名与含义分离,勿写 n_gt）；
       - parameter MSE：gauge 对齐后 albedo 残差 ‖e‖²/P 与未对齐 MAE。
 
     不新建第二条残差管线：corruption→GLS 段与 arm_energy 逐语句相同，

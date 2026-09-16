@@ -161,13 +161,17 @@ spec = retention_spectrum(DeltaF, A.T @ A) # 逐模式保留率
   物体间跨度 4.8%–71.4%)
   (`results/openillumination/ball_anchor.json`)。
 
-  **第二数据集(P-DILIGENT-QUEUE)**:在 DiLiGenT(10 物体/96 灯,独立
-  采集系统)上:**线性化包络精确迁移**(radius_2x 中位 1.0,全物体
-  [0.75, 1.5],与 OpenIllumination 同值);通道分裂**不作为数据集级
-  陈述迁移**——方向单通道 max D = 51.2%(OI 为 1.68%),球锚点方向份额
-  按物体分裂(pot1/pot2 ≈ 86%,六个物体 ≈ 0–2%)。通道条件性判据增加
-  第三个条件轴:流程误差剖面 × 数据集几何 × 物体
-  (`results/diligent/diligent_queue.json`)。
+  **第二数据集(P-DILIGENT-QUEUE,loader 已修正)**:在 DiLiGenT(10 物体/
+  96 灯,独立采集系统)上:**线性化包络精确迁移**(radius_2x 中位 1.0,
+  全物体 [0.75, 1.5];radius_10x 10/10 全为 1.5);**强度主导的通道
+  分裂同样迁移**(方向 max D 0.20%,OI 为 1.68%;强度通道复现 joint
+  误差 <0.05pp)。仍保持条件性的:球锚点方向份额在同一实测剖面下按
+  队列/物体不同(OI 中位 36%,区间 4.8–71.4%;DiLiGenT 中位 ≈0,
+  cat 22%/pot1 29% 为高值物体)。*更正说明*:此前段落报的"通道分裂
+  不迁移"(方向 max 51.2%、pot1/pot2 ≈86%)是 loader 丢失 DiLiGenT
+  逐灯光强归一化(名义对 GT 偏 15.6–26.3°)的伪影;已修复、门禁化、
+  撤回(`results/diligent/diligent_queue.json` +
+  `results/diligent/provenance/loader_normalization_fix.json`)。
 
   **基线对照(P-BASELINE v1.1,active 集控制)**:Drbohlav–Chantler
   式良构配置选择(方向球面贪心最远点采样——纯几何),候选池限制在

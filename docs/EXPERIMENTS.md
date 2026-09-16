@@ -901,32 +901,48 @@ to the frozen OI artifacts).
 **Findings** (`results/diligent/diligent_queue.json`, preregistered
 outcome rule, 433 s):
 
-1. **Linearization radius: TRANSFERS EXACTLY.** radius_2x median 1.0
-   (per-object 0.75–1.5), radius_10x median 1.5 — the same values as
-   OpenIllumination. The amplitude-side envelope is a property of the
-   corruption geometry, replicated across two acquisition systems.
-2. **Channel decomposition: the direction channel is far larger on
-   DiLiGenT.** direction-only max D = 51.2% (OI: 1.68%); the
-   direction hump is broader and taller. Joint D saturates the ceiling
-   faster (median 89.5% at level 0.5 — DiLiGenT's cleaner data has
-   larger Finf, so the dynamic range sits near the ceiling).
-3. **Ball-anchor direction share: SPLITS BY OBJECT, not by dataset.**
-   At the measured anchor (σ_logI 0.0159, σ_dir 2.96°): pot1/pot2 ≈
-   86%, ball/bear/buddha/cat/cow/goblet ≈ 0–2%, harvest −40% (finite
-   small denominator), reading degenerate (D(anchor) ≈ 0, share is
-   0/0-shaped — annotated in the artifact, not a negative
-   contribution). Median −0.7%: the OI cohort's 36% flip does NOT
-   reproduce as a dataset-level statement.
+**Loader correction (2026-09-16, defect report).** The v1 OI-format
+adapter dropped the per-light intensity normalization (divided by 255
+only), biasing the DiLiGenT cohort's nominal reconstruction vs GT by
+15.6–26.3° (2.56–6.34° when normalized like `diligent.py:43`). The
+drift endpoints were structurally blind to it (two-sided same-source
+bias cancels in nominal-vs-corrupted differences); only an absolute
+check or a cross-loader gate can catch it — both now exist
+(`tests/test_diligent_loader_consistency.py`;
+`results/diligent/provenance/loader_normalization_fix.json`). All
+numbers below are POST-correction; the pre-correction readings
+(direction max 51.2%, pot1/pot2 ≈86%) are withdrawn.
+
+1. **Linearization radius: TRANSFERS EXACTLY (hardened).** radius_2x
+   median 1.0 (per-object 0.75–1.5), radius_10x median 1.5 with
+   **10/10 objects at exactly 1.5** — the same values as
+   OpenIllumination, unchanged by the loader correction. The
+   amplitude-side envelope is a property of the corruption geometry,
+   replicated across two acquisition systems.
+2. **Channel decomposition: intensity dominance TRANSFERS.** With the
+   corrected loader the DiLiGenT direction channel is tiny (max D
+   0.20% vs OI's 1.68%) and the intensity channel reproduces joint to
+   <0.05 pp at every level — the same channel split as OI. The
+   pre-correction "direction channel is far larger on DiLiGenT"
+   (51.2%) was the normalization artifact.
+3. **Ball-anchor direction share: object-dependent, and the cohorts
+   differ.** At the measured anchor (σ_logI 0.0159, σ_dir 2.96°):
+   DiLiGenT median ≈ 0 (cat 22.1%, pot1 29.5%, the rest ≈0; harvest
+   and reading carry finite small denominators, annotated degenerate)
+   vs the OI cohort's median 36.0% (4.8–71.4%). The OI 36% flip does
+   not reproduce on DiLiGenT at the same error profile — the
+   criterion's object axis survives, its dataset-channel-split axis is
+   retracted.
 
 **Outcome (preregistered): transfer-partial** — radius confirmed,
-share not confirmed as a dataset flip. Read through the
-channel-conditionality criterion (C10): the criterion survives and
-GAINS an axis — the direction share is conditioned on (i) the
-procedure's error profile (measured, C10), (ii) the dataset/scene
-geometry (OI 36% vs DiLiGenT split), and (iii) the object (pot1/pot2
-vs ball/cow within DiLiGenT). A dataset-level recommendation is
-therefore impossible without measuring the error profile AND the
-object — which is precisely what the criterion prescribes.
+anchor share not confirmed as a dataset-level flip. Post-correction the
+reading is: the criterion's axes are (i) the procedure's error profile
+(measured, C10) and (ii) the object / scene (OI 36% median vs DiLiGenT
+≈0 at the same profile, with cat/pot1 as the DQ high objects) — but
+NOT a dataset-level channel-split difference, which the loader
+artifact had falsely suggested. A recommendation is impossible without
+measuring the profile AND the object — which is what the criterion
+prescribes.
 
 
 ## 24. Baselines: literature-style selection on the same lights（P-BASELINE, `experiments/baseline_comparison.py`）
@@ -958,8 +974,16 @@ the overlap per object. Reading basis: dc05_active vs randomA48
 |---|---|---|---|
 | OI k=14 | −0.438° | −0.704° | geometry-insufficient |
 | OI k=28 | −0.615° | −1.204° | geometry-insufficient |
-| DQ k=14 | −0.104° | **+0.242°** | geometry-informative |
-| DQ k=28 | +0.032° | **+0.474°** | geometry-informative |
+| DQ k=14 | −0.336° | −0.274° | geometry-informative (both beat random) |
+| DQ k=28 | −0.335° | −0.369° | geometry-insufficient |
+
+**Loader correction (2026-09-16).** The v1.1 DiLiGenT numbers were
+computed through the adapter's missing per-light intensity normalization
+(15.6–26.3° nominal-vs-GT bias). Corrected, the DQ column changes
+qualitatively: **both geometry-only and the informed family beat
+active-restricted random at both budgets**, and the pre-correction
+"informed loses to random" claim is withdrawn. What remains true from
+the v1.1 reading: on OI every informed policy beats geometry clearly.
 
 **OpenIllumination: geometry helps but does not replace the model.**
 dc05_active (5.235°/4.005°) genuinely improves on randomA48
@@ -969,19 +993,17 @@ effective budget — but every informed policy remains clearly better
 performance was the visibility confound (C8), now self-documenting in
 the artifact's overlap fields.
 
-**DiLiGenT: the reading flips, but the driver is the informed
-policy's failure, not geometry's strength.** dc05_active merely
-matches randomA48 (k=28: 6.686° vs 6.710–6.934°), while a_opt loses
-to active-restricted random outright (dev +0.242/+0.474; k=14 8.719°
-vs randomA48 8.443–9.010°). **The calibrated model's per-light
-ordering does not transfer to the second dataset** — consistent with
-the E-arm het finding (ordering validity is conditional, truth-end
-decoupling) and with C11's object-level split. The honest one-line
-summary across cohorts: geometry-only selection captures part of the
-value on OI and none beyond chance on DQ; the calibrated model
-captures more than geometry on OI and nothing beyond active-random on
-DQ — its advantage is conditional on the same axes as every other
-finding in this paper.
+**DiLiGenT (corrected): both approaches carry value; the model's
+increment is marginal.** With the fixed loader, dc05_active
+(−0.336/−0.335) and the informed family (−0.274/−0.369) both beat
+active-restricted random at both budgets; at k=14 geometry is nominally
+better (within noise) and at k=28 the informed family is marginally
+better (6.88° vs 6.68° medians). The honest one-line summary across
+cohorts: **geometry-only selection carries real value on BOTH
+acquisition systems** (a positive, transferable result), while the
+calibrated model's ADDITIONAL margin over geometry is large on OI and
+marginal on DiLiGenT. The pre-correction "the model's ordering does
+not transfer" reading was a loader artifact and is withdrawn.
 
 **Comparability (Gardi 2022 / ReLeaPS 2023).** They optimize light
 POSITIONS / next-light selection sequences under their own objectives;

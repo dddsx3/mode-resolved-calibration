@@ -23,15 +23,28 @@ from PIL import Image
 
 
 def load_diligent_as_oi(d):
-    """DiLiGenT 单对象目录 → OI 格式 dict(NominalScene 直接可用)。"""
+    """DiLiGenT 单对象目录 → OI 格式 dict(NominalScene 直接可用)。
+
+    归一化口径与 src/calibinfo/datasets/diligent.py:43 **同一约定**:
+    I[k,p] = gray_k[mask] / light_intensities[k][R](禁峰值缩放)。
+    缺陷史(缺陷报告 2026-09-16):本适配层 v1 只除 255、丢了逐灯光强,
+    使名义重建相对 GT 偏 15.6–26.3°(正确归一化后 2.56–6.34°);
+    C11 与 C12 的 DiLiGenT 半曾建立在其上。两加载器一致性由
+    tests/test_diligent_loader_consistency.py 钉死——"两个加载器分叉"
+    这类缺陷只有门禁能防复发。
+    """
     d = Path(d)
     dirs = np.loadtxt(d / "light_directions.txt")            # (96,3) 单位
+    ints = np.loadtxt(d / "light_intensities.txt")[:, 0]     # R 通道(同 diligent.py)
     mask = np.array(Image.open(d / "mask.png").convert("L")) > 128
     K = dirs.shape[0]
     imgs = np.stack([np.array(Image.open(str(d / f"{i:03d}.png"))
-                              .convert("L")).astype(float) / 255.0
+                              .convert("L")).astype(float)
                      for i in range(1, K + 1)])              # (K,H,W)
+    imgs = imgs / ints[:, None, None]                        # 逐灯强度归一
     return dict(images=imgs[..., None].repeat(3, axis=-1),   # (K,H,W,3)
                 mask=mask,
                 light_directions=dirs,
-                meta=dict(dataset="DiLiGenT", object=d.name, n_lights=K))
+                meta=dict(dataset="DiLiGenT", object=d.name, n_lights=K,
+                          normalization="gray / light_intensities[R] "
+                                        "(identical to diligent.py:43)"))

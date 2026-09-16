@@ -5,13 +5,14 @@ CI-safe: reads only results/baseline/baseline_comparison.json. Pins:
 1. The OI hard anchor: 88 informed rows bit-identical to the frozen
    E-arm subset (the baseline shares orderings + seeds by construction;
    recorded in the artifact).
-2. Outcome consistency (v1.1 reading, active-restricted): the combined
-   `reading` is recomputed from `median_dev_from` and must match; the
-   measured outcome is OI geometry-insufficient (both budgets) and
-   DiLiGenT geometry-informative (both budgets) -- the latter driven by
-   the informed policy LOSING to active-restricted random (dev > 0),
-   not by geometry beating it (pinned by
-   test_dq_informed_loses_to_active_random).
+2. Outcome consistency (v1.1 reading, active-restricted, loader-corrected):
+   the combined `reading` is recomputed from `median_dev_from` and must
+   match; the measured outcome is OI geometry-insufficient (both
+   budgets) and DiLiGenT geometry-informative-at-k14 (both beat random)
+   / geometry-insufficient-at-k28. With the corrected DiLiGenT loader
+   BOTH geometry-only and the informed family beat active-restricted
+   random on DQ -- the pre-correction "informed loses to random" claim
+   is withdrawn (P-DILIGENT-LOADER-FIX).
 3. The headline table: on OI, dc05_active beats randomA48 but no
    informed policy loses to it; the v1 all-pool DC05's chance-level
    performance is reproduced and self-documented via the recorded
@@ -60,21 +61,25 @@ def test_outcome_consistency():
             assert d["reading"].startswith(expected), (tag, k)
     assert art["oi"]["14"]["reading"] == "geometry-insufficient"
     assert art["oi"]["28"]["reading"] == "geometry-insufficient"
-    assert art["diligent"]["14"]["reading"].startswith(
-        "geometry-informative (driven by informed failure")
-    assert art["diligent"]["28"]["reading"].startswith(
-        "geometry-informative (driven by informed failure")
+    # loader-corrected: DQ 上是 "both beat random"(k=14,几何名义更好)与
+    # geometry-insufficient(k=28, informed 更好)——"model loses" 已撤回
+    assert art["diligent"]["14"]["reading"] == (
+        "geometry-informative (both beat random)")
+    assert art["diligent"]["28"]["reading"] == "geometry-insufficient"
 
 
-def test_dq_informed_loses_to_active_random():
-    """DQ 上的真发现:a_opt 相对 randomA48 的中位偏差为正(k14 +0.242,
-    k28 +0.474)——预测模型的逐灯排序在 DiLiGenT 上不优于 active-random。
-    与 E 臂 het 发现同族(排序有效性是条件性的)。"""
+def test_dq_both_beat_random_after_loader_fix():
+    """loader 修正后(DQ 半):几何与 informed 在 DQ 两个预算上都优于
+    active-random;"a_opt 输给随机"是丢光强归一化的伪影,已撤回
+    (P-DILIGENT-LOADER-FIX)。"""
     art = _load()
-    for k, want in (("14", 0.242046), ("28", 0.473932)):
+    for k, dca, dinf in (("14", -0.336354, -0.273633),
+                         ("28", -0.334681, -0.369331)):
         dev = art["diligent"][k]["median_dev_from"]
-        assert round(dev["informed_vs_randomA48"], 6) == want, k
-        assert dev["informed_vs_randomA48"] > 0, k
+        assert round(dev["dc05_active_vs_randomA48"], 6) == dca, k
+        assert round(dev["informed_vs_randomA48"], 6) == dinf, k
+        assert dev["dc05_active_vs_randomA48"] < 0, k
+        assert dev["informed_vs_randomA48"] < 0, k
     # v1 混淆自文档化:all-pool dc05 的 active 重合度远低于预算
     ov14 = art["oi"]["14"]["dc05_allpool_overlap_at_k"]
     assert max(ov14.values()) <= 9 and min(ov14.values()) >= 2
@@ -109,10 +114,10 @@ def test_headline_numbers():
     dev28 = art["oi"]["28"]["median_dev_from"]
     assert round(dev28["dc05_active_vs_randomA48"], 4) == -0.615
     assert round(dev28["informed_vs_randomA48"], 4) == -1.2042
-    # DQ:dc05_active 与 randomA48 打平(k28 中位 6.686 vs 带 [6.710, 6.934])
+    # DQ(loader 修正后):k28 中位 dc05_active 6.881 / a_opt 7.000
     m2 = art["diligent"]["28"]["median_ang_by_unit"]
-    assert round(m2["dc05_active"], 3) == 6.686
-    assert round(m2["a_opt"], 3) == 7.004
+    assert round(m2["dc05_active"], 3) == 6.884
+    assert round(m2["a_opt"], 3) == 6.682
 
 
 def test_v1_1_fields_present_and_consistent():

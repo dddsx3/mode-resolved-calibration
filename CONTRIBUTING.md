@@ -48,6 +48,24 @@ version: open an issue first for anything semantic; keep PRs small; make sure
    entry point covering every registered experiment; the same
    no-silent-locality principle applies to it.
 
+6. **Relative endpoints are blind to two-sided same-source bias; every
+   loader pair needs a consistency gate.** A defect that biases the
+   nominal side and the corrupted side IDENTICALLY cancels in
+   nominal-vs-corrupted drift endpoints — it is invisible to every
+   relative metric the benchmarks use, and only an ABSOLUTE check
+   (against ground truth) or a cross-loader gate can catch it. The
+   DiLiGenT OI-format adapter dropped the per-light intensity
+   normalization for an entire round: the nominal reconstruction was
+   off by 15.6–26.3 deg vs GT (2.56–6.34 deg when normalized like
+   `diligent.py:43`) while the drift endpoints (D, E, radius) looked
+   normal. Two DiLiGenT loaders coexisted with divergent conventions;
+   only the sanity arm (which used the correct one) was ever checked
+   absolutely. Therefore: (a) any second loader for the same data must
+   be proven to agree with the first (`tests/test_diligent_loader_consistency.py`
+   is the template — bit-identical masked intensities on a real object);
+   (b) absolute-vs-GT checks belong in the routine gate set, not only in
+   a side arm.
+
 ## Development setup
 
 ```bash

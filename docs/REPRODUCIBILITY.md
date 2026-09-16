@@ -19,7 +19,7 @@ re-derives the value. The binding table (claim → evidence file → field) is
 
 ### 1.1 Provenance note: git SHAs recorded in result manifests
 
-Twenty-four distinct `git_sha` values are recorded across the committed result
+Twenty-five distinct `git_sha` values are recorded across the committed result
 manifests. They are not all the current HEAD: results are produced from an
 earlier working-tree state, and two of the recorded commits were replaced
 during the 2026-09-09 repository reorganization. The complete ledger:
@@ -52,6 +52,7 @@ during the 2026-09-09 repository reorganization. The complete ledger:
 | `951503954d45` | `baseline/baseline_comparison.json` | yes (ancestor of HEAD) | P-BASELINE v1.1 run (2026-09-16): active-set-controlled (dc05_active + randomA48 + overlap), OI geometry-insufficient / DQ geometry-informative via the informed policy's failure; 88 OI rows bit-anchored |
 | `951503954d45` | `openillumination/decision_quality_feasible.json` | yes (ancestor of HEAD) | P-DQ-FEASIBLE zero-cost diagnostic (2026-09-16): budget-grid saturation (k=57/85/114 > |active|=48) + feasible-interval dAUC |
 | `665d01ed88a9` | `openillumination/active_set_ablation_feasible.json` | yes (ancestor of HEAD) | P-ABLATION-FEASIBLE zero-cost diagnostic (2026-09-16): budget-axis degeneracy marking for the C8 ablation (k=48 = |active| kills the ordering sub-term only) + the two calibers (1364x / 1001x) |
+| `29f9b9d239dc` | `diligent/diligent_queue.json`, `diligent/provenance/loader_normalization_fix.json`, `baseline/baseline_comparison.json` | yes (ancestor of HEAD) | P-DILIGENT-LOADER-FIX reruns (2026-09-16): DiLiGenT loader intensity normalization restored; queue + DQ-half baseline recomputed, OI rows unchanged |
 
 The two unreachable SHAs are the ones the repo reorganization replaced. All
 seventeen artifacts remain byte-for-byte as committed and are pinned by

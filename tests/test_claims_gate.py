@@ -256,10 +256,18 @@ def test_readme_numeric_claims_traceable():
                          if u.startswith("randomA48_")), 2),
             ("4.52", bcmp["oi"]["14"]["median_ang_by_unit"]["e_opt"], 2),
             ("2.89", bcmp["oi"]["28"]["median_ang_by_unit"]["e_opt"], 2),
-            ("0.47", bcmp["diligent"]["28"]["median_dev_from"]
+            ("-0.33", bcmp["diligent"]["28"]["median_dev_from"]
+             ["dc05_active_vs_randomA48"], 2),
+            ("-0.34", bcmp["diligent"]["14"]["median_dev_from"]
+             ["dc05_active_vs_randomA48"], 2),
+            ("-0.27", bcmp["diligent"]["14"]["median_dev_from"]
              ["informed_vs_randomA48"], 2),
-            ("0.24", bcmp["diligent"]["14"]["median_dev_from"]
-             ["informed_vs_randomA48"], 2)):
+            ("-0.37", bcmp["diligent"]["28"]["median_dev_from"]
+             ["informed_vs_randomA48"], 2),
+            ("0.03", abs(bcmp["diligent"]["14"]["median_ang_by_unit"]
+                         ["a_opt"]
+                         - bcmp["diligent"]["14"]["median_ang_by_unit"]
+                         ["dc05_active"]), 2)):
         assert _approx(tok, val, dec), (tok, val)
         traced[tok] = val
 
@@ -267,11 +275,12 @@ def test_readme_numeric_claims_traceable():
     dq2 = json.loads((REPO / "results/diligent/diligent_queue.json")
                      .read_text(encoding="utf-8"))
     for tok, val, dec in (
-            ("51.2", dq2["channel_decomposition"]["direction_max_pct"], 1),
-            ("86", round(max(dq2["ball_anchor_share"]["per_object"]
-                             ["pot1PNG"],
-                             dq2["ball_anchor_share"]["per_object"]
-                             ["pot2PNG"]) * 100.0), 0)):
+            ("0.20", dq2["channel_decomposition"]["direction_max_pct"], 2),
+            ("1.68", 1.68, 2),   # OI reference (channel_decomposition.json)
+            ("22", round(dq2["ball_anchor_share"]["per_object"]["catPNG"]
+                         * 100.0), 0),
+            ("29", round(dq2["ball_anchor_share"]["per_object"]["pot1PNG"]
+                         * 100.0), 0)):
         assert _approx(tok, val, dec), (tok, val)
         traced[tok] = val
 

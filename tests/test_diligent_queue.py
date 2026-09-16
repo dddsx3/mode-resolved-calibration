@@ -56,11 +56,12 @@ def test_outcome_consistency():
     # 实测:半径过、份额不过 → partial
     assert art["outcome"] == "transfer-partial"
     assert radius_ok and not share_ok
-    assert round(med_share, 4) == -0.0067
+    assert round(med_share, 6) == -5.2e-05
     assert r2 == 1.0
 
 
 def test_radius_transfers():
+    """半径跨系统复现(loader 修正后加固:10x 全 10/10 = 1.5)。"""
     art = _load()
     per_obj = art["linearization_radius"]["radius_2x"]["per_object"]
     assert len(per_obj) == 10
@@ -69,36 +70,37 @@ def test_radius_transfers():
         "median_over_crossed_subset"] == 1.0
     assert art["linearization_radius"]["radius_10x"][
         "median_over_crossed_subset"] == 1.5
+    assert all(v == 1.5 for v in
+               art["linearization_radius"]["radius_10x"]
+               ["per_object"].values())
 
 
 def test_direction_channel_table():
+    """loader 修正后:DiLiGenT 方向通道很小(与 OI 同侧)——
+    修正前的 51.2% 是丢光强归一化的伪影(见 P-DILIGENT-LOADER-FIX)。"""
     art = _load()
     cd = art["channel_decomposition"]
-    assert cd["direction_max_pct"] == 51.197
-    # 方向通道在 DiLiGenT 上远大于 OI 的 1.68%(通道条件性判据的
-    # 第二数据集实例)
-    assert cd["direction_max_pct"] > 30.0
+    assert cd["direction_max_pct"] == 0.203
+    # 强度通道复现 joint(与 OI 相同的强度主导)
+    byc = cd["by_channel"]
+    for lv in byc["joint"]:
+        assert abs(byc["joint"][lv]["median_pct"]
+                   - byc["intensity"][lv]["median_pct"]) < 0.05
 
 
 def test_ball_anchor_share_split():
+    """loader 修正后:锚点份额按物体分裂但整体近零(cat 22.1%、pot1 29.5%,
+    其余 ~0);修正前的 pot1/pot2 ~86% 是伪影。"""
     art = _load()
     sh = art["ball_anchor_share"]["per_object"]
-    # 真方向耦合:pot1/pot2 ~86%
-    assert round(sh["pot1PNG"], 4) == 0.8559     # 0.855874
-    assert round(sh["pot2PNG"], 4) == 0.8608     # 0.860849
-    # 近零对象
-    assert abs(sh["ballPNG"]) < 0.03
-    assert abs(sh["bearPNG"]) < 0.03
-    assert abs(sh["buddhaPNG"]) < 0.01
-    # 退化(D(anchor)≈0,分母无意义)对象在 artifact 登记
-    assert art["ball_anchor_share"]["degenerate_objects"] == ["readingPNG"]
-    assert "degenerate_note" in art["ball_anchor_share"]
-    # harvest 的 -40% 介于两者之间(D(anchor) 有限但小)——分母量级断言,
-    # 防误读为"负方向贡献"
-    d_harvest = [r["D"] for r in art["channel_decomposition"]["rows"]
-                 if r["object"] == "harvestPNG" and r["channel"] == "joint"
-                 and r["level"] == 0.05][0]
-    assert 0.5 < d_harvest < 0.6
+    assert round(sh["catPNG"], 4) == 0.2208
+    assert round(sh["pot1PNG"], 4) == 0.2946
+    assert abs(sh["pot2PNG"]) < 0.01
+    assert abs(sh["ballPNG"]) < 0.001
+    assert abs(sh["bearPNG"]) < 0.001
+    assert art["ball_anchor_share"]["degenerate_objects"] == [
+        "harvestPNG", "readingPNG"]
+    assert round(art["ball_anchor_share"]["median"], 6) == -5.2e-05
 
 
 def test_manifest_integrity():

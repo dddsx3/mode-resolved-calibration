@@ -11,18 +11,18 @@
  "oi": {
   "14": {
    "median_ang_by_unit": {
+    "randomA48_1": 5.987409,
     "a_opt": 4.745156,
-    "randomU_1": 6.323691,
-    "e_opt": 4.519638,
+    "randomA48_2": 5.842206,
+    "randomA48_0": 5.779608,
+    "d_opt": 4.919686,
     "randomU_0": 6.253736,
+    "randomU_2": 6.177151,
     "mode_aware": 5.058163,
     "dc05_active": 5.235004,
-    "randomA48_1": 5.987409,
-    "randomA48_2": 5.842206,
-    "d_opt": 4.919686,
-    "randomA48_0": 5.779608,
     "dc05": 6.221846,
-    "randomU_2": 6.177151
+    "e_opt": 4.519638,
+    "randomU_1": 6.323691
    },
    "dev_per_object": {
     "dc05_active_vs_randomA48": [
@@ -106,18 +106,18 @@
   },
   "28": {
    "median_ang_by_unit": {
+    "randomA48_1": 5.24881,
     "a_opt": 2.934844,
-    "randomU_1": 6.060925,
-    "e_opt": 2.894235,
+    "randomA48_2": 4.486589,
+    "randomA48_0": 4.524084,
+    "d_opt": 3.578368,
     "randomU_0": 6.078101,
+    "randomU_2": 5.943968,
     "mode_aware": 3.462629,
     "dc05_active": 4.004769,
-    "randomA48_1": 5.24881,
-    "randomA48_2": 4.486589,
-    "d_opt": 3.578368,
-    "randomA48_0": 4.524084,
     "dc05": 6.096166,
-    "randomU_2": 5.943968
+    "e_opt": 2.894235,
+    "randomU_1": 6.060925
    },
    "dev_per_object": {
     "dc05_active_vs_randomA48": [
@@ -203,58 +203,58 @@
  "diligent": {
   "14": {
    "median_ang_by_unit": {
-    "a_opt": 8.718606,
-    "randomU_1": 9.303884,
-    "randomU_0": 9.006982,
-    "randomA48_1": 8.524482,
-    "randomA48_2": 8.44326,
-    "dc05_active": 9.108547,
-    "randomA48_0": 9.010313,
-    "dc05": 9.826542,
-    "randomU_2": 9.719481
+    "randomA48_1": 8.538548,
+    "a_opt": 8.620893,
+    "randomA48_0": 8.83399,
+    "randomU_0": 8.897832,
+    "randomU_2": 9.553755,
+    "dc05_active": 8.595611,
+    "dc05": 9.38792,
+    "randomA48_2": 8.82542,
+    "randomU_1": 9.701775
    },
    "dev_per_object": {
     "dc05_active_vs_randomA48": [
-     0.057622,
-     -0.090858,
-     -1.210955,
-     0.708345,
-     -0.709666,
-     0.405726,
-     -0.117515,
-     -2.461502,
-     -0.117846,
-     0.209018
+     -0.451414,
+     -1.569725,
+     -0.77812,
+     0.164622,
+     -0.787277,
+     0.771924,
+     0.22516,
+     -2.29326,
+     -0.221294,
+     0.096884
     ],
     "informed_vs_randomA48": [
-     1.253827,
-     0.009099,
-     0.137109,
-     0.686135,
-     -0.381469,
-     0.346984,
-     0.80704,
-     -1.818981,
-     -1.391942,
-     0.610865
+     -0.265034,
+     -1.625595,
+     -0.625372,
+     0.378328,
+     0.108268,
+     1.274101,
+     -0.282231,
+     -1.026172,
+     -2.141026,
+     0.962998
     ],
     "dc05_vs_randomU": [
-     0.439103,
-     -0.173272,
-     -0.812529,
-     0.41454,
-     0.823269,
-     -0.247615,
-     0.252641,
-     -0.653885,
-     0.249016,
-     0.62726
+     0.129065,
+     -0.560801,
+     -0.837828,
+     -0.212674,
+     0.456267,
+     -0.703044,
+     0.341145,
+     -1.006317,
+     0.304762,
+     0.495358
     ]
    },
    "median_dev_from": {
-    "dc05_active_vs_randomA48": -0.104187,
-    "informed_vs_randomA48": 0.242046,
-    "dc05_vs_randomU": 0.250829
+    "dc05_active_vs_randomA48": -0.336354,
+    "informed_vs_randomA48": -0.273633,
+    "dc05_vs_randomU": -0.041804
    },
    "dc05_allpool_overlap_at_k": {
     "ballPNG": 5,
@@ -285,63 +285,63 @@
     0.642857
    ],
    "geometry_vs_randomA48": "geometry-beats-randomA48",
-   "model_vs_randomA48": "model-loses-to-randomA48",
-   "reading": "geometry-informative (driven by informed failure, not geometry strength)"
+   "model_vs_randomA48": "model-beats-randomA48",
+   "reading": "geometry-informative (both beat random)"
   },
   "28": {
    "median_ang_by_unit": {
-    "a_opt": 7.003548,
-    "randomU_1": 8.645752,
-    "randomU_0": 9.021766,
-    "randomA48_1": 6.71024,
-    "randomA48_2": 6.934296,
-    "dc05_active": 6.686485,
-    "randomA48_0": 6.85003,
-    "dc05": 8.85809,
-    "randomU_2": 9.222026
+    "randomA48_1": 6.974532,
+    "a_opt": 6.682042,
+    "randomA48_0": 6.878116,
+    "randomU_0": 8.714872,
+    "randomU_2": 9.015957,
+    "dc05_active": 6.883998,
+    "dc05": 8.618577,
+    "randomA48_2": 6.887727,
+    "randomU_1": 8.915449
    },
    "dev_per_object": {
     "dc05_active_vs_randomA48": [
-     1.192987,
-     -0.32647,
-     0.418791,
-     0.252965,
-     -0.77072,
-     0.691385,
-     0.690815,
-     -4.343342,
-     -0.189481,
-     -0.936057
+     0.637486,
+     -0.260724,
+     0.802859,
+     -0.408638,
+     -0.604278,
+     -0.105784,
+     0.549537,
+     -2.337255,
+     -0.520699,
+     -0.685312
     ],
     "informed_vs_randomA48": [
-     1.970369,
-     0.525396,
-     0.25669,
-     2.127394,
-     0.053865,
-     0.422469,
-     1.423068,
-     -3.27992,
-     -1.624986,
-     0.668427
+     1.060972,
+     -0.29467,
+     -0.898309,
+     1.443321,
+     -0.207246,
+     -0.364946,
+     -0.384908,
+     -0.373716,
+     -1.475588,
+     -1.055277
     ],
     "dc05_vs_randomU": [
-     1.439413,
-     0.074174,
-     -0.469463,
-     -0.762564,
-     0.617543,
-     0.298723,
-     -0.281147,
-     -0.546965,
-     0.42532,
-     0.923265
+     0.783034,
+     0.263833,
+     -0.834899,
+     -1.380502,
+     0.371201,
+     0.212702,
+     -0.053989,
+     -0.962783,
+     0.549609,
+     0.81447
     ]
    },
    "median_dev_from": {
-    "dc05_active_vs_randomA48": 0.031742,
-    "informed_vs_randomA48": 0.473932,
-    "dc05_vs_randomU": 0.186449
+    "dc05_active_vs_randomA48": -0.334681,
+    "informed_vs_randomA48": -0.369331,
+    "dc05_vs_randomU": 0.238267
    },
    "dc05_allpool_overlap_at_k": {
     "ballPNG": 11,
@@ -371,9 +371,9 @@
     0.428571,
     0.607143
    ],
-   "geometry_vs_randomA48": "geometry-at-randomA48",
-   "model_vs_randomA48": "model-loses-to-randomA48",
-   "reading": "geometry-informative (driven by informed failure, not geometry strength)"
+   "geometry_vs_randomA48": "geometry-beats-randomA48",
+   "model_vs_randomA48": "model-beats-randomA48",
+   "reading": "geometry-insufficient"
   }
  },
  "baseline_definition": {
@@ -383,8 +383,8 @@
  "oi_anchor": "88 informed rows BIT-IDENTICAL to the frozen E-arm anchor subset (shared orderings + seeds)",
  "manifest": {
   "config_sha256": "a8d0e8c332b28f5fce76cc5be7fbee73999006aedd0e390cb2967ad3de4d08ed",
-  "git_sha": "951503954d450d979cd09f2086ed28322d917375",
-  "elapsed_s": 4872.7
+  "git_sha": "29f9b9d239dcfd638a3186df7fc41b926fd5d174",
+  "elapsed_s": 5055.9
  },
  "note": "Literature-style selection baselines on the same light sets: geometry-only (DC05) vs the calibrated prediction model vs random, at the frozen E-arm operating point (level 0.5, regime 10, budgets 14/28), realized endpoint = normal angular error. OI cohort carries the full frame with a bit-identity anchor; DiLiGenT the minimal comparable trio."
 }

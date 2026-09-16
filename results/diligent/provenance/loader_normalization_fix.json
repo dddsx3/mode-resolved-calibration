@@ -1,0 +1,182 @@
+{
+ "gate": "P-DILIGENT-LOADER-FIX",
+ "analysis_status": "loader_normalization_fix_v1",
+ "defect": "src/calibinfo/datasets/diligent_oi_adapter.py dropped the per-light intensity normalization (v1 divided by 255 only), biasing the DiLiGenT cohort's nominal reconstruction vs GT by 15.6-26.3 deg while the drift endpoints were blind to it (two-sided same-source bias cancels in nominal-vs-corrupted differences). Fixed to gray / light_intensities[:, 0], the diligent.py:43 convention; cross-loader gate added (tests/test_diligent_loader_consistency.py, bit-identical masked intensities).",
+ "decisive_measurement": {
+  "ballPNG": {
+   "unnormalized": {
+    "median_deg": 15.61,
+    "mean_deg": 15.29
+   },
+   "intensity_normalized": {
+    "median_deg": 2.56,
+    "mean_deg": 3.41
+   }
+  },
+  "catPNG": {
+   "unnormalized": {
+    "median_deg": 15.06,
+    "mean_deg": 17.19
+   },
+   "intensity_normalized": {
+    "median_deg": 6.51,
+    "mean_deg": 8.18
+   }
+  },
+  "buddhaPNG": {
+   "unnormalized": {
+    "median_deg": 16.08,
+    "mean_deg": 18.62
+   },
+   "intensity_normalized": {
+    "median_deg": 9.93,
+    "mean_deg": 12.57
+   }
+  },
+  "pot1PNG": {
+   "unnormalized": {
+    "median_deg": 15.98,
+    "mean_deg": 19.74
+   },
+   "intensity_normalized": {
+    "median_deg": 7.29,
+    "mean_deg": 8.72
+   }
+  }
+ },
+ "queue_before_after": {
+  "source_old": "29f9b9d:results/diligent/diligent_queue.json",
+  "source_new_sha256": "2515d5e8172982b52111258bc4a93862aff548725512e1adeb3d4b7e9a9f6148",
+  "radius": {
+   "radius_2x_median": [
+    1.0,
+    1.0
+   ],
+   "radius_10x_median": [
+    1.5,
+    1.5
+   ],
+   "per_object_changed": [
+    "catPNG",
+    "harvestPNG"
+   ]
+  },
+  "channel": {
+   "direction_max_pct": [
+    51.197,
+    0.203
+   ],
+   "joint_D_at_0p5_per_object": {
+    "ballPNG": [
+     0.8979503521188197,
+     0.8716272011814395
+    ],
+    "bearPNG": [
+     0.8967195618307887,
+     0.8570106859204752
+    ],
+    "buddhaPNG": [
+     0.894801555527406,
+     0.8537281623403283
+    ],
+    "catPNG": [
+     0.8943793126034223,
+     0.8598784198176401
+    ],
+    "cowPNG": [
+     0.8973917179975849,
+     0.7702116204052701
+    ],
+    "gobletPNG": [
+     0.8979533926706218,
+     0.8533664313683791
+    ],
+    "harvestPNG": [
+     0.8911679171684914,
+     0.23531343858613965
+    ],
+    "pot1PNG": [
+     0.2417113849615392,
+     0.8504303918628556
+    ],
+    "pot2PNG": [
+     0.11289057649536444,
+     0.8321725892636852
+    ],
+    "readingPNG": [
+     0.3056362035961856,
+     0.20593355834949145
+    ]
+   }
+  },
+  "anchor": {
+   "median": [
+    -0.006654,
+    -5.2e-05
+   ],
+   "per_object": {
+    "ballPNG": [
+     -0.010702,
+     -0.0
+    ],
+    "bearPNG": [
+     0.013679,
+     -1.9e-05
+    ],
+    "buddhaPNG": [
+     -0.002605,
+     -3.7e-05
+    ],
+    "catPNG": [
+     -0.00129,
+     0.2208
+    ],
+    "cowPNG": [
+     -0.017675,
+     -0.027493
+    ],
+    "gobletPNG": [
+     -0.022284,
+     -6.6e-05
+    ],
+    "harvestPNG": [
+     -0.402019,
+     -0.006942
+    ],
+    "pot1PNG": [
+     0.855874,
+     0.294612
+    ],
+    "pot2PNG": [
+     0.860849,
+     -0.001131
+    ],
+    "readingPNG": [
+     -15.577696,
+     -0.007384
+    ]
+   },
+   "degenerate_objects": [
+    [
+     "readingPNG"
+    ],
+    [
+     "harvestPNG",
+     "readingPNG"
+    ]
+   ]
+  },
+  "outcome": [
+   "transfer-partial",
+   "transfer-partial"
+  ]
+ },
+ "conclusion_impact": {
+  "radius": "HARDENED: radius_2x/10x medians unchanged (1.0/1.5), radius_10x now 1.5 on 10/10 objects; the cross-system envelope reproduction survives the correction",
+  "channel": "CORRECTED: the direction-channel maximum was 51.2% under the biased loader and is 0.20% corrected -- the DiLiGenT direction channel is NOT large; the 'dataset-geometry axis' reading of C11 was a loader artifact. The ball-anchor share split also collapses (pot1 85.6%->29.5%, pot2 86.1%->-0.1%, cat -0.1%->+22.1%, median -0.67%->-0.005%)",
+  "baseline": "DQ half of C12 rerun on the corrected loader (see baseline_comparison.json; the OI half is deterministic-unchanged and the OI hard anchor is re-asserted at runtime)"
+ },
+ "manifest": {
+  "note": "git-blob + raw-data comparison; the decisive measurement re-runs the nominal estimator on both normalization conventions"
+ }
+}

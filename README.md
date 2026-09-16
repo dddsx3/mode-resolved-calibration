@@ -415,16 +415,22 @@ Three structural findings anchor it (verified by
    sweep floor; the flip also spans 4.8%–71.4% across objects)
    (`results/openillumination/ball_anchor.json`).
 
-   **Second dataset (P-DILIGENT-QUEUE).** On DiLiGenT (10 objects, 96
-   lights, independent capture rig): the **linearization envelope
-   transfers exactly** (radius_2x median 1.0, all objects in
-   [0.75, 1.5] — same values as OpenIllumination), while the channel
-   split **does not transfer as a dataset statement** — the
-   direction-only max D is 51.2% (vs OI's 1.68%) and the ball-anchor
-   direction share splits by object (pot1/pot2 ≈ 86%, six objects ≈
-   0–2%). The channel-conditionality criterion gains a third axis:
-   procedure error profile × dataset geometry × object
-   (`results/diligent/diligent_queue.json`).
+   **Second dataset (P-DILIGENT-QUEUE, loader-corrected).** On
+   DiLiGenT (10 objects, 96 lights, independent capture rig): the
+   **linearization envelope transfers exactly** (radius_2x median 1.0,
+   all objects in [0.75, 1.5]; radius_10x = 1.5 on 10/10) and the
+   **intensity-dominance channel split also transfers** (direction max
+   D 0.20% vs OI's 1.68%; intensity reproduces joint to <0.05 pp).
+   What stays conditional: the ball-anchor direction share differs by
+   cohort/object at the same measured profile (OI median 36% over
+   4.8–71.4% vs DiLiGenT ≈0 with cat 22%/pot1 29% as the high objects).
+   *Correction note:* an earlier version of this paragraph reported
+   "channel split does not transfer" (direction max 51.2%, pot1/pot2
+   ≈86%) — those were artifacts of a loader that dropped DiLiGenT's
+   per-light intensity normalization (15.6–26.3° nominal-vs-GT bias);
+   fixed, gate-enforced, and withdrawn
+   (`results/diligent/diligent_queue.json` +
+   `results/diligent/provenance/loader_normalization_fix.json`).
 
    **Baseline (P-BASELINE, active-set-controlled).** A
    Drbohlav–Chantler-style well-conditioned-configuration selection
@@ -433,12 +439,16 @@ Three structural findings anchor it (verified by
    active-restricted random controls (the C8-mandated frame): **on
    OpenIllumination geometry helps but does not replace the model**
    (dc05_active 5.24°/4.00° vs randomA48 5.78–5.99°/4.49–5.25° vs
-   e_opt 4.52°/2.89°); **on DiLiGenT the model's per-light ordering
-   itself does not transfer** (a_opt loses to active-restricted
-   random, dev +0.24°/+0.47°, while dc05_active merely matches it) —
-   the ordering's advantage is conditional on the same axes as every
-   other finding. The v1 all-pool DC05's chance-level performance was
-   the visibility confound (36–86% of its budget on non-illuminating
+   e_opt 4.52°/2.89°); **geometry-only selection carries real value on
+   BOTH acquisition systems** (DiLiGenT, loader-corrected: dc05_active
+   −0.33° and informed −0.27°/−0.37° vs active-restricted random, both
+   beating it), while the calibrated model's incremental margin over
+   geometry is large on OI and marginal (≤0.03°) on DiLiGenT.
+   *Correction note:* the earlier "the model's per-light ordering does
+   not transfer" reading (a_opt losing to random) was an artifact of
+   the DiLiGenT loader's missing intensity normalization and is
+   withdrawn. The v1 all-pool DC05's chance-level performance was the
+   visibility confound (36–86% of its budget on non-illuminating
    lights, overlap recorded; 88 OI rows bit-anchored to the frozen
    E-arm; `results/baseline/baseline_comparison.json`).
 4. **Mode-tail targeted intervention: no detectable advantage over scalar
