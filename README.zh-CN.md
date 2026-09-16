@@ -173,10 +173,10 @@ spec = retention_spectrum(DeltaF, A.T @ A) # 逐模式保留率
   (pooled Spearman −0.899;OI 内 −0.927、DiLiGenT 内 −1.000):队列差异
   是场景几何的后果,而非数据集本身的属性。
   *更正说明*:此前段落报的"通道分裂
-  不迁移"(方向 max 51.2%、pot1/pot2 ≈86%)是 loader 丢失 DiLiGenT
-  逐灯光强归一化(名义对 GT 偏 15.6–26.3°)的伪影;已修复、门禁化、
-  撤回(`results/diligent/diligent_queue.json` +
-  `results/diligent/provenance/loader_normalization_fix.json`)。
+  不迁移"及较大的 pot1/pot2 锚点份额,是 loader 丢失 DiLiGenT 逐灯光强
+  归一化的伪影;已修复、门禁化、撤回(字段路径+日期:
+  `results/diligent/provenance/loader_normalization_fix.json`,
+  2026-09-16)。
 
   **基线对照(P-BASELINE v1.1,active 集控制)**:Drbohlav–Chantler
   式良构配置选择(方向球面贪心最远点采样——纯几何),候选池限制在

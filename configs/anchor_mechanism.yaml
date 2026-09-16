@@ -60,10 +60,23 @@ K_dq: 96
 anchor: {sig_logI: 0.0159079094301168, sig_dir_deg: 2.9644001216106344}
 n_weak_modes: 5
 
+# 判据修订 v1.1(验收 533a279 §3.3/§5-2):原判据把 0/0 型近零 share
+# (|share| < 0.01,与 diligent_queue 的 degenerate_objects 同义)当作普通
+# 观测参与排序,把 pooled 相关系数从 0.688 抬到 0.899 而跨过 0.7 门限。
+# 修订后:门限在**剔除退化点**的样本上评估,两套口径同时报告;原判据
+# 保留为参照(v1_reference_only)。
 outcome_rule: >
-  mechanism-supported: some statistic has |Spearman| >= 0.7 pooled and
-  consistent sign within both cohorts. Otherwise: no single scene
-  statistic explains the cohort gap (C11 stays object-conditional).
+  mechanism-supported: some statistic has |Spearman| >= 0.7 on the
+  valid-sample pooled set (degenerate shares |share| < 0.01 excluded)
+  AND a consistent sign across both cohorts' valid subsets.
+  oi-internal-only: the OI-internal valid correlation reaches the
+  threshold but the pooled valid-sample correlation does not (DiLiGenT
+  contributes too few valid objects). Otherwise: no-single-statistic.
+
+outcome_rule_v1_reference_only: >
+  mechanism-supported: some statistic has |Spearman| >= 0.7 pooled
+  (all 21 objects, degenerate shares included) and consistent sign
+  within both cohorts. (Superseded 2026-09-16; retained for reference.)
 
 outcome_independence: >
   Every statistic and correlation is reported regardless of outcome;

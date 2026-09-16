@@ -17,7 +17,8 @@
    "light_isotropy": 0.8858750395468854,
    "dir_int_weak_ratio": 6.7760134501865075,
    "gauge_cos": 0.6703918294911259,
-   "n_active": 48
+   "n_active": 48,
+   "degenerate_share": false
   },
   {
    "cohort": "oi",
@@ -29,7 +30,8 @@
    "light_isotropy": 0.6375122026486295,
    "dir_int_weak_ratio": 27.84109495729684,
    "gauge_cos": 0.7734554627144812,
-   "n_active": 48
+   "n_active": 48,
+   "degenerate_share": false
   },
   {
    "cohort": "oi",
@@ -41,7 +43,8 @@
    "light_isotropy": 0.4632360896627746,
    "dir_int_weak_ratio": 30.180531505648663,
    "gauge_cos": 0.8000932434716427,
-   "n_active": 48
+   "n_active": 48,
+   "degenerate_share": false
   },
   {
    "cohort": "oi",
@@ -53,7 +56,8 @@
    "light_isotropy": 0.6258246361986728,
    "dir_int_weak_ratio": 7.463221275506198,
    "gauge_cos": 0.6559759746079146,
-   "n_active": 48
+   "n_active": 48,
+   "degenerate_share": false
   },
   {
    "cohort": "oi",
@@ -65,7 +69,8 @@
    "light_isotropy": 0.5912261963622066,
    "dir_int_weak_ratio": 17.78587557037864,
    "gauge_cos": 0.627644502500113,
-   "n_active": 48
+   "n_active": 48,
+   "degenerate_share": false
   },
   {
    "cohort": "oi",
@@ -77,7 +82,8 @@
    "light_isotropy": 0.6361586379627114,
    "dir_int_weak_ratio": 4.624118800758678,
    "gauge_cos": 0.6720668978292778,
-   "n_active": 48
+   "n_active": 48,
+   "degenerate_share": false
   },
   {
    "cohort": "oi",
@@ -89,7 +95,8 @@
    "light_isotropy": 0.7945233435263435,
    "dir_int_weak_ratio": 9.527985018590137,
    "gauge_cos": 0.6444298724014556,
-   "n_active": 48
+   "n_active": 48,
+   "degenerate_share": false
   },
   {
    "cohort": "oi",
@@ -101,7 +108,8 @@
    "light_isotropy": 0.4863576344489611,
    "dir_int_weak_ratio": 4.297088095850473,
    "gauge_cos": 0.6493074503245599,
-   "n_active": 48
+   "n_active": 48,
+   "degenerate_share": false
   },
   {
    "cohort": "oi",
@@ -113,7 +121,8 @@
    "light_isotropy": 0.5753886104046796,
    "dir_int_weak_ratio": 8.450906645394499,
    "gauge_cos": 0.6673559704894664,
-   "n_active": 48
+   "n_active": 48,
+   "degenerate_share": false
   },
   {
    "cohort": "oi",
@@ -125,7 +134,8 @@
    "light_isotropy": 0.745787793787877,
    "dir_int_weak_ratio": 4.91473461242779,
    "gauge_cos": 0.6684020382733321,
-   "n_active": 48
+   "n_active": 48,
+   "degenerate_share": false
   },
   {
    "cohort": "oi",
@@ -137,7 +147,8 @@
    "light_isotropy": 0.5886492076458283,
    "dir_int_weak_ratio": 12.727175745391673,
    "gauge_cos": 0.8207916208464852,
-   "n_active": 48
+   "n_active": 48,
+   "degenerate_share": false
   },
   {
    "cohort": "dq",
@@ -149,7 +160,8 @@
    "light_isotropy": 0.07293685654819425,
    "dir_int_weak_ratio": 12.78955371017878,
    "gauge_cos": 0.6202402339877074,
-   "n_active": 48
+   "n_active": 48,
+   "degenerate_share": true
   },
   {
    "cohort": "dq",
@@ -161,7 +173,8 @@
    "light_isotropy": 0.08398310629447808,
    "dir_int_weak_ratio": 38.85612190610259,
    "gauge_cos": 0.5824767287765872,
-   "n_active": 48
+   "n_active": 48,
+   "degenerate_share": true
   },
   {
    "cohort": "dq",
@@ -173,7 +186,8 @@
    "light_isotropy": 0.11587388564263155,
    "dir_int_weak_ratio": 99.83656717776854,
    "gauge_cos": 0.5517258717333148,
-   "n_active": 48
+   "n_active": 48,
+   "degenerate_share": true
   },
   {
    "cohort": "dq",
@@ -185,7 +199,8 @@
    "light_isotropy": 0.09218084838222118,
    "dir_int_weak_ratio": 3.5833583708156973,
    "gauge_cos": 0.3958239669692125,
-   "n_active": 48
+   "n_active": 48,
+   "degenerate_share": false
   },
   {
    "cohort": "dq",
@@ -197,7 +212,8 @@
    "light_isotropy": 0.08452595954556444,
    "dir_int_weak_ratio": 182150.20562015136,
    "gauge_cos": 0.3766776652144352,
-   "n_active": 48
+   "n_active": 48,
+   "degenerate_share": false
   },
   {
    "cohort": "dq",
@@ -209,7 +225,8 @@
    "light_isotropy": 0.0817151947241538,
    "dir_int_weak_ratio": 288.66920058486016,
    "gauge_cos": 0.5986904393609546,
-   "n_active": 48
+   "n_active": 48,
+   "degenerate_share": true
   },
   {
    "cohort": "dq",
@@ -221,7 +238,8 @@
    "light_isotropy": 0.10009408529124256,
    "dir_int_weak_ratio": 31475.160132845718,
    "gauge_cos": 0.6106352785705528,
-   "n_active": 48
+   "n_active": 48,
+   "degenerate_share": true
   },
   {
    "cohort": "dq",
@@ -233,7 +251,8 @@
    "light_isotropy": 0.08750860418015396,
    "dir_int_weak_ratio": 3.131377455137272,
    "gauge_cos": 0.37555819555903414,
-   "n_active": 48
+   "n_active": 48,
+   "degenerate_share": false
   },
   {
    "cohort": "dq",
@@ -245,7 +264,8 @@
    "light_isotropy": 0.0870702366116771,
    "dir_int_weak_ratio": 498.7265887412686,
    "gauge_cos": 0.5716079657053801,
-   "n_active": 48
+   "n_active": 48,
+   "degenerate_share": true
   },
   {
    "cohort": "dq",
@@ -257,72 +277,112 @@
    "light_isotropy": 0.09576116842681548,
    "dir_int_weak_ratio": 61875.19222349296,
    "gauge_cos": 0.5407307728415974,
-   "n_active": 48
+   "n_active": 48,
+   "degenerate_share": true
   }
  ],
  "correlations": {
   "finf_median_log10": {
    "pooled": -0.692208,
+   "pooled_excl_degenerate": -0.384615,
+   "n_valid": 14,
    "per_cohort": {
     "oi": -0.436364,
     "dq": -0.684848
    },
-   "consistent_sign": true
+   "per_cohort_excl_degenerate": {
+    "oi": -0.436364,
+    "dq": null
+   },
+   "consistent_sign": false
   },
   "finf_spread": {
    "pooled": -0.867532,
+   "pooled_excl_degenerate": -0.595604,
+   "n_valid": 14,
    "per_cohort": {
     "oi": -0.618182,
     "dq": -0.878788
    },
-   "consistent_sign": true
+   "per_cohort_excl_degenerate": {
+    "oi": -0.618182,
+    "dq": null
+   },
+   "consistent_sign": false
   },
   "light_spread_deg": {
    "pooled": 0.519481,
+   "pooled_excl_degenerate": -0.173626,
+   "n_valid": 14,
    "per_cohort": {
     "oi": -0.736364,
     "dq": 0.187879
+   },
+   "per_cohort_excl_degenerate": {
+    "oi": -0.736364,
+    "dq": null
    },
    "consistent_sign": false
   },
   "light_isotropy": {
    "pooled": 0.672727,
+   "pooled_excl_degenerate": 0.415385,
+   "n_valid": 14,
    "per_cohort": {
     "oi": 0.163636,
     "dq": -0.163636
+   },
+   "per_cohort_excl_degenerate": {
+    "oi": 0.163636,
+    "dq": null
    },
    "consistent_sign": false
   },
   "dir_int_weak_ratio": {
    "pooled": -0.898701,
+   "pooled_excl_degenerate": -0.687912,
+   "n_valid": 14,
    "per_cohort": {
     "oi": -0.927273,
     "dq": -1.0
    },
-   "consistent_sign": true
+   "per_cohort_excl_degenerate": {
+    "oi": -0.927273,
+    "dq": null
+   },
+   "consistent_sign": false
   },
   "gauge_cos": {
    "pooled": 0.537662,
+   "pooled_excl_degenerate": 0.054945,
+   "n_valid": 14,
    "per_cohort": {
     "oi": -0.290909,
     "dq": -0.066667
    },
+   "per_cohort_excl_degenerate": {
+    "oi": -0.290909,
+    "dq": null
+   },
    "consistent_sign": false
   }
  },
- "mechanism_supported": [
+ "mechanism_supported": [],
+ "mechanism_supported_including_degenerate": [
   "dir_int_weak_ratio",
   "finf_spread"
  ],
- "outcome": "mechanism-supported",
- "outcome_rule": "mechanism-supported: some statistic has |Spearman| >= 0.7 pooled and consistent sign within both cohorts. Otherwise: no single scene statistic explains the cohort gap (C11 stays object-conditional).",
- "reading": "the cohort gap is explained by ['dir_int_weak_ratio', 'finf_spread']",
+ "degenerate_share_threshold": 0.01,
+ "n_degenerate": 7,
+ "outcome": "oi-internal-only (valid-sample pooled below threshold; OI alone carries the mechanism)",
+ "outcome_rule": "mechanism-supported: some statistic has |Spearman| >= 0.7 on the valid-sample pooled set (degenerate shares |share| < 0.01 excluded) AND a consistent sign across both cohorts' valid subsets. oi-internal-only: the OI-internal valid correlation reaches the threshold but the pooled valid-sample correlation does not (DiLiGenT contributes too few valid objects). Otherwise: no-single-statistic.",
+ "reading": "the valid-sample pooled correlation falls below the 0.7 threshold: the mechanism holds WITHIN OpenIllumination (n=11, no degenerate shares) but DiLiGenT contributes only 3 objects above the degenerate scale, so the cross-cohort statement is not supported -- C11 keeps its object-level caveat with the OI-internal mechanism reported",
  "manifest": {
-  "config_sha256": "10c9fa56050e03fcc94c2b2f1a6822e6e44f940590f382cff65bb80f7326023b",
-  "git_sha": "e42b3eabddbfa6a68c29811b6b1890a30b6dd900",
+  "config_sha256": "83a03f02f81cf753d7a6d20b0ad2ac89cef3841a3a60528ee764a6ec4a3392cf",
+  "git_sha": "533a27969ef8d85112e8322e53e9b9886997ac4e",
   "oi_shares_sha256": "b4868a85f5574fcc7743ac970623d6dee585ed80290ab485ec30f686bc5ed605",
   "diligent_shares_sha256": "a7574db1b8638ecc8533f5f6a26e2f1d7783ad24887fc009d609fb6d8192aa3a",
-  "elapsed_s": 28.7
+  "elapsed_s": 27.2
  },
- "note": "Scene statistics (all from the nominal scene, none from the D functional) correlated against the per-object direction share at the shared measured anchor, to test which scene property explains the OI (36% median) vs DiLiGenT (~0) gap. Preregistered rule: |Spearman| >= 0.7 pooled with consistent per-cohort sign => mechanism-supported."
+ "note": "Scene statistics (all from the nominal scene, none from the D functional) correlated against the per-object direction share at the shared measured anchor, to test which scene property explains the OI (36% median) vs DiLiGenT (~0) gap. The headline statistic dir_int_weak_ratio is the mass the bottom-5 weak-mode subspace places on the direction parameter axes vs the intensity axis -- a weak-subspace loading measure, NOT a per-light nuisance-energy ratio (description corrected per acceptance 533a279 section 3.2). Degenerate shares (|share| < 0.01, 0/0-shaped) are flagged and excluded from the primary caliber; the v1 all-21 rule is retained as reference only."
 }

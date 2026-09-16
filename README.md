@@ -431,12 +431,11 @@ Three structural findings anchor it (verified by
    DiLiGenT): the cohort difference is a consequence of scene geometry,
    not of the datasets per se.
    *Correction note:* an earlier version of this paragraph reported
-   "channel split does not transfer" (direction max 51.2%, pot1/pot2
-   ≈86%) — those were artifacts of a loader that dropped DiLiGenT's
-   per-light intensity normalization (15.6–26.3° nominal-vs-GT bias);
-   fixed, gate-enforced, and withdrawn
-   (`results/diligent/diligent_queue.json` +
-   `results/diligent/provenance/loader_normalization_fix.json`).
+   "channel split does not transfer" and large pot1/pot2 anchor shares —
+   those were artifacts of a loader that dropped DiLiGenT's per-light
+   intensity normalization; fixed, gate-enforced, and withdrawn
+   (field paths + date: `results/diligent/provenance/`
+   `loader_normalization_fix.json`).
 
    **Baseline (P-BASELINE, active-set-controlled).** A
    Drbohlav–Chantler-style well-conditioned-configuration selection

@@ -44,7 +44,7 @@ BANNED = [
 NON_CLAIM_TOKENS = {"3.10"}          # README "Requires Python >= 3.10"
 
 SCAN_FILES = sorted(
-    [REPO / "README.md", REPO / "README.zh-CN.md"]
+    [REPO / "README.md", REPO / "README.zh-CN.md", REPO / "CONTRIBUTING.md"]
     + list((REPO / "docs").rglob("*.md"))
     + list((REPO / "examples").rglob("*.md"))
     + list((REPO / "tutorials").rglob("*.md"))
@@ -312,6 +312,13 @@ def test_readme_numeric_claims_traceable():
                       "decision_quality_feasible.json")
                      .read_text(encoding="utf-8"))
     _fe = dqf["feasible_dAUC_vs_randomA48"]
+    # feasible-interval magnitudes printed as a range (abs of the dAUC)
+    for tok, val, dec in (
+            ("0.38", abs(max(v["median_dAUC"] for v in _fe.values())), 2),
+            ("1.40", abs(min(v["median_dAUC"] for v in _fe.values())), 2)):
+        assert _approx(tok, val, dec), (tok, val)
+        traced[tok] = val
+
     for tok, val, dec in (
             ("-0.38", max(v["median_dAUC"] for v in _fe.values()), 2),
             ("-1.40", min(v["median_dAUC"] for v in _fe.values()), 2)):
@@ -347,25 +354,38 @@ def test_readme_numeric_claims_traceable():
     #       value "15.986150483597436").
     readme2 = re.sub(r"\d+e-\d+", " ", readme.replace("\u2212", "-"))
     tokens = set(re.findall(r"-?\d+\.\d+|-?\d+", readme2))
-    # 撤回注记(N2,P1-b 根治):带 *_note / provenance 名的字段是
-    # "撤回/更正说明"的合法居所——它们会引用已撤回的数值,于是把旧值
-    # "洗"回可追溯池。数字必须命中**非说明字段**才算可追溯:构建池子时
-    # 剥离这些字段(而非整个文件),使注记不再为旧值背书。
-    WITHDRAWN_FIELD_MARKS = ("_note", "note_", "provenance")
+    # 撤回注记排除(规则 7 的可执行实现;验收 533a279 §2.2):
+    # 按 **key 名** 排除不够——撤回叙述会被写进名字正常的字段(本次是
+    # `channel`)或存成数值数组(`*_before_after`)。改为三层排除:
+    #   (a) 整棵 provenance/ 子树不入池(撤回记录按定义不是当前测量);
+    #   (b) 容器名(withdrawn/before/after/correction/conclusion_impact…);
+    #   (c) 按 **内容形状**:字符串命中 corrected:/withdrawn/superseded/
+    #       pre-correction/was 等标记即整条不入池。
+    # 未入池的字段是"撤回注记的合法居所",不是数据源。
+    WITHDRAWN_CONTAINER_MARKS = (
+        "_note", "note_", "provenance", "withdrawn", "before_after",
+        "before", "after", "correction", "conclusion_impact",
+        "superseded", "caliber_note")
+    WITHDRAWN_CONTENT_MARKS = (
+        "corrected:", "withdrawn", "superseded", "pre-correction",
+        "was ", "no longer", "not the reading basis",
+        "retained for reference")
 
     def _pool(obj, path=""):
         chunks = []
         if isinstance(obj, dict):
             for k, v in obj.items():
                 kp = f"{path}.{k}" if path else k
-                if isinstance(v, str) and any(
-                        m in k.lower() for m in WITHDRAWN_FIELD_MARKS):
-                    continue                      # 撤回/更正说明:不入池
+                if any(m in k.lower() for m in WITHDRAWN_CONTAINER_MARKS):
+                    continue                      # 撤回/更正容器:不入池
                 chunks.append(_pool(v, kp))
         elif isinstance(obj, list):
             for i, v in enumerate(obj):
                 chunks.append(_pool(v, f"{path}[{i}]"))
         elif isinstance(obj, str):
+            low = obj.lower()
+            if any(m in low for m in WITHDRAWN_CONTENT_MARKS):
+                return ""                         # 更正/撤回散文:不入池
             chunks.append(obj)
         else:
             chunks.append(json.dumps(obj))
@@ -375,6 +395,10 @@ def test_readme_numeric_claims_traceable():
         chunks = []
         for q2 in sorted((REPO / "results").rglob("*")):
             if not q2.is_file():
+                continue
+            # (a) 撤回/溯源子树整体不入池
+            if any(part in ("provenance", "provenance_records")
+                   for part in q2.parts):
                 continue
             try:
                 d = json.loads(q2.read_text(encoding="utf-8"))

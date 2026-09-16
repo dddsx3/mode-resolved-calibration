@@ -1029,25 +1029,31 @@ intensity-nuisance whitened energy in the bottom-5 weak-mode subspace)
 and `gauge_cos` (coupling between each light's whitened intensity
 column and its direction-nuisance subspace).
 
-**Result: mechanism found.**
+**Result: an OI-internal mechanism; the cross-cohort claim is NOT
+supported** (revised after the acceptance review, section 3.3).
 
-| statistic | pooled ρ | OI ρ | DiLiGenT ρ | consistent |
+| statistic | pooled (all 21) | **pooled (valid, n=14)** | OI (valid) | DiLiGenT (valid) |
 |---|---|---|---|---|
-| **dir_int_weak_ratio** | **−0.899** | −0.927 | **−1.000** | ✓ |
-| finf_spread | −0.868 | −0.618 | −0.879 | ✓ |
-| finf_median_log10 | −0.692 | −0.436 | −0.685 | ✓ |
-| light_spread_deg | +0.519 | −0.736 | +0.188 | ✗ |
-| light_isotropy | +0.673 | +0.164 | −0.164 | ✗ |
-| gauge_cos | +0.538 | −0.291 | −0.067 | ✗ |
+| **dir_int_weak_ratio** | −0.899 | **−0.688** | **−0.927 (n=11)** | not computable (3 objects) |
+| finf_spread | −0.868 | −0.596 | −0.618 | — |
+| light_spread_deg | +0.519 | — | — | — |
+| light_isotropy | +0.673 | — | — | — |
+| gauge_cos | +0.538 | — | — | — |
 
-The share is monotone-decreasing in the direction-nuisance /
-intensity-nuisance weak-subspace energy ratio on BOTH cohorts
-independently (DiLiGenT is a perfect rank correlation over its 10
-objects). The 21 objects order smoothly: ratio 3.1–4.9 (cat, pot1,
-friends_cup, pine, fabric_hat) carry 22–71% direction share; ratio
->12 (ball, dolphin, pumpkin2, and every DiLiGenT object except cat/pot1)
-carry ≤12%. The cohort gap is therefore a consequence of scene geometry,
-not of the datasets per se — C11's object axis now has a mechanism.
+Seven of the ten DiLiGenT shares are 0/0-shaped (|share| < 0.01 — the
+artifact flags them `degenerate_share`, the same semantics as
+`diligent_queue.json`'s `degenerate_objects`). Counting those as
+ordinary ranks lifts the pooled correlation from **−0.688 to −0.899**,
+i.e. across the preregistered 0.7 threshold; the v1 rule is therefore
+retained as reference only. On the valid samples the mechanism holds
+**within OpenIllumination** (n=11, ρ=−0.927, every share at
+interpretable magnitude) and the DiLiGenT side cannot be tested for
+want of valid objects.
+
+The statistic itself (corrected description, acceptance section 3.2) is
+the mass the bottom-5 weak-mode subspace places on the direction
+parameter axes vs the intensity axis — a weak-subspace loading measure,
+not a per-light nuisance-energy ratio.
 
 
 ---

@@ -11,8 +11,12 @@
   finf_spread         Finf p90/p10
   light_spread_deg    active 灯方向的平均两两夹角
   light_isotropy      Σ d_k d_kᵀ/L 的最小/最大特征值
-  dir_int_weak_ratio  **核心候选**:方向 nuisance 与强度 nuisance 在
-                      bottom-5 弱模式子空间上的白化投影能量之比
+  dir_int_weak_ratio  **核心候选**:bottom-5 弱子空间(5 维基)中落在
+                      **方向参数轴**上的质量 vs 落在**强度参数轴**上的
+                      质量之比。注意这是**弱子空间的负载方向**统计量
+                      (哪些参数坐标被弱模式承载),不是逐灯 nuisance 能量
+                      (验收 533a279 §3.2 的 M1 更正:此前描述为逐灯白化
+                      能量,与代码不符——代码只用弱模式基 Vw 的行)。
   gauge_cos           每灯白化强度列与其 2D 方向 nuisance 子空间的
                       平均 |cos|(关闭一个通道在多大程度上同时移除
                       另一个通道的杠杆)
@@ -178,44 +182,90 @@ def run(config_path=REPO / "configs/anchor_mechanism.yaml",
     stats_names = ("finf_median_log10", "finf_spread", "light_spread_deg",
                    "light_isotropy", "dir_int_weak_ratio", "gauge_cos")
     shares = np.array([r["share"] for r in rows])
+    # 退化标记(与 diligent_queue 的 degenerate_objects 一致):|share| 低于
+    # 可解释尺度(0.01)的点是 0/0 型,不得参与统计判据(验收 533a279 §3.3)
+    DEGEN_SHARE = 0.01
+    for r in rows:
+        r["degenerate_share"] = bool(abs(r["share"]) < DEGEN_SHARE)
     corr = {}
     for sn in stats_names:
         vals = np.array([r[sn] for r in rows])
-        pooled = spearmanr(vals, shares).statistic
+        keep = np.array([not r["degenerate_share"] for r in rows])
+
+        def _rho(mask):
+            if mask.sum() < 4:
+                return None
+            v = vals[mask]
+            s = shares[mask]
+            if len(set(v)) < 2 or len(set(s)) < 2:
+                return None
+            return round(float(spearmanr(v, s).statistic), 6)
+
+        pooled_all = _rho(np.ones(len(rows), bool))
+        pooled_valid = _rho(keep)
         per = {}
+        per_valid = {}
         for tag in ("oi", "dq"):
             m = np.array([r["cohort"] == tag for r in rows])
-            if m.sum() >= 4:
-                per[tag] = float(spearmanr(vals[m], shares[m]).statistic)
-            else:
-                per[tag] = None
+            per[tag] = _rho(m)
+            per_valid[tag] = _rho(m & keep)
         corr[sn] = dict(
-            pooled=round(float(pooled), 6),
-            per_cohort={k: (round(v, 6) if v is not None else None)
-                        for k, v in per.items()},
+            pooled=pooled_all,
+            pooled_excl_degenerate=pooled_valid,
+            n_valid=int(keep.sum()),
+            per_cohort={k: v for k, v in per.items()},
+            per_cohort_excl_degenerate={k: v for k, v in per_valid.items()},
             consistent_sign=bool(
-                per["oi"] is not None and per["dq"] is not None
-                and np.sign(per["oi"]) == np.sign(per["dq"])
-                and np.sign(pooled) == np.sign(per["oi"])))
+                per_valid["oi"] is not None and per_valid["dq"] is not None
+                and np.sign(per_valid["oi"]) == np.sign(per_valid["dq"])
+                and pooled_valid is not None
+                and np.sign(pooled_valid) == np.sign(per_valid["oi"])))
 
-    supported = {sn: c for sn, c in corr.items()
-                 if abs(c["pooled"]) >= 0.7 and c["consistent_sign"]}
-    outcome = ("mechanism-supported" if supported
-               else "no-single-statistic")
+    # 判据(修订,验收 533a279 §3.3/§5-2):门限在两套口径上分别评估。
+    # 退化点(|share|<0.01)按产物自己的语义(0/0 型)不计入。
+    # v1 口径(参照):all-21 pooled 过线且**该口径下**两队列同号
+    supported_all = {}
+    for sn, c in corr.items():
+        pc = c["per_cohort"]
+        if (c["pooled"] is not None and abs(c["pooled"]) >= 0.7
+                and pc["oi"] is not None and pc["dq"] is not None
+                and np.sign(pc["oi"]) == np.sign(pc["dq"])
+                == np.sign(c["pooled"])):
+            supported_all[sn] = c
+    supported_valid = {sn: c for sn, c in corr.items()
+                       if c["pooled_excl_degenerate"] is not None
+                       and abs(c["pooled_excl_degenerate"]) >= 0.7
+                       and c["consistent_sign"]}
+    supported = supported_valid
+    outcome = ("mechanism-supported (valid samples only)"
+               if supported_valid else
+               "oi-internal-only (valid-sample pooled below threshold; "
+               "OI alone carries the mechanism)"
+               if abs(corr["dir_int_weak_ratio"]["per_cohort_excl_degenerate"]
+                      ["oi"] or 0) >= 0.7 else
+               "no-single-statistic")
 
     summary = dict(
         gate=cfg["gate"], analysis_status=cfg["analysis_status"],
         anchor=cfg["anchor"], n_objects=len(rows),
         rows=rows, correlations=corr,
         mechanism_supported=sorted(supported.keys()),
+        mechanism_supported_including_degenerate=sorted(
+            supported_all.keys()),
+        degenerate_share_threshold=DEGEN_SHARE,
+        n_degenerate=int(sum(r["degenerate_share"]
+                             for r in rows)),
         outcome=outcome,
         outcome_rule=cfg["outcome_rule"].strip(),
         reading=(
-            f"the cohort gap is explained by {sorted(supported.keys())}"
+            f"valid-sample pooled |rho| >= 0.7 for {sorted(supported.keys())}"
             if supported else
-            "no single scene statistic reaches |rho| >= 0.7 with a "
-            "consistent sign across both cohorts; the anchor share stays "
-            "object-conditional (C11 keeps its object-level caveat)"),
+            "the valid-sample pooled correlation falls below the 0.7 "
+            "threshold: the mechanism holds WITHIN OpenIllumination "
+            "(n=11, no degenerate shares) but DiLiGenT contributes only "
+            "3 objects above the degenerate scale, so the cross-cohort "
+            "statement is not supported -- C11 keeps its object-level "
+            "caveat with the OI-internal mechanism reported"),
         manifest=dict(
             config_sha256=_sha(Path(config_path)),
             git_sha=sha_at_launch,
@@ -226,8 +276,14 @@ def run(config_path=REPO / "configs/anchor_mechanism.yaml",
              "D functional) correlated against the per-object direction "
              "share at the shared measured anchor, to test which scene "
              "property explains the OI (36% median) vs DiLiGenT (~0) gap. "
-             "Preregistered rule: |Spearman| >= 0.7 pooled with consistent "
-             "per-cohort sign => mechanism-supported.")
+             "The headline statistic dir_int_weak_ratio is the mass the "
+             "bottom-5 weak-mode subspace places on the direction "
+             "parameter axes vs the intensity axis -- a weak-subspace "
+             "loading measure, NOT a per-light nuisance-energy ratio "
+             "(description corrected per acceptance 533a279 section 3.2). "
+             "Degenerate shares (|share| < 0.01, 0/0-shaped) are flagged "
+             "and excluded from the primary caliber; the v1 all-21 rule is "
+             "retained as reference only.")
     Path(out_path).parent.mkdir(parents=True, exist_ok=True)
     Path(out_path).write_bytes(json.dumps(summary, ensure_ascii=False,
                                           indent=1).encode("utf-8"))

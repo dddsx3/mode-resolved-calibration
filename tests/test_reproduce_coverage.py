@@ -78,3 +78,26 @@ def test_diag_stage_is_zero_cost():
     assert reqs, "diag block has no run_step entries"
     assert all(r == "none" for r in reqs), (
         f"diag stage contains data-dependent steps: {reqs}")
+
+def test_matrix_rows_in_sync_with_artifacts():
+    """验收 533a279 §5-3:复现矩阵的生成行必须与产物字段一致
+    (手工同步在同一提交里就失败过一次)。"""
+    import subprocess
+    import sys as _sys
+    r = subprocess.run([_sys.executable, "experiments/sync_matrix_rows.py",
+                        "--check"], capture_output=True, text=True,
+                       cwd=str(REPO))
+    assert r.returncode == 0, (
+        "reproduction matrix rows are out of sync with their artifacts:\n"
+        + r.stdout + "\n" + r.stderr)
+
+
+def test_contributing_in_scan_scope():
+    """验收 533a279 §4/S2:CONTRIBUTING.md 含数字(规则 6/7 引着撤回值),
+    必须在数字门禁的扫描范围内。"""
+    from pathlib import Path as _P
+    gate = (_P(REPO) / "tests/test_claims_gate.py").read_text(
+        encoding="utf-8")
+    assert "CONTRIBUTING.md" in gate, (
+        "CONTRIBUTING.md is not in the numeric gate's SCAN_FILES -- its "
+        "numbers (rules 6/7 quote withdrawn values) escape the gate")
