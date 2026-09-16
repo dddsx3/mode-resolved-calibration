@@ -169,14 +169,16 @@ spec = retention_spectrum(DeltaF, A.T @ A) # 逐模式保留率
   第三个条件轴:流程误差剖面 × 数据集几何 × 物体
   (`results/diligent/diligent_queue.json`)。
 
-  **基线对照(P-BASELINE)**:Drbohlav–Chantler 式良构配置选择
-  (方向球面贪心最远点采样——纯几何,无腐蚀/预测模型)在同一套灯、
-  同预算、同实现端点下:**四个队列×预算单元格全部
-  geometry-insufficient**——DC05 落在 random 带内(OI k=14 中位
-  6.22° vs random 6.18–6.32°),而每个 informed 策略都优于它
-  (OI k=28 e_opt 2.89° vs DC05 6.10°)。方向铺开度捕获不了分配
-  价值;校准预测模型才能(88 行 OI 锚点与冻结 E 臂逐位一致;
-  `results/baseline/baseline_comparison.json`)。
+  **基线对照(P-BASELINE v1.1,active 集控制)**:Drbohlav–Chantler
+  式良构配置选择(方向球面贪心最远点采样——纯几何),候选池限制在
+  照亮物体的灯内,对照 active 集内置换的随机基线(C8 规定的框架):
+  **OpenIllumination 上几何有增益但替代不了模型**(dc05_active
+  5.24°/4.01° vs randomA48 5.78–5.99°/4.49–5.25°,e_opt 4.52°/2.89°);
+  **DiLiGenT 上模型的逐灯排序本身不迁移**(a_opt 输给 active 随机,
+  偏差 +0.24°/+0.47°,dc05_active 也仅打平)——排序优势与论文所有
+  其他发现一样是条件性的。v1 全域池 DC05 的随机带表现是可见性混淆
+  (预算 57–86% 落在照不到物体的灯上,重合度已逐物体记录;88 行 OI
+  锚点与冻结 E 臂逐位一致;`results/baseline/baseline_comparison.json`)。
 - **靶向干预无可检出增量**：预注册三臂对照发现，模式靶向臂与标量 OED
   靶向臂统计不可区分——模式分解提供诊断洞察（哪些方向脆弱），但在简单
   标量准则之上没有增量分配价值（诚实负结果）；

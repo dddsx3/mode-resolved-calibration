@@ -931,23 +931,43 @@ cohort: 4 informed + DC05 + 3 random, with a HARD BIT-ANCHOR — the
 informed rows are bit-identical to the frozen E-arm anchor subset
 (88/88, shared orderings + seeds). DiLiGenT: a_opt + DC05 + 3 random.
 
-**Result: geometry-insufficient in all four cohort × budget cells.**
+**v1.1 (acceptance-corrected: active-set control).** The v1 DC05
+candidate pool spanned ALL lights — 57–86% of its budget fell on
+non-illuminating lights (per-object overlap 2–9 of 14 at k=14), so
+v1's "DC05 ≈ universe-random" merely replicated C8. v1.1 adds
+dc05_active (same geometry rule, pool restricted to the illuminating
+lights), randomA48 controls (permute the active set only), and records
+the overlap per object. Reading basis: dc05_active vs randomA48
+(equal effective budget).
 
-| cell | DC05 dev from random | informed dev | reading |
+| cell | dc05_active dev | informed dev (vs randomA48) | reading |
 |---|---|---|---|
-| OI k=14 | −0.137° | −1.225° | geometry-insufficient |
-| OI k=28 | +0.075° | −2.636° | geometry-insufficient |
-| DQ k=14 | +0.251° | −0.658° | geometry-insufficient |
-| DQ k=28 | +0.186° | −0.978° | geometry-insufficient |
+| OI k=14 | −0.438° | −0.704° | geometry-insufficient |
+| OI k=28 | −0.615° | −1.204° | geometry-insufficient |
+| DQ k=14 | −0.104° | **+0.242°** | geometry-informative |
+| DQ k=28 | +0.032° | **+0.474°** | geometry-informative |
 
-DC05's median angular error sits inside the random band on both
-cohorts (OI k=14: 6.222° vs random 6.177–6.324°; DQ k=28: 8.858° vs
-random 8.646–9.222°), and every informed policy beats it (OI k=28:
-e_opt 2.894° vs DC05 6.096°). **Direction spread — the classical
-well-posedness surrogate — does not capture the allocation value; the
-calibrated prediction model does.** (Consistent with the E-arm
-finding that the criterion's orderings, not the geometry, carry the
-validity.)
+**OpenIllumination: geometry helps but does not replace the model.**
+dc05_active (5.235°/4.005°) genuinely improves on randomA48
+(5.78–5.99°/4.49–5.25°) — direction spread has real value at equal
+effective budget — but every informed policy remains clearly better
+(e_opt 4.520°/2.894°). The v1 all-pool DC05's apparent chance-level
+performance was the visibility confound (C8), now self-documenting in
+the artifact's overlap fields.
+
+**DiLiGenT: the reading flips, but the driver is the informed
+policy's failure, not geometry's strength.** dc05_active merely
+matches randomA48 (k=28: 6.686° vs 6.710–6.934°), while a_opt loses
+to active-restricted random outright (dev +0.242/+0.474; k=14 8.719°
+vs randomA48 8.443–9.010°). **The calibrated model's per-light
+ordering does not transfer to the second dataset** — consistent with
+the E-arm het finding (ordering validity is conditional, truth-end
+decoupling) and with C11's object-level split. The honest one-line
+summary across cohorts: geometry-only selection captures part of the
+value on OI and none beyond chance on DQ; the calibrated model
+captures more than geometry on OI and nothing beyond active-random on
+DQ — its advantage is conditional on the same axes as every other
+finding in this paper.
 
 **Comparability (Gardi 2022 / ReLeaPS 2023).** They optimize light
 POSITIONS / next-light selection sequences under their own objectives;

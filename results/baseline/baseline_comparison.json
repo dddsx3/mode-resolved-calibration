@@ -11,35 +11,71 @@
  "oi": {
   "14": {
    "median_ang_by_unit": {
+    "randomU_0": 6.253736,
     "a_opt": 4.745156,
-    "randomU_2": 6.177151,
-    "d_opt": 4.919686,
+    "dc05_active": 5.235004,
+    "randomA48_2": 5.842206,
+    "randomA48_1": 5.987409,
     "randomU_1": 6.323691,
     "dc05": 6.221846,
     "e_opt": 4.519638,
-    "randomU_0": 6.253736,
-    "mode_aware": 5.058163
+    "mode_aware": 5.058163,
+    "randomA48_0": 5.779608,
+    "randomU_2": 6.177151,
+    "d_opt": 4.919686
    },
-   "median_dev_from_random": {
-    "dc05": -0.137122,
-    "informed": -1.225116
+   "median_dev_from": {
+    "dc05_active_vs_randomA48": -0.437886,
+    "informed_vs_randomA48": -0.704099,
+    "dc05_vs_randomU": -0.137122
+   },
+   "dc05_active_overlap_at_k": {
+    "obj_03_pumpkin": 3,
+    "obj_04_dolphin": 5,
+    "obj_07_pumpkin2": 3,
+    "obj_09_ball": 7,
+    "obj_10_pumpkin3": 7,
+    "obj_11_pine": 4,
+    "obj_13_mushroom": 4,
+    "obj_16_friends_cup": 2,
+    "obj_17_pumpkin5": 5,
+    "obj_18_fabric_hat": 9,
+    "obj_19_cylinder": 5
    },
    "reading": "geometry-insufficient"
   },
   "28": {
    "median_ang_by_unit": {
+    "randomU_0": 6.078101,
     "a_opt": 2.934844,
-    "randomU_2": 5.943968,
-    "d_opt": 3.578368,
+    "dc05_active": 4.004769,
+    "randomA48_2": 4.486589,
+    "randomA48_1": 5.24881,
     "randomU_1": 6.060925,
     "dc05": 6.096166,
     "e_opt": 2.894235,
-    "randomU_0": 6.078101,
-    "mode_aware": 3.462629
+    "mode_aware": 3.462629,
+    "randomA48_0": 4.524084,
+    "randomU_2": 5.943968,
+    "d_opt": 3.578368
    },
-   "median_dev_from_random": {
-    "dc05": 0.074738,
-    "informed": -2.635916
+   "median_dev_from": {
+    "dc05_active_vs_randomA48": -0.614981,
+    "informed_vs_randomA48": -1.204196,
+    "dc05_vs_randomU": 0.074738
+   },
+   "dc05_active_overlap_at_k": {
+    "obj_03_pumpkin": 7,
+    "obj_04_dolphin": 10,
+    "obj_07_pumpkin2": 8,
+    "obj_09_ball": 12,
+    "obj_10_pumpkin3": 9,
+    "obj_11_pine": 8,
+    "obj_13_mushroom": 10,
+    "obj_16_friends_cup": 7,
+    "obj_17_pumpkin5": 11,
+    "obj_18_fabric_hat": 13,
+    "obj_19_cylinder": 8
    },
    "reading": "geometry-insufficient"
   }
@@ -47,31 +83,65 @@
  "diligent": {
   "14": {
    "median_ang_by_unit": {
+    "randomU_0": 9.006982,
     "a_opt": 8.718606,
-    "randomU_2": 9.719481,
+    "dc05_active": 9.108547,
+    "randomA48_2": 8.44326,
+    "randomA48_1": 8.524482,
     "randomU_1": 9.303884,
     "dc05": 9.826542,
-    "randomU_0": 9.006982
+    "randomA48_0": 9.010313,
+    "randomU_2": 9.719481
    },
-   "median_dev_from_random": {
-    "dc05": 0.250829,
-    "informed": -0.658494
+   "median_dev_from": {
+    "dc05_active_vs_randomA48": -0.104187,
+    "informed_vs_randomA48": 0.242046,
+    "dc05_vs_randomU": 0.250829
    },
-   "reading": "geometry-insufficient"
+   "dc05_active_overlap_at_k": {
+    "ballPNG": 5,
+    "bearPNG": 6,
+    "buddhaPNG": 9,
+    "catPNG": 8,
+    "cowPNG": 8,
+    "gobletPNG": 7,
+    "harvestPNG": 6,
+    "pot1PNG": 6,
+    "pot2PNG": 6,
+    "readingPNG": 7
+   },
+   "reading": "geometry-informative"
   },
   "28": {
    "median_ang_by_unit": {
+    "randomU_0": 9.021766,
     "a_opt": 7.003548,
-    "randomU_2": 9.222026,
+    "dc05_active": 6.686485,
+    "randomA48_2": 6.934296,
+    "randomA48_1": 6.71024,
     "randomU_1": 8.645752,
     "dc05": 8.85809,
-    "randomU_0": 9.021766
+    "randomA48_0": 6.85003,
+    "randomU_2": 9.222026
    },
-   "median_dev_from_random": {
-    "dc05": 0.186449,
-    "informed": -0.97827
+   "median_dev_from": {
+    "dc05_active_vs_randomA48": 0.031742,
+    "informed_vs_randomA48": 0.473932,
+    "dc05_vs_randomU": 0.186449
    },
-   "reading": "geometry-insufficient"
+   "dc05_active_overlap_at_k": {
+    "ballPNG": 11,
+    "bearPNG": 13,
+    "buddhaPNG": 14,
+    "catPNG": 16,
+    "cowPNG": 14,
+    "gobletPNG": 13,
+    "harvestPNG": 15,
+    "pot1PNG": 13,
+    "pot2PNG": 11,
+    "readingPNG": 12
+   },
+   "reading": "geometry-informative"
   }
  },
  "baseline_definition": {
@@ -80,9 +150,9 @@
  },
  "oi_anchor": "88 informed rows BIT-IDENTICAL to the frozen E-arm anchor subset (shared orderings + seeds)",
  "manifest": {
-  "config_sha256": "89c7ef00e32fca607fb65024fc500fb8bb007ad2ee7e491ebf17d5c31a3dd3e0",
-  "git_sha": "d8e3dfc8b3f2059f4e551e34f8a9e2430066869e",
-  "elapsed_s": 4854.7
+  "config_sha256": "dc2a300d3ad57586633d778ab42dca860da631a2d3eb86b0d7c8fdf3328e7997",
+  "git_sha": "8e841a5987f85f9edf9a0bfb69db08f604487d00",
+  "elapsed_s": 5116.1
  },
  "note": "Literature-style selection baselines on the same light sets: geometry-only (DC05) vs the calibrated prediction model vs random, at the frozen E-arm operating point (level 0.5, regime 10, budgets 14/28), realized endpoint = normal angular error. OI cohort carries the full frame with a bit-identity anchor; DiLiGenT the minimal comparable trio."
 }
