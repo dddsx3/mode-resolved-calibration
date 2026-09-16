@@ -424,6 +424,12 @@ Three structural findings anchor it (verified by
    What stays conditional: the ball-anchor direction share differs by
    cohort/object at the same measured profile (OI median 36% over
    4.8–71.4% vs DiLiGenT ≈0 with cat 22%/pot1 29% as the high objects).
+   **Mechanism (P-ANCHOR-MECHANISM).** The object-level direction share
+   is monotone in a scene statistic computed without the D functional —
+   the direction-vs-intensity nuisance energy ratio in the weak-mode
+   subspace (pooled Spearman −0.899; −0.927 within OI, −1.000 within
+   DiLiGenT): the cohort difference is a consequence of scene geometry,
+   not of the datasets per se.
    *Correction note:* an earlier version of this paragraph reported
    "channel split does not transfer" (direction max 51.2%, pot1/pot2
    ≈86%) — those were artifacts of a loader that dropped DiLiGenT's

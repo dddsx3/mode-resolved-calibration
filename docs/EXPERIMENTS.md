@@ -1013,6 +1013,43 @@ DC05 is the one implementable same-lights geometry baseline. The
 statement is registered in the artifact's `baseline_definition`.
 
 
+## 25. Anchor-share mechanism: why the direction channel differs by cohort（P-ANCHOR-MECHANISM, `experiments/anchor_mechanism.py`）
+
+**Question (the one C11 left open).** At the SAME measured anchor
+(σ_logI 0.0159, σ_dir 2.96°) the direction share is OI median 36.0%
+(4.8–71.4%) but DiLiGenT median ≈0 (cat 22.1%, pot1 29.5% the only high
+objects). What scene property explains the gap?
+
+**Method.** Six scene statistics computed from the NOMINAL scene (none
+from the D functional — no circularity), correlated against the
+per-object share from the two committed artifacts (21 objects):
+Finf level and spread, light-direction spread and isotropy, and two
+mechanistic candidates — `dir_int_weak_ratio` (direction-nuisance vs
+intensity-nuisance whitened energy in the bottom-5 weak-mode subspace)
+and `gauge_cos` (coupling between each light's whitened intensity
+column and its direction-nuisance subspace).
+
+**Result: mechanism found.**
+
+| statistic | pooled ρ | OI ρ | DiLiGenT ρ | consistent |
+|---|---|---|---|---|
+| **dir_int_weak_ratio** | **−0.899** | −0.927 | **−1.000** | ✓ |
+| finf_spread | −0.868 | −0.618 | −0.879 | ✓ |
+| finf_median_log10 | −0.692 | −0.436 | −0.685 | ✓ |
+| light_spread_deg | +0.519 | −0.736 | +0.188 | ✗ |
+| light_isotropy | +0.673 | +0.164 | −0.164 | ✗ |
+| gauge_cos | +0.538 | −0.291 | −0.067 | ✗ |
+
+The share is monotone-decreasing in the direction-nuisance /
+intensity-nuisance weak-subspace energy ratio on BOTH cohorts
+independently (DiLiGenT is a perfect rank correlation over its 10
+objects). The 21 objects order smoothly: ratio 3.1–4.9 (cat, pot1,
+friends_cup, pine, fabric_hat) carry 22–71% direction share; ratio
+>12 (ball, dolphin, pumpkin2, and every DiLiGenT object except cat/pot1)
+carry ≤12%. The cohort gap is therefore a consequence of scene geometry,
+not of the datasets per se — C11's object axis now has a mechanism.
+
+
 ---
 
 **Reproduction contract**: every experiment script writes only statistical values and

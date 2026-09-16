@@ -1,0 +1,328 @@
+{
+ "gate": "P-ANCHOR-MECHANISM",
+ "analysis_status": "anchor_mechanism_v1",
+ "anchor": {
+  "sig_logI": 0.0159079094301168,
+  "sig_dir_deg": 2.9644001216106344
+ },
+ "n_objects": 21,
+ "rows": [
+  {
+   "cohort": "oi",
+   "object": "obj_03_pumpkin",
+   "share": 0.428534,
+   "finf_median_log10": 3.46603570802257,
+   "finf_spread": 3.5157063173584278,
+   "light_spread_deg": 87.51301447976424,
+   "light_isotropy": 0.8858750395468854,
+   "dir_int_weak_ratio": 6.7760134501865075,
+   "gauge_cos": 0.6703918294911259,
+   "n_active": 48
+  },
+  {
+   "cohort": "oi",
+   "object": "obj_04_dolphin",
+   "share": 0.047537,
+   "finf_median_log10": 6.071573860707603,
+   "finf_spread": 18.1536768475365,
+   "light_spread_deg": 90.39130370898077,
+   "light_isotropy": 0.6375122026486295,
+   "dir_int_weak_ratio": 27.84109495729684,
+   "gauge_cos": 0.7734554627144812,
+   "n_active": 48
+  },
+  {
+   "cohort": "oi",
+   "object": "obj_07_pumpkin2",
+   "share": 0.050285,
+   "finf_median_log10": 5.629360931671439,
+   "finf_spread": 10.822797516806018,
+   "light_spread_deg": 90.98223461957079,
+   "light_isotropy": 0.4632360896627746,
+   "dir_int_weak_ratio": 30.180531505648663,
+   "gauge_cos": 0.8000932434716427,
+   "n_active": 48
+  },
+  {
+   "cohort": "oi",
+   "object": "obj_09_ball",
+   "share": 0.360024,
+   "finf_median_log10": 3.855992787755688,
+   "finf_spread": 2.4475873081318302,
+   "light_spread_deg": 90.86869807894169,
+   "light_isotropy": 0.6258246361986728,
+   "dir_int_weak_ratio": 7.463221275506198,
+   "gauge_cos": 0.6559759746079146,
+   "n_active": 48
+  },
+  {
+   "cohort": "oi",
+   "object": "obj_10_pumpkin3",
+   "share": 0.14245,
+   "finf_median_log10": 3.5282206037539723,
+   "finf_spread": 10.205712298653047,
+   "light_spread_deg": 90.8883861248999,
+   "light_isotropy": 0.5912261963622066,
+   "dir_int_weak_ratio": 17.78587557037864,
+   "gauge_cos": 0.627644502500113,
+   "n_active": 48
+  },
+  {
+   "cohort": "oi",
+   "object": "obj_11_pine",
+   "share": 0.714045,
+   "finf_median_log10": 3.8966550612072672,
+   "finf_spread": 3.4361115712157684,
+   "light_spread_deg": 89.6120400634253,
+   "light_isotropy": 0.6361586379627114,
+   "dir_int_weak_ratio": 4.624118800758678,
+   "gauge_cos": 0.6720668978292778,
+   "n_active": 48
+  },
+  {
+   "cohort": "oi",
+   "object": "obj_13_mushroom",
+   "share": 0.33523,
+   "finf_median_log10": 3.8416240387163594,
+   "finf_spread": 2.999849690934255,
+   "light_spread_deg": 90.23266373205463,
+   "light_isotropy": 0.7945233435263435,
+   "dir_int_weak_ratio": 9.527985018590137,
+   "gauge_cos": 0.6444298724014556,
+   "n_active": 48
+  },
+  {
+   "cohort": "oi",
+   "object": "obj_16_friends_cup",
+   "share": 0.505793,
+   "finf_median_log10": 3.2521528435665634,
+   "finf_spread": 2.4938231087757043,
+   "light_spread_deg": 88.76793603067287,
+   "light_isotropy": 0.4863576344489611,
+   "dir_int_weak_ratio": 4.297088095850473,
+   "gauge_cos": 0.6493074503245599,
+   "n_active": 48
+  },
+  {
+   "cohort": "oi",
+   "object": "obj_17_pumpkin5",
+   "share": 0.448845,
+   "finf_median_log10": 3.9138384370072505,
+   "finf_spread": 8.40177296858711,
+   "light_spread_deg": 89.91739476375943,
+   "light_isotropy": 0.5753886104046796,
+   "dir_int_weak_ratio": 8.450906645394499,
+   "gauge_cos": 0.6673559704894664,
+   "n_active": 48
+  },
+  {
+   "cohort": "oi",
+   "object": "obj_18_fabric_hat",
+   "share": 0.6369,
+   "finf_median_log10": 4.413469744632868,
+   "finf_spread": 3.389572295204609,
+   "light_spread_deg": 89.82899928450598,
+   "light_isotropy": 0.745787793787877,
+   "dir_int_weak_ratio": 4.91473461242779,
+   "gauge_cos": 0.6684020382733321,
+   "n_active": 48
+  },
+  {
+   "cohort": "oi",
+   "object": "obj_19_cylinder",
+   "share": 0.115563,
+   "finf_median_log10": 6.278682402369469,
+   "finf_spread": 3.8760172617421214,
+   "light_spread_deg": 90.46037142263778,
+   "light_isotropy": 0.5886492076458283,
+   "dir_int_weak_ratio": 12.727175745391673,
+   "gauge_cos": 0.8207916208464852,
+   "n_active": 48
+  },
+  {
+   "cohort": "dq",
+   "object": "ballPNG",
+   "share": -0.0,
+   "finf_median_log10": 6.354295925531768,
+   "finf_spread": 17.524280649937605,
+   "light_spread_deg": 34.31350651988809,
+   "light_isotropy": 0.07293685654819425,
+   "dir_int_weak_ratio": 12.78955371017878,
+   "gauge_cos": 0.6202402339877074,
+   "n_active": 48
+  },
+  {
+   "cohort": "dq",
+   "object": "bearPNG",
+   "share": -1.9e-05,
+   "finf_median_log10": 3.9905345651110786,
+   "finf_spread": 196743.41525595688,
+   "light_spread_deg": 37.66519258614185,
+   "light_isotropy": 0.08398310629447808,
+   "dir_int_weak_ratio": 38.85612190610259,
+   "gauge_cos": 0.5824767287765872,
+   "n_active": 48
+  },
+  {
+   "cohort": "dq",
+   "object": "buddhaPNG",
+   "share": -3.7e-05,
+   "finf_median_log10": 4.687168244228666,
+   "finf_spread": 2098874.0242489297,
+   "light_spread_deg": 37.59538808014648,
+   "light_isotropy": 0.11587388564263155,
+   "dir_int_weak_ratio": 99.83656717776854,
+   "gauge_cos": 0.5517258717333148,
+   "n_active": 48
+  },
+  {
+   "cohort": "dq",
+   "object": "catPNG",
+   "share": 0.2208,
+   "finf_median_log10": 0.7571542015962748,
+   "finf_spread": 2.8108905547070524,
+   "light_spread_deg": 35.86339324664083,
+   "light_isotropy": 0.09218084838222118,
+   "dir_int_weak_ratio": 3.5833583708156973,
+   "gauge_cos": 0.3958239669692125,
+   "n_active": 48
+  },
+  {
+   "cohort": "dq",
+   "object": "cowPNG",
+   "share": -0.027493,
+   "finf_median_log10": 5.703982417375427,
+   "finf_spread": 44621972.65523948,
+   "light_spread_deg": 34.20905985452943,
+   "light_isotropy": 0.08452595954556444,
+   "dir_int_weak_ratio": 182150.20562015136,
+   "gauge_cos": 0.3766776652144352,
+   "n_active": 48
+  },
+  {
+   "cohort": "dq",
+   "object": "gobletPNG",
+   "share": -6.6e-05,
+   "finf_median_log10": 6.133929316534688,
+   "finf_spread": 300.3953373951145,
+   "light_spread_deg": 37.180192441668034,
+   "light_isotropy": 0.0817151947241538,
+   "dir_int_weak_ratio": 288.66920058486016,
+   "gauge_cos": 0.5986904393609546,
+   "n_active": 48
+  },
+  {
+   "cohort": "dq",
+   "object": "harvestPNG",
+   "share": -0.006942,
+   "finf_median_log10": 6.462000333621818,
+   "finf_spread": 978656.2266750062,
+   "light_spread_deg": 36.42325264908921,
+   "light_isotropy": 0.10009408529124256,
+   "dir_int_weak_ratio": 31475.160132845718,
+   "gauge_cos": 0.6106352785705528,
+   "n_active": 48
+  },
+  {
+   "cohort": "dq",
+   "object": "pot1PNG",
+   "share": 0.294612,
+   "finf_median_log10": 1.3636679787605464,
+   "finf_spread": 2.9680862349342756,
+   "light_spread_deg": 36.64579253719706,
+   "light_isotropy": 0.08750860418015396,
+   "dir_int_weak_ratio": 3.131377455137272,
+   "gauge_cos": 0.37555819555903414,
+   "n_active": 48
+  },
+  {
+   "cohort": "dq",
+   "object": "pot2PNG",
+   "share": -0.001131,
+   "finf_median_log10": 5.081692396690403,
+   "finf_spread": 207509.46597050698,
+   "light_spread_deg": 35.78997657426144,
+   "light_isotropy": 0.0870702366116771,
+   "dir_int_weak_ratio": 498.7265887412686,
+   "gauge_cos": 0.5716079657053801,
+   "n_active": 48
+  },
+  {
+   "cohort": "dq",
+   "object": "readingPNG",
+   "share": -0.007384,
+   "finf_median_log10": 6.901093347070666,
+   "finf_spread": 850925347.9502707,
+   "light_spread_deg": 36.81847164047579,
+   "light_isotropy": 0.09576116842681548,
+   "dir_int_weak_ratio": 61875.19222349296,
+   "gauge_cos": 0.5407307728415974,
+   "n_active": 48
+  }
+ ],
+ "correlations": {
+  "finf_median_log10": {
+   "pooled": -0.692208,
+   "per_cohort": {
+    "oi": -0.436364,
+    "dq": -0.684848
+   },
+   "consistent_sign": true
+  },
+  "finf_spread": {
+   "pooled": -0.867532,
+   "per_cohort": {
+    "oi": -0.618182,
+    "dq": -0.878788
+   },
+   "consistent_sign": true
+  },
+  "light_spread_deg": {
+   "pooled": 0.519481,
+   "per_cohort": {
+    "oi": -0.736364,
+    "dq": 0.187879
+   },
+   "consistent_sign": false
+  },
+  "light_isotropy": {
+   "pooled": 0.672727,
+   "per_cohort": {
+    "oi": 0.163636,
+    "dq": -0.163636
+   },
+   "consistent_sign": false
+  },
+  "dir_int_weak_ratio": {
+   "pooled": -0.898701,
+   "per_cohort": {
+    "oi": -0.927273,
+    "dq": -1.0
+   },
+   "consistent_sign": true
+  },
+  "gauge_cos": {
+   "pooled": 0.537662,
+   "per_cohort": {
+    "oi": -0.290909,
+    "dq": -0.066667
+   },
+   "consistent_sign": false
+  }
+ },
+ "mechanism_supported": [
+  "dir_int_weak_ratio",
+  "finf_spread"
+ ],
+ "outcome": "mechanism-supported",
+ "outcome_rule": "mechanism-supported: some statistic has |Spearman| >= 0.7 pooled and consistent sign within both cohorts. Otherwise: no single scene statistic explains the cohort gap (C11 stays object-conditional).",
+ "reading": "the cohort gap is explained by ['dir_int_weak_ratio', 'finf_spread']",
+ "manifest": {
+  "config_sha256": "10c9fa56050e03fcc94c2b2f1a6822e6e44f940590f382cff65bb80f7326023b",
+  "git_sha": "e42b3eabddbfa6a68c29811b6b1890a30b6dd900",
+  "oi_shares_sha256": "b4868a85f5574fcc7743ac970623d6dee585ed80290ab485ec30f686bc5ed605",
+  "diligent_shares_sha256": "a7574db1b8638ecc8533f5f6a26e2f1d7783ad24887fc009d609fb6d8192aa3a",
+  "elapsed_s": 28.7
+ },
+ "note": "Scene statistics (all from the nominal scene, none from the D functional) correlated against the per-object direction share at the shared measured anchor, to test which scene property explains the OI (36% median) vs DiLiGenT (~0) gap. Preregistered rule: |Spearman| >= 0.7 pooled with consistent per-cohort sign => mechanism-supported."
+}

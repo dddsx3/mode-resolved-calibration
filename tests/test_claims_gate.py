@@ -295,6 +295,18 @@ def test_readme_numeric_claims_traceable():
         traced[tok] = val
 
 
+    # anchor-mechanism numbers (P-ANCHOR-MECHANISM) in README prose
+    mech = json.loads((REPO / "results/openillumination/"
+                       "anchor_mechanism.json")
+                      .read_text(encoding="utf-8"))
+    _mc = mech["correlations"]["dir_int_weak_ratio"]
+    for tok, val, dec in (
+            ("-0.899", _mc["pooled"], 3),
+            ("-0.927", _mc["per_cohort"]["oi"], 3),
+            ("-1.000", _mc["per_cohort"]["dq"], 3)):
+        assert _approx(tok, val, dec), (tok, val)
+        traced[tok] = val
+
     # feasible-interval DQ numbers (P-DQ-FEASIBLE) in README prose
     dqf = json.loads((REPO / "results/openillumination/"
                       "decision_quality_feasible.json")

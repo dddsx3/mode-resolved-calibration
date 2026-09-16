@@ -167,7 +167,12 @@ spec = retention_spectrum(DeltaF, A.T @ A) # 逐模式保留率
   分裂同样迁移**(方向 max D 0.20%,OI 为 1.68%;强度通道复现 joint
   误差 <0.05pp)。仍保持条件性的:球锚点方向份额在同一实测剖面下按
   队列/物体不同(OI 中位 36%,区间 4.8–71.4%;DiLiGenT 中位 ≈0,
-  cat 22%/pot1 29% 为高值物体)。*更正说明*:此前段落报的"通道分裂
+  cat 22%/pot1 29% 为高值物体)。
+  **机制(P-ANCHOR-MECHANISM)**:物体级方向份额与一个**不经 D 功能量**
+  计算的场景统计量单调相关——弱模式子空间上方向/强度 nuisance 能量比
+  (pooled Spearman −0.899;OI 内 −0.927、DiLiGenT 内 −1.000):队列差异
+  是场景几何的后果,而非数据集本身的属性。
+  *更正说明*:此前段落报的"通道分裂
   不迁移"(方向 max 51.2%、pot1/pot2 ≈86%)是 loader 丢失 DiLiGenT
   逐灯光强归一化(名义对 GT 偏 15.6–26.3°)的伪影;已修复、门禁化、
   撤回(`results/diligent/diligent_queue.json` +

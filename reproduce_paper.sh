@@ -84,6 +84,7 @@ diag|feasible-budget DQ diagnostic|results/openillumination/decision_quality_fea
 diag|ablation-budget degeneracy|results/openillumination/active_set_ablation_feasible.json|none|0
 diag|E-arm cross diagnosis|results/openillumination/corruption_family_e_diag.json|none|0
 diag|baseline v1->v1.1 provenance|results/baseline/provenance/v1_v1_1_reuse.json|none|0
+oi|anchor-share mechanism|results/openillumination/anchor_mechanism.json|oi|0
 oi|certified dynamic range|results/certification/certified_gaps.json|oi|0
 oi|directional amplitude|results/magnitude/directional_amplitude_summary.json|oi|0
 oi|full-resolution confirmation|results/certification/lowrank_fullres.json|oi|0
@@ -144,6 +145,8 @@ run_step "submodularity recomputation" results/submodularity/submodularity_searc
     python experiments/submodularity_search.py --out /tmp/submod.json
 
 _CURRENT_STAGE="oi"
+run_step "anchor-share mechanism" results/openillumination/anchor_mechanism.json oi 0 \
+    python experiments/anchor_mechanism.py
 run_step "certified dynamic range" results/certification/certified_gaps.json oi 0 \
     python experiments/certified_gaps.py
 run_step "directional amplitude" results/magnitude/directional_amplitude_summary.json oi 0 \
