@@ -63,9 +63,15 @@ SCAN_FILES = [f for f in SCAN_FILES if "__pycache__" not in f.parts]
 # Rule 5/7 of CONTRIBUTING applies: a rule is enforced globally or not written.
 # The gate therefore covers the whole registry, and the endpoints it accepts
 # are the ones the producers actually compute.
+# Accepted endpoint words name a FUNCTIONAL — the quantity the error is
+# measured on. Statistics that can be computed over any functional are NOT
+# endpoints: "Δ AUC" and "MSE" appear in every allocation bullet and say
+# nothing about what the curve was computed on. An earlier version of this
+# gate accepted AUC, and mutation-testing the README's mislabelled bullet
+# (which contains "Δ AUC") showed it passed the defect straight through.
 _ENDPOINT_WORDS = re.compile(
     r"E_osb|J_A|ang_mean_deg|normal[- ]angular|physical endpoint"
-    r"|dual[- ]coordinate|weak-mode|MSE|AUC|angular error",
+    r"|physical reconstruction|dual[- ]coordinate|weak-mode|angular error",
     re.I,
 )
 # A comparison is "against random" when the row pairs a comparative with the
@@ -114,6 +120,63 @@ def test_random_comparisons_name_their_endpoint():
         "they are measured on; the same comparison can be a null on one "
         "endpoint and significant on another, so an unqualified row is "
         "ambiguous:\n  " + "\n  ".join(offenders))
+
+
+def _markdown_blocks(text):
+    """Group markdown into bullet blocks: (first line number, block text).
+
+    README prose wraps, so an endpoint named on a bullet's first line and a
+    comparison word five lines later belong to the same statement. Checking
+    line-by-line reports those as offenders; checking the whole file reports
+    nothing. The bullet is the unit a reader actually parses.
+    """
+    blocks, cur, start = [], [], 0
+    for i, ln in enumerate(text.splitlines(), 1):
+        if re.match(r"^\s*[-*] ", ln):
+            if cur:
+                blocks.append((start, "\n".join(cur)))
+            cur, start = [ln], i
+        elif cur and ln.strip():
+            cur.append(ln)
+        elif cur:
+            blocks.append((start, "\n".join(cur)))
+            cur = []
+    if cur:
+        blocks.append((start, "\n".join(cur)))
+    return blocks
+
+
+def test_readme_random_comparisons_name_their_endpoint():
+    """The same rule, applied to the README's headline bullets.
+
+    The registry is not the only place a reader meets these numbers: the
+    README's summary bullets carry the same comparison, and it was there that
+    the E_osb result was described as improving "reconstruction" while a
+    different bullet used the same word for the physical endpoint. Enforcing
+    the rule only in `docs/claims.md` would repeat exactly the mistake the
+    rule exists to prevent (CONTRIBUTING 5/7: enforced globally or not at
+    all).
+    """
+    readme = REPO / "README.md"
+    if not readme.exists():
+        import pytest
+        pytest.skip("README.md not present")
+
+    offenders = []
+    for start, blk in _markdown_blocks(readme.read_text(encoding="utf-8")):
+        if "random" not in blk.lower():
+            continue
+        if not _COMPARATIVE.search(blk):
+            continue
+        if _ENDPOINT_WORDS.search(blk):
+            continue
+        first = blk.strip().splitlines()[0]
+        offenders.append(f"README.md:{start} {first[:70]}")
+
+    assert not offenders, (
+        "these README bullets compare against random without naming the "
+        "functional they are measured on (the E_osb and physical endpoints "
+        "do not share a conclusion):\n  " + "\n  ".join(offenders))
 
 
 def test_banned_families_absent():

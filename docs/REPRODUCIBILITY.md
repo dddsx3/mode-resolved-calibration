@@ -94,6 +94,34 @@ which is why `git_sha` is documented here rather than re-derived at runtime.
 The invalid v1 `linearization_radius.json` was replaced by the
 metric-domain-corrected v2 rerun (reachable `785c7485f37e`).
 
+### 1.2 Endpoint note: a mislabelled field in a frozen artifact
+
+`results/openillumination/allocation/allocation_summary.json` carries a `note`
+reading "Delta < 0 means the mode-aware policy improved reconstruction". The
+word *reconstruction* is wrong there: every row of the evaluation, and the
+`E_run` column of `per_run_errors.csv`, is the gauge-aligned residual energy
+projected onto the predicted weak-mode subspace — the `E_osb` endpoint, a
+model-space quantity, not a physical reconstruction error. The physical
+counterpart of the same comparison (normal angular error) lives in
+`results/openillumination/decision_quality*.json`.
+
+The note is left byte-for-byte as committed. Hand-editing a frozen artifact
+changes its sha256 and silently invalidates every pin that references it
+(CONTRIBUTING, "Drift annotations never go into frozen artifacts"); the same
+`note` string also appears in the producer `allocation/provenance/a5_analyze.py`
+and in the upstream cloud driver, so a correction belongs in the producing
+script on a future rerun, not in a hand edit here. This paragraph is the
+sidecar annotation the rule asks for.
+
+**Why it matters:** the mislabel propagated. `README.md` described the same
+E_osb numbers as improving "reconstruction", and the registered claims used the
+word for both functionals — the E_osb endpoint (B5) and the physical endpoint
+(B9) — which made two compatible results read as a contradiction. The README
+now names the endpoint, and `docs/claims.md` B5/B9 cross-reference each other.
+The two functionals genuinely disagree: on E_osb the within-active-set
+ordering adds nothing detectable, while on the physical endpoint it is real
+with CIs excluding 0.
+
 ## 2. Environment
 
 ```bash
@@ -179,9 +207,16 @@ allocation evaluation were executed once, preregistered, and committed:
 
 - `results/openillumination/` — mode ranking, per-level severity, factorial
   correctness rerun, amplitude/directional analyses;
-- `results/openillumination/allocation/` — the 29,700-reconstruction
-  allocation evaluation (`uos_table.csv`, paired statistics, provenance with
-  the exact cloud driver and statistics scripts);
+- `results/openillumination/allocation/` — the 29,700-run allocation
+  evaluation (`uos_table.csv`, paired statistics, provenance with
+  the exact cloud driver and statistics scripts). Each row is one
+  (object, level, seed, regime, policy, budget) run whose error column is
+  `E_run` — the gauge-aligned residual energy projected onto the predicted
+  weak-mode subspace (the `E_osb` endpoint, a model-space quantity), not a
+  physical reconstruction error. The physical-endpoint counterpart of the
+  same comparison lives in `results/openillumination/decision_quality*.json`
+  (normal angular error); the two functionals do not share a conclusion
+  (`docs/claims.md` B5 / B9);
 - `results/{synthetic,gauge_spectrum,monte_carlo,nonlinear,diligent,diligent_ablation}/`
   — the synthetic validity panels and external sanity panels;
 - `results/certification|mode_tail|submodularity|magnitude/` — the certified

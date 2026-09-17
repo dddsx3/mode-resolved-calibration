@@ -193,8 +193,11 @@ reference record.
   [0.657, 0.716]) — while the gauge-aligned weak-mode endpoints show the
   error-redistribution phenomenon instead
   (`results/openillumination/decision_quality.json`);
-- preregistered allocation evaluation: mode-aware guidance improves
-  reconstruction over random allocation for 11/11 objects (Δ AUC −0.150 at 10×,
+- preregistered allocation evaluation **on the E_osb endpoint** (the
+  gauge-aligned residual energy projected onto the predicted weak-mode
+  subspace — a model-space quantity, NOT the physical reconstruction error):
+  mode-aware guidance improves the budget-curve E_osb over random allocation
+  for 11/11 objects (Δ AUC −0.150 at 10×,
   −0.279 at 100×; bootstrap 95% CI excludes 0 — an actionable outcome vs
   random; the classical E/A/D-opt baselines improve similarly). In post-hoc
   paired comparisons the classical baselines achieved modestly lower AUC than
@@ -205,6 +208,11 @@ reference record.
   measured benefit of every informed policy over full-universe random is an
   active-set effect rather than a mode-ordering effect (see
   `allocation_policy_pairwise.csv` and `allocation_random48_summary.json`).
+  **This bullet and the Decision-quality bullet above are different
+  functionals and do not share a conclusion:** on the E_osb endpoint the
+  within-active-set ordering adds nothing detectable, while on the physical
+  normal-angular-error endpoint it is real with CIs excluding 0 (−0.38…−1.40°,
+  feasible interval). Do not quote either endpoint as the general answer.
 - **Retention-ordering self-consistency (weakest evidence tier)**: median
   within-cell Spearman $R_A$ = 0.90 (object-cluster bootstrap 95% CI [0.7,
   0.95]; 65/66 cells positive, 11/11 objects positive). This is a
