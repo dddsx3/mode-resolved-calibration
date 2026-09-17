@@ -53,6 +53,68 @@ SCAN_FILES = sorted(
 )
 SCAN_FILES = [f for f in SCAN_FILES if "__pycache__" not in f.parts]
 
+# --------------------------------------------------------------- endpoint gate
+# Any claim that compares a policy against random must say WHICH functional it
+# is measured on. The same allocation comparison is a null result on the
+# model-space weak-mode endpoint (E_osb) and a real, CI-excluding-zero result
+# on the physical normal-angular-error endpoint; a row that names neither can
+# be read as a universal statement and then contradicts its sibling row.
+#
+# Rule 5/7 of CONTRIBUTING applies: a rule is enforced globally or not written.
+# The gate therefore covers the whole registry, and the endpoints it accepts
+# are the ones the producers actually compute.
+_ENDPOINT_WORDS = re.compile(
+    r"E_osb|J_A|ang_mean_deg|normal[- ]angular|physical endpoint"
+    r"|dual[- ]coordinate|weak-mode|MSE|AUC|angular error",
+    re.I,
+)
+# A comparison is "against random" when the row pairs a comparative with the
+# random baseline. M6 ("no feasible point beats the bound") is a statement
+# about a certificate, not a comparison against random, and is out of scope.
+_COMPARATIVE = re.compile(
+    r"advantage|benefit|beats?\b|better|improve|outperform", re.I,
+)
+
+
+def test_random_comparisons_name_their_endpoint():
+    """Every advantage-over-random row names the functional it is measured on.
+
+    Guards the failure mode the endpoint review found: B5 stated the
+    active-set attribution unconditionally while B9 reported the opposite on a
+    different endpoint, and neither row referenced the other. Both now carry
+    an endpoint and a cross-reference; this test keeps it that way.
+    """
+    registry = REPO / "docs/claims.md"
+    if not registry.exists():
+        import pytest
+        pytest.skip("docs/claims.md not present")
+
+    offenders = []
+    for ln, line in enumerate(registry.read_text(encoding="utf-8").splitlines(), 1):
+        # A claim row starts with "| " and has a claim id in the second cell.
+        # Do NOT require a fixed pipe count: a row written without its trailing
+        # pipe has one fewer, and such a row is exactly the kind that slips
+        # through a structural filter (found by mutation-testing this gate
+        # against the original defective B5 row, which had 4 pipes).
+        if not line.startswith("| "):
+            continue
+        rid = line.split("|")[1].strip()
+        if not re.match(r"^[A-Z]\d+['′]?$", rid):
+            continue                       # header / separator rows
+        if "random" not in line.lower():
+            continue
+        if not _COMPARATIVE.search(line):
+            continue
+        if _ENDPOINT_WORDS.search(line):
+            continue
+        offenders.append(f"docs/claims.md:{ln} row {rid}")
+
+    assert not offenders, (
+        "these claims compare against random without naming the functional "
+        "they are measured on; the same comparison can be a null on one "
+        "endpoint and significant on another, so an unqualified row is "
+        "ambiguous:\n  " + "\n  ".join(offenders))
+
 
 def test_banned_families_absent():
     hits = []

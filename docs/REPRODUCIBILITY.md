@@ -17,6 +17,38 @@ re-derives the value. The binding table (claim → evidence file → field) is
 - Raw datasets are external (see `docs/DATA.md`); the repository carries only
   manifests and derived evidence.
 
+### 1.0 Pinning a revision
+
+To cite or depend on a specific state of this repository, pin a commit and
+verify the content against the checksum manifest. Both halves are needed: the
+commit identifies the revision, the manifest proves the files match it.
+
+```bash
+git clone https://github.com/dddsx3/mode-resolved-calibration.git
+cd mode-resolved-calibration
+git checkout <commit>            # or: git checkout <tag>
+sha256sum -c checksums.sha256    # verifies EVERY committed file
+pytest                           # re-derives the headline numbers
+```
+
+`checksums.sha256` covers every tracked file (295 entries, and all 75 files
+under `results/`), so a successful `sha256sum -c` is a statement about the
+whole tree rather than a sample of it. The manifest is excluded from itself;
+regenerate it with `bash scripts/make_checksums.sh` after any content change.
+
+Release tags mark the states that are meaningful to cite: `science-closed`
+(the experimental program closed), `manuscript-evidence-v1` (the evidence
+freeze that later revisions must not alter), `allocation-prereg-frozen` (the
+allocation protocol as pre-registered, before the run). `git tag -l` lists
+them all; `git describe --tags` names the nearest one for any commit.
+
+Consumers that derive their own artifacts from this repository should record
+the pinned commit alongside the per-artifact hashes they read, so that a
+later reader can tell which revision a number came from. The artifacts
+themselves already carry a `git_sha` in their run manifests (see §1.1 for the
+ledger, including the two entries whose originating commits are no longer
+reachable).
+
 ### 1.1 Provenance note: git SHAs recorded in result manifests
 
 Twenty-six distinct `git_sha` values are recorded across the committed result
