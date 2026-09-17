@@ -433,7 +433,7 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
 > ("也把 α-近似次模界写进论文,而不是把次模当负定理复述") is delivered:
 > the submodularity framing under N-1 is superseded by the α-approximate
 > statement below; this section replaces the "do not write submodularity
-> into the paper" TODO. Methods stated in `docs/methods.md` §9 (L9–L12),
+> into the write-up" TODO. Methods stated in `docs/methods.md` §9 (L9–L12),
 > bound in `results/submodularity/alpha_bound.json`, gated by
 > `tests/test_alpha_bound.py`.
 
@@ -947,7 +947,7 @@ prescribes.
 
 ## 24. Baselines: literature-style selection on the same lights（P-BASELINE, `experiments/baseline_comparison.py`）
 
-**Question (the baseline gap).** TCI reviewers expect a baseline table.
+**Question (the baseline gap).** A literature-style baseline table is expected.
 The implementable same-lights baseline is the classic
 well-conditioned-configuration idea (Drbohlav & Chantler, ICCV 2005),
 operationalized as greedy farthest-point direction sampling (DC05):

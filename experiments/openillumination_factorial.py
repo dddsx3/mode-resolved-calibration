@@ -55,7 +55,7 @@ VARIANTS = ("A", "B", "C", "D")
 NOISE_CONV = {"A": "legacy", "B": "corrected", "C": "legacy", "D": "corrected"}
 MODE_COORD = {"A": "legacy", "B": "legacy", "C": "dual", "D": "dual"}
 SCALARS = ("P_trace", "P_logdet", "P_emin")
-PAPER_VARIANT = "D"
+REPORTED_VARIANT = "D"
 MACHINERY_TOL = 1e-7          # A 臂 vs 冻结产物的跨机浮点预算（预期 ~1e-12）
 
 
@@ -251,7 +251,7 @@ def run(config_path=REPO / "configs/openillumination.yaml",
 
     summary = dict(
         gate="MF-0.3 factorial correctness rerun (math freeze v1.0 section 57)",
-        paper_variant=PAPER_VARIANT,
+        paper_variant=REPORTED_VARIANT,
         machinery_check=machinery,
         protocol=dict(
             config_sha256=_sha(cfg_path),

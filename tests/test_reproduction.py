@@ -1,9 +1,9 @@
-"""Appendix-C reproduction gate (T6.3).
+"""Headline reproduction gate (T6.3).
 
-Independently recomputes the nine headline numbers (N1-N9) of the manuscript from the
-frozen artifacts under ``results/`` and ``data/manifests/`` and asserts they agree with
-the values reported in the manuscript appendix, bit-for-bit where the quantity is
-deterministic and within tight tolerance otherwise.
+Independently recomputes the nine headline numbers (N1-N9) from the frozen
+artifacts under ``results/`` and ``data/manifests/`` and asserts they agree with
+the reported values, bit-for-bit where the quantity is deterministic and within
+tight tolerance otherwise.
 
 This test is self-contained: it reads only the committed CSV/JSON artifacts and the
 public ``calibinfo`` helpers; it does not require the (external) raw datasets.

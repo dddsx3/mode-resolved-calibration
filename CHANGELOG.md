@@ -4,6 +4,32 @@ All notable changes to this project are documented here.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/);
 versioning: [semver](https://semver.org/).
 
+## [Unreleased]
+
+### Fixed
+
+- `scripts/make_figures.py` wrote its output to `docs/img/benchmark/figures/`,
+  a directory that does not exist in the repository, instead of the committed
+  `docs/img/benchmark/`. `reproduce.sh --stage figures` had therefore been
+  creating an untracked directory rather than refreshing the committed
+  figures. The script's docstring also referenced a path that does not exist
+  in the repository.
+- Fig.6 was written as `fig6_draft.png`, a name under which it was never
+  committed; it is now `fig6_linearization_envelope.png`.
+- `docs/methods.md` embedded `convexity_midpoint.png` by a relative path that
+  resolved to `docs/convexity_midpoint.png`; the file is at
+  `docs/img/convexity_midpoint.png`.
+- `src/calibinfo/metrics/__init__.py` was missing, making
+  `calibinfo.metrics` an implicit namespace package inside an otherwise
+  regular package tree.
+
+### Changed
+
+- `reproduce_paper.sh` renamed to `reproduce.sh`. The reproduction entry point
+  describes what it does (reproduce the repository's results) rather than
+  naming a downstream document the repository does not contain and does not
+  depend on. All references updated; the coverage gate follows the new name.
+
 ## [0.3.0] — 2026-09-10
 
 Math-freeze correctness gates (v1.0 §57, MF-0.1–MF-0.6) and documentation
@@ -68,7 +94,7 @@ interface is exercised by a preregistered factorial rerun into
 ## [0.4.0] — 2026-09-12
 
 Repository restructured for public research use: the project now stands on
-its own, independent of any manuscript.
+its own, independent of any write-up.
 
 ### Changed
 

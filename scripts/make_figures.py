@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""make_figures · rebuild paper figures (Fig.1-9, interface frozen).
+"""make_figures · rebuild the benchmark figures (Fig.1-9, interface frozen).
 
 Figures are rebuilt only from the machine-readable summaries under results/;
-each figure's recipe is `python paper/make_figures.py --figure N`.
+each figure's recipe is `python scripts/make_figures.py --figure N`.
 """
 
 from __future__ import annotations
@@ -13,7 +13,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 FROZEN = ROOT / "results"
-FIGS = ROOT / "docs/img/benchmark" / "figures"
+FIGS = ROOT / "docs/img/benchmark"
 
 FIGURES = {f"Fig.{i}" for i in range(1, 10)}
 
@@ -131,7 +131,7 @@ def _make_fig6(out_dir):
     np.atleast_1d(axes)[0].set_ylabel("median |emp/pred − 1| (weak 5 modes)")
     np.atleast_1d(axes)[0].legend(fontsize=8)
     fig.suptitle("Fig.6 (draft) — Linearization validity envelope (B-arm analytic SH+ReLU)", fontsize=10)
-    out = out_dir / "fig6_draft.png"
+    out = out_dir / "fig6_linearization_envelope.png"
     fig.tight_layout()
     fig.savefig(out, dpi=150)
     print(f"[make_figures] Fig.6 -> {out}")

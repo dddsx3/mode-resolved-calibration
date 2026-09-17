@@ -5,7 +5,7 @@
   1. factorial 证据存在且结构齐全（四臂、protocol、display）；
   2. 机制校验通过且 A 臂锚点与冻结 benchmark 逐位一致（pred/emp 相对差 0
      容差带 + A 臂统计量与冻结 validation_summary.json 逐字段一致）；
-  3. 论文口径 = D（arm D 为 paper-facing，固定先验），其主结果字段存在。
+  3. 报告口径 = D（arm D 为固定先验的报告臂），其主结果字段存在。
 """
 
 import json

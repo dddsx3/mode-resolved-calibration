@@ -1,7 +1,7 @@
 """render_schematic · overview 示意图渲染器（HTML → PNG）。
 
 源文件: docs/img/benchmark/overview_schematic.html（自包含 HTML+CSS，
-paper-figure-html 模板设计语言）。本脚本用本机 Edge/Chrome headless 以
+图表 HTML 模板设计语言）。本脚本用本机 Edge/Chrome headless 以
 2x 设备缩放截图为 README 用的 PNG。改 HTML 后重跑本脚本即可。
 
 用法: python scripts/render_schematic.py

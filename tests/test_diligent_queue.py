@@ -1,4 +1,4 @@
-"""P-DILIGENT-QUEUE artifact gates (TCI gap 2: second dataset).
+"""P-DILIGENT-QUEUE artifact gates (second dataset).
 
 CI-safe: reads only results/diligent/diligent_queue.json. Pins:
 

@@ -1,4 +1,4 @@
-"""P-DILIGENT-QUEUE · 三个核心实验在 DiLiGenT 队列上的迁移(TCI 缺口 2)。
+"""P-DILIGENT-QUEUE · 三个核心实验在 DiLiGenT 队列上的迁移(第二数据集)。
 
 OpenIllumination(11 物体/142 灯)之外的第二数据集:DiLiGenT(10 物体/
 96 灯,独立采集系统)。同一代码路径,经 diligent_oi_adapter 适配 +

@@ -1,9 +1,9 @@
 """Benchmark-evidence recomputation gate (N10-N12).
 
 Independently recomputes the three post-adjudication allocation headline
-numbers from the frozen artifacts under results/ (post tag
-manuscript-evidence-v1 these artifacts and this file may not change --
-see the manuscript-evidence drift gate in .github/workflows/ci.yml):
+numbers from the frozen artifacts under results/ (after tag
+manuscript-evidence-v1 these artifacts and this file may not change; the
+evidence-integrity job in .github/workflows/ci.yml enforces this):
 
   N10  post-hoc paired policy comparison: mode-aware minus each classical
        baseline (E/A/D-opt greedy) has positive median and CI excluding 0
@@ -17,6 +17,8 @@ see the manuscript-evidence drift gate in .github/workflows/ci.yml):
 Self-contained: reads only committed CSV/JSON artifacts; no experiment
 pipeline imports. N1-N9 live in tests/test_reproduction.py (frozen at
 tag science-closed); N10-N12 here (frozen at tag manuscript-evidence-v1).
+(The tag name is historical and retained: retagging would invalidate the
+recorded provenance of the frozen artifacts it seals.)
 """
 
 import csv

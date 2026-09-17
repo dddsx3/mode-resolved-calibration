@@ -13,8 +13,8 @@ version: open an issue first for anything semantic; keep PRs small; make sure
    plus a re-derived test.
 2. **Single source of truth.** The math lives once, in `src/calibinfo`
    (docstrings carry the normative definitions; `docs/methods.md` is the
-   prose statement). Docs, examples, and papers reference it — they never
-   restate formulas independently.
+   prose statement). Docs and examples reference it — they never restate
+   formulas independently.
 3. **Numeric claims are gated.** `tests/test_claims_gate.py` scans the repo
    for overclaiming sentence patterns; `docs/claims.md` is the
    claim-to-evidence registry. New numeric claims must trace to a file under

@@ -1,22 +1,22 @@
 #!/usr/bin/env bash
-# reproduce_paper.sh · staged reproduction chain: install -> tests -> experiments
+# reproduce.sh · staged reproduction chain: install -> tests -> experiments
 # (by stage) -> figures. Every step prints the GATE name of the artifact it
 # produces so a runner can cross-check against results/ (acceptance 665d01e
 # section 5: the previous version covered only the early synthetic era and
 # was referenced by no document).
 #
 # Usage:
-#   ./reproduce_paper.sh                      # all stages (skips stages whose
-#                                             # raw data is absent)
-#   ./reproduce_paper.sh --stage synthetic    # no raw data needed
-#   ./reproduce_paper.sh --stage diag         # zero-cost diagnostics on the
-#                                             # COMMITTED artifacts (seconds)
-#   ./reproduce_paper.sh --stage oi           # OpenIllumination experiments
-#   ./reproduce_paper.sh --stage dq           # DiLiGenT experiments
-#   ./reproduce_paper.sh --stage figures
-#   ./reproduce_paper.sh --list               # print the runner table
-#   ./reproduce_paper.sh --stage oi --long    # also run the multi-hour
-#                                             # experiments (skipped by default)
+#   ./reproduce.sh                      # all stages (skips stages whose
+#                                      # raw data is absent)
+#   ./reproduce.sh --stage synthetic    # no raw data needed
+#   ./reproduce.sh --stage diag         # zero-cost diagnostics on the
+#                                      # COMMITTED artifacts (seconds)
+#   ./reproduce.sh --stage oi           # OpenIllumination experiments
+#   ./reproduce.sh --stage dq           # DiLiGenT experiments
+#   ./reproduce.sh --stage figures
+#   ./reproduce.sh --list               # print the runner table
+#   ./reproduce.sh --stage oi --long    # also run the multi-hour
+#                                      # experiments (skipped by default)
 #
 # Raw data is external: OpenIllumination (D:/data/OpenIllumination) and
 # DiLiGenT (D:/data/DiLiGenT/pmsData), see docs/DATA.md. Steps whose data

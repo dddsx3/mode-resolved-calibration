@@ -103,7 +103,10 @@ The preregistered A/B/C/D factorial
 that arm A (legacy/legacy) reproduces the frozen benchmark bit-close (max
 relative difference 0.0 on all 66×5 pred/emp entries and the pooled
 Spearman), and re-measures the interface corrections on the identical
-protocol (same objects, pixel subsets, levels, seeds).
+protocol (same objects, pixel subsets, levels, seeds). The artifact's
+`paper_variant` field names the reported arm (D); that key is part of the
+frozen evidence and is read by `tests/test_factorial_evidence.py`, so it is
+retained as committed rather than renamed.
 
 ## 4. Headline results and how to reproduce them
 

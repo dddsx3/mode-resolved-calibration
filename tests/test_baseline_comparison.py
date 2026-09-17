@@ -1,4 +1,4 @@
-"""P-BASELINE artifact gates (TCI gap 3: literature baselines).
+"""P-BASELINE artifact gates (literature baselines).
 
 CI-safe: reads only results/baseline/baseline_comparison.json. Pins:
 

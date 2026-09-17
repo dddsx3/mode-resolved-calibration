@@ -1,7 +1,7 @@
 # Mathematical foundations
 
 This page states the methods implemented in `calibinfo` precisely enough to
-use the library without consulting any manuscript. Statements marked
+use the library on its own. Statements marked
 **(proved)** are established in the unit tests listed at the end; statements
 marked **(cited)** are classical results we instantiate. Notation follows the
 table in the README.
@@ -105,7 +105,7 @@ larger t = higher precision; the parameterization is pinned by
   `J_A = tr ΔF⁻¹` (smooth), `J_D = −logdet`, and `J_E = −λmin` (nonsmooth at
   eigenvalue crossings — use as certificate only with care) are convex in t.
 
-  ![midpoint convexity of J_E](convexity_midpoint.png)
+  ![midpoint convexity of J_E](img/convexity_midpoint.png)
   The certificate functional is **J_A**; mode-tail functionals on the R
   spectrum are report-only (convexity unproven).
 - **L4 (certificates)** — the budget-constrained program

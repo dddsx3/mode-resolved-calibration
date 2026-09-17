@@ -1,4 +1,4 @@
-"""P-BALL-ANCHOR artifact gates (TCI gap 1: physical anchoring).
+"""P-BALL-ANCHOR artifact gates (physical anchoring).
 
 CI-safe: reads only results/openillumination/ball_anchor.json. Pins:
 
