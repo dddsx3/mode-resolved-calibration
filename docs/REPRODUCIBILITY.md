@@ -170,10 +170,17 @@ retained as committed rather than renamed.
 
 ## 4. Headline results and how to reproduce them
 
+**Continuation scope.** The rows explicitly marked historical reproduce
+unchanged earlier pipelines. They do not regenerate the later per-sample
+projection evidence or the new matched-ensemble study. Current bindings and
+isolated reproduction commands for M12–M17/C13 are in
+[the theory continuation index](theory/README.md); imported source evidence
+has its own manifest under `results/theory_extension_20260918/imported_20260917/`.
+
 | Result | Value | Command | Evidence | Test |
 |---|---|---|---|---|
-| Directional validation of the retention ordering (real objects) | R_A = 0.90, CI [0.7, 0.95], 65/66 cells | `python experiments/openillumination_factorial.py` (arm D rows committed) | `results/openillumination/correctness/mf0_factorial_summary.json` (`variants.D`) | `tests/test_reproduction.py::test_N1_mode_resolved_pass_rate` |
-| Directional-validation construction disclosure | rank-equivalent to the mode-index baseline, deviation exactly 0.0 (66/66 cells) | `python experiments/directional_amplitude.py` | `results/magnitude/directional_amplitude_summary.json` | `tests/test_math_gates.py` |
+| **Historical / superseded** retention-ordering control (old common-shift gauge) | Historical R_A = 0.90, CI [0.7, 0.95], 65/66 cells; current per-sample-projection control is indexed by B1 | `python experiments/openillumination_factorial.py` (historical arm D rows committed) | `results/openillumination/correctness/mf0_factorial_summary.json` (`variants.D`) | `tests/test_reproduction.py::test_N1_mode_resolved_pass_rate` |
+| Historical predictor-ranking construction disclosure, not empirical validation | rank-equivalent to the mode-index baseline, deviation exactly 0.0 (66/66 cells) | `python experiments/directional_amplitude.py` | `results/magnitude/directional_amplitude_summary.json` | `tests/test_math_gates.py` |
 | Certified dynamic range (P = 1200 subsample) | 36–89% per object, median 62.87% | `python experiments/certified_gaps.py` | `results/certification/certified_gaps.json` | `tests/test_certified_gaps_evidence.py` |
 | Certified greedy optimality | 0.011–0.028% above the convex lower bound | same | same | same |
 | Full-resolution confirmation (all masked pixels, all 142 lights) | 27.3–89.4%, median 60.06%; greedy 0.002–0.005% | `python experiments/lowrank_fullres.py` | `results/certification/lowrank_fullres.json` | `tests/test_m2_m3_evidence.py::test_fullres_structure` |
@@ -181,7 +188,7 @@ retained as committed rather than renamed.
 | Linearization validity radius (P-RADIUS v2) | median radius_2x = 1.0, radius_10x = 1.5 (11/11 objects); small-level slope +2.02–2.19 | `python experiments/linearization_radius.py` | `results/magnitude/linearization_radius.json` | `tests/test_pradius_pconc_artifacts.py` |
 | Certificate concentration (P-CONC) | rel_spread_median 1.08%; clean_vs_mean_ratio median 1.42 (1.17–3.08) | `python experiments/certificate_concentration.py` | `results/certification/certificate_concentration.json` | `tests/test_pradius_pconc_artifacts.py` |
 | Submodularity negative result | E-opt: 1518 violating triples over 10 instances, γ_min = 0.704; A-opt marginal; D-opt clean | `python experiments/submodularity_search.py --out /tmp/submod.json` (recomputation; the committed artifact stays untouched) | `results/submodularity/submodularity_search.json` | `tests/test_submodularity_harness.py` |
-| Amplitude validity envelope | emp/pred median 201.1 (original pipeline), 1.0045 synthetic MC | `python experiments/directional_amplitude.py` | `results/magnitude/directional_amplitude_summary.json` | `tests/test_math_gates.py` |
+| **Historical / superseded** amplitude envelope | Historical emp/pred median 201.1 (original pipeline); 1.0045 matched synthetic MC is a separate ensemble. Current coordinate-matched, ensemble-unmatched reading is B2 | `python experiments/directional_amplitude.py` (historical producer) | `results/magnitude/directional_amplitude_summary.json` | `tests/test_math_gates.py` |
 | Certified allocation rank invariance | 594 frozen orderings, rank 1200 = rank(F∞) everywhere | `python experiments/allocation_rank_check.py` | `results/openillumination/correctness/allocation_rank_check.json` | `tests/test_math_gates.py` |
 | Monte-Carlo variance identity (synthetic) | emp/analytic covariance ratio 1.0045 | `python scripts/run_experiments.py --experiment monte_carlo --config configs/monte_carlo.yaml` | `results/monte_carlo/ci03_formal_summary.json` | `tests/test_reproduction.py::test_N7_covariance_ratio` |
 | Gauge closed form vs direct | max rel 2.55e-8 over 25 decades | `python scripts/run_experiments.py --experiment gauge_spectrum --config configs/gauge_spectrum.yaml` | `results/gauge_spectrum/ci02_formal_summary.json` | `tests/test_reproduction.py::test_N6_gauge_closed_form` |

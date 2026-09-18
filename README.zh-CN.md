@@ -25,7 +25,7 @@ Fisher 信息——蓝色区域信息最薄；中：保留谱把 tracked 方向�
 
 | 层 | 对象 | 回答的问题 | 证据 |
 |---|---|---|---|
-| **诊断 Diagnosis** | `R = F∞^{-1/2} ΔF F∞^{-1/2}` | 哪些可辨识方向被标定不确定度伤害？ | `results/magnitude/directional_amplitude_summary.json` |
+| **诊断 Diagnosis** | `R = F∞^{-1/2} ΔF F∞^{-1/2}` | 哪些可辨识方向被标定不确定度伤害？ | `docs/methods.md` §3（matched GLS）；当前 B1 `variants.D` 排序控制见下，不是 matched prediction 验证 |
 | **估值 Valuation** | `V(B) = 1 − J*(B)/J₀` | 更好的标定值多少钱？ | `results/certification/certified_gaps_levels.json`（level 曲线） |
 | **决策 Decision** | `t*(B) = argmin J_A(t)` | 预算具体投到哪里？ | `results/certification/certified_gaps.json`（greedy 前缀） |
 | **认证 Certification** | `J_A(t) − J* ≤ g_FW(t)` | 离最优还有多远？ | `results/certification/certified_gaps.json`（FW 间隙） |
@@ -87,11 +87,26 @@ spec = retention_spectrum(DeltaF, A.T @ A) # 逐模式保留率
    放大倍数。
 4. **预算分配是凸程序**：ΔF 对逐灯精度乘子联合算子凹 ⇒ 标准 OED 泛函
    凸 ⇒ Frank–Wolfe 对偶间隙给出全局认证下界；低秩结构
-   `R = I − VVᵀ`（恰 P−3L 个 ρ≡1）让全分辨率计算可行。
+   `R = I − VVᵀ` 恰有 `P − rank(V)` 个 ρ≡1，仅在 `rank(V)=3L` 时为
+   `P−3L`。其余模式由 `VᵀV` 的正特征值给出，不能重复计入其零模式。
 5. **奇异协方差**：零协方差 ≠ 零精度——奇异 Σ_c 走因子分解/边缘化路线，
    禁止用伪逆精度替换（库内有已知答案反例）。
+6. **γ 保证范围（M9/M12）**：旧 alpha-only 候选已 **refuted（反例否定）**，
+   不是尚待补证；旧真实物体 γ ≥ 0.635 的保证解释已撤回。
+   `gamma_lower_bound(alpha)` 的历史数值行为及回归测试完全保留，但不是
+   有效证书。M12 是已证 **未加权全迹、固定 SPD 参数空间、PSD 更新** 的
+   leave-one-out 谱界，API 为
+   `calibinfo.allocation.alpha_bound.spectral_gamma_lower_bound(A, updates)`；
+   不能直接外推到任意任务权重、奇异基线或变化的可辨识子空间，也没有在此
+   报告替代旧值的真实物体谱界读数（methods.md §9）。
 
-完整推导见 [docs/methods.md](docs/methods.md)。
+完整推导见 [docs/methods.md](docs/methods.md)。冻结光度管线的
+`A_k = diag(s_hat_k)` 对应 **additive albedo（加性反照率）**，不是
+log-albedo。均值/对比度表只作用于这个逐像素标量参数；单位法向的反照率–
+法向联合模型具有内禀 **3P** 维（每像素一个反照率、两个法向切向坐标），
+不是无约束 4P 模型。联合模型扩展见 methods，不把旧标量表当作联合实测结果。
+导入证据与后续物理／联合模型推导的区分见
+[理论续推索引](docs/theory/README.md)。
 
 ## 示例
 
@@ -110,8 +125,23 @@ spec = retention_spectrum(DeltaF, A.T @ A) # 逐模式保留率
 （声明 → 证据文件 → 复现命令 → 验收测试），复现指南见
 [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md)。摘要：
 
-- **幅值有效域**：真实数据 emp/pred 中位 15.98（合成 matched MC 为
-  1.0045）——线性化理论在真实光度数据上的可证伪有效域；
+- **幅值比较（B2；同投影，不是同系综）**：修正 D 臂的经验退化量与
+  同投影线性预测之比，中位 53.744194（5–95% [0.489414, 820.342156]），
+  绑定新导入 [`amplitude_comparison.json`](results/theory_extension_20260918/imported_20260917/amplitude_comparison.json)
+  的 `variants.D.new_ratio_matched_prediction.pooled`。预测仅匹配逐 seed
+  gauge 投影及 dual 坐标；经验分母仍是 **residual bootstrap（残差重抽样）**，
+  不是 matched GLS 的标定极限系综。因此比值偏离一既不能验证、也不能反驳
+  matched-GLS 方差定理；合成 matched MC 参照仍为 1.0045。
+
+  **历史幅值摘要（superseded）**：此前修正 D 臂中位 15.98、原 A 臂中位
+  201.1 保留在 `results/magnitude/directional_amplitude_summary.json`，
+  不是当前 B2 读数，也不能作为定理失效的证据。
+
+- **历史有效域图（B8；旧投影管线）**：冻结 validity map 的各曲率箱
+  Spearman 中位 ≥ 0.8、Kendall 符号一致率中位 ≥ 0.7，仅是历史读数，
+  **不能保证当前逐 seed gauge 投影管线的排序稳健性**；旧“线性化失效
+  只打幅值、不打方向”的推广已被 superseded
+  （`results/magnitude/validity_map.json`）。
 - **认证动态范围**：全部 masked 像素、全部 142 灯下，重标所有 48 个
   有效灯可带来 **27.3–89.4%（中位 60.06%）** 的 tr ΔF⁻¹ 改善，逐物体
   差异大——所以按实例认证；J_A-greedy 距凸下界仅 **0.002–0.005%**；
@@ -194,11 +224,18 @@ spec = retention_spectrum(DeltaF, A.T @ A) # 逐模式保留率
 - **负结果**：E-opt 增益违反次模性（γ_min = 0.704）；固定水平 severity
   分支经修正管线复测后已撤回（符号翻转，且该跨物体对比是标量化恒等式的
   产物）；策略排序差异全部落在认证 epsilon 内。
-- **保留序自洽性（最弱证据层）**：细胞内 Spearman R_A = 0.90（bootstrap
-  95% CI [0.7, 0.95]，65/66 细胞、11/11 物体为正）。这是**场景内构造性
-  恒等式**（66/66 细胞、偏差 0.0），不是样本外验证——见
-  [docs/methods.md](docs/methods.md)。它只验证**方向**（理论标出的弱方向
-  确实是经验上更脆的方向），不验证幅值 `1/ρ_j`。
+- **保留序控制（B1；当前逐 seed gauge 重算）**：单元内 Spearman
+  R_A = 0.55（object-cluster bootstrap 95% CI [-0.1, 0.7]，43/66 单元、
+  7/11 物体为正），对应新导入
+  [`mf0_factorial_summary.json`](results/theory_extension_20260918/imported_20260917/mf0_factorial_summary.json)
+  的 `variants.D`：`gauge_mode=per_seed`、`prediction_field=pred_deg`。
+  这是**原预测排序控制**，不是 matched prediction 验证；CI 跨零，不能据此
+  宣称当前管线的方向验证稳健，更不验证幅值 `1/ρ_j`。
+
+  **历史 B1（superseded）**：R_A = 0.90（CI [0.7, 0.95]，65/66 单元、
+  11/11 物体为正）保留在旧 `results/openillumination/correctness/mf0_factorial_summary.json`。
+  其与 mode-index 的精确等价（66/66 单元、偏差 0.0）是场景内构造恒等式，
+  不是当前管线的样本外证据。
 
 ## 复现与完整性
 **入口**:`./reproduce.sh` 分阶段复现整条链——`--stage synthetic`
@@ -213,9 +250,11 @@ spec = retention_spectrum(DeltaF, A.T @ A) # 逐模式保留率
   口径）；
 - 复现命令、证据文件与验收测试的对应表见
   [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md)；
-- 流水线有两个口径：`legacy`（逐位复现原始基准产物）与 `corrected`
-  （文档化的修正口径，报告数字所用）；A/B/C/D factorial 验证两者关系
-  （原始口径逐位复现 + 修正口径重测所有头条）。
+- 冻结 `legacy` / `corrected` A/B/C/D factorial 保留为历史复现锚。
+  **B1/B2 当前读数来自另行导入的逐 seed gauge 修正**，来源由
+  `results/theory_extension_20260918/imported_20260917/manifest.json` 固定；
+  旧 machinery 对拍通过不表示新经验值与旧摘要相等。其他冻结分析仅保持
+  各自记录的口径和范围，详见 `docs/EXPERIMENTS.md` §11。
 
 ## 贡献
 

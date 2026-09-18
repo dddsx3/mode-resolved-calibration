@@ -2,8 +2,8 @@
 
 Each section records one experiment as an objective protocol with the fixed fields
 Dataset → sampling → corruption → estimator → metric → bootstrap → seed → output.
-No analysis history is included; the fields below are exactly what a fresh run needs
-to reproduce the frozen artifacts.
+Frozen protocols remain reproducible; explicit historical/superseded labels distinguish
+archived readings from current evidence and do not modify the frozen artifacts.
 
 ---
 
@@ -247,9 +247,48 @@ labels were fixed before the rerun:
   median for P_mode and each scalar predictor, and the paired
   Δ(mode − best scalar) with within-replicate re-selection.
 - **Seed**: experiment seed `20260907` (frozen §5 config, unchanged)
-- **Output**: `results/openillumination/correctness/` —
-  `mf0_factorial_summary.json` (+ `mf0_factorial_rows_<arm>.json`); no frozen
-  artifact is modified.
+- **Historical output (before the per-seed gauge correction)**:
+  `results/openillumination/correctness/mf0_factorial_summary.json`
+  (+ `mf0_factorial_rows_<arm>.json`); no frozen artifact is modified.
+
+### Imported per-seed gauge rerun (B1/B2; current reading)
+
+The evidence rerun was produced on 2026-09-17 and imported unchanged into
+`results/theory_extension_20260918/imported_20260917/`. Its `manifest.json`
+records source members and hashes; this is **imported existing evidence, not a
+new local measurement**. The original command above reproduces the historical
+factorial, not the imported per-seed correction.
+
+- **Gauge / prediction convention**: the imported D arm is
+  `noise_fit_convention=corrected`, `mode_coordinate=dual`,
+  `gauge_mode=per_seed`, `prediction_field=pred_deg`. B1 uses the original
+  prediction ordering control, **not matched-prediction validation**.
+- **Current B1**: within-cell Spearman R_A = 0.55, object-cluster bootstrap
+  95% CI [-0.1, 0.7], 43/66 cells positive, 7/11 objects positive; bound to
+  `variants.D` in
+  [`mf0_factorial_summary.json`](../results/theory_extension_20260918/imported_20260917/mf0_factorial_summary.json).
+  The CI spans zero. The retained legacy machinery check compares a separately
+  recomputed legacy-gauge A arm with the frozen benchmark; it does not require
+  the per-seed empirical outputs to equal the old outputs.
+- **Historical B1 (superseded)**: R_A = 0.90, CI [0.7, 0.95], 65/66 cells
+  positive, 11/11 objects positive in the earlier corrected summary. Its
+  mode-index equivalence was a construction identity, not independent validation.
+- **Current B2**: empirical/same-projection linear-prediction ratio median
+  53.744194, 5–95% [0.489414, 820.342156], from
+  `variants.D.new_ratio_matched_prediction.pooled` in
+  [`amplitude_comparison.json`](../results/theory_extension_20260918/imported_20260917/amplitude_comparison.json).
+  Here `pred_deg_matched_linear` matches the per-seed gauge projection and
+  dual coordinate only. The empirical denominator remains a **residual
+  bootstrap**, not the matched GLS calibration-limit ensemble; this ratio
+  neither validates nor refutes the variance theorem. The reported interval
+  is pooled percentiles, not a bootstrap CI; the additional object-cluster
+  median CI in the imported artifact is descriptive, not the old preregistered
+  statistic.
+- **Historical B2 (superseded)**: earlier arm-D median 15.98
+  (5–95% [0.005, 714.2]) and original arm-A median 201.1
+  (5–95% [7.3, 1525.8]) remain in
+  `results/magnitude/directional_amplitude_summary.json`. Their old
+  validity-envelope interpretation is not a current theorem-failure claim.
 
 ## 12. Certified optimality gaps（P-CERT, `experiments/certified_gaps.py`）
 
@@ -427,46 +466,51 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
   metric recomputed; `revision` block in the artifact documents this).
 
 
-## 16. α-approximate submodularity bound(P-ALPHA-BOUND, `experiments/alpha_bound.py`)
+## 16. Historical α-only candidate and valid full-trace replacement (P-ALPHA-BOUND)
 
-> **Status: DONE (2026-09-13)** — the assessment report's H5 open item
-> ("也把 α-近似次模界写进论文,而不是把次模当负定理复述") is delivered:
-> the submodularity framing under N-1 is superseded by the α-approximate
-> statement below; this section replaces the "do not write submodularity
-> into the write-up" TODO. Methods stated in `docs/methods.md` §9 (L9–L12),
-> bound in `results/submodularity/alpha_bound.json`, gated by
-> `tests/test_alpha_bound.py`.
+> **Status: REFUTED candidate; historical evidence retained.** The archived
+> α-only expression is not a general γ theorem and is not a proved
+> Chamon–Ribeiro (NeurIPS 2017) result. The exact counterexample and the
+> valid M12 full-trace spectral bound are stated in `docs/methods.md` §9.
+> `experiments/alpha_bound.py` reproduces the historical record only.
 
-- **Parameterization**: A-opt selection gain G(S) = F(∅) − F(S) with
-  F(S) = tr M(S)^{-1}, M(S) = ΔF(t_S): t_k = κ on k ∈ S, else 1
-  (refined-set semantics, identical to P-CERT / P-SUBMOD). W_k =
-  u_k[K_k(1) − K_k(κ)]u_k^T ⪰ 0 by Loewner monotonicity of
-  K_k(t) = (M0_k + tΛ0_k)^{-1} in t.
-- **Bound**: γ ≥ 1/(1+α), α = max_x λmax(ΔF(1)^{-1} W_x); α is a function
-  of the nominal design only (A, B, Λ0, κ) — computable a priori, no ground
-  truth, no measurements, no exhaustive search. Derivation: exact additive
-  decomposition + Woodbury marginal gain + two-sided eigenvalue sandwich +
-  Loewner monotonicity (methods.md §9 L9–L12).
-- **Toy verification (CI-safe, no raw data)**: 20 P-SUBMOD instances
-  (10 random / 10 adversarial, L=5, P=40, κ=10), exhaustive triples:
-  γ_measured ≥ 1/(1+α) on all 20 (random α ∈ [0.059, 0.119], adversarial
-  α ∈ [0.025, 0.090], measured γ ∈ [0.9999, 1.0000]); two-sided sandwich on
-  3200 (S,x) pairs with zero violations (min val/lb = 1.0021, min ub/val =
-  1.0368).
-- **Real objects**: same 11-object cohort, corrected convention, level ∈
-  {0.1, 0.5}; α ranges 0.188–0.515 at level 0.5 (γ lower bound 0.66–0.84),
-  worst object `obj_10_pumpkin3` (0.635 @ level 0.1). Overall phrasing:
-  "A-optimal light-refinement selection is ≥ 0.635-supermodular on every
-  held-out object at the probed levels."
-- **Output**: `results/submodularity/alpha_bound.json`.
-- **Honest framing**: the bound is ~1.6× looser than the *measured*
-  γ_min = 0.99989 (N-1/P-SUBMOD). Its value is a-priori computability (no
-  search), the explicit α form, and the two α→0 limits (Λ0 → ∞ or → 0
-  ⇒ exact submodularity; α peaks at intermediate precision). This is the
-  Chamon & Ribeiro (NeurIPS 2017) approximate-supermodularity framework
-  instantiated with calibration precision as the design variable; the repo
-  does **not** claim to be first to give an approximate-submodularity bound.
-- **Outcome**: cf. `docs/claims.md` M9.
+- **Historical parameterization**: A-opt selection gain G(S) = F(∅) − F(S)
+  with F(S) = tr M(S)^{-1}, M(S) = ΔF(t_S): t_k = κ on k ∈ S, else 1.
+  The exact additive decomposition and the local Woodbury marginal sandwich
+  remain valid; the historical global alpha-only collapse is refuted.
+- **Refuted candidate**: γ ≥ 1/(1+α), α = max_x λmax(ΔF(1)^{-1} W_x).
+  Exact evidence has α=1 and γ=14/109 < 1/2; at every fixed positive α,
+  the general SPD+PSD class has inf γ=0. Shared linear-Gaussian Jacobians
+  do not restore the candidate. The imported 2026-09-17 evidence did not
+  establish membership in the physically restricted Lambertian subclass;
+  this is that source's historical scope, not the status of the later
+  physical/joint-model extensions in the [theory continuation index](theory/README.md).
+- **Historical toy regression**: 20 P-SUBMOD instances (10 random / 10
+  adversarial, L=5, P=40, κ=10); none violates the candidate in this finite
+  sample. Archived α ranges are [0.059, 0.119] / [0.025, 0.090], measured
+  γ ∈ [0.9999, 1.0000]. The valid local sandwich has zero violations in
+  3200 archived (S,x) pairs, with min val/lb = 1.000096 and min ub/val =
+  1.001011 (`toy_instances` fields). Finite-sample agreement is not proof.
+- **Historical real-object numbers, not certificates**: level 0.5 α ranges
+  0.188–0.515 and the old candidate ranges 0.66–0.84. The archived minimum
+  0.635 (`obj_10_pumpkin3`, level 0.1) is a historical candidate value;
+  its real-object guarantee interpretation is withdrawn. No valid real-design
+  spectral bound has been remeasured here.
+- **Historical output / tests**: `results/submodularity/alpha_bound.json`,
+  `tests/test_alpha_bound.py`, `tests/test_gamma_bound_proof_limits.py`.
+  Existing fields, including `gamma_lower_bound` and `theorem_holds`, and
+  the historical API `gamma_lower_bound(alpha)` retain their numeric behavior
+  only for reproduction; their names cannot promote them to valid guarantees.
+- **Proved replacement (M12)**:
+  `calibinfo.allocation.alpha_bound.spectral_gamma_lower_bound(A, updates)`
+  implements the leave-one-out spectral bound for **unweighted full trace
+  on a fixed SPD parameter space with PSD updates**. Arbitrary task weights,
+  singular baselines and changing subspaces are not directly covered. Empty
+  or all-zero updates use the explicit γ=1 convention. The proof is analytic;
+  `tests/test_gamma_general_bound.py` checks instances and API behavior, and
+  the imported exact-verification record is
+  `results/theory_extension_20260918/imported_20260917/gamma_exact_verification.json`.
+- **Outcome**: `docs/claims.md` M9 (refuted) and M12 (proved, scoped).
 
 
 ## 17. Goal-oriented calibration value(P-GOAL-ORIENTED, `experiments/goal_orientation.py`)
@@ -478,8 +522,9 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
 > H=I parity < 1e-10, dense parity < 1e-10, gradient FD ≤ 1e-6).
 > Methods: `docs/methods.md` §10.
 
-- **Tasks** (on the per-pixel log-albedo-direction parameterization, P
-  pixels): `all` (H = I, A-opt reference), `mean` (H = 1/√P·1ᵀ,
+- **Tasks** (on the per-pixel **additive albedo** parameterization,
+  `A_k = diag(s_hat_k)`, not log-albedo; P pixels): `all` (H = I, A-opt
+  reference), `mean` (H = 1/√P·1ᵀ,
   mean-albedo task), `contrast` (bright-quartile mean minus dim-quartile
   mean, unit norm; quartiles by per-pixel mean intensity). κ = 10,
   levels {0.1, 0.5, 2.0, 8.0}, the same 11-object cohort / corrected
@@ -503,10 +548,12 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
   exactly aligned (texture residual 0.313745–34.581472) and inherits the
   mechanism qualitatively (`gauge_mechanism_rho_mean` field).
 - **Output**: `results/goal_oriented/goal_orientation.json`.
-- **Honest scope**: H acts on the per-pixel scalar parameterization; the
-  photometric-stereo normals-vs-albedo pair needs the joint 4P (log ρ, n)
-  parameterization — flagged as an extension in methods.md §10, not
-  claimed here.
+- **Honest scope**: H acts on the frozen per-pixel scalar additive-albedo
+  coordinates with normals fixed. The albedo/normal task pair requires a joint
+  **intrinsic 3P** model (one albedo and two normal-tangent coordinates per
+  pixel), not unconstrained 4P coordinates: unit normals impose one constraint
+  per pixel. The joint extension in methods.md is separate from this frozen
+  scalar experiment; no joint real-data result is claimed by this table.
 - **Outcome**: cf. `docs/claims.md` M11.
 
 
@@ -560,9 +607,10 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
 
 ## 19. Model-validity map（P-VALIDITY-MAP, `experiments/validity_map.py`）
 
-> **Status: DONE (2026-09-14)** — E2/M2: "Fisher 线性化在哪个 regime 准",
-> 不证明它永远准。**只读 join** 两个已提交产物(corrected arm-D 的逐 cell
-> pred_deg/emp_deg x linearization-radius 的曲率指标),无实验重算。
+> **Status: HISTORICAL (2026-09-14); not a current-pipeline guarantee.**
+> 只读 join 两个冻结产物（逐 seed gauge 修正前 corrected arm-D 的逐 cell
+> pred_deg/emp_deg × linearization-radius 曲率指标），无实验重算。
+> 这些输入不等于 §11 的新投影管线；旧表和图保留用于复现。
 
 - **四端点(逐 cell,66 = 11 物体 x 6 level)**:Spearman 排序相关;
   **Kendall 符号一致率**(预测 vs 经验模式排序的逐对符号一致,
@@ -571,11 +619,13 @@ estimator numerical collapse, not linearization failure. v1 outputs and its
 - **二维图**(`docs/img/validity_map.png`):横轴 level,纵轴
   excess-over-first-order-scaling q(ℓ)(对数轴,红线 = 一阶边界 q=1),
   四面板着色。
-- **核心发现(B8)**:排序/符号效度对曲率稳健——四个曲率箱
-  (q<0.75 / 0.75-1.0 / 1.0-1.5 / >=1.5)的 median Spearman 全部 >= 0.8、
-  Kendall 全部 >= 0.7;幅值比随曲率单调恶化(median-of-medians
-  7.7 -> 10.4 -> 72.0 -> 106.5)。**线性化失效打幅值,不打方向**:
-  排序类问题在全网格有效,幅值类问题只在次线性 regime 有效。
+- **历史发现（B8；superseded 投影管线）**：四个曲率箱
+  (q<0.75 / 0.75-1.0 / 1.0-1.5 / >=1.5) 的 median Spearman 全部 >= 0.8、
+  Kendall 全部 >= 0.7；幅值比 median-of-medians
+  7.7 -> 10.4 -> 72.0 -> 106.5。这些仅为冻结输入上的历史排序结果，
+  **不能作为当前逐 seed gauge projection 管线的排序稳健保证**。
+  旧“线性化失效打幅值、不打方向”的推广已撤回；同投影 B2 还受 residual
+  bootstrap 与 GLS 系综不匹配的限制，不能把偏离解释成定理失败。
 - **Output**: `results/magnitude/validity_map.json`(cells + by-excess-bin
   + by-level + manifest 含来源产物 sha256)+ `docs/img/validity_map.png`。
 - **Outcome**: cf. `docs/claims.md` B8.

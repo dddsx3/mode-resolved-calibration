@@ -6,6 +6,21 @@ versioning: [semver](https://semver.org/).
 
 ## [Unreleased]
 
+### Theory continuation
+
+- Imported the verified general-gamma correction from the supplied September
+  evidence package: the alpha-only candidate is refuted, and the independent
+  leave-one-out full-trace spectral bound is now available. The historical
+  `gamma_lower_bound` numeric behavior is unchanged.
+- Synchronized M9, B1/B2 and the bilingual README with the per-sample projection
+  evidence. Historical results remain traceable but do not certify current
+  ordering or matched-ensemble amplitude claims.
+- Continued the remaining derivations in isolated `experiments/theory_*.py`
+  modules, with analytic proofs, separate numerical experiments and claim
+  identifiers in `docs/theory/` and `docs/claims.md`. New evidence is written
+  only under `results/theory_extension_20260918/`; existing evidence is not
+  regenerated or overwritten.
+
 ### Fixed
 
 - `scripts/make_figures.py` wrote its output to `docs/img/benchmark/figures/`,

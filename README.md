@@ -27,7 +27,9 @@ optimization landscape itself — not any particular policy — is certified
 (see [Research direction](#research-direction-certified-bounds-on-calibration-precision-allocation)).
 The mathematical statements are collected in
 [docs/methods.md](docs/methods.md); every number in this README is bound to a
-committed evidence file in [docs/claims.md](docs/claims.md).
+committed evidence file in [docs/claims.md](docs/claims.md). The
+[theory continuation index](docs/theory/README.md) separates imported evidence
+from subsequent physical-model and joint-model derivations.
 
 **Figure 1. Fragile directions, their spectrum, and what a budget buys.**
 Left: per-pixel Fisher information on a real object — information is thin in
@@ -160,21 +162,35 @@ validity panels) whose numbers, protocols, and provenance are documented in
 `tests/test_reproduction.py`. This benchmark is separate from the library API
 — the examples above never touch it.
 
-Key results (11 held-out OpenIllumination objects). Numbers use the
-**corrected pipeline** (see [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md)
-for the two pipeline versions); the original pipeline's outputs are kept as a
-reference record.
+Key results (11 held-out OpenIllumination objects). The frozen analyses use
+`legacy` or `corrected` conventions as recorded in their artifacts. **B1 and
+B2 below use the imported per-seed gauge rerun**, not the earlier corrected
+summary; both earlier pipeline versions remain immutable historical records
+(see [docs/EXPERIMENTS.md](docs/EXPERIMENTS.md) §11).
 
-- **Amplitude validity envelope**: on real data the empirical/predicted
-  degradation ratio has median 15.98 (5–95% [0.005, 714.2]), against 1.0045 on
-  synthetic matched Monte-Carlo — the matched-GLS variance theorem holds where
-  its assumptions hold, and the real-data deviation is reported as a positive,
-  falsifiable validity envelope of the linearized theory;
-- **Model-validity map**: ordering validity is curvature-robust (median
-  Spearman ≥ 0.8 and Kendall sign agreement ≥ 0.7 in every curvature bin)
-  while the magnitude ratio grows monotonically with the linearization
-  curvature metric — linearization failure hits magnitudes, not directions
-  (`results/magnitude/validity_map.json`, methods.md §4 scope note);
+- **Amplitude comparison (B2; projection-matched, not ensemble-matched)**:
+  corrected arm D has empirical/same-projection linear-prediction ratio
+  median 53.744194 (5–95% [0.489414, 820.342156]), bound to
+  `variants.D.new_ratio_matched_prediction.pooled` in
+  [`amplitude_comparison.json`](results/theory_extension_20260918/imported_20260917/amplitude_comparison.json).
+  The prediction matches the per-seed gauge projection and dual coordinate,
+  but the empirical denominator is a **residual bootstrap**, not the matched
+  GLS calibration-limit ensemble. Deviation from one therefore neither
+  validates nor refutes the matched-GLS variance theorem; the synthetic
+  matched-MC reference remains 1.0045.
+
+  **Historical amplitude summaries (superseded)**: the earlier arm-D median
+  15.98 and original arm-A median 201.1 are retained in
+  `results/magnitude/directional_amplitude_summary.json`, not used as current
+  B2 estimates or as evidence of theorem failure.
+
+- **Historical validity map (B8; superseded projection pipeline)**: the
+  archived map reported curvature-bin median Spearman ≥ 0.8 and Kendall
+  sign agreement ≥ 0.7, with magnitude ratios increasing with curvature
+  (`results/magnitude/validity_map.json`). These are historical ordering
+  readouts, **not a robustness guarantee for the current per-seed gauge
+  projection**. They do not establish that linearization failure affects
+  magnitudes but never directions in the updated pipeline;
 - **Decision quality**: on the physical reconstruction endpoint (normal
   angular error from the single frozen residual pipeline, extended with a
   one-step normal refit), the information-theoretic allocation beats BOTH
@@ -213,15 +229,20 @@ reference record.
   within-active-set ordering adds nothing detectable, while on the physical
   normal-angular-error endpoint it is real with CIs excluding 0 (−0.38…−1.40°,
   feasible interval). Do not quote either endpoint as the general answer.
-- **Retention-ordering self-consistency (weakest evidence tier)**: median
-  within-cell Spearman $R_A$ = 0.90 (object-cluster bootstrap 95% CI [0.7,
-  0.95]; 65/66 cells positive, 11/11 objects positive). This is a
-  within-scene construction identity (66/66 cells, deviation 0.0), not an
-  out-of-sample validation — see
-  [docs/methods.md](docs/methods.md). It validates *direction* only: the
-  retention operator's bottom tracked directions are the empirically more
-  fragile directions inside a given problem instance, not the predicted
-  magnitudes `1/ρ_j`.
+- **Retention-ordering control (B1; current per-seed gauge rerun)**: median
+  within-cell Spearman $R_A$ = 0.55 (object-cluster bootstrap 95% CI [-0.1,
+  0.7]; 43/66 cells positive, 7/11 objects positive), from `variants.D` in
+  [`mf0_factorial_summary.json`](results/theory_extension_20260918/imported_20260917/mf0_factorial_summary.json).
+  This is `gauge_mode=per_seed`, `prediction_field=pred_deg`: the **original
+  prediction ordering control**, not matched-prediction validation. Its CI
+  spans zero; it does not establish robust directional validation, let alone
+  validate the magnitudes `1/ρ_j`.
+
+  **Historical B1 (superseded)**: $R_A$ = 0.90 (CI [0.7, 0.95]; 65/66 cells
+  positive, 11/11 objects positive) belongs to the earlier corrected artifact
+  `results/openillumination/correctness/mf0_factorial_summary.json`. Its
+  exact mode-index equivalence (66/66 cells, deviation 0.0) was a within-scene
+  construction identity, not out-of-sample evidence for the current pipeline.
 
 **Figure 3. Benchmark evidence.** Left: per-level severity medians under
 controlled corruption (mode-resolved vs scalar criteria). Middle: pooled
@@ -237,11 +258,13 @@ span 0 against the active-set control).
 
 ### Correctness & integrity
 
-Two pipeline-interface details (the heteroscedastic noise-fit coefficient
-order and the normalized dual-coordinate mode projection) exist in a
-`legacy` and a `corrected` version. Reported numbers use `corrected`; a
-preregistered A/B/C/D factorial re-measured every headline under it on the
-identical frozen protocol — see
+**Evidence-version scope.** The noise-fit and dual-coordinate `legacy` /
+`corrected` factorial remains a frozen reproducibility anchor. B1 and B2 now
+use the separately imported **per-seed gauge correction**, whose manifest
+pins the evidence source. A legacy machinery match does not make the updated
+empirical outputs equal to the old summaries. Other frozen analyses retain
+only their explicitly recorded conventions and scope — see
+[docs/EXPERIMENTS.md](docs/EXPERIMENTS.md) §11 and
 [docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md).
 
 ## Research direction: certified bounds on calibration-precision allocation
@@ -262,7 +285,7 @@ and committed evidence:
 
 | Layer | Object | Question it answers | Evidence |
 |---|---|---|---|
-| **Diagnosis** | `R = F∞^{-1/2} ΔF F∞^{-1/2}` | Which identifiable directions are hurt by calibration uncertainty? | `results/magnitude/directional_amplitude_summary.json` |
+| **Diagnosis** | `R = F∞^{-1/2} ΔF F∞^{-1/2}` | Which identifiable directions are hurt by calibration uncertainty? | `docs/methods.md` §3 (matched GLS); current B1 `variants.D` ordering control below, not matched-prediction validation |
 | **Valuation** | `V(B) = 1 − J*(B)/J₀` | What is better calibration worth? | `results/certification/certified_gaps_levels.json` (the level curve) |
 | **Decision** | `t*(B) = argmin J_A(t)` | Where exactly should the budget be spent? | `results/certification/certified_gaps.json` (greedy prefix) |
 | **Certification** | `J_A(t) − J* ≤ g_FW(t)` | How far from optimal is that allocation? | `results/certification/certified_gaps.json` (FW gap) |
@@ -276,6 +299,11 @@ certificates hold for *any* candidate allocation, not only the greedy one.
 layer extends to downstream tasks: for task operators `H` (linear functionals
 of the parameter estimate), `J_H = tr(H ΔF⁻¹Hᵀ)` prices the *same*
 calibration state per task (low-rank push-through route; `methods.md` §10).
+The frozen photometric pipeline uses **additive albedo** coordinates
+(`A_k = diag(s_hat_k)`), not log-albedo. Its scalar task table does not measure
+joint albedo/normal uncertainty: with unit normals the joint intrinsic model
+has **3P** coordinates (albedo plus two normal-tangent coordinates per pixel),
+not an unconstrained 4P model; see the joint-model extension in `methods.md`.
 On the 11 held-out objects the same uniform refinement at level 0.5 buys a
 median 62.87% dynamic range for the all-parameter A-opt functional — the
 certified P-CERT headline, reproduced by the new route as a cross-check —
@@ -292,15 +320,17 @@ Three structural findings anchor it (verified by
 `tests/test_math_foundations.py`; no raw data required):
 
 1. **Exact low-rank structure** — with per-light block-diagonal nuisance, the
-   retention spectrum consists of exactly `P − 3L` modes pinned at ρ = 1 plus
-   the eigenvalues of `I − VᵀV` for a `P × 3L` skinny factor: the full
-   spectrum is computable from a `3L × 3L` eigenproblem, which removes the
-   pixel-subsampling bottleneck entirely (full resolution, all 142 lights, on
-   a laptop).
+   `P × 3L` factor `V` gives exactly `P − rank(V)` modes pinned at ρ = 1;
+   this is `P − 3L` only when `rank(V) = 3L`. The non-unit modes come from
+   the positive eigenvalues of `VᵀV`, so a `3L × 3L` eigenproblem recovers
+   the full spectrum without double-counting the skinny Gram matrix's zero
+   modes. This removes the pixel-subsampling bottleneck (full resolution,
+   all 142 lights, on a laptop).
 
    **Figure 4. The full spectrum from a 3L×3L eigenproblem.** The dense
    P×P spectrum (solid) and the low-rank route (dashed) coincide to machine
-   precision; exactly P − 3L modes sit pinned at ρ = 1.
+   precision; exactly P − rank(V) modes sit at ρ = 1 (P − 3L only at
+   full column rank).
 
    ![retention spectrum low-rank structure](docs/img/retention_lowrank_structure.png)
 
@@ -338,12 +368,24 @@ Three structural findings anchor it (verified by
    calibration-uncertainty scale** added to the nominal whitened system in
    `experiments/` — it is a controlled operating point, **not** an
    uncertainty estimated from real calibration data, and has **no physical
-   calibration anchor**. Every headline above (62.87%, γ ≥ 0.635, D ≤
-   1−1/κ) is conditional on this `level`; the curve is the honest way to
-   state the dependence rather than a single point. This is the answer to
-   "how would this change if the true calibration uncertainty were
-   different?" — see `docs/claims.md` and `docs/methods.md` §7 for the
-   conditional-variable discipline.
+   calibration anchor**. The dynamic-range headlines (including 62.87%) are
+   conditional on this `level`; the ceiling D ≤ 1−1/κ is a structural bound,
+   not a fitted operating-point value. The curve is the honest way to state
+   the dependence rather than a single point. This answers how the result
+   changes with calibration uncertainty; see `docs/claims.md` and
+   `docs/methods.md` §7 for the conditional-variable discipline.
+
+   **γ guarantee scope (M9/M12).** The alpha-only candidate is **refuted**,
+   not merely unproved; the former real-object γ ≥ 0.635 guarantee is
+   **withdrawn**. Historical `gamma_lower_bound(alpha)` values and archived
+   tests retain their numeric behavior for reproduction only, not as valid
+   certificates. The proved replacement M12 is the leave-one-out spectral
+   bound implemented by
+   `calibinfo.allocation.alpha_bound.spectral_gamma_lower_bound(A, updates)`:
+   **unweighted full trace, a fixed SPD parameter space, and PSD updates**.
+   It does not directly cover arbitrary task weights, singular baselines, or
+   changing identifiable subspaces. No replacement real-object spectral
+   readings are reported here; see `docs/methods.md` §9.
 
 
    **Figure 5. Certified optimality gaps.** Left: the J_A landscape over the

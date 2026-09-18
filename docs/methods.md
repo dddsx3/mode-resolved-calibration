@@ -1,10 +1,11 @@
 # Mathematical foundations
 
 This page states the methods implemented in `calibinfo` precisely enough to
-use the library on its own. Statements marked
-**(proved)** are established in the unit tests listed at the end; statements
-marked **(cited)** are classical results we instantiate. Notation follows the
-table in the README.
+use the library on its own. Statements marked **(proved)** have analytic
+arguments; the tests listed at the end check identities and representative
+instances, not the universal quantifiers of a theorem. Statements marked
+**(cited)** are classical results we instantiate. The continuation proofs and
+their scope are indexed in `docs/theory/README.md`.
 
 ## 1. Model
 
@@ -123,8 +124,11 @@ With per-light block-diagonal nuisance the retention operator factorizes as
 
     R = I − V Vᵀ,   V = F∞^{-1/2} [u_k K_k^{1/2}]_{k active}  (P × 3L),
 
-so `spec(R) = {1}^{P−rank(V)} ⊕ (1 − spec(VᵀV))`: exactly P − 3L modes sit at
-ρ = 1 and the rest follow from a 3L × 3L eigenproblem. The same structure
+so the multiplicity of the unit eigenvalue is exactly `P − rank(V)`.
+Only the nonzero eigenvalues of `VᵀV` produce nontrivial values `1 − λ`;
+zero eigenvalues of the skinny Gram matrix are not counted a second time.
+There are at least `max(0, P − 3L)` unit modes, with equality `P − 3L`
+only when `rank(V)=3L`. The same structure
 gives the Woodbury route for `tr ΔF⁻¹` and its gradient
 (`information.lowrank`), which is what makes full-resolution (all masked
 pixels, all 142 lights) certification feasible on a workstation.
@@ -155,20 +159,27 @@ a single `(w_k, s_k, B_k)`:
     M0_k = B_k^T (w_k B_k)  (identity-precision block, PSD),
     F∞ = diag( Σ_k w_k s_k² )   (= A^T A, the calibration-limit Fisher).
 
-Under this structure `u_k u_k^T = F∞ · M0_k` per-light, and `M0_k ⪰ 0`.
-Both properties are used **below and only below**; dropping them is what the
-non-legitimate counterexample at the end of this section exploits.
+Under the shared design the full Gram block is positive semidefinite;
+there is no general matrix identity `u_k u_kᵀ = F∞ M0_k` (the factors even
+have different dimensions in the per-light model). The scalar one-row
+special case has `u² = F∞ m`, but that equality is not a matrix proof.
 
-**The ceiling.** For the **uniform** multiplier `t = κ·1` the per-light kernel
-is `U_k(t) = u_k(M0_k + t Λ0_k)^{-1} u_k^T`, Loewner-decreasing in `t`. Since
+**The ceiling.** For fixed whitened `A_obs`, `B` and precision `Λ0 ⪰ 0`,
+completion of squares gives the variational form
 
-    M0_k + t Λ0_k ⪰ (1/t)(M0_k + Λ0_k)  ⟺  (t−1)M0_k + (t2−1)Λ0_k ⪰ 0,  t ≥ 1,
+    xᵀΔF(t)x = min_c { ‖A_obs x − Bc‖² + t cᵀΛ0 c }.
 
-we have `U_k(t) ⪯ t U_k(1)`, hence `ΔF(t) ⪯ t ΔF(1)` (Loewner) and
-`J_A(t) ≥ J_A(1)/t` (tr X−1 Loewner-decreasing). Therefore the certified
-dynamic range obeys the **universal ceiling**
+For each c and `t ≥ 1`, the expression lies between its value at one and
+t times that value. Taking the minimum on both sides proves
 
-    D = 1 − J_A(κ·1)/J_A(1)  ≤  1 − 1/κ.
+    ΔF(1) ⪯ ΔF(t) ⪯ t ΔF(1).
+
+This argument uses the common observation model, not an invalid subtraction
+of unrelated kernel bounds. It also holds for per-light `1 ≤ t_k ≤ κ`,
+yielding `ΔF(1) ⪯ ΔF(t_vec) ⪯ κΔF(1)`. The kernel is fixed on that box;
+on one fixed positive-definite quotient, inverse order therefore proves
+
+    D = 1 − J_A(κ·1)/J_A(1) ≤ 1 − 1/κ.
 
 The "90.0% at κ=10" headline is this ceiling being **met** — when the
 identity precision block `M0` dominates `Λ0` (large level = small `Λ0`),
@@ -198,14 +209,13 @@ is *not* implied by `M0 ⪰ 0` alone. If `u` and `m` are decoupled — e.g.
 
     D ≈ 0.9803  >  1 − 1/κ = 0.5.
 
-This `(u, M0, F∞)` triple cannot arise from any whitened model (the structural
-link `u u^T = F∞·M0` is violated: `1 ≠ 0.01`); it exists only as a detached
-matrix example. It demonstrates that the ceiling rests on the shared-`(A,B)`
-structure, not on PSD-ness of `M0` by itself. The exact numbers are pinned by
-`tests/test_math_foundations.py::test_structural_link_required_for_ceiling`,
-which also checks that the legitimate family `u² = F∞·m` respects the bound on
-a dense `b`-grid. (Per-light verification for the multi-light direction-parameterized
-`ΔF(t)` is the same argument applied per block.)
+This `(u, M0, F∞)` triple cannot arise from any whitened model: its shared
+Gram matrix `[[F∞,u],[u,m]]` has negative determinant. It exists only as a
+detached matrix example. It demonstrates that the ceiling rests on the
+common observation model, not on PSD-ness of `M0` by itself. The exact
+numbers are pinned by `tests/test_math_foundations.py::test_structural_link_required_for_ceiling`,
+which also checks the legitimate one-row scalar family `u²=F∞m`.
+The variational argument above supplies the general matrix proof.
 
 **Extension to any quadratic functional (M10′).** The ceiling holds for
 *every* task functional, not only the trace: by the same Loewner chain
@@ -227,117 +237,224 @@ below it; `results/goal_oriented/goal_orientation.json`).
   submodularity structure required by such guarantees is violated for E-opt
   gains on real-shaped instances (documented negative result,
   `results/submodularity/submodularity_search.json`).
-- No claim that the linearized theory predicts real-data error magnitudes —
-  the matched-GLS variance identity holds on matched synthetic ensembles
-  (ratio ≈ 1.0045) and the real-data deviation (emp/pred median 15.98,
-  pooled over the corrected arm's 66 cells; `validity_map.json` /
-  `directional_amplitude_summary.json`, cross-reproduced bit-exactly) is
-  reported as a validity envelope.
+- No claim that the linearized theory predicts real-data error magnitudes.
+  The historical matched synthetic check has ratio ≈ 1.0045. The historical
+  corrected-interface median 15.98 (`directional_amplitude_summary.json`)
+  used a legacy gauge branch and is superseded for current amplitude reading.
+  The imported per-sample-projection D-arm median is 53.744 relative to the
+  same-coordinate prediction, but its denominator is residual bootstrap,
+  not the matched GLS baseline. It does not by itself refute the theorem.
+  B1/B2 identify the exact fields; the new S1/S2/S3 study is separate evidence.
 - No claim of overall reconstruction advantage for any allocation policy —
   the certified result is about the information landscape itself plus the
   mode-targeted intervention endpoint.
 
-## 9. α-approximate submodularity bound for the A-opt selection function
+## 9. γ 数学修正：被否定的 α 候选式与有效全迹谱界
 
-This section proves a **prior, computable lower bound** on the submodularity
-ratio of the A-optimal light-refinement selection function. It answers the
-"how close is greedy allocation to optimal?" question with a bound that
-needs no ground truth, no measured data, and no exhaustive search — only the
-nominal design (`A`, `B`, `Λ0`). It instantiates the Chamon & Ribeiro
-(NeurIPS 2017) approximate-supermodularity framework with the calibration
-precision `t` as the design variable; the novelty here is the explicit form
-of `α`, not the framework (which is **not** claimed as first).
+**当前结论。** 历史候选 `γ ≥ 1/(1+α)` 在一般 SPD 基线加 PSD 更新类上
+**已被精确反例否定**，而不只是证明尚未完成；一般共享线性高斯 Jacobian
+结构也不能挽救它。它是仓库自己的历史候选式，不是 Chamon–Ribeiro
+(NeurIPS 2017) 的已证定理。新有效保证是下文的 leave-one-out 谱界。
+解析证明与有限数值回归必须区分：测试核验恒等式和实例，不代替一般证明。
 
-**Setup.** For a refined set `S ⊆ {1..L}` (light `k ∈ S` carries precision
-multiplier `t_k = κ`, others `t_k = 1`), define the A-opt remaining cost
+### 定义、局部恒等式与零更新
 
-    F(S) = tr M(S)^{-1},   M(S) = ΔF(t_S),   G(S) = F(∅) − F(S).
+在同一个固定的正定参数空间（或预先固定的可辨识子空间）上，令候选集
+`U` 有限，`A ≻ 0`，`W_i ⪰ 0`，并定义
 
-**L9 (exact additive decomposition).** With `U_k(t) = u_k(M0_k + tΛ0_k)^{-1} u_k^T`
-(Loewner-decreasing in `t`) and `A := ΔF(1)`,
+    M(S) = A + Σ_{i∈S} W_i,
+    F(S) = tr M(S)^{-1},   G(S) = F(∅) − F(S),
+    d_x(S) = G(S∪{x}) − G(S),
+    γ = inf_{S⊆T⊆U\{x}, W_x≠0} d_x(S)/d_x(T).
 
-    M(S) = A + Σ_{k∈S} W_k,   W_k = U_k(1) − U_k(κ) ⪰ 0.
+这里允许 `S=T`。对未加权全迹，`d(M,W)>0` 当且仅当 `W≠0`；零更新
+产生恒为零的边际，不能把 `0/0` 放进商的下确界。若候选集为空或所有更新
+均为零，**另外约定 γ=1**，而非声称空集上的商下确界自动等于一。
 
-**L10 (exact marginal gain).** By the Woodbury identity
-`M^{-1} − (M+W)^{-1} = M^{-1}W(M+W)^{-1}`,
+标定模型中 `A=ΔF(1)`、`W_k=u_k[K_k(1)−K_k(κ)]u_kᵀ` 给出原 L9 的
+精确加性分解；原 L10 的边际恒等式与 L11 的局部夹逼仍然成立：
 
-    Δ_x G(S) = tr[ M(S)^{-1} W_x (M(S)+W_x)^{-1} ].
+    d(M,W) = tr[M^{-1} − (M+W)^{-1}]
+           = tr[M^{-1}W(M+W)^{-1}],
+    ρ = λmax(M^{-1/2} W M^{-1/2}),
+    tr(W M^{-2})/(1+ρ) ≤ d(M,W) ≤ tr(W M^{-2}).
 
-**L11 (two-sided eigenvalue sandwich).** Let `ρ(S,x) = λmax(M(S)^{-1}W_x)`.
-Simultaneously diagonalize `M^{-1}W_x` (both are symmetric: the product of
-two PD/PSD symmetric matrices is diagonalizable with real eigenvalues, since
-`M^{-1/2}(M^{-1}W_x)M^{1/2} = M^{-1/2}W_xM^{-1/2} ⪰ 0`), and use the fact
-that `(I+X)^{-1}` has eigenvalues `1/(1+μ_j) ∈ [1/(1+ρ), 1]`:
+证明可用 `X=M^{-1/2}WM^{-1/2} ⪰ 0` 和
+`X/(1+ρ) ⪯ X(I+X)^{-1} ⪯ X`，作合同变换并取迹。
+这里不要求 `M^{-1}W` 对称，更不能由 `M⪯N` 推出 `M^{-2}⪰N^{-2}`。
 
-    (1/(1+ρ)) · tr[W_x M(S)^{-2}]  ≤  Δ_x G(S)  ≤  tr[W_x M(S)^{-2}].
+### 精确反例与任意固定 α 的不可能性
 
-**L12 (uniform precision ceiling, CR17-style).** Define the submodularity ratio
-`γ = inf_{x, S: x∉S} Δ_x G(S) / Δ_x G(N\{x})`. Because `M(S) ⪰ A` (each `W_k ⪰
-0` and `S ⊆ N`), the Rayleigh quotient gives `ρ(S,x) = λmax(M(S)^{-1} W_x) ≤
-λmax(A^{-1} W_x)` — this avoids invoking monotonicity of matrix inversion on
-singular limits, which is unsafe when `rank(F∞) < n` (the Loewner ordering of
-inverses only holds for *strictly* positive-definite arguments; see CR17, §4).
-Combining with the lower bound from L11 (`Δ_x G(S) ≥ tr[W_x M^{-2}]/(1+ρ)`):
+取二维有理矩阵
 
-    γ ≥ 1/(1 + α),    α := max_x λmax(A^{-1} W_x),    A := ΔF(1).
+    A  = diag(1, 1/100),
+    W1 = [[1, 0], [0, 0]],
+    W2 = [[1/2, 1/20], [1/20, 1/200]].
 
-**Proof status of the final collapse (explicit).** The step above assumes
-`tr[W_x M(S)^{-2}] ≥ tr[W_x M(N\{x})^{-2}]` for `S ⊆ N\{x}`. We do **not**
-claim that step as established here: `X ↦ X^{-2}` is not operator-monotone
-on the PD cone (Löwner: `t ↦ t^p` is operator-monotone iff `|p| ≤ 1`), so
-`M(S) ⪯ M(T)` alone does not deliver the `M^{-2}` ordering — and the
-ordering **does reverse in practice**: on the pinned 2×2 counterexample
-(`M=[[1,-1],[-1,2]]`, `H=[[1,-1],[-1,1]]`, `W=[[1,-2],[-2,4]]`) the gain
-*increases* (`d(M,W) = 1/3 < d(N,W) = 1/2` for `N = M+H`) while
-`tr[W M^{-2}] = 1 < tr[W N^{-2}] = 1.25`. We therefore present
-`γ ≥ 1/(1+α)` as (i) a **CR17-form** α-approximate-supermodularity
-certificate — the additive family `M(S) = A + Σ_{k∈S} W_k`, `W_k ⪰ 0`, is
-the Chamon–Ribeiro setting with calibration precision as the design
-variable — together with (ii) direct numerical support at scale:
-**162,000 exhaustive triples** over near-singular and adversarially scaled
-`(A, {W_k})` families give **zero violations**, including **12,493 triples
-on which the `M^{-2}` ordering is reversed** (min observed ratio 0.271,
-min bound slack 1.31×; `results/submodularity/alpha_bound.json`, field
-`proof_limits`). A self-contained proof of the collapse step is left open
-and flagged as such.
+两更新为秩一 PSD，白化更新的谱均为 `{1,0}`，故
+`α=max_i λmax(A^{-1/2}W_iA^{-1/2})=1`。直接求逆得到
 
-This is the *uniform ceiling*: the A-opt selection function is
-`α`-approximately supermodular with a bound computable **a priori** from
-(`A`, `B`, `Λ0`, `κ`), independent of any measured data.
+    d_1(∅) = 1/2,   d_1({2}) = 109/28,
+    d_1(∅)/d_1({2}) = 14/109 < 1/2 = 1/(1+α).
 
-**Limit behavior.** `Λ0_x → ∞` (calibration excellent) or `Λ0_x → 0`
-(calibration very poor) drive `W_x → 0`, hence `α → 0` and `γ → 1` (exact
-submodularity); `α` peaks at intermediate precision levels. This is the
-quantitative form of the assessment report's qualitative "low-SNR →
-supermodular" tendency.
+另一个严格嵌套比值为 `707/802`，其余四个 `S=T` 的比值为一，所以
+**真实 γ=14/109**。同时 `tr(W1 A^{-2})=1`，而
+`tr[W1(A+W2)^{-2}]=109/16`。这直接否决了“边际递减已证”和旧全局界，
+但不影响上述局部夹逼。
 
-**Numerical verification** (`results/submodularity/alpha_bound.json`,
-`experiments/alpha_bound.py`):
+更一般地，对任意固定 `p>0` 和 `ε>0`，取
 
-- **(a) theorem on the P-SUBMOD toy family** — 20 instances (10 random /
-  10 adversarial, L=5, P=40), exhaustive triples: `γ_measured ≥ 1/(1+α)`
-  on all 20 (random α ∈ [0.059, 0.119], adversarial α ∈ [0.025, 0.090];
-  measured γ ∈ [0.9999, 1.0000]).
-- **(b) two-sided sandwich** — 1600 random `(S,x)` pairs with zero
-  violations (`min val/lb = 1.000096`, `min ub/val = 1.001011`).
-- **(c) real objects** — on the 11 held-out OpenIllumination objects the
-  nominal-design `α @ level=0.5` ranges 0.188–0.515 (γ lower bound
-  0.66–0.84; `obj_10_pumpkin3` is the worst at 0.635 @ level=0.1). The
-  most conservative statement is
-  "A-optimal light-refinement selection is ≥ 0.635-supermodular on every
-  held-out object at the probed levels."
-- **(d) proof-limits adversarial search** — 400 synthetic `(A, {W_k ⪰ 0})`
-  instances (near-singular, rotated 2×2 counterexample, shared
-  null-direction, anisotropic; P=8, L=5), 162,000 exhaustive
-  `(S ⊆ T ⊆ N\{x}, x)` triples: **zero violations** of `γ ≥ 1/(1+α)`,
-  12,493 triples with the `M^{-2}` trace ordering reversed, min observed
-  ratio 0.271 (`proof_limits` field; `tests/test_gamma_bound_proof_limits.py`
-  pins the counterexample and re-derives the family check).
+    A=diag(1,ε²),
+    W1=p·diag(1,0),   W2=(p/2)·[[1,ε],[ε,ε²]].
 
-**Honest framing.** The bound is about a factor 1.6 looser than the *measured*
-`γ_min = 0.99989` (P-SUBMOD negative-result pack). Its value is the a-priori
-computability (no exhaustive search), the explicit form of `α`, and the two
-`α → 0` limits — not numerical tightness.
+此时 `α=p` 精确不变，并有
+
+    d_1(∅) = p/(1+p),
+    d_1({2}) = p[p²+ε²(p+2)²]/[2ε²(p+1)(p²+4p+2)],
+    d_1(∅)/d_1({2}) = 2ε²(p²+4p+2)/[p²+ε²(p+2)²] → 0.
+
+`p=1` 时比值为 `14ε²/(1+9ε²)`。因此每个固定 `α>0` 的实例族都有
+`inf γ=0`，即使维数和候选数都固定为二；不存在仅依赖 α 的普适正下界。
+各个 `ε>0` 的实例仍然正定、非零边际严格为正，不能把奇异端点 `ε=0`
+冒充合法实例。`α=0` 则意味着所有更新为零。非正交白化也不能无损地设
+`A=I`：目标变为 `tr(A^{-1} M̃^{-1})`，不能丢掉这个权重。
+
+### 一般共享实现与前轮物理范围边界
+
+对 `p=1` 的 ε 族写 `W_i=l_i l_iᵀ`，其中 `l1=(1,0)ᵀ`、
+`l2=(1,ε)ᵀ/√2`。令每块观测 `y_i=A_i x+B_i c_i+η_i`，独立单位噪声、
+独立标量 nuisance 的先验精度从一精化到 `κ=10`，取
+
+    A_i=(√22/3)l_iᵀ,   B_i=√10,
+    F_i(t)=22t/[9(10+t)]·W_i,
+    F_i(1)=(2/9)W_i,   F_i(10)=(11/9)W_i,
+    A0=(1/√54)·[[6,−ε],[0,√47 ε]].
+
+无 nuisance 观测块满足 `A0ᵀA0=R=A−(2/9)(W1+W2) ≻ 0`，
+`det R=47ε²/81`。按行堆叠 `A0,A1,A2` 为共同观测设计 `A_obs`，并令
+`B` 的前两行为零、后两行为 `diag(√10,√10)`，则四个子集均精确满足
+
+    A_obsᵀA_obs − A_obsᵀB(BᵀB+diag(t1,t2))^{-1}BᵀA_obs
+      = A + Σ_{i∈S}W_i,   t_i=10 当且仅当 i∈S，否则 t_i=1.
+
+故这不是独立拼接 `F∞、U、M0` 的伪反例。任意 `p>0` 的共享实现也可取
+`κ=B_i²=1+4p`、`A_i=√(1+2p)l_iᵀ`（此处 `l_i l_iᵀ=W_i/p`），
+每块基线为 `l_i l_iᵀ/2`、增量为 `W_i`；无 nuisance 残余为
+`A−(l1l1ᵀ+l2l2ᵀ)/2 ≻ 0`。这里 κ 随 p 改变；不能宣称任意 α 都能在
+任意预先固定 κ 下实现。固定 κ 的共享模型有 `ΣW_i⪯(κ−1)A`。
+
+**前轮构造的模型边界：** 上述观测行是一般线性 Jacobian，并未满足实际
+Lambertian 每灯对角设计及受限方向导数，不能将这一个构造直接改称物理反例。
+本轮 M13 另给出满足着色、单位法向和方向切基约束的独立物理构造；其逐灯
+正定耦合先验也是构造的一部分。该新结果不等于对共享同一对角先验等更窄
+子类的完整判定，详见 `docs/theory/physical_gamma_and_tightness.md`。
+
+### 正定全迹谱界及证明
+
+**成对定理。** 若 `0≺M⪯N`、`0≠W⪰0`，则
+
+    d(M,W)/d(N,W) ≥ λmin(N)/λmax(M).
+
+取同一个因子 `W=LLᵀ`（可为秩亏更新），对 `P=M,N` 定义
+`X_P=LᵀP^{-1}L`、`Y_P=LᵀP^{-2}L`、`f(X)=I−(I+X)^{-1}`。
+Woodbury 恒等式给出
+
+    d(P,W)=tr[(I+X_P)^{-1}Y_P].
+
+对每个单独的 SPD 矩阵 P，谱分解给出
+
+    P^{-1}/λmax(P) ⪯ P^{-2} ⪯ P^{-1}/λmin(P).
+
+作 L 的合同变换，再对正定权重 `(I+X_P)^{-1}` 取迹，得到
+
+    d(M,W) ≥ tr f(X_M)/λmax(M),
+    d(N,W) ≤ tr f(X_N)/λmin(N).
+
+这些迹不等式不要求 `X_P` 与 `Y_P` 可交换。由 `M⪯N` 的逆反序与合同
+变换有 `X_M⪰X_N`；再次对 `I+X_P` 使用逆反序，得到
+`f(X_M)⪰f(X_N)`。`W≠0` 保证 `tr f(X_N)>0` 及 `d(N,W)>0`，故相除
+即得成对谱界。证明从未比较 `M^{-2}` 与 `N^{-2}`。
+
+**全局定理。** 记 `U+={x:W_x≠0}`。若它非空，则
+
+    γ ≥ λmin(A)/max_{x∈U+} λmax(M(U\{x}))
+      ≥ λmin(A)/λmax(M(U)) > 0.
+
+因为任意有效三元组满足 `M(T)⪰A`、`M(S)⪯M(U\{x})⪯M(U)`，代入
+成对界再取下确界即可。排除零候选不影响 γ，并可能加强 leave-one-out 界。
+记 `m=|U|`、`χ_A=λmax(A)/λmin(A)`，还可得保守推论
+
+    γ ≥ 1/[χ_A(1+(m−1)α)],
+    γ ≥ 1/(κχ_A)  （满足 M(U)⪯κA 的共享模型）.
+
+基线条件数不能删掉。本二维有理反例的 leave-one-out 谱界为 `1/200`，
+小于真实 `14/109`；它不是任何真实物体重新测得的谱界读数。
+
+**实现。** `calibinfo.allocation.alpha_bound.spectral_gamma_lower_bound(A, updates)`
+返回上述仅对非零更新取 max 的 `float`；支持矩阵列表、生成器及三维数组。
+`A` 必须非空、有限、实对称 SPD，更新必须同形、有限、实对称 PSD。
+空/全零更新返回 `1.0`；非法输入抛出 `ValueError`，不使用 ridge 或伪逆。
+仅允许相对于各自矩阵尺度 `64*n*eps_float` 量级的对称/PSD 舍入误差，
+随后对称化并将更新的微小负特征值截零；保证针对这些校验后的矩阵。
+按共同标量缩放以降低溢出问题，逐个排除候选后直接求和以避免 `total-W_x`
+的大数相消；不按阈值删掉微小正更新。输入不被原地修改。无法分辨 SPD 或
+表示正谱比值时拒绝输入；结果不是区间算术证书。该通用稠密实现的特征值
+开销为 `O(m n³)`、直接 leave-one-out 求和为 `O(m² n²)`，不声称达到
+历史低秩 α 路径的现实规模性能。
+
+### 可交换情形与任务范围
+
+若 `A` 和**所有**更新可同时正交对角化（两两可交换），共同基下
+
+    d_x(S)=Σ_j w_xj/[m_j(S)(m_j(S)+w_xj)],
+    m_j(S)=b_j+Σ_{i∈S}w_ij,   b_j>0, w_ij≥0.
+
+每项随 S 增大而不增，因此真实 `γ=1`（包含 `S=T` 和全零约定）。
+保守谱界函数不检测此特例，返回值不一定等于一。
+
+新谱界面向**未加权全迹**。任务 `J_H(M)=tr(QM^{-1})`、`Q=HᵀH≻0`
+时可在 `M̃=Q^{-1/2}MQ^{-1/2}` 的加权坐标中应用同一定理；原矩阵上的
+同一谱常数不能直接沿用。若 Q 秩亏，取
+
+    M=I, N=I+(1/2)·[[1,1],[1,1]], W=diag(1,0), H=[0,1],
+    d_H(M,W)=0, d_H(N,W)=1/28.
+
+这给出 `γ_H=0`，尽管 `λmin(N)/λmax(M)=1`。不能排除零分子来掩盖反例，
+也不能用伪逆机械恢复正界。此任务范围限制不影响独立成立的结构价值上限
+`V_H≤1−1/κ`，亦不影响凸性与 Frank–Wolfe 证书。
+
+### 历史搜索处置与测试说明（不覆盖原数值）
+
+`results/submodularity/alpha_bound.json` 与 `experiments/alpha_bound.py`
+的历史结果和计算路径保留；`gamma_lower_bound(alpha)` 的名称和数值行为
+也为复现保留，但其 docstring 明示是**已被反例否决的历史候选表达式**。
+文件中旧字段名、旧措辞以及下列有限搜索结果，不是当前有效 γ 保证。
+归档检索摘要仍为 162,000 个三元组、12,493 个平方逆反序样本、最小比值
+0.271；保留这些可追溯数字并不保留原先的普适保证解释。
+
+- P-SUBMOD 历史 toy 族为二十个实例（十个 random、十个 adversarial），
+  原候选式在这些实例上未违反；random α 为 0.059–0.119，adversarial α 为
+  0.025–0.090，实测 γ 为 0.9999–1.0000。这不是一般类上的定理。
+- 有效的局部 sandwich 在 1600 个随机 `(S,x)` 对上零违反，历史端点比值
+  `min val/lb=1.000096`、`min ub/val=1.001011` 保留。
+- 真实对象在 level=0.5 的历史 α 为 0.188–0.515；旧候选表达式约为
+  0.66–0.84。历史最小值 `0.635144`（当时按 `0.635` 打印，
+  `obj_10_pumpkin3`、level=0.1）及 level=0.5 的 `0.660259` 均仅为
+  **历史候选数值**，撤回“所有对象至少 0.635-supermodular”的保证解释。
+  未重新计算真实设计的有效谱界，不用本节反例谱值替代真实读数。
+- 原 proof-limits 搜索的四百个实例、**162,000** 个穷举三元组仍记为旧
+  候选式零违反，包括 **12,493** 个平方逆迹反序样本、最小实测比值
+  `0.271`、最小历史候选 slack 倍数 `1.31`。这些有限记录不抵消精确反例。
+
+`tests/test_alpha_bound.py` 和 `tests/test_gamma_bound_proof_limits.py`
+继续作为历史实例、局部夹逼和归档字段的回归；其历史名称及说明中“theorem”
+或“bound”不再被解释为普适证明。新增 `tests/test_gamma_general_bound.py`
+覆盖有理反例、ε/固定 α 族、零更新、可交换真实 γ、小维穷举谱界、输入拒绝
+和旧函数数值兼容。独立精确脚本保留在原证据包的
+`verification_v5/verify_gamma_exact.py`；其原始输出以新增副本存于
+`results/theory_extension_20260918/imported_20260917/gamma_exact_verification.json`。
+该副本是导入的前轮证据，不冒充本轮新运行。本轮命令与测试记录另见
+`docs/theory/README.md`，不修改历史 results 或幅值 run 的 code_snapshot。
 
 ## 10. Goal-oriented calibration value (J_H)
 
@@ -391,18 +508,24 @@ refinement shrinks by exactly 1/t. Verified on all 44 cells
 (`gauge_mechanism_rho_mean`): `V_rho_mean` rises 0.878 → 0.9000 along the
 level grid toward the ceiling. The two-term law is accurate to ≤ 2e-4 at
 large `level`; the worst case over the cohort is 3.9e-2 at `level` 0.1,
-where the prior term `1/q` is largest (per-level `|ΔV|` medians:
+where the prior term `1/q` is smallest (per-level `|ΔV|` medians:
 1.6e-2 / 2.3e-3 / 3e-4 / 0.0 for `level` = 0.1 / 0.5 / 2.0 / 8.0). The registered uniform-mean task is *not*
 exactly aligned (texture residual 0.31–34.6) but inherits the mechanism
 through its ρ-component; the all-parameter A-opt mixes in
 gauge-orthogonal directions whose variance is calibration-insensitive —
 that contrast is the value gap above.
 
-**Scope.** `H` acts on the per-pixel log-albedo-direction parameterization
-that the certified pipeline carries. The photometric-stereo
-normals-vs-albedo task pair requires the joint `4P` (log ρ, n)
-parameterization — a mechanical extension of the same functional, not
-attempted here and not claimed.
+**Scope.** The implemented `A_k=diag(sqrt(w_k) s_k)` acts on **additive
+albedo perturbations**, not log-albedo; `B_phi[:,0]=rho*s_hat` confirms this
+by differentiation. For log-albedo, write `D_rho=diag(rho)` and transform
+`A_log=A_add D_rho`, `F_log=D_rho F_add D_rho`, and the task consistently.
+The unit-normal joint model has intrinsic scene dimension `3P` (one
+log-albedo plus two normal-tangent coordinates per pixel); `4P` is only an
+ambient representation with P constraints. The continuation M17 derives
+its information, fixed gauge quotient, surviving ceiling and certificate,
+and validates a local synthetic profile estimator; it does not claim new
+real-data reconstruction accuracy. The old `joint_map.py` estimates albedo
+and lights while holding normals fixed, so it is not that joint scene estimator.
 
 **Decision-layer reading: aggregate vs per-light.** Two results at
 different granularities combine into one boundary statement. At the
@@ -437,6 +560,7 @@ genuine but modest.
 | `tests/test_lowrank_identity.py` | M4 spectral identity, Woodbury trace/gradient |
 | `tests/test_math_gates.py` | singular-covariance counterexample, retention-covariance theorem, polyfit order, rank invariance |
 | `tests/test_known_answer_precheck.py` | λmin reading, trace dilution, parallel sums, gauge identity |
-| `tests/test_alpha_bound.py` | L9–L12: γ ≥ 1/(1+α) on toy family, two-sided sandwich zero violations, real-object α in range |
-| `tests/test_gamma_bound_proof_limits.py` | 2×2 `M^{-2}`-reversal counterexample pinned; adversarial exhaustive family re-derivation; artifact `proof_limits` fields |
+| `tests/test_alpha_bound.py` | 历史 toy/实物 α 数值回归与仍有效的局部 sandwich；不是旧候选式的一般证明 |
+| `tests/test_gamma_bound_proof_limits.py` | 历史平方逆反序实例、有限对抗搜索及归档字段回归；零违反不恢复被否定的候选式 |
+| `tests/test_gamma_general_bound.py` | §9：精确反例的数值复现、固定 α 族、有效谱界穷举、零更新/可交换情形、输入校验、旧函数兼容 |
 | `tests/test_goal_oriented.py` | §10: H=I parity, dense parity, row-mixing invariance, gradient FD; artifact headline fields |
