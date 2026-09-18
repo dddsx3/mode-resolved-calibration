@@ -5,3 +5,5 @@ pyyaml>=6.0
 matplotlib>=3.7
 Pillow>=10.0
 pytest>=7
+# Exact symbolic checks for the theory continuation, not a core library dependency.
+sympy>=1.12

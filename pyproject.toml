@@ -39,7 +39,7 @@ Homepage = "https://github.com/dddsx3/mode-resolved-calibration"
 Issues = "https://github.com/dddsx3/mode-resolved-calibration/issues"
 
 [project.optional-dependencies]
-dev = ["pytest>=7"]
+dev = ["pytest>=7", "sympy>=1.12"]
 reproduce = ["matplotlib>=3.7", "Pillow>=10.0"]
 examples = ["matplotlib>=3.7"]
 

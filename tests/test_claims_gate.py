@@ -18,7 +18,11 @@ import math
 import re
 from pathlib import Path
 
+import pytest
+
 REPO = Path(__file__).resolve().parents[1]
+IMPORTED = REPO / "results/theory_extension_20260918/imported_20260917"
+SIGNED_NUMBER = r"[+-]?(?:\d+(?:\.\d*)?|\.\d+)"
 
 BANNED = [
     # overclaim phrasings (registry: docs/claims.md)
@@ -194,18 +198,119 @@ def _approx(token, value, decimals):
     return abs(float(token) - float(value)) <= 0.5 * 10 ** (-decimals) + 1e-9
 
 
+def _prose(text):
+    """Normalize presentation, not the sign or the claim's scope."""
+    return re.sub(r"[`*$]", "", text).replace("\u2212", "-")
+
+
+def _readme_claim_block(text, claim):
+    blocks = [block for _, block in _markdown_blocks(text)
+              if re.search(r"\b" + claim + r"\b", block.splitlines()[0])]
+    assert len(blocks) == 1, f"expected one current README {claim} bullet"
+    return blocks[0]
+
+
+def _ra_numbers(block):
+    """Read one R_A statement, never a different headline's first CI."""
+    text = _prose(block)
+    ra = re.findall(r"\bR_A\s*=\s*(" + SIGNED_NUMBER + r")", text)
+    ci = re.findall(r"CI\s*\[\s*(" + SIGNED_NUMBER + r")\s*,\s*("
+                    + SIGNED_NUMBER + r")\s*\]", text)
+    cells = re.findall(r"(\d+)\s*/\s*(\d+)\s*(?:positive\s+)?"
+                       r"(?:cells|单元|细胞)", text)
+    objects = re.findall(r"(\d+)\s*/\s*(\d+)\s*(?:positive\s+)?"
+                         r"(?:objects|物体)", text)
+    assert len(ra) == len(ci) == len(cells) == len(objects) == 1, text
+    return (float(ra[0]), tuple(map(float, ci[0])),
+            tuple(map(int, cells[0])), tuple(map(int, objects[0])))
+
+
+def _assert_ra_bound(block, arm, n_cells):
+    ra, ci, cells, objects = _ra_numbers(block)
+    assert ra == pytest.approx(arm["RA"], abs=5e-4, rel=0)
+    assert ci == pytest.approx(arm["RA_ci95"], abs=5e-4, rel=0)
+    assert cells == (arm["n_pos_cells"], n_cells)
+    assert objects == (arm["n_pos_objects"], arm["n_objects"])
+
+
+def _amplitude_numbers(block):
+    text = _prose(block)
+    median = re.findall(r"(?:\bmedian|中位)\s*(" + SIGNED_NUMBER + r")", text)
+    percentiles = re.findall(
+        r"5\s*[-–]\s*95%\s*\[\s*(" + SIGNED_NUMBER + r")\s*,\s*("
+        + SIGNED_NUMBER + r")\s*\]", text)
+    assert len(median) == len(percentiles) == 1, text
+    return (float(median[0]), *map(float, percentiles[0]))
+
+
+@pytest.mark.parametrize("name", ["README.md", "README.zh-CN.md"])
+def test_readme_current_b1_b2_field_bound(name):
+    text = (REPO / name).read_text(encoding="utf-8")
+    factorial = json.loads((IMPORTED / "mf0_factorial_summary.json")
+                           .read_text(encoding="utf-8"))
+    amplitude = json.loads((IMPORTED / "amplitude_comparison.json")
+                           .read_text(encoding="utf-8"))
+    arm = factorial["variants"]["D"]
+    b1 = _readme_claim_block(text, "B1")
+    _assert_ra_bound(b1, arm, factorial["protocol"]["n_cells"])
+    for field, expected in (("noise_fit_convention", "corrected"),
+                            ("mode_coordinate", "dual"),
+                            ("gauge_mode", "per_seed"),
+                            ("prediction_field", "pred_deg")):
+        assert arm[field] == expected
+    for literal in ("gauge_mode=per_seed", "prediction_field=pred_deg",
+                    "variants.D", "imported_20260917/mf0_factorial_summary.json"):
+        assert literal in b1
+    assert re.search(r"not matched[- ]prediction validation|不是 matched prediction 验证",
+                     _prose(b1), re.I)
+    assert re.search(r"CI\s+spans zero|CI 跨零", _prose(b1))
+
+    b2 = _readme_claim_block(text, "B2")
+    pooled = amplitude["variants"]["D"]["new_ratio_matched_prediction"]["pooled"]
+    assert _amplitude_numbers(b2) == pytest.approx(
+        [pooled[k] for k in ("median", "p5", "p95")], abs=5e-7, rel=0)
+    for literal in ("variants.D.new_ratio_matched_prediction.pooled",
+                    "imported_20260917/amplitude_comparison.json"):
+        assert literal in b2
+    plain = _prose(b2)
+    assert re.search(r"residual\s+bootstrap", plain, re.I)
+    assert re.search(r"not the matched\s+GLS|不是 matched GLS", plain, re.I)
+    assert re.search(r"neither\s+validates nor refutes|既不能验证、也不能反驳", plain)
+    # Cross-artifact field equality prevents swapping B1's original-prediction
+    # control for the separately reported matched-coordinate ranking.
+    assert amplitude["variants"]["D"]["frozen_statistical_summary"] == arm
+
+
+@pytest.mark.parametrize("minus", ["-", "\u2212"])
+def test_ra_parser_is_signed_and_local_to_the_claim(minus):
+    text = ("- **Amplitude B2**: CI [0.2, 0.8].\n\n"
+            "- **Current B1**: R_A = 0.55; CI [" + minus + "0.1, 0.7]; "
+            "43/66 cells positive, 7/11 objects positive.\n\n"
+            "Historical B1: R_A = 0.90; CI [0.7, 0.95].")
+    block = _readme_claim_block(text, "B1")
+    assert _ra_numbers(block) == (0.55, (-0.1, 0.7), (43, 66), (7, 11))
+    arm = {"RA": 0.55, "RA_ci95": [-0.1, 0.7], "n_pos_cells": 43,
+           "n_pos_objects": 7, "n_objects": 11}
+    # A valid unrelated CI or a superseded R_A cannot launder a mutated B1.
+    with pytest.raises(AssertionError):
+        _assert_ra_bound(block.replace(minus + "0.1", "0.1"), arm, 66)
+    with pytest.raises(AssertionError):
+        _assert_ra_bound(block.replace("43/66", "65/66"), arm, 66)
+
+
 def test_readme_numeric_claims_traceable():
     """Every number in the library-first README traces to results/**:
     benchmark claims via summary JSON fields, allocation claims via
     allocation_summary.json, structural/count claims via the artifacts."""
     readme = (REPO / "README.md").read_text(encoding="utf-8")
-    # use the paper-facing arm D as the R_A anchor, not the frozen legacy
-    # record (validation_summary.json is a frozen legacy artifact; the README
-    # CI [0.7, 0.95] is arm D's)
-    fd = json.loads((REPO / "results/openillumination/correctness/"
-                     "mf0_factorial_summary.json").read_text(encoding="utf-8"))
+    # Current B1 is the imported per-seed D arm, not the earlier corrected
+    # artifact. Historical numbers are separately gated and regressed below.
+    fd = json.loads((IMPORTED / "mf0_factorial_summary.json")
+                    .read_text(encoding="utf-8"))
     D = fd["variants"]["D"]
     assert D["noise_fit_convention"] == "corrected", "anchor must be paper-facing arm D"
+    assert D["gauge_mode"] == "per_seed"
+    assert D["prediction_field"] == "pred_deg"
     al = json.loads((REPO / "results/openillumination/allocation/"
                      "allocation_summary.json").read_text(encoding="utf-8"))
 
@@ -231,22 +336,17 @@ def test_readme_numeric_claims_traceable():
         "-0.077": _m(10, "mode_aware")["ci95"][1],
         "-0.684": _m(100, "mode_aware")["ci95"][0],
         "-0.102": _m(100, "mode_aware")["ci95"][1],
-        "0.90": D["RA"],
-        "0.7":  D["RA_ci95"][0],      # CI lower bound, previously untraced
-        "0.95": D["RA_ci95"][1],
+        "0.55": D["RA"],
+        "-0.1": D["RA_ci95"][0],
+        "0.7": D["RA_ci95"][1],
     }
     for tok, val in traced.items():
         assert _approx(tok, val, 3), (tok, val)
 
-    # the R_A CI pair printed in the README is the paper-facing anchor: it must
-    # numerically match the arm-D field, not merely recur verbatim somewhere
-    # under results/** (a plain lexical token like "0.6" can coincidentally
-    # occur in a results file and slip past the generic sweep below).
-    ci_m = re.search(r"CI\s*\[\s*([0-9.]+)\s*,\s*([0-9.]+)\s*\]", readme)
-    assert ci_m, "README must print the R_A CI pair (e.g. 'CI [0.7, 0.95]')"
-    lo, hi = ci_m.group(1), ci_m.group(2)
-    assert _approx(lo, D["RA_ci95"][0], 3), (lo, D["RA_ci95"][0])
-    assert _approx(hi, D["RA_ci95"][1], 3), (hi, D["RA_ci95"][1])
+    # The R_A CI must match B1, including its sign, not the first CI in the
+    # whole README (allocation and historical bullets also carry CIs).
+    _assert_ra_bound(_readme_claim_block(readme, "B1"), D,
+                     fd["protocol"]["n_cells"])
 
     # post-hoc paired policy comparison (allocation_policy_pairwise.csv): the
     # README quotes the range of the six median paired differences
@@ -276,15 +376,15 @@ def test_readme_numeric_claims_traceable():
         assert v["ci95"][0] < 0 < v["ci95"][1]         # CI spans 0
 
     # numbers quoted from the certified / level / channel evidence layer, and
-    # from the corrected amplitude arm -- each verified against its own field
-    # (decimals match the rounding printed in the README)
+    # from the imported same-projection amplitude comparison (not ensemble-
+    # matched) -- each verified against its own field at the printed precision
     cg = json.loads((REPO / "results/certification/certified_gaps.json")
                     .read_text(encoding="utf-8"))
     lr = json.loads((REPO / "results/certification/lowrank_fullres.json")
                     .read_text(encoding="utf-8"))
-    ampD = json.loads((REPO / "results/magnitude/"
-                       "directional_amplitude_summary.json")
-                      .read_text(encoding="utf-8"))["arm_D_corrected"]
+    ampD = json.loads((IMPORTED / "amplitude_comparison.json")
+                      .read_text(encoding="utf-8"))["variants"]["D"]
+    amp_pooled = ampD["new_ratio_matched_prediction"]["pooled"]
     go = json.loads((REPO / "results/goal_oriented/goal_orientation.json")
                     .read_text(encoding="utf-8"))
     go_v = go["headline"]["value_curves_by_level"]
@@ -297,8 +397,9 @@ def test_readme_numeric_claims_traceable():
             ("0.027", max(meds), 3),
             ("0.64", max(v["random_mean_minus_lower_rel"]["median"]
                          for v in cg["by_k"].values()) * 100, 2),
-            ("15.98", ampD["ratio_stats"]["median"], 2),
-            ("714.2", ampD["ratio_stats"]["p95"], 1),
+            ("53.744194", amp_pooled["median"], 6),
+            ("0.489414", amp_pooled["p5"], 6),
+            ("820.342156", amp_pooled["p95"], 6),
             ("27.3", lr["by_k"]["48"]["dynamic_range_pct"]["min"], 1),
             ("89.4", lr["by_k"]["48"]["dynamic_range_pct"]["max"], 1),
             # goal-oriented paragraph: V_H medians (x100, 2dp) + Spearman
@@ -467,6 +568,25 @@ def test_readme_numeric_claims_traceable():
         assert _approx(tok, val, dec), (tok, val)
         traced[tok] = val
 
+    # Historical values may still be printed, but only in explicitly scoped
+    # history. Dedicated history/scope tests below and in test_headline_binding
+    # prevent these sources from licensing a current B1/B2/γ headline.
+    old_fd = json.loads((REPO / "results/openillumination/correctness/"
+                         "mf0_factorial_summary.json").read_text(encoding="utf-8"))
+    old_amp = json.loads((REPO / "results/magnitude/"
+                          "directional_amplitude_summary.json")
+                         .read_text(encoding="utf-8"))
+    old_ab = json.loads((REPO / "results/submodularity/alpha_bound.json")
+                        .read_text(encoding="utf-8"))
+    for tok, val, dec in (
+            ("0.90", old_fd["variants"]["D"]["RA"], 2),
+            ("0.95", old_fd["variants"]["D"]["RA_ci95"][1], 2),
+            ("15.98", old_amp["arm_D_corrected"]["ratio_stats"]["median"], 2),
+            ("201.1", old_amp["arm_A_frozen"]["ratio_stats"]["median"], 1),
+            ("0.635", old_ab["gamma_overall"]["gamma_lower_bound_min"], 3)):
+        assert _approx(tok, val, dec), (tok, val)
+        traced[tok] = val
+
     # generic sweep: every other number printed in README must appear as a
     # *token* under results/** (claim-tracing rule, guideline section 4).
     # Two hardening points over the original sweep:
@@ -543,6 +663,125 @@ def test_readme_numeric_claims_traceable():
                           f"the pool): {untraced}")
 
 
+# --------------------------------------------------------- supersession scopes
+# A token's presence in an immutable JSON cannot restore its former scientific
+# interpretation. Require the qualifier in the local statement, not elsewhere
+# in the document, and keep the current spectral API's scope explicit.
+_HISTORY_SCOPE = re.compile(
+    r"historical|history|archived|superseded|withdrawn|refuted|is false"
+    r"|历史|归档|旧|撤回|否定|否决|前轮", re.I)
+_OLD_GAMMA = re.compile(
+    r"(?<![\w.])0\.635(?:144)?(?!\d)"
+    r"|(?<!\w)gamma_lower_bound\s*\("
+    r"|(?:alpha|α)[- ]only"
+    r"|(?:γ|gamma|\\gamma)\s*(?:≥|>=|\\geq?)\s*1\s*/\s*"
+    r"\(\s*1\s*\+\s*(?:α|alpha|\\alpha)\s*\)", re.I)
+_CANDIDATE_REJECTION = re.compile(
+    r"failure of (?:the )?(?:alpha[- ]only|α[- ]only) candidate"
+    r"|(?:alpha[- ]only|α[- ]only) (?:candidate|bound) (?:is |has been )?"
+    r"(?:false|refuted|disproved)", re.I)
+_CANDIDATE_PROMOTION = re.compile(
+    r"(?:alpha[- ]only\s+(?:candidate|bound)|gamma_lower_bound\([^)]*\))"
+    r"[^.]{0,80}\b(?:is|remains|provides|gives|yields)\s+(?:now\s+)?"
+    r"(?:a\s+)?(?:valid|proved|certified|guaranteed)\b"
+    r"|(?:γ\s*(?:≥|>=)\s*)?0\.635(?:144)?[^.]{0,50}"
+    r"\b(?:is|remains|provides)\s+(?:a\s+)?(?:valid|proved|certified)\b"
+    r"|(?:旧|历史)(?:候选|函数)[^。]{0,40}(?:仍是有效|提供有效|已证保证)", re.I)
+
+
+def _scope_blocks(text):
+    """Paragraphs, individual table rows and list items (with wrapped lines)."""
+    current, start = [], 0
+    for line_no, line in enumerate(text.splitlines(), 1):
+        boundary = not line.strip() or re.match(r"^\s*(?:[-*] |\d+\. |\| |#)", line)
+        if current and boundary:
+            yield start, "\n".join(current)
+            current = []
+        if line.strip():
+            if not current:
+                start = line_no
+            current.append(line)
+    if current:
+        yield start, "\n".join(current)
+
+
+def _superseded_scope_issues(text):
+    issues = []
+    for line, block in _scope_blocks(text):
+        plain = re.sub(r"\s+", " ", _prose(block))
+        # Full stops split assertions, not decimal points or API module names.
+        for sentence in re.split(r"(?<=[.!?])\s+|[。]", plain):
+            if not _OLD_GAMMA.search(sentence):
+                continue
+            if ((not _HISTORY_SCOPE.search(sentence)
+                 and not _CANDIDATE_REJECTION.search(sentence))
+                    or _CANDIDATE_PROMOTION.search(sentence)):
+                issues.append((line, "refuted alpha-only expression used without withdrawal scope"))
+        if re.search(r"\bR_A\s*=\s*0\.90?\b|(?<![\w.])(?:15\.98|201\.1)(?!\d)", plain):
+            if not _HISTORY_SCOPE.search(plain):
+                issues.append((line, "superseded B1/B2 values used as current evidence"))
+        if "validity_map.json" in plain and re.search(
+                r"curvature[- ]robust|排序.{0,30}稳健|magnitudes,? not directions", plain, re.I):
+            if not _HISTORY_SCOPE.search(plain):
+                issues.append((line, "historical B8 map promoted to current projection guarantee"))
+    return issues
+
+
+def test_refuted_and_superseded_claims_keep_local_scope():
+    hits = []
+    for path in SCAN_FILES:
+        text = path.read_text(encoding="utf-8")
+        hits.extend(f"{path.relative_to(REPO)}:{line}: {why}"
+                    for line, why in _superseded_scope_issues(text))
+    assert not hits, "\n".join(hits)
+
+
+@pytest.mark.parametrize("name", ["README.md", "README.zh-CN.md"])
+def test_readme_spectral_api_scope_is_not_the_historical_candidate(name):
+    text = (REPO / name).read_text(encoding="utf-8")
+    blocks = [re.sub(r"\s+", " ", _prose(block))
+              for _, block in _scope_blocks(text) if "spectral_gamma_lower_bound(" in block]
+    assert blocks, "README must distinguish M12 from the refuted candidate"
+    for block in blocks:
+        for pattern in (r"M12", r"refuted", r"withdrawn|撤回", r"proved|已证",
+                        r"unweighted\s+full[- ]trace|未加权全迹",
+                        r"fixed SPD|固定 SPD", r"PSD", r"arbitrary task|任意任务",
+                        r"singular|奇异", r"not directly|不能直接"):
+            assert re.search(pattern, block, re.I), (name, pattern)
+    b8 = _prose(_readme_claim_block(text, "B8"))
+    assert _HISTORY_SCOPE.search(b8)
+    assert re.search(r"not a robustness guarantee for the current|不能保证当前",
+                     re.sub(r"\s+", " ", b8), re.I)
+
+
+@pytest.mark.parametrize("bad", [
+    "The alpha-only candidate is a valid guarantee.",
+    "The refuted alpha-only candidate nevertheless provides a valid guarantee.",
+    "At this level, γ ≥ 0.635 is a real-object certificate.",
+    "gamma_lower_bound(alpha) gives a certified bound.",
+    "γ ≥ 1/(1+α) for all SPD baselines and PSD updates.",
+    "Current R_A = 0.90, CI [0.7, 0.95].",
+    "The current amplitude median is 15.98.",
+    "validity_map.json proves curvature-robust ordering for the current projection.",
+])
+def test_scope_gate_rejects_promoted_history(bad):
+    # A disclaimer in a different paragraph must not be a document whitelist.
+    text = "Historical alpha-only candidate: refuted; old values withdrawn.\n\n" + bad
+    assert _superseded_scope_issues(text), bad
+
+
+@pytest.mark.parametrize("good", [
+    "The alpha-only candidate is refuted, not merely unproved.",
+    "The former γ ≥ 0.635 guarantee is withdrawn.",
+    "Historical gamma_lower_bound(alpha) values are for reproduction only.",
+    "旧 γ ≥ 1/(1+α) 候选已被否定，不是有效保证。",
+    "Historical R_A = 0.90, CI [0.7, 0.95] is superseded.",
+    "The archived amplitude median 15.98 is not the current B2.",
+])
+def test_scope_gate_preserves_qualified_history(good):
+    assert not _superseded_scope_issues(good)
+
+
 # --------------------------------------------------------------- E-1b 加固
 # docs/methods.md + docs/claims.md 的数字此前零机器校验(验收 E-1 的
 # `emp/pred ≈ 102` 错字段抓取正落在这个盲区)。本测试把数字追溯扩展到
@@ -570,7 +809,8 @@ DOCS_NON_CLAIM = {
     "1.0": "version labels (v1.0, s1.0)",
     "1.1": "version labels (v1.1)",
     # 派生统计(注明来源;不在 results 字面中)
-    "102": "REMOVED - the wrong emp/pred value is now 15.98 (E-1a); "
+    "102": "REMOVED - the wrong emp/pred value was corrected in E-1a; "
+           "current B2 is bound to the imported projection-matched field; "
            "kept here so it can NEVER re-enter docs",
     "100": "percentages/counts in prose (e.g. '100% of the advantage')",
     "1.0368": "historical pre-T3 value quoted as drift history in "
@@ -582,8 +822,8 @@ DOCS_NON_CLAIM = {
 # 豁免是逻辑倒置(白名单=跳过检查=允许),且删白名单也不够(102 会经
 # 舍入匹配命中池里的 102.19 而通过)。唯一正确的语义是显式拒绝。
 DOCS_BANNED_TOKENS = {
-    "102": "E-1a historical wrong value (emp/pred; correct median is 15.98) "
-           "- must never re-enter docs",
+    "102": "E-1a historical wrong emp/pred field; current B2 uses the imported "
+           "same-projection ratio - must never re-enter docs",
 }
 
 

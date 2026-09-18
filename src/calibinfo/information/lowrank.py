@@ -6,13 +6,13 @@
     V     = F∞^{-1/2} [u_k K_k^{1/2}]_{k∈active}   （P × 3|active| 瘦阵）
 
 推论（L5 恒等式，tests/test_math_foundations.py 机器锁定）：
-    spec(R) = {1}^{P−rank(V)} ⊕ (1 − spec(VᵀV))；
+    spec(R) = {1}^{P−rank(V)} ⊕ {1−μ : μ 为 VᵀV 的非零特征值}；
     tr ΔF⁻¹ = tr D⁻¹ + tr(G⁻¹ VᵀD⁻²V),  G = I − VᵀD⁻¹V（push-through 恒等式），
 全部从 3|active|×3|active| 的小矩阵出发——稠密 P×P 路线的 15–46 倍加速，
 且解锁 P ≫ 1200 的全分辨率规模（P=54600 时稠密路线需 22 GB，本路线 455 ms）。
 
 数值纪律：
-  - K_k^{1/2} 用 eigh **对称**平方根（禁 Cholesky/sqrtm——对称性进 V 的谱结构）；
+  - K_k^{1/2} 沿用 eigh 对称平方根以保持历史数值路径；谱恒等式本身只要求同一 Gram 因子；
   - D = diag(F∞) 要求 F∞ 严格为正（实场景满足；近零像素必须在调用方截断并记录）；
   - G = I − VᵀD⁻¹V 的 PD 性 ⇔ ΔF ≻ 0；破坏即抛错（禁静默正则化）。
 
@@ -29,7 +29,7 @@ from calibinfo.allocation.blocks import sym_inv
 
 
 def _sym_sqrt(M: np.ndarray) -> np.ndarray:
-    """对称 PSD 平方根（eigh 构造；对称性是 V 谱结构成立的前提）。"""
+    """对称 PSD 平方根（eigh 构造，保留历史实现约定）。"""
     w, V = np.linalg.eigh(0.5 * (M + M.T))
     return (V * np.sqrt(np.clip(w, 0.0, None))) @ V.T
 
@@ -50,22 +50,21 @@ def _build_V(finf_diag, u, M0, lam, active, t, whiten):
 
 def retention_spectrum_lowrank(finf_diag, u, M0, lam, active, t,
                                unit_tol=1e-9):
-    """L5 恒等式全谱：spec(R) = {1}^{P−rank(V)} ⊕ (1 − spec(VᵀV))。
+    """L5 全谱：P−rank(V) 个单位模式，及 VᵀV 非零谱 μ 对应的 1−μ。
 
     **API 契约（T8）**：
     - 输入：`finf_diag` (P,) = `diag(F∞)`, `u` (L,P,q), `M0` (L,q,q), `lam` (L,q,q),
       `active` (L,), `t` (L,). `F∞` 要求严格为正；零像素须由调用方截断。
     - 返回 `dict(rho (P,) 升序, n_unit, n_active_blocks, eig_VtV)`。
-    - `rho` 包含 n_unit 个 ρ=1 单元（不可辨识模），这与稠密路线不同：
-      `retention_spectrum` 返回 `(k,)` 仅限于可辨识子空间。
-    - 此 API 与 `information.retention_spectrum`、`metrics.retention_spectrum_full`
-      返回 **相同长度** 的 `rho` 吗？不能直接换用！
-      使用任一 API 前请核对：稠密路线返回 `(n_identifiable,)`；低秩路线返回
-      `(P,)` 包含 ρ=1 单元；两者的值在 `k=n` 时等价。
+    - `rho` 包含 n_unit 个 ρ=1 的标定不敏感可辨识模式，不是不可辨识模。
+      本 API 的正 Finf 契约使整个 P 维空间可辨识，因此与稠密
+      `retention_spectrum` 在相同正 Finf 输入下都返回 P 个谱值。
+      稠密接口另可接受秩亏 Finf 并只返回其可辨识子空间的谱；此低秩
+      接口不接受该输入，不可用单位模式补成同长度。
 
     **数值纪律**（与稠密路线一致）：
-      - K^{1/2} 用 eigh 对称平方根；
-      - G = I − VᵀD⁻¹V 的 PD ⇔ ΔF ≻ 0；破坏抛错。
+      - K^{1/2} 沿用 eigh 对称平方根，不改变历史计算行为；
+      - G = I − VᵀD⁻¹V 的 PD ⇔ ΔF ≻ 0，风险计算路径显式检查该条件。
 
     绑定测试：`tests/test_lowrank_identity.py`（≤1e-10）、
     `tests/test_retention_contract.py``（k-维分支等价性）。"""

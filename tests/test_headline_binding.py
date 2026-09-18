@@ -22,9 +22,13 @@ from pathlib import Path
 import pytest
 
 REPO = Path(__file__).resolve().parents[1]
+IMPORTED = REPO / "results/theory_extension_20260918/imported_20260917"
 DOCS = {"methods": REPO / "docs/methods.md", "claims": REPO / "docs/claims.md",
         "experiments": REPO / "docs/EXPERIMENTS.md"}
 ARTS = {
+    "b1": IMPORTED / "mf0_factorial_summary.json",
+    "b2": IMPORTED / "amplitude_comparison.json",
+    "factorial_historical": REPO / "results/openillumination/correctness/mf0_factorial_summary.json",
     "amp": REPO / "results/magnitude/directional_amplitude_summary.json",
     "ab": REPO / "results/submodularity/alpha_bound.json",
     "go": REPO / "results/goal_oriented/goal_orientation.json",
@@ -101,7 +105,10 @@ _CLOUD_INFO = (REPO / "results/openillumination/provenance/"
 U = "\u2212"                                     # unicode minus,与 docs 一致
 
 BINDINGS = [
-    # ---- 幅值有效域 / α 界(methods + claims)----
+    # ---- current B2(methods); claims/EXPERIMENTS use claim-local parsers below ----
+    (M, "53.744", "b2",
+     lambda j: j["variants"]["D"]["new_ratio_matched_prediction"]["pooled"]["median"], 3),
+    # ---- historical amplitude / alpha candidate; traceability is NOT validity ----
     (M, "15.98", "amp", lambda j: j["arm_D_corrected"]["ratio_stats"]["median"], 2),
     (M, "0.635", "ab", lambda j: j["gamma_overall"]["gamma_lower_bound_min"], 3),
     (M, "162,000", "ab", lambda j: j["proof_limits"]["adversarial_triples"], 0),
@@ -112,6 +119,9 @@ BINDINGS = [
     (M, "1.31", "ab", lambda j: j["proof_limits"]["min_tightness"], 2),
     (M, "1.001011", "ab", _ab_min("min_ub_over_val"), 6),
     (M, "1.000096", "ab", _ab_min("min_val_over_lb"), 6),
+    (E, "0.635", "ab", lambda j: j["gamma_overall"]["gamma_lower_bound_min"], 3),
+    (E, "1.001011", "ab", _ab_min("min_ub_over_val"), 6),
+    (E, "1.000096", "ab", _ab_min("min_val_over_lb"), 6),
     # ---- goal-oriented / 两项定律 ----
     (M, "62.87", "go", _go_v("0.5", "all", 100.0), 2),
     (M, "89.76", "go", _go_v("0.5", "mean", 100.0), 2),
@@ -368,6 +378,11 @@ SPECIALS = [
 # Deliberate additions/removals must update this table (same
 # discipline as the README traced map). Covers methods/claims/EXPERIMENTS.
 OCCURRENCE_COUNTS = {
+    # ---- current projection-matched B2 / explicitly historical alpha table ----
+    ("methods", "53.744"): 1,
+    ("experiments", "0.635"): 1,
+    ("experiments", "1.001011"): 1,
+    ("experiments", "1.000096"): 1,
     # ---- Σ_φ family sensitivity (C9 / P-SIGMA-FAMILY) ----
     ("claims", "0.07"): 1,
     ("experiments", "0.07"): 1,
@@ -518,6 +533,160 @@ OCCURRENCE_COUNTS = {
     ("methods", "−0.82"): 1
 }
 
+
+
+def _claim_row(text, claim):
+    rows = re.findall(r"^\| " + re.escape(claim) + r" \|.*$", text, re.M)
+    assert len(rows) == 1, f"missing or duplicate claim row {claim}"
+    return rows[0]
+
+
+def _experiment_entry(text, label):
+    match = re.search(r"(?ms)^- \*\*" + re.escape(label)
+                      + r"\*\*:(.*?)(?=^- |^## |\Z)", text)
+    assert match, f"missing experiment entry {label}"
+    return match.group(1)
+
+
+def _current_benchmark_scope(doc, claim, text):
+    if doc == C:
+        row = _claim_row(text, claim)
+        marker = "Current D arm:" if claim == "B1" else "With per-sample projection,"
+        assert row.count(marker) == 1, (claim, marker)
+        return row.split(marker, 1)[1]
+    assert doc == E
+    return _experiment_entry(text, "Current " + claim)
+
+
+def _plain(text):
+    return re.sub(r"\s+", " ", re.sub(r"[`*$]", "", text)).replace(U, "-")
+
+
+def _field_match(text, pattern, expected, dec):
+    matches = re.findall(pattern, _plain(text))
+    assert len(matches) == 1, (pattern, matches)
+    assert float(matches[0]) == pytest.approx(expected, abs=0.5 * 10 ** -dec,
+                                             rel=0), (pattern, expected)
+
+
+@pytest.mark.parametrize("doc", [C, E])
+def test_current_b1_fields_bound_in_their_own_scope(doc):
+    text = DOCS[doc].read_text(encoding="utf-8")
+    scope = _current_benchmark_scope(doc, "B1", text)
+    factorial = json.loads(ARTS["b1"].read_text(encoding="utf-8"))
+    arm = factorial["variants"]["D"]
+    num = r"([+-]?\d+(?:\.\d+)?)"
+    for pattern, expected, dec in (
+            (r"R_A\s*=\s*" + num, arm["RA"], 2),
+            (r"CI\s*\[\s*" + num, arm["RA_ci95"][0], 2),
+            (r"CI\s*\[\s*[+-]?\d+(?:\.\d+)?\s*,\s*" + num,
+             arm["RA_ci95"][1], 2),
+            (r"(\d+)/\d+\s+(?:positive\s+)?cells", arm["n_pos_cells"], 0),
+            (r"\d+/(\d+)\s+(?:positive\s+)?cells", factorial["protocol"]["n_cells"], 0),
+            (r"(\d+)/\d+\s+(?:positive\s+)?objects", arm["n_pos_objects"], 0),
+            (r"\d+/(\d+)\s+(?:positive\s+)?objects", arm["n_objects"], 0)):
+        _field_match(scope, pattern, expected, dec)
+    assert arm["gauge_mode"] == "per_seed"
+    assert arm["prediction_field"] == "pred_deg"
+    # EXPERIMENTS records the convention in the immediately preceding entry;
+    # the registry must carry it in the B1 row itself.
+    convention = scope if doc == C else _experiment_entry(text, "Gauge / prediction convention")
+    for literal in ("gauge_mode=per_seed", "prediction_field=pred_deg"):
+        assert literal in convention
+    assert re.search(r"not (?:a validation of matched prediction|matched-prediction validation)",
+                     _plain(convention), re.I)
+    assert "imported_20260917/mf0_factorial_summary.json" in scope
+    assert "variants.D" in scope
+
+
+@pytest.mark.parametrize("doc", [C, E])
+def test_current_b2_fields_bound_in_their_own_scope(doc):
+    scope = _current_benchmark_scope(doc, "B2", DOCS[doc].read_text(encoding="utf-8"))
+    pooled = json.loads(ARTS["b2"].read_text(encoding="utf-8"))["variants"]["D"][
+        "new_ratio_matched_prediction"]["pooled"]
+    if doc == C:
+        fields = ((r"median\s+([\d.]+)", "median"),
+                  (r"p5\s+([\d.]+)", "p5"),
+                  (r"p95\s+([\d.]+)", "p95"))
+        dec = 3
+        _field_match(scope, r"across (\d+) condition-mode", pooled["n"], 0)
+    else:
+        fields = ((r"median\s+([\d.]+)", "median"),
+                  (r"5–95%\s*\[\s*([\d.]+)", "p5"),
+                  (r"5–95%\s*\[\s*[\d.]+\s*,\s*([\d.]+)", "p95"))
+        dec = 6
+    for pattern, field in fields:
+        _field_match(scope, pattern, pooled[field], dec)
+    assert "imported_20260917/amplitude_comparison.json" in scope
+    assert "variants.D.new_ratio_matched_prediction.pooled" in scope
+    plain = _plain(scope)
+    assert "residual bootstrap" in plain
+    assert re.search(r"not the (?:ideal )?matched GLS", plain)
+    assert "neither validates nor refutes" in plain
+
+
+def test_current_binding_rejects_mutation_despite_historical_match():
+    text = DOCS[C].read_text(encoding="utf-8")
+    scope = _current_benchmark_scope(C, "B1", text)
+    assert "0.90" not in scope
+    with pytest.raises(AssertionError):
+        _field_match(scope.replace("0.55", "0.90"), r"R_A\s*=\s*([\d.]+)", 0.55, 2)
+    with pytest.raises(AssertionError):
+        _field_match(scope.replace("−0.10", "0.10"), r"CI\s*\[\s*([+-]?[\d.]+)", -0.1, 2)
+    # Equal-looking numbers in another claim never satisfy a missing local field.
+    with pytest.raises(AssertionError):
+        _field_match(_current_benchmark_scope(C, "B2", text).replace("53.744", "15.98"),
+                     r"median\s+([\d.]+)", 53.74419400160423, 3)
+
+
+# Historical artifact regressions are deliberately separate from CURRENT
+# B1/B2 bindings. Old gamma field names cannot turn these into certificates.
+HISTORICAL_REGRESSIONS = [
+    ("factorial_historical", lambda j: j["variants"]["D"]["RA"], 0.9),
+    ("factorial_historical", lambda j: j["variants"]["D"]["RA_ci95"], [0.7, 0.95]),
+    ("factorial_historical", lambda j: j["variants"]["D"]["n_pos_cells"], 65),
+    ("factorial_historical", lambda j: j["variants"]["D"]["n_pos_objects"], 11),
+    ("amp", lambda j: [j["arm_D_corrected"]["ratio_stats"][k]
+                       for k in ("median", "p5", "p95")],
+     [15.975062209835617, 0.004671273192167978, 714.2002367645034]),
+    ("amp", lambda j: [j["arm_A_frozen"]["ratio_stats"][k]
+                       for k in ("median", "p5", "p95")],
+     [201.1000934896747, 7.2676885568468235, 1525.8203599747435]),
+    ("amp", lambda j: j["arm_D_corrected"]["n_cells_exactly_equal_to_baseline"], 66),
+    ("amp", lambda j: j["arm_D_corrected"]["max_abs_deviation_from_mode_index_baseline"], 0),
+    ("ab", lambda j: j["gamma_overall"]["gamma_lower_bound_min"], 0.635144),
+    ("ab", lambda j: j["by_level"]["0.5"]["gamma_lower_bound_min"], 0.660259),
+    ("ab", lambda j: j["proof_limits"]["adversarial_triples"], 162000),
+    ("ab", lambda j: j["proof_limits"]["m_inv_sq_reversal_samples"], 12493),
+    ("ab", lambda j: j["proof_limits"]["min_ratio_observed"], 0.270682),
+    ("ab", lambda j: j["proof_limits"]["min_tightness"], 1.314983),
+    ("ab", _ab_min("min_val_over_lb"), 1.000096),
+    ("ab", _ab_min("min_ub_over_val"), 1.001011),
+]
+
+
+@pytest.mark.parametrize("art,extract,expected", HISTORICAL_REGRESSIONS)
+def test_historical_values_remain_data_regressions(art, extract, expected):
+    value = extract(json.loads(ARTS[art].read_text(encoding="utf-8")))
+    assert value == pytest.approx(expected, abs=1e-12, rel=0)
+
+
+@pytest.mark.parametrize("name", ["README.md", "README.zh-CN.md"])
+def test_superseded_readme_b1_remains_bound_to_its_historical_fields(name):
+    text = (REPO / name).read_text(encoding="utf-8")
+    # Bound the historical paragraph itself, never a later matching number.
+    paragraphs = [_plain(part) for part in re.split(r"\n\s*\n", text)]
+    histories = [part for part in paragraphs if re.search(
+        r"(?:Historical B1|历史 B1)\s*[（(]superseded[）)]", part)]
+    assert len(histories) == 1
+    scope = histories[0]
+    match = re.search(r"R_A\s*=\s*([\d.]+).*?CI\s*\[([\d.]+),\s*([\d.]+)\]"
+                      r".*?(\d+)/(\d+)\s*(?:cells|单元).*?(\d+)/(\d+)\s*(?:objects|物体)", scope)
+    assert match
+    arm = json.loads(ARTS["factorial_historical"].read_text(encoding="utf-8"))["variants"]["D"]
+    assert list(map(float, match.groups())) == pytest.approx(
+        [arm["RA"], *arm["RA_ci95"], arm["n_pos_cells"], 66,
+         arm["n_pos_objects"], arm["n_objects"]], abs=5e-4, rel=0)
 
 
 def test_headline_numbers_field_bound():
