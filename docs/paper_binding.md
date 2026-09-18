@@ -13,12 +13,13 @@ binding, not the manuscript text.
 
 | Manuscript section | Claim | Registry row(s) |
 |---|---|---|
-| §I Introduction (contributions) | refined precision upper bound; task-weighted risk; low-rank scaling | M10 / M10' / M11 / C14 |
+| §I Introduction (contributions) | refined precision upper bound; task-weighted risk; low-rank scaling; absolute accuracy against independent ground truth | M10 / M10' / M11 / C14 / B10 |
 | §II Mode-Resolved Information | effective information; retention operator; matched covariance semantics; unit-retention multiplicity `P − rank(V)` | M1 / M2 / M4 / M8 / M7 |
 | §III Task-Aware Value | ceiling for any fixed quadratic task; exact two-term decomposition with remainder; convexity | M10' / M14 / M3 / M5 |
 | §III (subsection C) | why the certificate does not rely on diminishing returns: exact counterexample to the candidate bound, fixed-α family, condition-number-aware spectral replacement | M13 / M15 |
 | §IV Convex Certified Allocation | convex relaxation; Frank–Wolfe lower bound; discrete suboptimality upper bound | M6 / M10 / B4 / B7 |
 | §V Evaluation (TABLE I) | full-resolution calibration value and allocation certificates | C3 (full-resolution headline) / C1 (P=1200 subsample cross-check) |
+| §V (absolute DiLiGenT ground-truth accuracy) | absolute normal accuracy improves with calibration precision under one fixed full-mask estimator and perturbation protocol; intermediate-budget policy differences change sign | B10 |
 | §V (corner-endpoint comparison) | allocation-cell relevance, endpoint dependence, active-set vs ordering | B5 / B8 / B9 / C8 / C12 |
 | §VI From Information Risk to Reconstruction (A) | matched generation–estimation ensemble | C13 |
 | §VI (transfer bridge) | mean-square-error identity (covariance + bias); measurable risk radius and pairwise margin | M16 |

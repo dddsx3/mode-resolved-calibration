@@ -6,6 +6,20 @@ versioning: [semver](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- DiLiGenT absolute ground-truth accuracy endpoint (manuscript provenance
+  index D01): `results/diligent/diligent_gt_accuracy.json` registers the
+  full-mask mean-angular-error curve against `Normal_gt` under calibration
+  refinement (10 objects, 96 lights, budgets 0/5/14/28/48). Cohort median
+  falls from 18.9681° to 16.4146° at the 48-light budget against the
+  16.0175° exact-calibration floor; intermediate-budget policy differences
+  change sign, so no universal ordering advantage is claimed. Registered as
+  claim B10 in `docs/claims.md`, mapped in `docs/paper_binding.md`, and
+  structure-gated by `tests/test_diligent_gt_accuracy.py`. The artifact pins
+  the repository loader byte-for-byte (`provenance.loader_sha256` =
+  `src/calibinfo/datasets/diligent.py`).
+
 ### Theory continuation
 
 - Imported the verified general-gamma correction from the supplied September
