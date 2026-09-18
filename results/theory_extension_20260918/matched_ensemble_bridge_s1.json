@@ -1,0 +1,5376 @@
+{
+  "protocol": "P-MATCHED-ENSEMBLE",
+  "stage": "S1",
+  "status": "completed",
+  "claim_slot": "C13 (reserved; coordinator integrates)",
+  "config": {
+    "status": "experimental — NOT part of the published results",
+    "protocol": "P-MATCHED-ENSEMBLE S1 -> S2 -> S3; information-risk ranking bridge",
+    "registered_date": "2026-09-18",
+    "registration_rule": "Written before the first ensemble run. Seeds, sample sizes, thresholds, objects and levels are frozen. No outcome-dependent tuning or exclusions.",
+    "provisional_claim_slots": {
+      "matched_ensemble": "C13",
+      "ranking_conditions": "M16",
+      "integration": "coordinator assigns final registry numbering"
+    },
+    "seeds": {
+      "scene": 2026091831,
+      "measurement_noise": 2026091832,
+      "nuisance": 2026091833,
+      "ideal_baseline": 2026091834,
+      "residual_bootstrap": 2026091835,
+      "dense_design": 2026091836,
+      "bridge_scene": 2026091861,
+      "bridge_gaussian": 2026091862,
+      "bridge_real": 2026091863,
+      "counterexample": 2026091864
+    },
+    "s1": {
+      "trials": 8192,
+      "batch_size": 256,
+      "variance_ddof": 1,
+      "gate_empirical_over_predicted": [
+        0.8,
+        1.25
+      ],
+      "gate_applies_to": [
+        "numerator_variance_ratio",
+        "ideal_baseline_variance_ratio",
+        "empirical_degradation_over_prediction"
+      ],
+      "require_all_selected_modes_valid": true,
+      "identity_relative_tolerance": 1e-09,
+      "n_modes": 5,
+      "mode_coordinate": "W = F_infinity^(1/2) U, with U retention eigenvectors",
+      "projection": "P_rho = I - rho rho^T/(rho^T rho), applied identically on both covariance sides and to every sample",
+      "primary_s1_denominator": "analytic ideal sigma^2 F_infinity^-1; separately verify an independent ideal Gaussian baseline ensemble",
+      "proper_nuisance_covariance": "support-preserving factor Sigma_phi = L L^T; never use pinv(Sigma_phi) as profiling precision"
+    },
+    "openillumination": {
+      "olat_root": "D:/data/OpenIllumination/OLAT",
+      "data_meta": "D:/data/OpenIllumination_meta",
+      "objects": [
+        "obj_04_dolphin",
+        "obj_09_ball"
+      ],
+      "camera": "A1",
+      "n_lights": 24,
+      "n_pixels": 96,
+      "noise_fit_convention": "corrected",
+      "sigma": 1.0,
+      "levels": [
+        0.1,
+        0.35
+      ],
+      "level_units": "log-intensity SD = level; EACH tangent-coordinate SD = level degrees (converted to radians)",
+      "selection": "sorted uniform samples without replacement, RNG SeedSequence([scene_seed, object_index]); lights sampled first, then masked pixels; no resampling on failure",
+      "unidentifiable_pixels": "remove only exact/nonfinite F_infinity<=0 after nominal assembly, record original and retained indices; fail if fewer than n_modes+1 remain",
+      "scope": "Real thumbnails provide the nominal geometry, weights and residual pool. S1 and S3 observations are SYNTHETIC, not new real-data measurements. Canonical loader reads all 142 thumbnails; analysis uses only the frozen subset."
+    },
+    "dense_controls": {
+      "m": 36,
+      "n": 8,
+      "q": 5,
+      "noise_ar1_correlation": 0.65,
+      "nuisance_eigenvalues": [
+        0.09,
+        0.025,
+        0.006,
+        0.0,
+        0.0
+      ],
+      "cases": [
+        {
+          "name": "dense_noise_singular_phi_sigma_035",
+          "sigma": 0.35,
+          "zero_nuisance": false
+        },
+        {
+          "name": "dense_noise_singular_phi_sigma_170",
+          "sigma": 1.7,
+          "zero_nuisance": false
+        },
+        {
+          "name": "dense_noise_zero_phi_sigma_060",
+          "sigma": 0.6,
+          "zero_nuisance": true
+        }
+      ]
+    },
+    "s2": {
+      "trials": 8192,
+      "numerator": "reuse exactly the S1 linear observation draws, matched GLS, modes and projection",
+      "baseline": "raw flattened nominal real residual pool, iid with replacement over observations, no recentering and no degrees-of-freedom correction; zero-nuisance ideal GLS",
+      "report": "R2 = R1 * (b_ideal / b_boot_population) * (b_boot_population / b_boot_empirical); report per-mode factors and geometric-mean closure, not a product of medians"
+    },
+    "s3": {
+      "trials": 8192,
+      "generator": "rho * relu(n dot sphere_exp(d, tangent_phi)) * exp(logI_phi) + the SAME Gaussian measurement noise as S1",
+      "paired_draws": "reuse exactly S1 nuisance and measurement seeds; no truncation of Gaussian draws",
+      "estimator": "same frozen nominal marginal GLS as S1/S2; only replace the observation-side first-order forward perturbation by the finite physical forward model",
+      "denominator": "reuse the exact S2 bootstrap baseline samples",
+      "report": "R3 = R2 * (v_nonlinear / v_linear); separate centered variance, mean and second moment; report RMS/max physical draws and shadow changes",
+      "historical_isomorphism": false,
+      "historical_boundary": "Historical amplitude uses fixed real images, estimator-side assumed-light corruption, plug-in per-pixel GLS, and random-axis/scalar-angle perturbations. S3 is not that estimator or ensemble and does not explain away the historical 53.744.",
+      "radius_scope": "Levels 0.1 and 0.35 lie below the first historical 2x radius crossings for the selected objects (read-only reference only). A historical radius for a different estimator/endpoint does not certify this S3 experiment."
+    },
+    "bridge": {
+      "diligent_root": "D:/data/DiLiGenT/pmsData",
+      "objects": [
+        "ballPNG",
+        "bearPNG"
+      ],
+      "n_lights": 16,
+      "n_pixels": 64,
+      "noise_fit_convention": "corrected",
+      "sigma": 1.0,
+      "sig_logI": 0.1,
+      "sig_dir_deg_per_tangent": 0.5,
+      "families": [
+        "anchor",
+        "het"
+      ],
+      "heterogeneity": "SD multipliers exp(linspace(-0.7,0.7,n_lights)), normalized to RMS 1; fixed active-light order, not fitted to errors",
+      "plan_cells": {
+        "precision_ladder": {
+          "precision_multipliers": [
+            1.0,
+            4.0,
+            16.0,
+            64.0
+          ],
+          "equal_budget": false
+        },
+        "equal_budget_subsets": {
+          "n_plans": 4,
+          "budget_k": 4,
+          "precision_multiplier": 16.0,
+          "construction": "partition the 16 selected active lights by local index modulo 4; fail rather than replace an all-dark light"
+        }
+      },
+      "matched_trials_per_plan": 4096,
+      "fixed_real_trials_per_plan": 256,
+      "batch_size": 256,
+      "endpoint_H": "P_rho / sqrt(n_pixels) for gauge-aligned linear-albedo MSE; SAME H for every plan and both families within a scene",
+      "confidence_failure_probability": 0.01,
+      "spearman_target": 0.7,
+      "sampling_radius": "exact Gaussian quadratic-form concentration with a union bound over all matched plan risks; no plug-in SEM advertised as a certificate",
+      "ranking_rule": "strict pairwise gap > sum of error radii; all pairs gives Spearman=1; partial margins give a rank-displacement lower bound; no margin means no unconditional threshold",
+      "diagnostics": "reuse family_e_diag S_pred/S_real, fit_anc/fit_het and cross_ah/cross_ha definitions; do not infer causal exclusion from ranks alone",
+      "real_pipeline": "existing allocation_mode_tail.arm_metrics on FIXED independently loaded DiLiGenT images, with historical scalar-angle corruption; report albedo MSE, dual energy and angular drift separately",
+      "scope": "Independent DiLiGenT nominal-design synthetic Gaussian validation plus a separately labelled actual-image estimator-side diagnostic. This is not an OI holdout claim, full-cohort transfer claim, real recalibration, or proof that normal angular error is the same H endpoint. GT normals are used only for absolute nominal sanity."
+    },
+    "counterexamples": {
+      "n_policies": 6,
+      "epsilon_values": [
+        0.01,
+        0.0001,
+        1e-06
+      ],
+      "gaussian_trials": 4096,
+      "separated_synthetic_risks": [
+        1.0,
+        2.0,
+        4.0,
+        8.0,
+        16.0,
+        32.0
+      ],
+      "cases": [
+        "arbitrarily_small_covariance_error_without_margin_reverses_all_ranks",
+        "matched_covariance_but_wrong_endpoint_H_reverses_ranking",
+        "finite_matched_Gaussian_samples_have_positive_reversal_probability_without_margin"
+      ]
+    },
+    "archive_reference": {
+      "path": "D:/论文_新实证与γ一般界_源码证据_20260917.zip",
+      "member": "amplitude_rerun_20260917/amplitude_comparison.json",
+      "mode": "read-only; no extraction over repository files or historical outputs"
+    },
+    "output": {
+      "directory": "results/theory_extension_20260918",
+      "main": "matched_ensemble_bridge.json",
+      "s1_checkpoint": "matched_ensemble_bridge_s1.json",
+      "allow_overwrite_historical": false
+    }
+  },
+  "n_cases": 7,
+  "n_mode_checks": 35,
+  "all_pass": true,
+  "numerator_ratio_summary": {
+    "n": 35,
+    "minimum": 0.9732858128592206,
+    "median": 1.0031776302050366,
+    "maximum": 1.0239557682748683,
+    "geometric_mean": 1.0009244426443227
+  },
+  "baseline_ratio_summary": {
+    "n": 35,
+    "minimum": 0.9694119792657003,
+    "median": 0.9972835731673636,
+    "maximum": 1.0373898365883327,
+    "geometric_mean": 0.999082299390457
+  },
+  "degradation_ratio_summary": {
+    "n": 35,
+    "minimum": 0.951195065033588,
+    "median": 1.0025943177815075,
+    "maximum": 1.0562648184422925,
+    "geometric_mean": 1.0018438353426835
+  },
+  "maximum_numerical_identity_error": 9.40409033338312e-13,
+  "cases": [
+    {
+      "trials": 8192,
+      "batch_size": 256,
+      "seeds": {
+        "measurement_noise": [
+          2026091832,
+          1000
+        ],
+        "nuisance": [
+          2026091833,
+          1000
+        ],
+        "ideal_baseline": [
+          2026091834,
+          1000
+        ],
+        "residual_bootstrap": [
+          2026091835,
+          1000
+        ]
+      },
+      "generation": "synthetic observation residual B phi + epsilon; phi and epsilon independently resampled",
+      "baseline": "independent synthetic epsilon0, same Sigma and sigma, phi exactly zero",
+      "estimator": "matched marginal GLS; ideal zero-nuisance GLS for baseline",
+      "sigma": 0.35,
+      "model_metadata": {
+        "route": "published delta_f on supported covariance factor",
+        "nuisance": {
+          "rank": 3,
+          "dimension": 5,
+          "eigenvalues": [
+            -1.5765272785312815e-18,
+            1.199203114162693e-17,
+            0.006000000000000003,
+            0.025000000000000022,
+            0.08999999999999997
+          ],
+          "relative_rank_tolerance": 1e-12,
+          "relative_reconstruction_error": 6.14898687695091e-16,
+          "semantics": "proper Gaussian support; zero variance means deterministic zero"
+        },
+        "sigma": 0.35,
+        "full_rank_precision": "Lambda = sigma^2 inverse(Sigma_phi) AFTER whitening by Sigma only"
+      },
+      "covariance_identity": {
+        "relative_covariance_identity_error": 6.337091413494398e-16,
+        "relative_baseline_identity_error": 9.792006532769281e-16,
+        "unbiasedness_error": 1.8937291417258394e-15,
+        "baseline_unbiasedness_error": 2.0544498112697794e-15,
+        "condition_information": 10.399609292526037
+      },
+      "numerator": {
+        "empirical_variance": [
+          0.24886508959800796,
+          0.12958766701940963,
+          0.11657252180427162,
+          0.10813635250930587,
+          0.12336310708680837
+        ],
+        "predicted_variance": [
+          0.24754400183703074,
+          0.1301292055847206,
+          0.11687138366487071,
+          0.11097311592877532,
+          0.12224090960945605
+        ],
+        "empirical_over_predicted": [
+          1.0053367795267645,
+          0.9958384548428031,
+          0.9974428140471403,
+          0.9744373815610428,
+          1.009180212098696
+        ],
+        "mean": [
+          0.0035318116685753823,
+          -0.005340813595574911,
+          -0.004283691267782097,
+          -0.0035058903149365597,
+          0.0004944238283528437
+        ],
+        "second_moment": [
+          0.24884718425241278,
+          0.1296003725022628,
+          0.11657664177098347,
+          0.10813544353786293,
+          0.12334829256869746
+        ],
+        "gaussian_pointwise_ratio_reference95": [
+          0.9696056121547898,
+          1.0308569132076237
+        ],
+        "confidence_scope": "chi-square reference only for Gaussian samples; not simultaneous"
+      },
+      "ideal_baseline": {
+        "empirical_variance": [
+          0.12163591921294145,
+          0.10474038759233983,
+          0.10744921711664537,
+          0.10624452910797609,
+          0.12257496939677846
+        ],
+        "predicted_variance": [
+          0.12004780026281318,
+          0.10552679145488847,
+          0.11049791170152964,
+          0.10734344511368438,
+          0.12223949204315125
+        ],
+        "empirical_over_predicted": [
+          1.0132290549818614,
+          0.9925478274122945,
+          0.9724094823337547,
+          0.989762616575754,
+          1.0027444269279915
+        ],
+        "mean": [
+          0.0018246123905042806,
+          0.0003223217213746228,
+          -0.00039569528121959416,
+          -0.0039851659521254554,
+          0.003392013564020105
+        ],
+        "second_moment": [
+          0.12162440028864802,
+          0.10472770579178659,
+          0.10743625733188998,
+          0.10624744135277256,
+          0.122571512387978
+        ],
+        "gaussian_pointwise_ratio_reference95": [
+          0.9696056121547898,
+          1.0308569132076237
+        ],
+        "confidence_scope": "chi-square reference only for Gaussian samples; not simultaneous"
+      },
+      "primary_ratio_with_analytic_ideal_baseline": [
+        1.0053367795267645,
+        0.9958384548428031,
+        0.9974428140471403,
+        0.9744373815610428,
+        1.009180212098696
+      ],
+      "empirical_degradation_over_prediction": [
+        0.9922107687138539,
+        1.0033153338706988,
+        1.0257436112750633,
+        0.9845162519193426,
+        1.0064181709694673
+      ],
+      "predicted_degradation": [
+        2.0620452960828772,
+        1.2331390331369014,
+        1.0576795693710186,
+        1.033813623284094,
+        1.0000115966311796
+      ],
+      "unprojected_one_over_retention": [
+        2.065352170400004,
+        1.2384632891363478,
+        1.0447704980987516,
+        1.000000000000001,
+        0.9999999999999993
+      ],
+      "retention_eigenvalues": [
+        0.4841789280935689,
+        0.8074522747439352,
+        0.9571480069735662,
+        0.999999999999999,
+        1.0000000000000007,
+        1.0000000000000009,
+        1.0000000000000016,
+        1.0000000000000027
+      ],
+      "projection": {
+        "formula": "P=I-rho rho^T/(rho^T rho); score=P F_inf^(1/2) U",
+        "baseline_projected_fraction": [
+          0.9799820429617379,
+          0.8614431955501081,
+          0.9020237689920779,
+          0.8762730213361999,
+          0.997873404433888
+        ],
+        "score_sha256": "38c1321909e68c17868ab466072646e329dcc8f1441e8863d7065f1df7e77ab4",
+        "all_modes_valid": true,
+        "variance_floor_count": 0
+      },
+      "gate_interval": [
+        0.8,
+        1.25
+      ],
+      "numerical_identity_pass": true,
+      "gate_pass": true,
+      "variance_ratio_summary": {
+        "n": 5,
+        "minimum": 0.9744373815610428,
+        "median": 0.9974428140471403,
+        "maximum": 1.009180212098696,
+        "geometric_mean": 0.9963736333569108
+      },
+      "case_id": "dense_noise_singular_phi_sigma_035",
+      "nominal_source": "independent dense synthetic design",
+      "scene_index": null
+    },
+    {
+      "trials": 8192,
+      "batch_size": 256,
+      "seeds": {
+        "measurement_noise": [
+          2026091832,
+          1001
+        ],
+        "nuisance": [
+          2026091833,
+          1001
+        ],
+        "ideal_baseline": [
+          2026091834,
+          1001
+        ],
+        "residual_bootstrap": [
+          2026091835,
+          1001
+        ]
+      },
+      "generation": "synthetic observation residual B phi + epsilon; phi and epsilon independently resampled",
+      "baseline": "independent synthetic epsilon0, same Sigma and sigma, phi exactly zero",
+      "estimator": "matched marginal GLS; ideal zero-nuisance GLS for baseline",
+      "sigma": 1.7,
+      "model_metadata": {
+        "route": "published delta_f on supported covariance factor",
+        "nuisance": {
+          "rank": 3,
+          "dimension": 5,
+          "eigenvalues": [
+            -1.5765272785312815e-18,
+            1.199203114162693e-17,
+            0.006000000000000003,
+            0.025000000000000022,
+            0.08999999999999997
+          ],
+          "relative_rank_tolerance": 1e-12,
+          "relative_reconstruction_error": 6.14898687695091e-16,
+          "semantics": "proper Gaussian support; zero variance means deterministic zero"
+        },
+        "sigma": 1.7,
+        "full_rank_precision": "Lambda = sigma^2 inverse(Sigma_phi) AFTER whitening by Sigma only"
+      },
+      "covariance_identity": {
+        "relative_covariance_identity_error": 6.60579134017934e-16,
+        "relative_baseline_identity_error": 1.0133964027719376e-15,
+        "unbiasedness_error": 1.96436339940413e-15,
+        "baseline_unbiasedness_error": 2.0544498112697794e-15,
+        "condition_information": 10.511228654859538
+      },
+      "numerator": {
+        "empirical_variance": [
+          3.948129187073595,
+          2.693583074185444,
+          2.7786261793869147,
+          2.711818131239736,
+          3.074983232149877
+        ],
+        "predicted_variance": [
+          3.8797209671687742,
+          2.702927408794098,
+          2.73828113948102,
+          2.6483742904330043,
+          3.0075617417386113
+        ],
+        "empirical_over_predicted": [
+          1.017632252546951,
+          0.9965428836237881,
+          1.0147337098898257,
+          1.0239557682748683,
+          1.0224173254618842
+        ],
+        "mean": [
+          -0.022576706068880417,
+          0.011636238257470281,
+          -0.027092025650577445,
+          0.014235882013806394,
+          0.036642094811111435
+        ],
+        "second_moment": [
+          3.948156945366846,
+          2.693389669698616,
+          2.779020969474728,
+          2.711689759089717,
+          3.075950511097951
+        ],
+        "gaussian_pointwise_ratio_reference95": [
+          0.9696056121547898,
+          1.0308569132076237
+        ],
+        "confidence_scope": "chi-square reference only for Gaussian samples; not simultaneous"
+      },
+      "ideal_baseline": {
+        "empirical_variance": [
+          2.763224526188935,
+          2.4174369060256784,
+          2.6796798620238036,
+          2.5364830117598998,
+          3.0249171093020406
+        ],
+        "predicted_variance": [
+          2.7741393343831344,
+          2.4561385432916905,
+          2.6982897540115856,
+          2.6165170907844644,
+          3.003014244517749
+        ],
+        "empirical_over_predicted": [
+          0.9960655155064061,
+          0.9842428932310372,
+          0.9931030787334405,
+          0.9694119792657003,
+          1.007293626670029
+        ],
+        "mean": [
+          -0.01684294282926755,
+          0.044560562324971686,
+          -0.00916128191574351,
+          -0.022380921953185647,
+          -0.0022068857923125233
+        ],
+        "second_moment": [
+          2.7631709032306744,
+          2.4191274524618325,
+          2.679436681751979,
+          2.5366742881534763,
+          3.024552727070114
+        ],
+        "gaussian_pointwise_ratio_reference95": [
+          0.9696056121547898,
+          1.0308569132076237
+        ],
+        "confidence_scope": "chi-square reference only for Gaussian samples; not simultaneous"
+      },
+      "primary_ratio_with_analytic_ideal_baseline": [
+        1.017632252546951,
+        0.9965428836237881,
+        1.0147337098898257,
+        1.0239557682748683,
+        1.0224173254618842
+      ],
+      "empirical_degradation_over_prediction": [
+        1.0216519262084685,
+        1.0124969054664676,
+        1.0217808519775933,
+        1.0562648184422925,
+        1.01501419088876
+      ],
+      "predicted_degradation": [
+        1.398531400021218,
+        1.1004783977583217,
+        1.0148210122393189,
+        1.012175421961027,
+        1.0015143109058386
+      ],
+      "unprojected_one_over_retention": [
+        1.4020454537293177,
+        1.1030687146844935,
+        1.0058272506200825,
+        1.0000000000000013,
+        1.0000000000000002
+      ],
+      "retention_eigenvalues": [
+        0.7132436379577337,
+        0.9065618367084467,
+        0.9942065095010202,
+        0.9999999999999988,
+        0.9999999999999999,
+        1.0000000000000007,
+        1.0000000000000022,
+        1.0000000000000027
+      ],
+      "projection": {
+        "formula": "P=I-rho rho^T/(rho^T rho); score=P F_inf^(1/2) U",
+        "baseline_projected_fraction": [
+          0.9599098042848196,
+          0.8498749284746326,
+          0.9336642747444918,
+          0.9053692355655599,
+          1.0391052749196363
+        ],
+        "score_sha256": "1a3fbeed991e7d13d8b0e62c52185a4225b7940ea9f63e1647b26ecef34f97e8",
+        "all_modes_valid": true,
+        "variance_floor_count": 0
+      },
+      "gate_interval": [
+        0.8,
+        1.25
+      ],
+      "numerical_identity_pass": true,
+      "gate_pass": true,
+      "variance_ratio_summary": {
+        "n": 5,
+        "minimum": 0.9965428836237881,
+        "median": 1.017632252546951,
+        "maximum": 1.0239557682748683,
+        "geometric_mean": 1.015008473993789
+      },
+      "case_id": "dense_noise_singular_phi_sigma_170",
+      "nominal_source": "independent dense synthetic design",
+      "scene_index": null
+    },
+    {
+      "trials": 8192,
+      "batch_size": 256,
+      "seeds": {
+        "measurement_noise": [
+          2026091832,
+          1002
+        ],
+        "nuisance": [
+          2026091833,
+          1002
+        ],
+        "ideal_baseline": [
+          2026091834,
+          1002
+        ],
+        "residual_bootstrap": [
+          2026091835,
+          1002
+        ]
+      },
+      "generation": "synthetic observation residual B phi + epsilon; phi and epsilon independently resampled",
+      "baseline": "independent synthetic epsilon0, same Sigma and sigma, phi exactly zero",
+      "estimator": "matched marginal GLS; ideal zero-nuisance GLS for baseline",
+      "sigma": 0.6,
+      "model_metadata": {
+        "route": "published delta_f on supported covariance factor",
+        "nuisance": {
+          "rank": 0,
+          "dimension": 5,
+          "eigenvalues": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "relative_rank_tolerance": 1e-12,
+          "relative_reconstruction_error": 0.0,
+          "semantics": "proper Gaussian support; zero variance means deterministic zero"
+        },
+        "sigma": 0.6,
+        "full_rank_precision": "Lambda = sigma^2 inverse(Sigma_phi) AFTER whitening by Sigma only"
+      },
+      "covariance_identity": {
+        "relative_covariance_identity_error": 9.905960130480277e-16,
+        "relative_baseline_identity_error": 9.905960130480277e-16,
+        "unbiasedness_error": 2.0544498112697794e-15,
+        "baseline_unbiasedness_error": 2.0544498112697794e-15,
+        "condition_information": 11.274370961705367
+      },
+      "numerator": {
+        "empirical_variance": [
+          0.2511848401113002,
+          0.3627755835730781,
+          0.4248432917438538,
+          0.35879117353042395,
+          0.3117369046369419
+        ],
+        "predicted_variance": [
+          0.25807921660071753,
+          0.3543568518759384,
+          0.4234116631856105,
+          0.3610965285634869,
+          0.31447098094811615
+        ],
+        "empirical_over_predicted": [
+          0.9732858128592206,
+          1.0237577787830872,
+          1.0033811741213556,
+          0.993615682094109,
+          0.9913057913867566
+        ],
+        "mean": [
+          0.0013363866576754692,
+          -0.003059207216126757,
+          0.0018938536999267403,
+          -0.005227043816740097,
+          0.00296343270247108
+        ],
+        "second_moment": [
+          0.2511559638286716,
+          0.3627406581930184,
+          0.424795017672307,
+          0.358774697766813,
+          0.31170763274895635
+        ],
+        "gaussian_pointwise_ratio_reference95": [
+          0.9696056121547898,
+          1.0308569132076237
+        ],
+        "confidence_scope": "chi-square reference only for Gaussian samples; not simultaneous"
+      },
+      "ideal_baseline": {
+        "empirical_variance": [
+          0.2578224027576438,
+          0.35271175620321804,
+          0.4231779078470115,
+          0.3596828431783968,
+          0.31412801826722475
+        ],
+        "predicted_variance": [
+          0.25807921660071753,
+          0.3543568518759384,
+          0.4234116631856105,
+          0.3610965285634869,
+          0.31447098094811615
+        ],
+        "empirical_over_predicted": [
+          0.9990049030431185,
+          0.9953575169662691,
+          0.9994479241860266,
+          0.9960850208371873,
+          0.9989093979995948
+        ],
+        "mean": [
+          0.0019095526405008966,
+          0.007262406281869277,
+          0.0011418414639195675,
+          -0.004347200841169457,
+          0.01566752072494361
+        ],
+        "second_moment": [
+          0.2577945766876553,
+          0.3527214431139191,
+          0.4231275541894892,
+          0.35965783473648033,
+          0.3143351437675364
+        ],
+        "gaussian_pointwise_ratio_reference95": [
+          0.9696056121547898,
+          1.0308569132076237
+        ],
+        "confidence_scope": "chi-square reference only for Gaussian samples; not simultaneous"
+      },
+      "primary_ratio_with_analytic_ideal_baseline": [
+        0.9732858128592206,
+        1.0237577787830872,
+        1.0033811741213556,
+        0.993615682094109,
+        0.9913057913867566
+      ],
+      "empirical_degradation_over_prediction": [
+        0.9742552913348536,
+        1.0285327245062446,
+        1.003935422586957,
+        0.9975209558507336,
+        0.9923880918248791
+      ],
+      "predicted_degradation": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "unprojected_one_over_retention": [
+        1.0000000000000018,
+        1.0000000000000004,
+        1.0,
+        0.9999999999999991,
+        0.9999999999999984
+      ],
+      "retention_eigenvalues": [
+        0.9999999999999982,
+        0.9999999999999996,
+        1.0,
+        1.0000000000000009,
+        1.0000000000000016,
+        1.000000000000002,
+        1.0000000000000024,
+        1.0000000000000036
+      ],
+      "projection": {
+        "formula": "P=I-rho rho^T/(rho^T rho); score=P F_inf^(1/2) U",
+        "baseline_projected_fraction": [
+          0.7168867127797697,
+          0.9843245885442732,
+          1.1761435088489183,
+          1.0030459126763527,
+          0.8735305026336543
+        ],
+        "score_sha256": "2c4847793475982ec465e32a09c1029639aaf30ecd54b5cba33ec454bb0bbd06",
+        "all_modes_valid": true,
+        "variance_floor_count": 0
+      },
+      "gate_interval": [
+        0.8,
+        1.25
+      ],
+      "numerical_identity_pass": true,
+      "gate_pass": true,
+      "variance_ratio_summary": {
+        "n": 5,
+        "minimum": 0.9732858128592206,
+        "median": 0.993615682094109,
+        "maximum": 1.0237577787830872,
+        "geometric_mean": 0.996932897345288
+      },
+      "case_id": "dense_noise_zero_phi_sigma_060",
+      "nominal_source": "independent dense synthetic design",
+      "scene_index": null
+    },
+    {
+      "trials": 8192,
+      "batch_size": 256,
+      "seeds": {
+        "measurement_noise": [
+          2026091832,
+          0
+        ],
+        "nuisance": [
+          2026091833,
+          0
+        ],
+        "ideal_baseline": [
+          2026091834,
+          0
+        ],
+        "residual_bootstrap": [
+          2026091835,
+          0
+        ]
+      },
+      "generation": "synthetic observation residual B phi + epsilon; phi and epsilon independently resampled",
+      "baseline": "independent synthetic epsilon0, same Sigma and sigma, phi exactly zero",
+      "estimator": "matched marginal GLS; ideal zero-nuisance GLS for baseline",
+      "sigma": 1.0,
+      "model_metadata": {
+        "route": "per-light published delta_f on supported covariance factors",
+        "nuisance_blocks": [
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          }
+        ],
+        "n_lights": 24,
+        "n_pixels": 96,
+        "sigma": 1.0,
+        "noise_units": "Cov(eps)=sigma^2 Sigma",
+        "scene_parameter": "linear albedo increment; normals held fixed"
+      },
+      "covariance_identity": {
+        "relative_covariance_identity_error": 1.0290922672192678e-13,
+        "relative_baseline_identity_error": 2.3045301635145434e-16,
+        "unbiasedness_error": 3.2018909436682373e-12,
+        "baseline_unbiasedness_error": 1.979811259392395e-15,
+        "condition_information": 3897.6088292703153
+      },
+      "numerator": {
+        "empirical_variance": [
+          23.564751491076112,
+          4.105967459506242,
+          2.4804889673520196,
+          2.2715685602783635,
+          1.8886384479716218
+        ],
+        "predicted_variance": [
+          24.029049349657072,
+          4.1610594999794515,
+          2.495552606201331,
+          2.253828163036282,
+          1.8812031360128896
+        ],
+        "empirical_over_predicted": [
+          0.9806776434712517,
+          0.9867600930788224,
+          0.993963806328154,
+          1.0078712288421234,
+          1.00395242375286
+        ],
+        "mean": [
+          0.03428775580822638,
+          0.007521866556118141,
+          -0.011764743788257113,
+          0.014758039206886443,
+          0.0025955233800032513
+        ],
+        "second_moment": [
+          23.563050584695958,
+          4.1055228212518395,
+          2.480324582485019,
+          2.271509068915584,
+          1.8884146380277014
+        ],
+        "gaussian_pointwise_ratio_reference95": [
+          0.9696056121547898,
+          1.0308569132076237
+        ],
+        "confidence_scope": "chi-square reference only for Gaussian samples; not simultaneous"
+      },
+      "ideal_baseline": {
+        "empirical_variance": [
+          22.409388212793356,
+          1.0401583914615269,
+          1.0190831484779006,
+          1.0153572893514833,
+          1.007264355574014
+        ],
+        "predicted_variance": [
+          22.772495121654572,
+          1.0026687699990382,
+          1.000053647722901,
+          1.0000917263028746,
+          1.0060582159826457
+        ],
+        "empirical_over_predicted": [
+          0.9840550230916095,
+          1.0373898365883327,
+          1.0190284799203817,
+          1.0152641629233772,
+          1.0011988765383624
+        ],
+        "mean": [
+          -0.017883756790858345,
+          0.002260519060793415,
+          -0.008250835850541064,
+          0.0002654339417080896,
+          0.014068600863967752
+        ],
+        "second_moment": [
+          22.406972520528157,
+          1.0400365289480533,
+          1.019026824971735,
+          1.0152334148250506,
+          1.0073393240296271
+        ],
+        "gaussian_pointwise_ratio_reference95": [
+          0.9696056121547898,
+          1.0308569132076237
+        ],
+        "confidence_scope": "chi-square reference only for Gaussian samples; not simultaneous"
+      },
+      "primary_ratio_with_analytic_ideal_baseline": [
+        0.9806776434712517,
+        0.9867600930788224,
+        0.993963806328154,
+        1.0078712288421234,
+        1.00395242375286
+      ],
+      "empirical_degradation_over_prediction": [
+        0.9965678955534956,
+        0.951195065033588,
+        0.9754033630206429,
+        0.9927182162522448,
+        1.0027502500042929
+      ],
+      "predicted_degradation": [
+        1.055178592477011,
+        4.149984146792009,
+        2.495418732668639,
+        2.2536214466729,
+        1.8698750292252868
+      ],
+      "unprojected_one_over_retention": [
+        255.69954349367356,
+        4.136934549157089,
+        2.4953779984318234,
+        2.253576479437467,
+        1.8649280229613587
+      ],
+      "retention_eigenvalues": [
+        0.00391083998953147,
+        0.24172487819604316,
+        0.4007408900088213,
+        0.44373910054724125,
+        0.5362137239013004,
+        0.5848078709058108,
+        0.6621379415673961,
+        0.6815453923875282,
+        0.7371483659588168,
+        0.753161651643077,
+        0.7960831183915503,
+        0.8519554857100251,
+        0.8700671614292965,
+        0.877507693167168,
+        0.9153464468309009,
+        0.9208181509460347,
+        0.9255489904049296,
+        0.9381879569667855,
+        0.9587084050152801,
+        0.9649582386931678,
+        0.9708170743276319,
+        0.9782201777962907,
+        0.9790083379273448,
+        0.9813280316328005,
+        0.9846877061538652,
+        0.9888475356610132,
+        0.9911340891922895,
+        0.992087731452535,
+        0.9935089171085079,
+        0.9946416165260954,
+        0.9953886011860615,
+        0.9970798905026542,
+        0.9980033709121381,
+        0.9981901581531399,
+        0.9985321741614679,
+        0.9987843332498358,
+        0.9992040898160095,
+        0.9992741307814221,
+        0.9994713217449,
+        0.9996289761752424,
+        0.9997640396661729,
+        0.999877573583622,
+        0.9999139498717824,
+        0.999919004860139,
+        0.9999524587713796,
+        0.9999648291766994,
+        0.9999689032309368,
+        0.9999807468375923,
+        0.9999889666927575,
+        0.9999911336862097,
+        0.9999942007186865,
+        0.9999962949484611,
+        0.999997642208429,
+        0.9999997227537741,
+        0.9999998675350631,
+        0.9999999999999978,
+        0.9999999999999987,
+        0.9999999999999987,
+        0.9999999999999988,
+        0.9999999999999988,
+        0.9999999999999989,
+        0.9999999999999989,
+        0.9999999999999989,
+        0.999999999999999,
+        0.9999999999999991,
+        0.9999999999999991,
+        0.9999999999999991,
+        0.9999999999999991,
+        0.9999999999999992,
+        0.9999999999999994,
+        0.9999999999999994,
+        0.9999999999999994,
+        0.9999999999999996,
+        0.9999999999999996,
+        0.9999999999999997,
+        0.9999999999999997,
+        0.9999999999999998,
+        0.9999999999999998,
+        0.9999999999999998,
+        0.9999999999999998,
+        0.9999999999999998,
+        1.0,
+        1.0,
+        1.0,
+        1.0000000000000002,
+        1.0000000000000002,
+        1.0000000000000002,
+        1.0000000000000002,
+        1.0000000000000002,
+        1.0000000000000004,
+        1.0000000000000004,
+        1.0000000000000004,
+        1.0000000000000007,
+        1.0000000000000007,
+        1.0000000000000009,
+        1.0000000000000016
+      ],
+      "projection": {
+        "formula": "P=I-rho rho^T/(rho^T rho); score=P F_inf^(1/2) U",
+        "baseline_projected_fraction": [
+          22.772495121654586,
+          1.00266876999904,
+          1.0000536477229012,
+          1.0000917263028752,
+          1.0060582159826457
+        ],
+        "score_sha256": "e33295ff9e64a5bb927412278c344345007bd4dc3521fbf59ad2cd8aae605b63",
+        "all_modes_valid": true,
+        "variance_floor_count": 0
+      },
+      "gate_interval": [
+        0.8,
+        1.25
+      ],
+      "numerical_identity_pass": true,
+      "gate_pass": true,
+      "variance_ratio_summary": {
+        "n": 5,
+        "minimum": 0.9806776434712517,
+        "median": 0.993963806328154,
+        "maximum": 1.0078712288421234,
+        "geometric_mean": 0.9945928219810217
+      },
+      "case_id": "OI_obj_04_dolphin_level_0.1",
+      "scene_index": 0,
+      "object": "obj_04_dolphin",
+      "level": 0.1,
+      "nominal_source": "real OI thumbnails; synthetic observations"
+    },
+    {
+      "trials": 8192,
+      "batch_size": 256,
+      "seeds": {
+        "measurement_noise": [
+          2026091832,
+          1
+        ],
+        "nuisance": [
+          2026091833,
+          1
+        ],
+        "ideal_baseline": [
+          2026091834,
+          1
+        ],
+        "residual_bootstrap": [
+          2026091835,
+          1
+        ]
+      },
+      "generation": "synthetic observation residual B phi + epsilon; phi and epsilon independently resampled",
+      "baseline": "independent synthetic epsilon0, same Sigma and sigma, phi exactly zero",
+      "estimator": "matched marginal GLS; ideal zero-nuisance GLS for baseline",
+      "sigma": 1.0,
+      "model_metadata": {
+        "route": "per-light published delta_f on supported covariance factors",
+        "nuisance_blocks": [
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          }
+        ],
+        "n_lights": 24,
+        "n_pixels": 96,
+        "sigma": 1.0,
+        "noise_units": "Cov(eps)=sigma^2 Sigma",
+        "scene_parameter": "linear albedo increment; normals held fixed"
+      },
+      "covariance_identity": {
+        "relative_covariance_identity_error": 9.40409033338312e-13,
+        "relative_baseline_identity_error": 2.3045301635145434e-16,
+        "unbiasedness_error": 1.1849609769487523e-11,
+        "baseline_unbiasedness_error": 1.979811259392395e-15,
+        "condition_information": 36880.831994685155
+      },
+      "numerator": {
+        "empirical_variance": [
+          28.681349095676378,
+          7.0862271436501985,
+          5.128359854350286,
+          3.1623790503660674,
+          2.727551288831419
+        ],
+        "predicted_variance": [
+          28.804105848258107,
+          7.172451776558628,
+          5.108371058646433,
+          3.147858480935189,
+          2.722535150165457
+        ],
+        "empirical_over_predicted": [
+          0.9957382203346835,
+          0.9879783600371865,
+          1.003912949054478,
+          1.0046128406085666,
+          1.0018424513878754
+        ],
+        "mean": [
+          -0.02735416337953605,
+          0.035932411729115425,
+          0.00178982194415973,
+          0.010529623911932781,
+          -0.016930035795041914
+        ],
+        "second_moment": [
+          28.678596204683487,
+          7.0866532639010025,
+          5.127737037322861,
+          3.1621038907468733,
+          2.7275049619052467
+        ],
+        "gaussian_pointwise_ratio_reference95": [
+          0.9696056121547898,
+          1.0308569132076237
+        ],
+        "confidence_scope": "chi-square reference only for Gaussian samples; not simultaneous"
+      },
+      "ideal_baseline": {
+        "empirical_variance": [
+          22.309139127389585,
+          0.98751635864034,
+          1.0368351214868392,
+          1.02261420789075,
+          0.996561473585206
+        ],
+        "predicted_variance": [
+          22.77475965279109,
+          1.0012815676783415,
+          1.000221777041686,
+          1.0002159988464188,
+          1.000632460559703
+        ],
+        "empirical_over_predicted": [
+          0.9795554143051322,
+          0.9862524094297285,
+          1.036605226246366,
+          1.02239337210179,
+          0.995931586136812
+        ],
+        "mean": [
+          -0.08620479507540442,
+          -0.0026109670343316864,
+          -0.0033273765427559417,
+          0.0005334907953941474,
+          -0.01346433821220217
+        ],
+        "second_moment": [
+          22.313847110498788,
+          0.987402629358695,
+          1.0367196261342064,
+          1.0224896616672576,
+          0.9966211114182012
+        ],
+        "gaussian_pointwise_ratio_reference95": [
+          0.9696056121547898,
+          1.0308569132076237
+        ],
+        "confidence_scope": "chi-square reference only for Gaussian samples; not simultaneous"
+      },
+      "primary_ratio_with_analytic_ideal_baseline": [
+        0.9957382203346835,
+        0.9879783600371865,
+        1.003912949054478,
+        1.0046128406085666,
+        1.0018424513878754
+      ],
+      "empirical_degradation_over_prediction": [
+        1.0165205620766549,
+        1.001750009014889,
+        0.96846217213252,
+        0.9826089135763166,
+        1.0059350113334506
+      ],
+      "predicted_degradation": [
+        1.2647380823063092,
+        7.163271559257101,
+        5.107238390425019,
+        3.147178693967818,
+        2.7208143424036124
+      ],
+      "unprojected_one_over_retention": [
+        2819.6402488147605,
+        7.14995918958806,
+        5.10712563087849,
+        3.1471436742103056,
+        2.720530222391519
+      ],
+      "retention_eigenvalues": [
+        0.00035465517291447066,
+        0.13986093815139863,
+        0.1958048562490497,
+        0.3177484422445137,
+        0.3675754056210912,
+        0.4088975219572748,
+        0.4831918599186766,
+        0.5080736730726103,
+        0.6473370074527517,
+        0.6583539228582587,
+        0.6977096910273197,
+        0.7557200441429871,
+        0.7881746331023083,
+        0.8141038879758004,
+        0.8394045600534508,
+        0.8521121170568144,
+        0.8656213938516769,
+        0.893849858710412,
+        0.8993773069675216,
+        0.9064264360442905,
+        0.9123026647042065,
+        0.9203026072829712,
+        0.9284801993313908,
+        0.9434179936644288,
+        0.9561154980069031,
+        0.9619731968408063,
+        0.9705128897370028,
+        0.9789844921187818,
+        0.9801226041558001,
+        0.9827412478583124,
+        0.9854213285503411,
+        0.9874787395089878,
+        0.992668309567266,
+        0.9939839824574391,
+        0.9948726248520653,
+        0.9963570683062354,
+        0.9969347234599228,
+        0.9977162454741717,
+        0.9983503570667773,
+        0.9986389176361886,
+        0.9991814574162264,
+        0.9994758766336596,
+        0.9995979824127873,
+        0.9997026585038596,
+        0.9998086759573405,
+        0.9998619184396724,
+        0.9998853850916765,
+        0.9999200806703755,
+        0.9999483190659489,
+        0.9999520504232757,
+        0.9999755398787308,
+        0.9999826100098878,
+        0.9999873907895812,
+        0.9999984962101272,
+        0.9999992724509742,
+        0.9999999999999984,
+        0.9999999999999986,
+        0.9999999999999989,
+        0.9999999999999989,
+        0.9999999999999989,
+        0.999999999999999,
+        0.9999999999999992,
+        0.9999999999999992,
+        0.9999999999999992,
+        0.9999999999999993,
+        0.9999999999999993,
+        0.9999999999999994,
+        0.9999999999999994,
+        0.9999999999999994,
+        0.9999999999999997,
+        0.9999999999999998,
+        0.9999999999999998,
+        0.9999999999999998,
+        0.9999999999999999,
+        0.9999999999999999,
+        0.9999999999999999,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0000000000000002,
+        1.0000000000000002,
+        1.0000000000000002,
+        1.0000000000000002,
+        1.0000000000000004,
+        1.0000000000000004,
+        1.0000000000000007,
+        1.0000000000000007,
+        1.0000000000000007,
+        1.0000000000000009,
+        1.0000000000000009,
+        1.0000000000000009,
+        1.0000000000000013,
+        1.0000000000000013
+      ],
+      "projection": {
+        "formula": "P=I-rho rho^T/(rho^T rho); score=P F_inf^(1/2) U",
+        "baseline_projected_fraction": [
+          22.77475965279107,
+          1.0012815676783404,
+          1.0002217770416866,
+          1.0002159988464188,
+          1.0006324605597037
+        ],
+        "score_sha256": "a9c61a3542ad18dbd979be35f467d57325449599a0bdd600c5f940e5552bf2b3",
+        "all_modes_valid": true,
+        "variance_floor_count": 0
+      },
+      "gate_interval": [
+        0.8,
+        1.25
+      ],
+      "numerical_identity_pass": true,
+      "gate_pass": true,
+      "variance_ratio_summary": {
+        "n": 5,
+        "minimum": 0.9879783600371865,
+        "median": 1.0018424513878754,
+        "maximum": 1.0046128406085666,
+        "geometric_mean": 0.9987973102914081
+      },
+      "case_id": "OI_obj_04_dolphin_level_0.35",
+      "scene_index": 0,
+      "object": "obj_04_dolphin",
+      "level": 0.35,
+      "nominal_source": "real OI thumbnails; synthetic observations"
+    },
+    {
+      "trials": 8192,
+      "batch_size": 256,
+      "seeds": {
+        "measurement_noise": [
+          2026091832,
+          100
+        ],
+        "nuisance": [
+          2026091833,
+          100
+        ],
+        "ideal_baseline": [
+          2026091834,
+          100
+        ],
+        "residual_bootstrap": [
+          2026091835,
+          100
+        ]
+      },
+      "generation": "synthetic observation residual B phi + epsilon; phi and epsilon independently resampled",
+      "baseline": "independent synthetic epsilon0, same Sigma and sigma, phi exactly zero",
+      "estimator": "matched marginal GLS; ideal zero-nuisance GLS for baseline",
+      "sigma": 1.0,
+      "model_metadata": {
+        "route": "per-light published delta_f on supported covariance factors",
+        "nuisance_blocks": [
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.046174197867086e-06,
+              3.046174197867086e-06,
+              0.010000000000000002
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          }
+        ],
+        "n_lights": 24,
+        "n_pixels": 96,
+        "sigma": 1.0,
+        "noise_units": "Cov(eps)=sigma^2 Sigma",
+        "scene_parameter": "linear albedo increment; normals held fixed"
+      },
+      "covariance_identity": {
+        "relative_covariance_identity_error": 6.70835188237416e-16,
+        "relative_baseline_identity_error": 2.0062777490853979e-16,
+        "unbiasedness_error": 3.884497583768198e-15,
+        "baseline_unbiasedness_error": 1.824282583346435e-15,
+        "condition_information": 28.414520230419473
+      },
+      "numerator": {
+        "empirical_variance": [
+          0.2147893841610652,
+          1.7497055668285357,
+          1.5250006420632505,
+          1.122890433098529,
+          1.0705315319682538
+        ],
+        "predicted_variance": [
+          0.2108339801789633,
+          1.7321174926729688,
+          1.4924518346300777,
+          1.1178058214944098,
+          1.0745192002569037
+        ],
+        "empirical_over_predicted": [
+          1.0187607518424895,
+          1.0101540884091098,
+          1.0218089499961922,
+          1.004548743177345,
+          0.9962888813083131
+        ],
+        "mean": [
+          -0.0029303743096660033,
+          0.027757958399822435,
+          0.013649518403542168,
+          0.009195154267357359,
+          -0.008108281192109143
+        ],
+        "second_moment": [
+          0.214771751847414,
+          1.7502624839777339,
+          1.52500079411096,
+          1.1228379123744587,
+          1.0704665960734894
+        ],
+        "gaussian_pointwise_ratio_reference95": [
+          0.9696056121547898,
+          1.0308569132076237
+        ],
+        "confidence_scope": "chi-square reference only for Gaussian samples; not simultaneous"
+      },
+      "ideal_baseline": {
+        "empirical_variance": [
+          0.17788246795027113,
+          1.0137504518523568,
+          0.9897468479247142,
+          1.0095918044255578,
+          0.9922288172774935
+        ],
+        "predicted_variance": [
+          0.17733232683869776,
+          1.0027091774395973,
+          1.0097669960612754,
+          0.9946762712520387,
+          0.9985085579145668
+        ],
+        "empirical_over_predicted": [
+          1.003102317109242,
+          1.011011442461266,
+          0.9801734972378259,
+          1.014995364426201,
+          0.9937108795039384
+        ],
+        "mean": [
+          -0.00014139732332412472,
+          0.007608525123479434,
+          -0.008032280105348108,
+          0.00982313100221688,
+          -0.008535077477698624
+        ],
+        "second_moment": [
+          0.1778607737750231,
+          1.0136845926724596,
+          0.9896905467413796,
+          1.0095650571411778,
+          0.9921805431432507
+        ],
+        "gaussian_pointwise_ratio_reference95": [
+          0.9696056121547898,
+          1.0308569132076237
+        ],
+        "confidence_scope": "chi-square reference only for Gaussian samples; not simultaneous"
+      },
+      "primary_ratio_with_analytic_ideal_baseline": [
+        1.0187607518424895,
+        1.0101540884091098,
+        1.0218089499961922,
+        1.004548743177345,
+        0.9962888813083131
+      ],
+      "empirical_degradation_over_prediction": [
+        1.0156100075397816,
+        0.9991519838291157,
+        1.0424776357203056,
+        0.9897077153108361,
+        1.0025943177815075
+      ],
+      "predicted_degradation": [
+        1.1889201700417475,
+        1.7274375578130285,
+        1.4780160576168322,
+        1.1237885669951522,
+        1.0761241771438481
+      ],
+      "unprojected_one_over_retention": [
+        11.013123733701505,
+        1.7267644412478411,
+        1.470794999228202,
+        1.1204913754264683,
+        1.0754471832647963
+      ],
+      "retention_eigenvalues": [
+        0.09080075954652882,
+        0.5791177859079337,
+        0.6799044057973742,
+        0.8924655931594224,
+        0.9298457567802103,
+        0.9493394448901082,
+        0.9558773697046052,
+        0.9652343434148615,
+        0.9792435206438596,
+        0.9875758579304106,
+        0.9902658202221308,
+        0.9916553360864241,
+        0.992171246986681,
+        0.9934834227964634,
+        0.9945949389071783,
+        0.9954581193718345,
+        0.995932986542299,
+        0.9963624004076084,
+        0.997188878681946,
+        0.9981108280174337,
+        0.9982649733479128,
+        0.9991258663778628,
+        0.9992542828862723,
+        0.9995797041899045,
+        0.9996984083780485,
+        0.9997522042212661,
+        0.999812575370465,
+        0.9998387144316061,
+        0.9998677677800295,
+        0.9998805276373802,
+        0.9998898409080491,
+        0.9999011161570882,
+        0.9999101237907628,
+        0.999917085116698,
+        0.9999237277524834,
+        0.9999315516137837,
+        0.9999401711811793,
+        0.9999493067709203,
+        0.9999559077490345,
+        0.9999599618606074,
+        0.9999645207935726,
+        0.9999710658422846,
+        0.9999757279810721,
+        0.9999787200627916,
+        0.9999808780766489,
+        0.9999826679239742,
+        0.9999846012033143,
+        0.9999863576251968,
+        0.9999875562321661,
+        0.9999887855052766,
+        0.9999901389035564,
+        0.9999909521222557,
+        0.9999924775324458,
+        0.9999935619627115,
+        0.9999952869428813,
+        0.9999957182288157,
+        0.999995967799753,
+        0.9999964477434055,
+        0.9999969936755592,
+        0.9999973058432434,
+        0.9999976622833192,
+        0.9999980380814578,
+        0.9999982235250978,
+        0.9999984668988431,
+        0.9999986821688532,
+        0.9999987944596991,
+        0.9999991085195574,
+        0.9999992356760768,
+        0.999999389439104,
+        0.9999996538287694,
+        0.9999998526876221,
+        0.9999998960490136,
+        0.9999999999999982,
+        0.9999999999999984,
+        0.9999999999999986,
+        0.9999999999999989,
+        0.9999999999999991,
+        0.9999999999999992,
+        0.9999999999999992,
+        0.9999999999999993,
+        0.9999999999999993,
+        0.9999999999999996,
+        0.9999999999999997,
+        0.9999999999999997,
+        0.9999999999999999,
+        0.9999999999999999,
+        1.0,
+        1.0,
+        1.0,
+        1.0000000000000002,
+        1.0000000000000002,
+        1.0000000000000004,
+        1.0000000000000004,
+        1.0000000000000004,
+        1.0000000000000007,
+        1.0000000000000009
+      ],
+      "projection": {
+        "formula": "P=I-rho rho^T/(rho^T rho); score=P F_inf^(1/2) U",
+        "baseline_projected_fraction": [
+          0.1773323268386978,
+          1.0027091774395964,
+          1.009766996061274,
+          0.9946762712520378,
+          0.9985085579145653
+        ],
+        "score_sha256": "0e799e602a7de73a819e4784b808dbf8cafaacf02fd9d72f28b792944551016f",
+        "all_modes_valid": true,
+        "variance_floor_count": 0
+      },
+      "gate_interval": [
+        0.8,
+        1.25
+      ],
+      "numerical_identity_pass": true,
+      "gate_pass": true,
+      "variance_ratio_summary": {
+        "n": 5,
+        "minimum": 0.9962888813083131,
+        "median": 1.0101540884091098,
+        "maximum": 1.0218089499961922,
+        "geometric_mean": 1.0102693243373193
+      },
+      "case_id": "OI_obj_09_ball_level_0.1",
+      "scene_index": 1,
+      "object": "obj_09_ball",
+      "level": 0.1,
+      "nominal_source": "real OI thumbnails; synthetic observations"
+    },
+    {
+      "trials": 8192,
+      "batch_size": 256,
+      "seeds": {
+        "measurement_noise": [
+          2026091832,
+          101
+        ],
+        "nuisance": [
+          2026091833,
+          101
+        ],
+        "ideal_baseline": [
+          2026091834,
+          101
+        ],
+        "residual_bootstrap": [
+          2026091835,
+          101
+        ]
+      },
+      "generation": "synthetic observation residual B phi + epsilon; phi and epsilon independently resampled",
+      "baseline": "independent synthetic epsilon0, same Sigma and sigma, phi exactly zero",
+      "estimator": "matched marginal GLS; ideal zero-nuisance GLS for baseline",
+      "sigma": 1.0,
+      "model_metadata": {
+        "route": "per-light published delta_f on supported covariance factors",
+        "nuisance_blocks": [
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          },
+          {
+            "rank": 3,
+            "dimension": 3,
+            "eigenvalues": [
+              3.73156339238718e-05,
+              3.73156339238718e-05,
+              0.12249999999999998
+            ],
+            "relative_rank_tolerance": 1e-12,
+            "relative_reconstruction_error": 0.0,
+            "semantics": "proper Gaussian support; zero variance means deterministic zero"
+          }
+        ],
+        "n_lights": 24,
+        "n_pixels": 96,
+        "sigma": 1.0,
+        "noise_units": "Cov(eps)=sigma^2 Sigma",
+        "scene_parameter": "linear albedo increment; normals held fixed"
+      },
+      "covariance_identity": {
+        "relative_covariance_identity_error": 2.7081271721672822e-14,
+        "relative_baseline_identity_error": 2.0062777490853979e-16,
+        "unbiasedness_error": 3.11106856559572e-14,
+        "baseline_unbiasedness_error": 1.824282583346435e-15,
+        "condition_information": 286.98806582721625
+      },
+      "numerator": {
+        "empirical_variance": [
+          0.23038709984034048,
+          1.9889758979798733,
+          1.6506123329104254,
+          1.1630582916708108,
+          1.0946445477523603
+        ],
+        "predicted_variance": [
+          0.23477776505793752,
+          2.015398125870263,
+          1.6434828126859413,
+          1.1653923090869955,
+          1.0911771901538805
+        ],
+        "empirical_over_predicted": [
+          0.9812986327026602,
+          0.9868898221392459,
+          1.0043380558466761,
+          0.9979972260002185,
+          1.0031776302050366
+        ],
+        "mean": [
+          0.003110320326752497,
+          0.005344341295783688,
+          0.005887398102293367,
+          0.012801277348155098,
+          0.005021978456493454
+        ],
+        "second_moment": [
+          0.23036865050760166,
+          1.9887616650543374,
+          1.6504455036035408,
+          1.1630801894834355,
+          1.0945361444179522
+        ],
+        "gaussian_pointwise_ratio_reference95": [
+          0.9696056121547898,
+          1.0308569132076237
+        ],
+        "confidence_scope": "chi-square reference only for Gaussian samples; not simultaneous"
+      },
+      "ideal_baseline": {
+        "empirical_variance": [
+          0.18579924209839382,
+          0.997630192243755,
+          0.9786102958129312,
+          0.9862881586416083,
+          1.0005322890875967
+        ],
+        "predicted_variance": [
+          0.18222691630858756,
+          1.0003475632064114,
+          1.0011276466243384,
+          0.999249073802249,
+          0.9998819905115917
+        ],
+        "empirical_over_predicted": [
+          1.0196037218988923,
+          0.9972835731673636,
+          0.9775080122027071,
+          0.9870293448345936,
+          1.0006503753264646
+        ],
+        "mean": [
+          -0.004243625862567044,
+          -0.012038961515216795,
+          0.002549132315759936,
+          0.008077365142228466,
+          0.007967362071336938
+        ],
+        "second_moment": [
+          0.18579456988731108,
+          0.9976533478087906,
+          0.9784973346238698,
+          0.986233005965512,
+          1.0004736326567742
+        ],
+        "gaussian_pointwise_ratio_reference95": [
+          0.9696056121547898,
+          1.0308569132076237
+        ],
+        "confidence_scope": "chi-square reference only for Gaussian samples; not simultaneous"
+      },
+      "primary_ratio_with_analytic_ideal_baseline": [
+        0.9812986327026602,
+        0.9868898221392459,
+        1.0043380558466761,
+        0.9979972260002185,
+        1.0031776302050366
+      ],
+      "empirical_degradation_over_prediction": [
+        0.9624313952827738,
+        0.9895779382035671,
+        1.0274473900050296,
+        1.0111120112315028,
+        1.0025256122826591
+      ],
+      "predicted_degradation": [
+        1.2883813753417144,
+        2.0146978910113127,
+        1.6416316323173514,
+        1.16626809034964,
+        1.0913059746136415
+      ],
+      "unprojected_one_over_retention": [
+        114.7622843993803,
+        2.014554753057247,
+        1.6406521002538954,
+        1.1655602462317844,
+        1.0912527571960777
+      ],
+      "retention_eigenvalues": [
+        0.008713664120870357,
+        0.4963876005268263,
+        0.6095137414234543,
+        0.8579565090976335,
+        0.9163779824661819,
+        0.9284991914034474,
+        0.9432955966686511,
+        0.9527750901567285,
+        0.9702926981817512,
+        0.9841036075833411,
+        0.9873712287259785,
+        0.9879490997997614,
+        0.9899195950602374,
+        0.9915452941419971,
+        0.9929206135330907,
+        0.993481480077429,
+        0.9937804725723567,
+        0.9945974674481549,
+        0.9954599331537406,
+        0.9961037574974364,
+        0.9966128670020874,
+        0.9971195113105372,
+        0.9975399357370004,
+        0.9977674336816015,
+        0.9979721331708434,
+        0.9983337039802312,
+        0.9986554853699388,
+        0.9988129287879155,
+        0.9988875060109789,
+        0.9989895214440351,
+        0.9990414348663059,
+        0.9990974207165888,
+        0.999144278890913,
+        0.9992277749270932,
+        0.9992308843179416,
+        0.9993668436905752,
+        0.9994200692390532,
+        0.9994894047754936,
+        0.9995398726487006,
+        0.9995840362985492,
+        0.9996244901012065,
+        0.9996912887209841,
+        0.9997386374547917,
+        0.9997933800885858,
+        0.9997991425361528,
+        0.999814936330858,
+        0.9998368229236935,
+        0.9998526873931224,
+        0.9998719974013176,
+        0.9998842840841142,
+        0.9998904728834123,
+        0.9999019178978609,
+        0.9999173969522703,
+        0.9999292730853889,
+        0.9999474250086365,
+        0.9999529844820586,
+        0.9999546973380834,
+        0.9999596431556487,
+        0.999966693280755,
+        0.999970430094322,
+        0.9999733776800958,
+        0.9999780647125247,
+        0.9999801542122139,
+        0.9999828428556737,
+        0.9999853116156061,
+        0.9999862470365752,
+        0.9999900456352931,
+        0.9999914707582447,
+        0.9999930259690669,
+        0.9999959964935858,
+        0.9999982483778104,
+        0.9999987926867964,
+        0.9999999999999979,
+        0.9999999999999983,
+        0.9999999999999988,
+        0.9999999999999989,
+        0.999999999999999,
+        0.9999999999999992,
+        0.9999999999999993,
+        0.9999999999999994,
+        0.9999999999999994,
+        0.9999999999999997,
+        0.9999999999999997,
+        0.9999999999999998,
+        0.9999999999999998,
+        0.9999999999999998,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0000000000000002,
+        1.0000000000000002,
+        1.0000000000000004,
+        1.0000000000000007,
+        1.0000000000000007
+      ],
+      "projection": {
+        "formula": "P=I-rho rho^T/(rho^T rho); score=P F_inf^(1/2) U",
+        "baseline_projected_fraction": [
+          0.18222691630858728,
+          1.0003475632064098,
+          1.0011276466243373,
+          0.9992490738022499,
+          0.9998819905115921
+        ],
+        "score_sha256": "01642c081c079dbb7ca0f08b11033ad7ec00a3c688f375cda8a6d3c73fa47b3e",
+        "all_modes_valid": true,
+        "variance_floor_count": 0
+      },
+      "gate_interval": [
+        0.8,
+        1.25
+      ],
+      "numerical_identity_pass": true,
+      "gate_pass": true,
+      "variance_ratio_summary": {
+        "n": 5,
+        "minimum": 0.9812986327026602,
+        "median": 0.9979972260002185,
+        "maximum": 1.0043380558466761,
+        "geometric_mean": 0.9946983356212445
+      },
+      "case_id": "OI_obj_09_ball_level_0.35",
+      "scene_index": 1,
+      "object": "obj_09_ball",
+      "level": 0.35,
+      "nominal_source": "real OI thumbnails; synthetic observations"
+    }
+  ],
+  "scenes": [
+    {
+      "n_lights_total": 142,
+      "n_masked_pixels": 9820,
+      "selected_lights": [
+        4,
+        13,
+        16,
+        28,
+        31,
+        34,
+        45,
+        54,
+        56,
+        61,
+        64,
+        71,
+        73,
+        74,
+        75,
+        76,
+        80,
+        81,
+        84,
+        95,
+        121,
+        131,
+        132,
+        138
+      ],
+      "requested_pixels": 96,
+      "retained_pixels": 96,
+      "selected_masked_pixel_indices": [
+        6,
+        9,
+        42,
+        121,
+        146,
+        347,
+        421,
+        440,
+        457,
+        667,
+        855,
+        957,
+        1042,
+        1045,
+        1095,
+        1113,
+        1321,
+        1703,
+        1721,
+        1735,
+        1826,
+        1914,
+        2030,
+        2091,
+        2319,
+        2523,
+        2801,
+        2990,
+        3041,
+        3074,
+        3121,
+        3128,
+        3182,
+        3191,
+        3205,
+        3245,
+        3278,
+        3332,
+        3358,
+        3416,
+        3445,
+        3483,
+        3497,
+        3700,
+        3743,
+        3794,
+        4025,
+        4066,
+        4402,
+        4443,
+        4538,
+        4610,
+        4821,
+        4879,
+        4905,
+        4938,
+        5469,
+        5594,
+        5731,
+        5968,
+        6117,
+        6124,
+        6257,
+        6335,
+        6427,
+        6466,
+        6497,
+        6609,
+        6686,
+        6704,
+        6805,
+        6924,
+        7102,
+        7235,
+        7613,
+        7813,
+        7864,
+        7871,
+        7945,
+        8156,
+        8176,
+        8200,
+        8316,
+        8336,
+        8368,
+        8417,
+        8555,
+        8927,
+        8992,
+        9000,
+        9004,
+        9098,
+        9199,
+        9589,
+        9715,
+        9787
+      ],
+      "selected_pixel_coordinates_yx": [
+        [
+          91,
+          70
+        ],
+        [
+          91,
+          152
+        ],
+        [
+          92,
+          152
+        ],
+        [
+          94,
+          150
+        ],
+        [
+          95,
+          69
+        ],
+        [
+          98,
+          162
+        ],
+        [
+          99,
+          171
+        ],
+        [
+          100,
+          73
+        ],
+        [
+          100,
+          137
+        ],
+        [
+          103,
+          78
+        ],
+        [
+          105,
+          147
+        ],
+        [
+          106,
+          165
+        ],
+        [
+          107,
+          164
+        ],
+        [
+          107,
+          167
+        ],
+        [
+          108,
+          130
+        ],
+        [
+          108,
+          148
+        ],
+        [
+          110,
+          176
+        ],
+        [
+          114,
+          156
+        ],
+        [
+          114,
+          174
+        ],
+        [
+          115,
+          62
+        ],
+        [
+          115,
+          165
+        ],
+        [
+          116,
+          137
+        ],
+        [
+          117,
+          132
+        ],
+        [
+          118,
+          68
+        ],
+        [
+          119,
+          176
+        ],
+        [
+          121,
+          130
+        ],
+        [
+          123,
+          158
+        ],
+        [
+          125,
+          100
+        ],
+        [
+          125,
+          151
+        ],
+        [
+          126,
+          62
+        ],
+        [
+          126,
+          109
+        ],
+        [
+          126,
+          116
+        ],
+        [
+          126,
+          170
+        ],
+        [
+          126,
+          179
+        ],
+        [
+          127,
+          70
+        ],
+        [
+          127,
+          110
+        ],
+        [
+          127,
+          143
+        ],
+        [
+          128,
+          74
+        ],
+        [
+          128,
+          100
+        ],
+        [
+          128,
+          158
+        ],
+        [
+          129,
+          64
+        ],
+        [
+          129,
+          102
+        ],
+        [
+          129,
+          116
+        ],
+        [
+          131,
+          73
+        ],
+        [
+          131,
+          116
+        ],
+        [
+          131,
+          167
+        ],
+        [
+          133,
+          152
+        ],
+        [
+          134,
+          69
+        ],
+        [
+          136,
+          157
+        ],
+        [
+          137,
+          74
+        ],
+        [
+          137,
+          169
+        ],
+        [
+          138,
+          117
+        ],
+        [
+          140,
+          79
+        ],
+        [
+          140,
+          137
+        ],
+        [
+          140,
+          163
+        ],
+        [
+          141,
+          71
+        ],
+        [
+          145,
+          104
+        ],
+        [
+          146,
+          103
+        ],
+        [
+          147,
+          115
+        ],
+        [
+          149,
+          104
+        ],
+        [
+          150,
+          130
+        ],
+        [
+          150,
+          137
+        ],
+        [
+          151,
+          147
+        ],
+        [
+          152,
+          103
+        ],
+        [
+          153,
+          73
+        ],
+        [
+          153,
+          112
+        ],
+        [
+          153,
+          143
+        ],
+        [
+          154,
+          132
+        ],
+        [
+          155,
+          88
+        ],
+        [
+          155,
+          106
+        ],
+        [
+          156,
+          87
+        ],
+        [
+          157,
+          88
+        ],
+        [
+          158,
+          148
+        ],
+        [
+          159,
+          163
+        ],
+        [
+          163,
+          83
+        ],
+        [
+          165,
+          69
+        ],
+        [
+          165,
+          120
+        ],
+        [
+          165,
+          127
+        ],
+        [
+          166,
+          97
+        ],
+        [
+          168,
+          107
+        ],
+        [
+          168,
+          127
+        ],
+        [
+          168,
+          151
+        ],
+        [
+          170,
+          78
+        ],
+        [
+          170,
+          98
+        ],
+        [
+          170,
+          130
+        ],
+        [
+          171,
+          89
+        ],
+        [
+          172,
+          140
+        ],
+        [
+          177,
+          117
+        ],
+        [
+          178,
+          109
+        ],
+        [
+          178,
+          117
+        ],
+        [
+          178,
+          121
+        ],
+        [
+          179,
+          144
+        ],
+        [
+          181,
+          112
+        ],
+        [
+          193,
+          127
+        ],
+        [
+          199,
+          127
+        ],
+        [
+          203,
+          119
+        ]
+      ],
+      "exact_unidentifiable_pixel_exclusions": [],
+      "nominal_noise_coefficients": {
+        "intercept_a": -0.0004140621329646921,
+        "slope_b": 0.010432810170523844
+      },
+      "inverse_weight_variance_range": [
+        1e-06,
+        0.0035954100110013347
+      ],
+      "finf_diagonal_range": [
+        2147.996971233382,
+        5049939.525632104
+      ],
+      "parameterization": "linear albedo (A=diag(shading)); fixed nominal normals",
+      "nominal_array_sha256": "772688189b0e5701a3c0f654e24b31a017673d1ec33bf6a080b294c514869da6",
+      "dataset": "OpenIllumination",
+      "object": "obj_04_dolphin",
+      "source_kind": "actual_local_thumbnails",
+      "source_files": [
+        {
+          "path": "D:\\Data\\OpenIllumination_meta\\light_pos.npy",
+          "sha256": "bd57514a9b50dee7494a3db40087c739c78cb52e97432c106d7717e084d584f1"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\000\\com_masked_thumbnail\\A1.png",
+          "sha256": "54a778482a392aa0626822831aa6f8fc263e3c92d7a5a16fd1dfa570e0d8da70"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\001\\com_masked_thumbnail\\A1.png",
+          "sha256": "ae64f706d3b170f49749c2d98b9a291b5bdcf6491c7c2631c2511a60b4ffa085"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\002\\com_masked_thumbnail\\A1.png",
+          "sha256": "e5f76ab1c743e3c92b5eab8e2f3d8c70668ce01651f75f85b24db766291a941c"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\003\\com_masked_thumbnail\\A1.png",
+          "sha256": "1fced6018ecdd23a7907b73691e2987ff8643ecc82edb1ba77f5393f2c0decf8"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\004\\com_masked_thumbnail\\A1.png",
+          "sha256": "be7d2c9a864c623466862c22c7c87ecc74a9d9ac2da9eb70a12885f2ad2a83a2"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\005\\com_masked_thumbnail\\A1.png",
+          "sha256": "a0a381521addb7320c46c4232ec04b934244b05ed7f255ddef64955f346a068d"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\006\\com_masked_thumbnail\\A1.png",
+          "sha256": "b5a571f2e745b235e591bf593e636957fe2a99e2e245b4388b238dd77854e411"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\007\\com_masked_thumbnail\\A1.png",
+          "sha256": "1154d51e69eeb1f8bd5e502b80630f36a36c1260d61d1d0dfe2842bebf20792d"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\008\\com_masked_thumbnail\\A1.png",
+          "sha256": "ae7d15eb6fea3f24725b83c49c0130b2662e47a21e36bb7ecb89f478ddd1d1f8"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\009\\com_masked_thumbnail\\A1.png",
+          "sha256": "65d3f032cc068e3c660744e4aaf704c894ed516e1490e09a1ebbe118a4691657"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\010\\com_masked_thumbnail\\A1.png",
+          "sha256": "4a914e0fd62a003fdbe00f2a5176f40f408ac7345a63f15742cf69e00044e041"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\011\\com_masked_thumbnail\\A1.png",
+          "sha256": "033acad1cd5551c17eb7524f9662670f8a2ad862d6e1c74e0ff265dd1edb6873"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\012\\com_masked_thumbnail\\A1.png",
+          "sha256": "43c58415b4058fd6b82c6827d31b94afcbd6dd18e88299f1836fc5856b6226b8"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\013\\com_masked_thumbnail\\A1.png",
+          "sha256": "0b87f2addbcefd51c6c168e9cb51d3ff3c2bb4641c870b4e0315d825092c3c32"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\014\\com_masked_thumbnail\\A1.png",
+          "sha256": "b7fc629ab90e0508a5cec36c593399215bc013b9a5e53c4bd7f003aef4409682"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\015\\com_masked_thumbnail\\A1.png",
+          "sha256": "af58a928d4dc2335a8325f57abac785633d6e37fa9236153ec037429221ae4af"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\016\\com_masked_thumbnail\\A1.png",
+          "sha256": "8225c6ba500bb04ead830ed2b43a5b96f117335b46da6b99657fb4f5f97dca0b"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\017\\com_masked_thumbnail\\A1.png",
+          "sha256": "e24ebdd4952076ec3dd8a1a7ab7e0d5fe7bb3d57042cc7d5d716e401af26e525"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\018\\com_masked_thumbnail\\A1.png",
+          "sha256": "0e57ebf282ffc6e3c7173e9e6b87573e354abccafc0e7522e60fadb3519f3b57"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\019\\com_masked_thumbnail\\A1.png",
+          "sha256": "2e60db9290e64ad13e0af7d95977e9db98bb255ae233114fb2b8392a0c2e5ae7"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\020\\com_masked_thumbnail\\A1.png",
+          "sha256": "a97e4bc73df4a8c467027bde8b3e69ed7f460cd719e54cdcf3b28b79d2e123cd"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\021\\com_masked_thumbnail\\A1.png",
+          "sha256": "ac649211c7590ae1dd1e9a0a403f1484ee9eb68b04db0c42da7f76fc8291ad00"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\022\\com_masked_thumbnail\\A1.png",
+          "sha256": "0163e3b971693cab2624bedb1e10af19f32407005eb1fa9915f600deb9c37e8e"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\023\\com_masked_thumbnail\\A1.png",
+          "sha256": "cfd6d3c78611abc1672212423890f61082f9482f9038e0e10905fce4ed523a64"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\024\\com_masked_thumbnail\\A1.png",
+          "sha256": "50cfd3f03d7558675639cba2f435c07bca976ae3fb80988e5630380f85ad326d"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\025\\com_masked_thumbnail\\A1.png",
+          "sha256": "226b407a93ff82357e8c58c93e801756fc8bc6c667b3bde2c8cd507c8e1025e1"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\026\\com_masked_thumbnail\\A1.png",
+          "sha256": "2efddfb429f97493ff50e3a3e9dfa8b3d827050d926cd64d4e7e37d9d83f2aaf"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\027\\com_masked_thumbnail\\A1.png",
+          "sha256": "28e76c79e82795821776e60c2ebb8f79a607d7ad873b23b00275f0e1dd5e78f9"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\028\\com_masked_thumbnail\\A1.png",
+          "sha256": "6e3f27e2a98e89920491cb17f322d471d689c8739cf05e9cdba606dc3f4ed756"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\029\\com_masked_thumbnail\\A1.png",
+          "sha256": "dc7b77629878da714f8ce138c76cd8305b6b54d6fcf97d8f3fe9b5f2cdb6e0de"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\030\\com_masked_thumbnail\\A1.png",
+          "sha256": "8f9c09952c2f863d0719cb3b0c5da1e68229c23644f58ae3f091239d680fa9cb"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\031\\com_masked_thumbnail\\A1.png",
+          "sha256": "79015baa5602193cf3cc17b7188490c13bc5025b315e1d009f2f919e99dc9038"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\032\\com_masked_thumbnail\\A1.png",
+          "sha256": "a7136224ab22552263ae0a2e96d4c6d12b752730b5574abd819f80b98444943a"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\033\\com_masked_thumbnail\\A1.png",
+          "sha256": "bb3e9d9ffdedf052aaca2af493c97d39762ed780340da73d013a671fce6ea426"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\034\\com_masked_thumbnail\\A1.png",
+          "sha256": "18249dcd6744b9875e418fe3202a0cafd6f820db867983600c7a9c79ba2fba6b"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\035\\com_masked_thumbnail\\A1.png",
+          "sha256": "20863cae8d2f80a57bd4954aa91bc42eb44ddafdfbd94da0fbb67db4451281e0"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\036\\com_masked_thumbnail\\A1.png",
+          "sha256": "cef38a162cca9ef5359ff8c3d1d225dbe0b9c8556313da5332b85db7f95ffced"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\037\\com_masked_thumbnail\\A1.png",
+          "sha256": "d7305cf5ae16084dc7f99d01f9e2f2d63b3d70d613636279076fde480709c67e"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\038\\com_masked_thumbnail\\A1.png",
+          "sha256": "dba315e9dee6e32d9712a336677c27c12b57088cdc3bd7679ac741e5cd574dca"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\039\\com_masked_thumbnail\\A1.png",
+          "sha256": "1f32bb342e889b2bc54ca6cc095af5853ba140f122cd97c759fb145498e582b1"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\040\\com_masked_thumbnail\\A1.png",
+          "sha256": "dfdb13df0435f770e8c41e9196687d281b06fce4d9a154cfd87d100c6a6c8f15"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\041\\com_masked_thumbnail\\A1.png",
+          "sha256": "d078bfd5bb49d17e2105259e247cfe89700c130911a7a091979975dce84c1c8a"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\042\\com_masked_thumbnail\\A1.png",
+          "sha256": "0feb492cd2787c46df977a4d808b1900eb91d121b2cb2a125d18ddb472aa9eff"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\043\\com_masked_thumbnail\\A1.png",
+          "sha256": "ea83594325ede760dd2f65e844ce04ed27cb88ca28908b1113e15749e4e51b55"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\044\\com_masked_thumbnail\\A1.png",
+          "sha256": "8c407fc5e329f4c49d6d2df685793177f564f04b14923794f02f9ef2faa730b5"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\045\\com_masked_thumbnail\\A1.png",
+          "sha256": "92bbd9f5fad44ada2109368027c1e884a63bcb55347c0c0fa6d045b813cb5f49"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\046\\com_masked_thumbnail\\A1.png",
+          "sha256": "09336fda06131e44eced423522986e70192cc68ce22ebed8f4b28275778d5a8f"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\047\\com_masked_thumbnail\\A1.png",
+          "sha256": "d113bb34dcc3f98a3056fe0e56cf6a018c48cb68d35d91c59b98697fc01435e0"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\048\\com_masked_thumbnail\\A1.png",
+          "sha256": "9198adc44df3192b5b05f189b7ec62a45e73a12d136da1838434757b8bc44a2f"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\049\\com_masked_thumbnail\\A1.png",
+          "sha256": "b53b8ec551381352b876c7a65252697be59609a686e74572825cb572a030694e"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\050\\com_masked_thumbnail\\A1.png",
+          "sha256": "4c5a9204249371a5bedba8d2e590fcc131d77f9fcf3272fdbb51ec9a0359784f"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\051\\com_masked_thumbnail\\A1.png",
+          "sha256": "c46e1fedafeed35dfe3349fda3d45c8336a315801a5d56de3e094754731afb7a"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\052\\com_masked_thumbnail\\A1.png",
+          "sha256": "9de387f69eb8c59993ea5afddf67ee73e9b3e8638fac95505a294025ff3ed180"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\053\\com_masked_thumbnail\\A1.png",
+          "sha256": "e0f60bf4c011a03e25776ccba330872bfdbdc18e7f1498b1268672bf843d1842"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\054\\com_masked_thumbnail\\A1.png",
+          "sha256": "9c2920ef0bed62f0e85c1eabd60f3f99a5db6fe221502e9023e57fd89e3da768"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\055\\com_masked_thumbnail\\A1.png",
+          "sha256": "cb381756b3373622d91d0ac26cc6e0b822cdac1e091740882bc251aafd0d34e0"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\056\\com_masked_thumbnail\\A1.png",
+          "sha256": "9d3dfe1d3c17eb2791cafcdda1c4773c6861ec7f54ea9ae9f0bd4dcaea94a0ce"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\057\\com_masked_thumbnail\\A1.png",
+          "sha256": "4024713d647d8dd5eac2731c00cd8da134c531106f62384dab2207c5a7887cf5"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\058\\com_masked_thumbnail\\A1.png",
+          "sha256": "f8b36e6c5c2a78318cfbd78bfd51d3fbb531f41fe4f5be53dc8e3e13932cb028"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\059\\com_masked_thumbnail\\A1.png",
+          "sha256": "ccb295008aab2b11247ad4dbf56b5ee0f979361fb80f4f3347fbd49752c5e1d0"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\060\\com_masked_thumbnail\\A1.png",
+          "sha256": "d484a1bdc736e71102c1b0775c1b494956816f50102b7e823e3dbcc0f90e621d"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\061\\com_masked_thumbnail\\A1.png",
+          "sha256": "81008c5f241cfd076b189f4d577219af99c39bc3134e3bf0d8a64aeebc463295"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\062\\com_masked_thumbnail\\A1.png",
+          "sha256": "fe44b192fe94b969fd3a9f48cacfbded40ff90ae67108a8ff7b460a96c9d2af1"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\063\\com_masked_thumbnail\\A1.png",
+          "sha256": "e1da47506ddd5b3a17e078aaf04150ec065909ffaa7f8a037de18ddc6c995b06"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\064\\com_masked_thumbnail\\A1.png",
+          "sha256": "97a506a5ba44dfa6f0e2e0d34a1c2751ac1d662612d1012a3a60e0b8d9756e4e"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\065\\com_masked_thumbnail\\A1.png",
+          "sha256": "780508efc93eb8226b83f1f5ec578cdf64ae49082e5cd9f9bfbce25e8a77d823"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\066\\com_masked_thumbnail\\A1.png",
+          "sha256": "2082567945bdc4751fdeed07937c1c60dd4268742a92a753214769efdca72126"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\067\\com_masked_thumbnail\\A1.png",
+          "sha256": "a4e094912c257677b1b0308fead23aa43f0c201ce8befd9dc29537bf64314da5"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\068\\com_masked_thumbnail\\A1.png",
+          "sha256": "aea15a6bc049aa72ee93cddd9a281b8fd4a8002aa08d9b3851a551f5b88ed6e2"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\069\\com_masked_thumbnail\\A1.png",
+          "sha256": "6951d434f257a4c7f756e88e7c067d21828c61322d0f2d7f86ba875737c62a78"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\070\\com_masked_thumbnail\\A1.png",
+          "sha256": "f2131d00a1f2779505eaef77f4c1404c8131a60113a4efb738c750ecc18f547f"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\071\\com_masked_thumbnail\\A1.png",
+          "sha256": "c1a2303bda712be43d1a03010f763f6ab6e5771cefdf92ecf2ea30700a2bb8bf"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\072\\com_masked_thumbnail\\A1.png",
+          "sha256": "a5a7e3c1aa5764a35754b6ae0844d51b376e380fbe5a3df3b60b3b968588fbee"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\073\\com_masked_thumbnail\\A1.png",
+          "sha256": "b75e852d79676a970bfc831e303e8c3af99daa8fdda03657d0be170d5283e4a4"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\074\\com_masked_thumbnail\\A1.png",
+          "sha256": "6e6ae57864af7c0c5b109bd262f3bb03e2912e3a9bce96a4c8e6901b30ecb375"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\075\\com_masked_thumbnail\\A1.png",
+          "sha256": "bd70baba4b1bdff9ca7e240e8fd8474c2c4a8d00e614826ced8e8c5d0c0745ce"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\076\\com_masked_thumbnail\\A1.png",
+          "sha256": "4e7d15445ce9cce44cb7da647e0cbc2858983eb3d41cb38057a50e4e271ada8c"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\077\\com_masked_thumbnail\\A1.png",
+          "sha256": "6d870e533c09e6a7964cffc295b9a5972266dcb9612938caebf290a2018fc67b"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\078\\com_masked_thumbnail\\A1.png",
+          "sha256": "03b0d24fe9be81ea8afd5ed395cafe35ab78b3cc5c5dc77cafeb1bbcde70fa28"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\079\\com_masked_thumbnail\\A1.png",
+          "sha256": "c0a9421effbf5bbb84f5338d73cb4fc9cc3cdd129b35315d37df4ec276a9501b"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\080\\com_masked_thumbnail\\A1.png",
+          "sha256": "3ae042b160f685beb0e336f8a0fab663f67e9cf226201f2901335bb69072292c"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\081\\com_masked_thumbnail\\A1.png",
+          "sha256": "420dec86432dc9990d52037de8d01f8b44167ce113878638d6cc83537e9e3aa3"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\082\\com_masked_thumbnail\\A1.png",
+          "sha256": "65002993cf994a3fb99003737167721cb1d4f0092d008254ea89cde383c4f422"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\083\\com_masked_thumbnail\\A1.png",
+          "sha256": "9c42cfb673e0036dab85cdb79811919854e8a3ff8e27c7519292b999a449f5c9"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\084\\com_masked_thumbnail\\A1.png",
+          "sha256": "74fb1855e35252f6be03b53c773da0bbcb007245dbf664ce202197234cfaea61"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\085\\com_masked_thumbnail\\A1.png",
+          "sha256": "1dc9fac03639803993309d90a5d5b2d601ae31350da57ac07804d68270b660ed"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\086\\com_masked_thumbnail\\A1.png",
+          "sha256": "22e434f4fc7f99c5529935a50cf6e611ed3614734e6f38952d604eba26bbb246"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\087\\com_masked_thumbnail\\A1.png",
+          "sha256": "da82c95c108aba0499595734c85aff23e8fbc577f341febe98200f5720ecdb4b"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\088\\com_masked_thumbnail\\A1.png",
+          "sha256": "033b98fea96ee6e13bca2ffd6387faa8bfd42c6f3529904f9114bb32bb1ac4d3"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\089\\com_masked_thumbnail\\A1.png",
+          "sha256": "78e82193e09fd246fc05062177627b1f7eb37607d8beee9f9e630a4c6320ba4f"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\090\\com_masked_thumbnail\\A1.png",
+          "sha256": "2452db1cb94688b959220252d520f54ed9209927a0a5d74814ea8435c7d06f74"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\091\\com_masked_thumbnail\\A1.png",
+          "sha256": "a7875f48f066180c88a9b7923a502271d1f518a9d015416c8940951be21aa788"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\092\\com_masked_thumbnail\\A1.png",
+          "sha256": "b3cacd44c9bb7d7e3426e111c319d2099bbd80c1e78cbb075ec4ea4e7ad9d8f7"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\093\\com_masked_thumbnail\\A1.png",
+          "sha256": "3cad10d20c7f0dd10940b8552ded15e2c13838c43aa7328fa70aa2b08c05b778"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\094\\com_masked_thumbnail\\A1.png",
+          "sha256": "03c22bef244414c2351a590116e7dbc5ae8f0d0e70ddb30c85f18935689e93db"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\095\\com_masked_thumbnail\\A1.png",
+          "sha256": "5ffe771bd78f9f140796684fbcc2861c53a35b1b4bf0a725e3278b4167df8183"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\096\\com_masked_thumbnail\\A1.png",
+          "sha256": "2dce630f02a3de804eb279b1815be2cb6065aed246efa6eea8550f16638a7a8c"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\097\\com_masked_thumbnail\\A1.png",
+          "sha256": "7a5ec3c06586ca58cfd132a8331648b85a1bddaa14bb5569c642b9fbe3b936ba"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\098\\com_masked_thumbnail\\A1.png",
+          "sha256": "227478def2d4ae140def702620adde7ef70f9e4eff211a28c2ce361def03cf99"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\099\\com_masked_thumbnail\\A1.png",
+          "sha256": "29212f930ee5f9b7743818eadf80245a03dfd6fa8f5b5be04917f0f52f3eaacb"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\100\\com_masked_thumbnail\\A1.png",
+          "sha256": "d63e895f12add2ec95a042e1b71a3ad23da2bc5215189c9e2d9c0ebd7aab36a9"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\101\\com_masked_thumbnail\\A1.png",
+          "sha256": "6ec4fcaef69cc3c6dd09612e6a8177a09ff30700036e4e74e451f38bf7808b3d"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\102\\com_masked_thumbnail\\A1.png",
+          "sha256": "04d4d8bf068dccec8dac8b9480153230403ca4524c614217aea88ed983ec66f4"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\103\\com_masked_thumbnail\\A1.png",
+          "sha256": "a48d69aef1c04a07971d4b9999e71bada62ea4694a114ba4f6e4307d3d5826c1"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\104\\com_masked_thumbnail\\A1.png",
+          "sha256": "aae0874c5a167bb066f446151419010e90b8c2fc4cf79d3984b6dc220b794145"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\105\\com_masked_thumbnail\\A1.png",
+          "sha256": "dedb7c7e4318d34dfb03f451d0662eaf218f6037bd348418c1ae41d57e7ebb6c"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\106\\com_masked_thumbnail\\A1.png",
+          "sha256": "d1fbe7edb3b2baabfc9461ac8028b7f34ef083be38483f93dcdcb81205e8a7b1"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\107\\com_masked_thumbnail\\A1.png",
+          "sha256": "dda5cffdcb421a9fc223c5d3ff1c3f18be7ef0f3955f1917fc97d8b5a1f77962"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\108\\com_masked_thumbnail\\A1.png",
+          "sha256": "0fc78c7b64f0291ac4112617b7f47f05b9d79d9fdaba8a8d7404df3f4826a202"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\109\\com_masked_thumbnail\\A1.png",
+          "sha256": "527b286127ca4dc40b8b0fbf4a99718c0bc3c668639456d521f2a9d244009a42"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\110\\com_masked_thumbnail\\A1.png",
+          "sha256": "14cba5fbee16dd70204cde589c6ecefab9c2ea78110268fbd05e994df52796f7"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\111\\com_masked_thumbnail\\A1.png",
+          "sha256": "d684c6663235de647c4aae0b0cb0899d5511fbe742034099d949719e989324eb"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\112\\com_masked_thumbnail\\A1.png",
+          "sha256": "a1ac21a1ddc3308a3b9396ad9231cb615d5f604c41a8d1681dbe7f1dba59cdc6"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\113\\com_masked_thumbnail\\A1.png",
+          "sha256": "c0fcf7af85d1561de9188235433b7d2bfa36d4e65504c54e5837ff7d6023b743"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\114\\com_masked_thumbnail\\A1.png",
+          "sha256": "dc60eb5affdf9220a239262430e0087a6f28a24783a35d665f509e1cadb3d805"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\115\\com_masked_thumbnail\\A1.png",
+          "sha256": "a1a9a2691c1e608a46fd305b043982498f4ae774e826875452d816acf912237b"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\116\\com_masked_thumbnail\\A1.png",
+          "sha256": "296501d0391e0c9731cb96f86995ad9f294b32801fe7e0c8d7e2f8af6fc6d00b"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\117\\com_masked_thumbnail\\A1.png",
+          "sha256": "a7d5c7cf0bafce539d4b2a36f160c89e0c3ff8441d8b6bee4b7c12700fa0dbe6"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\118\\com_masked_thumbnail\\A1.png",
+          "sha256": "19c52129f6489ab6a04689e23b5f02036b4dfa2f4509fa42a355b5f00450f3e6"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\119\\com_masked_thumbnail\\A1.png",
+          "sha256": "7d16d4cb699112834534c2b6f8386316f13709d5eaec6f447b7478ffc26fb6c9"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\120\\com_masked_thumbnail\\A1.png",
+          "sha256": "d3602f66329f10bf21dbb1a1b3bdfc1b256d898288e2242b96209570495c8cfe"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\121\\com_masked_thumbnail\\A1.png",
+          "sha256": "6023cdab8063eeeedb5e1edb06384e38b1c86ee9436fd51c651ad2be0fa64fa8"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\122\\com_masked_thumbnail\\A1.png",
+          "sha256": "572b58bf93dfbf328fbff73445bae9e2df896200d99259f689976d1b4d492abb"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\123\\com_masked_thumbnail\\A1.png",
+          "sha256": "c2c8e54016634b72fed1f8917d34694705e79298834ed52f6cb339461f894a9e"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\124\\com_masked_thumbnail\\A1.png",
+          "sha256": "a1ec734ad44e51fb18c5b05f5b47998ab790236fd7feaacded18d60fa9a47b55"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\125\\com_masked_thumbnail\\A1.png",
+          "sha256": "cd2c5404a2b4f664ba6447540e63be667498571001f2fe22d926a37af44969ad"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\126\\com_masked_thumbnail\\A1.png",
+          "sha256": "1da25d60ec9a03ca7013628f140ccd6dd60455da257f8fc803713d6be2038eee"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\127\\com_masked_thumbnail\\A1.png",
+          "sha256": "61ad57c807185234db23d21b3a158759b7553fb695888a93ca763fc22b2ba5f9"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\128\\com_masked_thumbnail\\A1.png",
+          "sha256": "083d29e18f71e4f419b443d1ba5a875f45378401c77f47b23ac00e4ea6fe6bb6"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\129\\com_masked_thumbnail\\A1.png",
+          "sha256": "f57309e61b1b16d106a68da4ae377a870199a876be35535f7d676f51e9e9533a"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\130\\com_masked_thumbnail\\A1.png",
+          "sha256": "00715b3d5a0da932dcc744666cee8c82ec347fa3b8c991e8366003e317ceb64f"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\131\\com_masked_thumbnail\\A1.png",
+          "sha256": "f33f8be8831c1a10f8f04c8cb60c934158e240a94e0f4e9e455aa0f530039e17"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\132\\com_masked_thumbnail\\A1.png",
+          "sha256": "342d652d0f54acd057361462fce64f8fb90b8650ab482aa036640e9548194873"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\133\\com_masked_thumbnail\\A1.png",
+          "sha256": "87f9c6f0e2a2f0cd848abfa5296ef53e868857d133cdf53fb078823d59e5b378"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\134\\com_masked_thumbnail\\A1.png",
+          "sha256": "dbc5d1d818219459a67572804b7a68174c680942717ca6b51afee80531477688"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\135\\com_masked_thumbnail\\A1.png",
+          "sha256": "9f569e9802d319652e87c1f5a6e686156572f48372175d35ae24cf572d414454"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\136\\com_masked_thumbnail\\A1.png",
+          "sha256": "ef583db923a686ebc7ab8952fac6b1a8108a7b1a3e152d5daa58c40eb42b20e0"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\137\\com_masked_thumbnail\\A1.png",
+          "sha256": "991ea7522257ada2f176433b4b54d2a6987cb72ba5a7a65556c67242f4e779c8"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\138\\com_masked_thumbnail\\A1.png",
+          "sha256": "2be698fdfacfa298deaa6010f0dcf34210871e182171f8797a8b7e2755c83c71"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\139\\com_masked_thumbnail\\A1.png",
+          "sha256": "1340ff19e821d0d54c54c5240e7ea7bf66c2acb516d3f921fba39d4e58ca5131"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\140\\com_masked_thumbnail\\A1.png",
+          "sha256": "39a9ca45d3cb0f6a1c2b375da03d6374302232f5f122954547564a24ab89d542"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_04_dolphin\\Lights\\141\\com_masked_thumbnail\\A1.png",
+          "sha256": "7721872051e9cfda7b3778950eebb4d7731158cfb304f2565d2cf3ece0ef5fc3"
+        }
+      ],
+      "camera": "A1",
+      "image_resolution_wh": [
+        200,
+        273
+      ],
+      "scope": "Real nominal asset only; ensemble observations are synthetic"
+    },
+    {
+      "n_lights_total": 142,
+      "n_masked_pixels": 3559,
+      "selected_lights": [
+        3,
+        5,
+        6,
+        10,
+        14,
+        25,
+        30,
+        31,
+        32,
+        41,
+        46,
+        47,
+        49,
+        54,
+        61,
+        72,
+        85,
+        91,
+        93,
+        108,
+        111,
+        122,
+        124,
+        130
+      ],
+      "requested_pixels": 96,
+      "retained_pixels": 96,
+      "selected_masked_pixel_indices": [
+        56,
+        72,
+        79,
+        85,
+        93,
+        144,
+        217,
+        266,
+        285,
+        298,
+        363,
+        374,
+        375,
+        443,
+        473,
+        533,
+        547,
+        646,
+        678,
+        743,
+        745,
+        778,
+        798,
+        800,
+        816,
+        834,
+        841,
+        934,
+        960,
+        1020,
+        1063,
+        1066,
+        1121,
+        1122,
+        1164,
+        1186,
+        1192,
+        1243,
+        1260,
+        1286,
+        1352,
+        1415,
+        1419,
+        1423,
+        1433,
+        1504,
+        1568,
+        1629,
+        1640,
+        1686,
+        1697,
+        1721,
+        1724,
+        1748,
+        1770,
+        1772,
+        1793,
+        1815,
+        1824,
+        1890,
+        1903,
+        1945,
+        2002,
+        2008,
+        2037,
+        2064,
+        2100,
+        2170,
+        2211,
+        2333,
+        2470,
+        2506,
+        2558,
+        2583,
+        2702,
+        2742,
+        2802,
+        2832,
+        2951,
+        3087,
+        3105,
+        3159,
+        3169,
+        3172,
+        3199,
+        3212,
+        3214,
+        3216,
+        3266,
+        3385,
+        3398,
+        3420,
+        3438,
+        3463,
+        3482,
+        3519
+      ],
+      "selected_pixel_coordinates_yx": [
+        [
+          105,
+          103
+        ],
+        [
+          105,
+          119
+        ],
+        [
+          105,
+          126
+        ],
+        [
+          106,
+          102
+        ],
+        [
+          106,
+          110
+        ],
+        [
+          107,
+          126
+        ],
+        [
+          109,
+          120
+        ],
+        [
+          110,
+          125
+        ],
+        [
+          111,
+          97
+        ],
+        [
+          111,
+          110
+        ],
+        [
+          112,
+          127
+        ],
+        [
+          112,
+          138
+        ],
+        [
+          112,
+          139
+        ],
+        [
+          114,
+          107
+        ],
+        [
+          114,
+          137
+        ],
+        [
+          116,
+          94
+        ],
+        [
+          116,
+          108
+        ],
+        [
+          118,
+          99
+        ],
+        [
+          118,
+          131
+        ],
+        [
+          119,
+          140
+        ],
+        [
+          119,
+          142
+        ],
+        [
+          120,
+          119
+        ],
+        [
+          120,
+          139
+        ],
+        [
+          120,
+          141
+        ],
+        [
+          121,
+          100
+        ],
+        [
+          121,
+          118
+        ],
+        [
+          121,
+          125
+        ],
+        [
+          123,
+          104
+        ],
+        [
+          123,
+          130
+        ],
+        [
+          124,
+          132
+        ],
+        [
+          125,
+          116
+        ],
+        [
+          125,
+          119
+        ],
+        [
+          126,
+          114
+        ],
+        [
+          126,
+          115
+        ],
+        [
+          127,
+          97
+        ],
+        [
+          127,
+          119
+        ],
+        [
+          127,
+          125
+        ],
+        [
+          128,
+          115
+        ],
+        [
+          128,
+          132
+        ],
+        [
+          129,
+          96
+        ],
+        [
+          130,
+          100
+        ],
+        [
+          131,
+          100
+        ],
+        [
+          131,
+          104
+        ],
+        [
+          131,
+          108
+        ],
+        [
+          131,
+          118
+        ],
+        [
+          132,
+          126
+        ],
+        [
+          133,
+          127
+        ],
+        [
+          134,
+          126
+        ],
+        [
+          134,
+          137
+        ],
+        [
+          135,
+          121
+        ],
+        [
+          135,
+          132
+        ],
+        [
+          136,
+          95
+        ],
+        [
+          136,
+          98
+        ],
+        [
+          136,
+          122
+        ],
+        [
+          136,
+          144
+        ],
+        [
+          137,
+          85
+        ],
+        [
+          137,
+          106
+        ],
+        [
+          137,
+          128
+        ],
+        [
+          137,
+          137
+        ],
+        [
+          138,
+          142
+        ],
+        [
+          139,
+          95
+        ],
+        [
+          139,
+          137
+        ],
+        [
+          140,
+          134
+        ],
+        [
+          140,
+          140
+        ],
+        [
+          141,
+          110
+        ],
+        [
+          141,
+          137
+        ],
+        [
+          142,
+          114
+        ],
+        [
+          143,
+          126
+        ],
+        [
+          144,
+          109
+        ],
+        [
+          146,
+          116
+        ],
+        [
+          149,
+          87
+        ],
+        [
+          149,
+          123
+        ],
+        [
+          150,
+          122
+        ],
+        [
+          151,
+          97
+        ],
+        [
+          153,
+          123
+        ],
+        [
+          154,
+          120
+        ],
+        [
+          156,
+          102
+        ],
+        [
+          156,
+          132
+        ],
+        [
+          161,
+          112
+        ],
+        [
+          168,
+          118
+        ],
+        [
+          169,
+          113
+        ],
+        [
+          171,
+          121
+        ],
+        [
+          172,
+          108
+        ],
+        [
+          172,
+          111
+        ],
+        [
+          173,
+          114
+        ],
+        [
+          173,
+          127
+        ],
+        [
+          173,
+          129
+        ],
+        [
+          174,
+          108
+        ],
+        [
+          176,
+          112
+        ],
+        [
+          181,
+          120
+        ],
+        [
+          182,
+          111
+        ],
+        [
+          183,
+          111
+        ],
+        [
+          184,
+          107
+        ],
+        [
+          185,
+          110
+        ],
+        [
+          186,
+          108
+        ],
+        [
+          187,
+          125
+        ]
+      ],
+      "exact_unidentifiable_pixel_exclusions": [],
+      "nominal_noise_coefficients": {
+        "intercept_a": 6.321659663605369e-06,
+        "slope_b": 0.007796165134713867
+      },
+      "inverse_weight_variance_range": [
+        0.00012861444609048954,
+        0.0033388000897961994
+      ],
+      "finf_diagonal_range": [
+        1533.5708929460504,
+        9049.803796342505
+      ],
+      "parameterization": "linear albedo (A=diag(shading)); fixed nominal normals",
+      "nominal_array_sha256": "719a6f24958dc68f1bbac94d566077fec780f73a9f92be1bb429a8cdbd999440",
+      "dataset": "OpenIllumination",
+      "object": "obj_09_ball",
+      "source_kind": "actual_local_thumbnails",
+      "source_files": [
+        {
+          "path": "D:\\Data\\OpenIllumination_meta\\light_pos.npy",
+          "sha256": "bd57514a9b50dee7494a3db40087c739c78cb52e97432c106d7717e084d584f1"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\000\\com_masked_thumbnail\\A1.png",
+          "sha256": "e039b94c67ab79d76959fabf96d2e1142ccbf35e49549f6f2b39c5a4a76702d1"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\001\\com_masked_thumbnail\\A1.png",
+          "sha256": "e28f6b2620c284cb20e2f7cc3d17e52b65ea0357f042727d74bb0cf463b5ad2e"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\002\\com_masked_thumbnail\\A1.png",
+          "sha256": "2d8676ab85b655a9aaf6b7ed10280da54844d2deab7908f8b55b77f5eec64515"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\003\\com_masked_thumbnail\\A1.png",
+          "sha256": "c35faa3df11ebddba5e6ac0068db9ce466beef96e68845264277b096dbd58b8c"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\004\\com_masked_thumbnail\\A1.png",
+          "sha256": "bdf83b82412a400e826143382b8133b52beab12e2db77b82cc5b01cceccecf82"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\005\\com_masked_thumbnail\\A1.png",
+          "sha256": "b479caa4fb0041989f2173bb114bb71f0a088e8f432c983cca46ebe46bd5d9f7"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\006\\com_masked_thumbnail\\A1.png",
+          "sha256": "bfdfb19d034841e1558eff905ef19aaec684b87f076393f867d1640ee5dfca10"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\007\\com_masked_thumbnail\\A1.png",
+          "sha256": "34ee3f28dc4f98ba024616b45f1c4d1b5b4bc6842e4ce3673eb5e5cc3b02cef2"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\008\\com_masked_thumbnail\\A1.png",
+          "sha256": "32165e7bb9eef749553ddddafcd8cb44f3d48f2461c019cf8cd179c6ccac0dfa"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\009\\com_masked_thumbnail\\A1.png",
+          "sha256": "34c125579fb9e378e47cba59dd9099a4e084059eba15fe7356ecc9b03188dc36"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\010\\com_masked_thumbnail\\A1.png",
+          "sha256": "0fddcc291bb55130ded96898e0284726c67b5825c663aef79aa06ae2259d9454"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\011\\com_masked_thumbnail\\A1.png",
+          "sha256": "1651bf6da32dddd856407fab51a2e7d74baabcb35686260f8d65ad7936d29fab"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\012\\com_masked_thumbnail\\A1.png",
+          "sha256": "ccf701f251d11c87467230e1eb6e5c24ff085e83cd86ba00b59da792cc84e975"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\013\\com_masked_thumbnail\\A1.png",
+          "sha256": "b214dc5ec5e859a83890a6828f94e171c7bfc43503cf4fd58d6996f15655cdac"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\014\\com_masked_thumbnail\\A1.png",
+          "sha256": "2bbe87cf05c0132ceaf40c7112df236b054d4edf24912804314f685273564034"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\015\\com_masked_thumbnail\\A1.png",
+          "sha256": "a1cdb6415c3ba84acfa59994e160c554009bdb90543ddd019b0af3848098f608"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\016\\com_masked_thumbnail\\A1.png",
+          "sha256": "df51d94c7475f7dfbfe0a3b92ee88db128d0ec520beec4cbada62c43801ccbcd"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\017\\com_masked_thumbnail\\A1.png",
+          "sha256": "1ec585b7d91981061d06de08221e5cef3f0d8d52b9e07929f2283ea2b67d7d71"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\018\\com_masked_thumbnail\\A1.png",
+          "sha256": "2e62ecea1e7be47d6be6f164b64e1b06bd5a8f26ec33c9eb6f2657617fb79ee2"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\019\\com_masked_thumbnail\\A1.png",
+          "sha256": "3afb4e3f2bd44d488f5c4d86a05558446b3e61f23613aada4443cb5f6c352ad5"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\020\\com_masked_thumbnail\\A1.png",
+          "sha256": "d9d32b5812494f600e84b7a6751a9a9323df7cefddd432a7d51eb652596f7971"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\021\\com_masked_thumbnail\\A1.png",
+          "sha256": "1e5ce5567dc8342afb80bfd1d8dc3fc6f4ac3ba82676984d5349d6fbe5609b2e"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\022\\com_masked_thumbnail\\A1.png",
+          "sha256": "51f89e8c165c9dbdc53bf8ae6c5a3ab20f652ef3abb7e2669ea166739f05c083"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\023\\com_masked_thumbnail\\A1.png",
+          "sha256": "94a8bdecdfb37c1939200b0a0c1748f63bd5d54464e5f5a405b7cffc81f44852"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\024\\com_masked_thumbnail\\A1.png",
+          "sha256": "2d5039278b9fa7c07a3cc1485b9c12dc99e64633f7799a1f5b840015c67dfcc4"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\025\\com_masked_thumbnail\\A1.png",
+          "sha256": "9141dd6cc9ca257779a95f1a261114b3897504305f5949cefd698f2bf244d137"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\026\\com_masked_thumbnail\\A1.png",
+          "sha256": "6a02d08342e79d5a12e641a63c1b3364551e2b7b1651474bb1d6a3bd03b857f3"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\027\\com_masked_thumbnail\\A1.png",
+          "sha256": "352acccee535986909f78e34bb0d68ace79b8a18681b35890542282354e1f9a5"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\028\\com_masked_thumbnail\\A1.png",
+          "sha256": "1242cb15cc80ba5d1499b16b6b6753ba36868951464a2f6d87bab24019d08979"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\029\\com_masked_thumbnail\\A1.png",
+          "sha256": "bcd56b35aba609b0d475ece62dc2c842ca9c387af94c9785c1bcb6bd80389857"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\030\\com_masked_thumbnail\\A1.png",
+          "sha256": "1aa0e7b01362bc70ea7a892910997e8e70e348a934d09802ca3e9ca0d390b8da"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\031\\com_masked_thumbnail\\A1.png",
+          "sha256": "e8a17dcb49473d793eece952472d87fec9406754333195068100d8c99c9611bf"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\032\\com_masked_thumbnail\\A1.png",
+          "sha256": "5a13d43b918491adb5444e6032edf6ec08eaefacffbd887d1e13f90c8e7a2df7"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\033\\com_masked_thumbnail\\A1.png",
+          "sha256": "5d69e365d5f9990b363657b2bbecd481c0a18ec0c883e39323c84aabc94be33d"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\034\\com_masked_thumbnail\\A1.png",
+          "sha256": "255588dcbe158709bba87f9357e3ad6008c4d67fc79e2b8f06edf5aaafbe9de0"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\035\\com_masked_thumbnail\\A1.png",
+          "sha256": "d82d7703f6d30c58e7ad42d034d166f03cb9cecfaa78f09c94868679ac7bd090"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\036\\com_masked_thumbnail\\A1.png",
+          "sha256": "906bacc138b19ce9196f9821701a099a97bec96564fe9d1b99b7c62453f73182"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\037\\com_masked_thumbnail\\A1.png",
+          "sha256": "2ae528c4036b33c4af95fc8c7c8a9ae6a349df32db90e61cded699794fd30e90"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\038\\com_masked_thumbnail\\A1.png",
+          "sha256": "d28d123f055a55b50defa082b22a5dc4b212be6b0ee0d791513e4441b559c0d3"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\039\\com_masked_thumbnail\\A1.png",
+          "sha256": "11f02c2bf599114a1dd7b26c996a24dd61149532bebd0d21f9b28cc276c7c0e5"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\040\\com_masked_thumbnail\\A1.png",
+          "sha256": "11403d299f37d8971fa9de2676df2d239d47a6531be719c6832bcb1e588c55f9"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\041\\com_masked_thumbnail\\A1.png",
+          "sha256": "c9104134726f1d25876d9819fc6d82b49e3bb6dc1eaf27255a7bd729ff63a7b3"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\042\\com_masked_thumbnail\\A1.png",
+          "sha256": "da4c8060be7f2060e75a7b55fe43b4e6102d1d39856fb5523256aad12b7cba69"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\043\\com_masked_thumbnail\\A1.png",
+          "sha256": "a7d726017b6685d188a085525773ce514f941395d0b0ee76c110ed56c2e7a9d1"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\044\\com_masked_thumbnail\\A1.png",
+          "sha256": "8a5d0e8ea8445b3b65e5a4ea2b35b958a50dd76000cce99156da80e869152b26"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\045\\com_masked_thumbnail\\A1.png",
+          "sha256": "e11df397c66ac6ede4ef4b49709f4c906bcb282d8ce6f696e3c40c03c916b358"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\046\\com_masked_thumbnail\\A1.png",
+          "sha256": "4ff252977a2c353cce8080c5405bdda093d82e6aef715a2c4f6a59541f4095b4"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\047\\com_masked_thumbnail\\A1.png",
+          "sha256": "28b1213201b3af460bb0ebb0124d0b7df74706ca1e194114d544f47eec7b994b"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\048\\com_masked_thumbnail\\A1.png",
+          "sha256": "c41a6803fdaebc45e696f062955287519a4222708a89cd0b278d6735b8b306e6"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\049\\com_masked_thumbnail\\A1.png",
+          "sha256": "a32095f9556de2e5b1f1753e8ac9586d74b3a60112d7ec478f6be2ab4bfaf403"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\050\\com_masked_thumbnail\\A1.png",
+          "sha256": "5787f9855576e6cff4bb0a91177dd912c70f9b67d96fc3ef4fe583ec7112043e"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\051\\com_masked_thumbnail\\A1.png",
+          "sha256": "a611a4381b78a1b3144e9aad7183a4609cd756d22754fddc48ec43a587746783"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\052\\com_masked_thumbnail\\A1.png",
+          "sha256": "93a8e57a29b0b8837f5a0534887327b92c5aee19e4d7996f5e68b15ad4acc6ac"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\053\\com_masked_thumbnail\\A1.png",
+          "sha256": "483f9ee43885a1e0ab1e3fa830facff4ad27b2ebaa3f66eb1b99aab3889ac751"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\054\\com_masked_thumbnail\\A1.png",
+          "sha256": "a279ec5781a8afad24261b842748eab484c4ccb03440439066ffa523dff47d8f"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\055\\com_masked_thumbnail\\A1.png",
+          "sha256": "df89ca4cea9c6710530025e7c2dae6bc4f2660977e3b12272121097eb77f467e"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\056\\com_masked_thumbnail\\A1.png",
+          "sha256": "768fd30f2633f3c6ccabd1617aaadc55f76ba05ad8d934aa2754657c75c52ad7"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\057\\com_masked_thumbnail\\A1.png",
+          "sha256": "91690041fdaed730b1aca3b657d400f3b8ea818548976085d7ff4e4add07e6a7"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\058\\com_masked_thumbnail\\A1.png",
+          "sha256": "d975376ea7b3bd5b81ea7e606f7178b3d73cab7ef1f0bbba6ae66919ae2b689b"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\059\\com_masked_thumbnail\\A1.png",
+          "sha256": "bcae6b4199a7443c5bd4b67fd5a5bf7a7007e01dc008de58f85657d26ca4bc53"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\060\\com_masked_thumbnail\\A1.png",
+          "sha256": "8ef3a57d2e8835ab73d821e2e58cc855869e20f4b708fea847f16de650ac11a8"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\061\\com_masked_thumbnail\\A1.png",
+          "sha256": "4c9cea78367a62dff304c35cc04fe933ebc9d5fa790984065791e8588123b1f9"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\062\\com_masked_thumbnail\\A1.png",
+          "sha256": "1ce8c15cf0b0955c77dcae500eb6f607655660785a0eb95806a49290d1973e43"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\063\\com_masked_thumbnail\\A1.png",
+          "sha256": "595b88306061f97b833afd7f4629a6aff7d0e0f11303205a1b64b9f4b5f265b3"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\064\\com_masked_thumbnail\\A1.png",
+          "sha256": "05b7b7916d10dda65c28137a2b79defbf53f61297f416ed32afa42407bc6a82b"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\065\\com_masked_thumbnail\\A1.png",
+          "sha256": "defbb7edacbd0b7b37adcf5ee651d9cc38dc5520f2771fcffac01126f35609e1"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\066\\com_masked_thumbnail\\A1.png",
+          "sha256": "c9dc52b42964f4e414cbbd8329988a9f3f3c9b579b77d3d16d7379d35aef717c"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\067\\com_masked_thumbnail\\A1.png",
+          "sha256": "88fea1dbb845a5745aff13767539ce54a824c9b17c4b62abb03be23d774dc680"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\068\\com_masked_thumbnail\\A1.png",
+          "sha256": "098b354c6f7b8faea7e0cbb39ed8756463f0e84fe1b6b93ddadaa7956a97cd28"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\069\\com_masked_thumbnail\\A1.png",
+          "sha256": "c6323bae82a36f06d7e66de74b74add5d134e01fc10d8742d0343534e4beaf9a"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\070\\com_masked_thumbnail\\A1.png",
+          "sha256": "38491d056166b86810f208067cdb2a7e74f138d8921d2e4c076435aace2916ee"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\071\\com_masked_thumbnail\\A1.png",
+          "sha256": "433aa4bc26fbfc726d1012a0dd06a33cf539156d5a5e717152105f8d04c1338f"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\072\\com_masked_thumbnail\\A1.png",
+          "sha256": "64d87d760c4a0c05cedc6f8c3f133c6d8a3773286f110503b68bfdcfe3ea3745"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\073\\com_masked_thumbnail\\A1.png",
+          "sha256": "c4acdc0bb3034de70bbe198382a4d84b1544550faa3dcc3dbcbf5bc721457bed"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\074\\com_masked_thumbnail\\A1.png",
+          "sha256": "63f779abea91096b76386844a5688bf8dd3f88eb68a932cc05380014423932f7"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\075\\com_masked_thumbnail\\A1.png",
+          "sha256": "d1d0212941f43857bf3e1ed7ba6a36d23efce806b88812cfa5a611f4c5bbf9ce"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\076\\com_masked_thumbnail\\A1.png",
+          "sha256": "cbfcb97abdfab1b8493ca4a014ee6084ed972ee754c1a2c1aef42961339c5ab8"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\077\\com_masked_thumbnail\\A1.png",
+          "sha256": "b1ca26528cf6b77b468d4c649a3481290c1560b12eecb44d62e451c1c847eca4"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\078\\com_masked_thumbnail\\A1.png",
+          "sha256": "a6fd054e7ba4ebd14382752c480e2e0af7056cc4fdd1c58cbead4fc26d473289"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\079\\com_masked_thumbnail\\A1.png",
+          "sha256": "5500ea1c0be49aa2a5f9a1ba115d818bd1f8cccac2bcb844a01260abce73b563"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\080\\com_masked_thumbnail\\A1.png",
+          "sha256": "87b214200ce308d5911137d886223cb444116e3d875dad7287ad3c03c6a9979c"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\081\\com_masked_thumbnail\\A1.png",
+          "sha256": "3032ca42393647706044a220ea9f60fbd281b83913c6f3008f56d48255a0d513"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\082\\com_masked_thumbnail\\A1.png",
+          "sha256": "efa818f38c47dee4228a9520ac1200caac28d927be3c023280f1d879beb3060b"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\083\\com_masked_thumbnail\\A1.png",
+          "sha256": "53fedffa1c71a723270933062a16f72e5e65d3d8b14886bd087f27ae4e4c0fdf"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\084\\com_masked_thumbnail\\A1.png",
+          "sha256": "1d8867c393d0c5ef5ccdb48197f5b87336e3db725459f414d9dc24d1c9359bd1"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\085\\com_masked_thumbnail\\A1.png",
+          "sha256": "1da579afc31b5ff6f6a33ac303ab2763143a62e51a646e1ad9637a25e24c4ac0"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\086\\com_masked_thumbnail\\A1.png",
+          "sha256": "2bbd1d503d2c824bb2fdca2d913719f801d84d3427a89f47dc42dae1872f0c0c"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\087\\com_masked_thumbnail\\A1.png",
+          "sha256": "0f979b79b06dee9958b4f67019d8f2107e9bbb738d1ccdcb275db52cc5e5ebbd"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\088\\com_masked_thumbnail\\A1.png",
+          "sha256": "468b34e3c6d0c10442a65e49febf1465d70b602c5e198a4819cc6da4b3edec13"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\089\\com_masked_thumbnail\\A1.png",
+          "sha256": "460fe2a7dc174025959f8119d925271e6be158db288373d8f43dc3370d8bdbc8"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\090\\com_masked_thumbnail\\A1.png",
+          "sha256": "e57a8b393bdf30393021bb24bddde3f6e8ca6f594e27a08d4e48b385f108bd40"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\091\\com_masked_thumbnail\\A1.png",
+          "sha256": "cdc454b679d2bdf6c76e406e6ee1608729d566e38664b79dc2b62e7dd651adf3"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\092\\com_masked_thumbnail\\A1.png",
+          "sha256": "14a02787696a5e5e6edaf59f0b322b8e2394a806cb19bb1be3c8f78026055d4b"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\093\\com_masked_thumbnail\\A1.png",
+          "sha256": "038353ebd9bb904d4e68f8172f65a4d34ef8147ac3b20b6ab775e193218c4587"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\094\\com_masked_thumbnail\\A1.png",
+          "sha256": "f2f96469abeaea6fabb45adfda6e7a38b955a27f69513c72295368a3a875d176"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\095\\com_masked_thumbnail\\A1.png",
+          "sha256": "aaab9e5b2403a19bed9fb29087cb227b2fb8ab7dc63e55d74081d4cb3bd621eb"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\096\\com_masked_thumbnail\\A1.png",
+          "sha256": "95c251de9671a86de09cc16dccadc1dd7ef34fd431a11aad2df889bc42913e85"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\097\\com_masked_thumbnail\\A1.png",
+          "sha256": "bcb744da36cf3ee18196024db8fbbb2311ab64a0f25f5c46fb25fca31f436611"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\098\\com_masked_thumbnail\\A1.png",
+          "sha256": "9707e08a284a34776d6f9efde09cf9ae5fbe6f4d674f063eed9e86a557d468fb"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\099\\com_masked_thumbnail\\A1.png",
+          "sha256": "3b0062a0e8105cc054578dfc33c10ae2b454de8e098538c93e215c6e8913cf13"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\100\\com_masked_thumbnail\\A1.png",
+          "sha256": "09bc9039ead2639fe749f8142181366059cd5930578021584166f717a0d94983"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\101\\com_masked_thumbnail\\A1.png",
+          "sha256": "9b153b8fca176f30814a08258d34b02c93b37403864777e473ee2ca19c8d253a"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\102\\com_masked_thumbnail\\A1.png",
+          "sha256": "aaf81fcefe1aa8d14e44382075ea99958a1549b0977441bacb596ebe13411f05"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\103\\com_masked_thumbnail\\A1.png",
+          "sha256": "215dce25180cf3ed5c621634d97ac68f3414f2c9cd53d09f66fbeebe7bf2f2ec"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\104\\com_masked_thumbnail\\A1.png",
+          "sha256": "470f631887b04bf6da6ca7f9291b45ca8bbd5e5729431f3e44055fd8325ea7ee"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\105\\com_masked_thumbnail\\A1.png",
+          "sha256": "6ca87356735905c50ed51df2bc248ccc4b6038a466bb9da90bda5ad407fa6f4b"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\106\\com_masked_thumbnail\\A1.png",
+          "sha256": "b36e918c40080c1a39c006d48be6d791d30f332b5ef2c8d296b67a38a1a37b46"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\107\\com_masked_thumbnail\\A1.png",
+          "sha256": "7312bb8ce5fc3e29c1c4555da0b54d9585f9858ba258f23fc7a9ceccf60f5f8d"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\108\\com_masked_thumbnail\\A1.png",
+          "sha256": "d15c5d45ff0a0677b52423b6c4bdb950a6a9c967f885a76e97297a09fcaaac7e"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\109\\com_masked_thumbnail\\A1.png",
+          "sha256": "fad60e79a5b8d94ff14be0b2c5fbdeca8d06c6dd5d4e3067a6f19fdd7184177f"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\110\\com_masked_thumbnail\\A1.png",
+          "sha256": "34c0c27ed22af7456ddfc6b80a92948e8dafd54e4f8b00207334468fde90039a"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\111\\com_masked_thumbnail\\A1.png",
+          "sha256": "dbdb4202a8862a2bc3dc567dcce60fbb939765d165a32e13f801c7b9bb0e3808"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\112\\com_masked_thumbnail\\A1.png",
+          "sha256": "32270e34f24791d72f287d65357426734a80112488e694e1881720b562d3e8bc"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\113\\com_masked_thumbnail\\A1.png",
+          "sha256": "8e37d34b3222862f78d00fe3637349863a52436189b35d6fe3c66965486863e2"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\114\\com_masked_thumbnail\\A1.png",
+          "sha256": "f2898fd1b1b8bff739c23995efd20871a31244e68fe210064e36562657f3ae74"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\115\\com_masked_thumbnail\\A1.png",
+          "sha256": "269368e2fb8fb9c2bcacf954327f7d764a28bf41bd51595f90c4309d9a9fad49"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\116\\com_masked_thumbnail\\A1.png",
+          "sha256": "e8dee629c4a2a867b2c12ca9e0cc78b1fa874f9b8044eb38959ea945cd19b09f"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\117\\com_masked_thumbnail\\A1.png",
+          "sha256": "2f00c9cfd36f8b10f40b2b24097a71896fa0fe48023d5b3f678fe46b1682973e"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\118\\com_masked_thumbnail\\A1.png",
+          "sha256": "2a2baf88525f41b97006cb5045a74ca830483214ca25b69848313071800b701c"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\119\\com_masked_thumbnail\\A1.png",
+          "sha256": "e7b5396cb2e5946ff399f1d41fc750955d62f4c5b5c5052ba269eb178a742b30"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\120\\com_masked_thumbnail\\A1.png",
+          "sha256": "cc8cff9afa017a107b596535fc547cb875dfb15e25a1a7acb0c62c80d46920b2"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\121\\com_masked_thumbnail\\A1.png",
+          "sha256": "5f0d6452f2c14ceef75c8b544019003e0972edfeff161cdde012b05075736e1e"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\122\\com_masked_thumbnail\\A1.png",
+          "sha256": "88058a2cd1b9f2f9c555796574671e93dc8822f6b2a42ba2353708e3aa78f85e"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\123\\com_masked_thumbnail\\A1.png",
+          "sha256": "419aea3e03d10c5017870f2c366aa204c3ef85044c8879eed0f301ab5972cf9f"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\124\\com_masked_thumbnail\\A1.png",
+          "sha256": "9132abdbd8bc28aaccb2bb9b8c25aa0e804f0e4b6b0b93ff64c30dffa74ba748"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\125\\com_masked_thumbnail\\A1.png",
+          "sha256": "0aa15c8db02b7de4deba3c01d22ff18b301773823d8115c4087f56c8270f3f21"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\126\\com_masked_thumbnail\\A1.png",
+          "sha256": "a2979bb29c70ec4df7e56ca47a8bf1aedaff6f532ef1092ea086dc2e821f3758"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\127\\com_masked_thumbnail\\A1.png",
+          "sha256": "0f85aa55b79fb49bad6222b0e2a83ed43b308dc6fdffd122511436afc4e53cad"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\128\\com_masked_thumbnail\\A1.png",
+          "sha256": "0693469d17a53929dc18622f7c381a8397b3a7eeba27126563eca964b3321f0c"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\129\\com_masked_thumbnail\\A1.png",
+          "sha256": "cb55cb138525dc43d88a5ba2aa6c0313de5c82d51ce1a7bc436029479a608552"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\130\\com_masked_thumbnail\\A1.png",
+          "sha256": "bb7b60d78ce5b8749e236d1a36e1b1e714a0ef02bb73f8e337624758a4527ff6"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\131\\com_masked_thumbnail\\A1.png",
+          "sha256": "26ed70367d0dcd73ed9ecc61a9e82bca37ab0157e767a01c0275a7ef8ce79aa1"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\132\\com_masked_thumbnail\\A1.png",
+          "sha256": "f1e5c2d77ad18fe2df786f2a8d78e4a3120e18d8fce5723795ccfbdd97c97ae2"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\133\\com_masked_thumbnail\\A1.png",
+          "sha256": "6576a4f7f2db79a61f332f23f686e67257d48684c4b3e9409640ed84770fd865"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\134\\com_masked_thumbnail\\A1.png",
+          "sha256": "759a8d90d1a6ceb95441db0aafc38a8ee7bee33487c830f0c607fac7cdeba18e"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\135\\com_masked_thumbnail\\A1.png",
+          "sha256": "0193b0686293dd9b006fbfa536f1fc0d79dad46ae4d4605316cdab64e1ec9d0e"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\136\\com_masked_thumbnail\\A1.png",
+          "sha256": "03bbb0b4fe4459920923bccb21c0e709bfe4e6a56b48738d7a0c36b362f4f99a"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\137\\com_masked_thumbnail\\A1.png",
+          "sha256": "7c03245ee0a71a33b8283aeba5cd0673400f79086a012fb1de23624f2b592959"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\138\\com_masked_thumbnail\\A1.png",
+          "sha256": "cf1f3828add5b89617e245a13464e19a427754c0579aa91dfe1bca3ff17f5b6b"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\139\\com_masked_thumbnail\\A1.png",
+          "sha256": "10b0dba2ce57c2d975d675861ef78fe7e21586c66f113739aaa75fbf6172a387"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\140\\com_masked_thumbnail\\A1.png",
+          "sha256": "2af9994573bcb00a2ed9184e7ad333b3102ac8dcbd9effe9a94c33e1be31066a"
+        },
+        {
+          "path": "D:\\Data\\OpenIllumination\\OLAT\\obj_09_ball\\Lights\\141\\com_masked_thumbnail\\A1.png",
+          "sha256": "dc7d76b0aaf770cbd0b487224217fe51c0caade6fcca387de6641a99f4506348"
+        }
+      ],
+      "camera": "A1",
+      "image_resolution_wh": [
+        200,
+        273
+      ],
+      "scope": "Real nominal asset only; ensemble observations are synthetic"
+    }
+  ],
+  "wall_seconds": 3.466303399996832,
+  "interpretation": "Conditional closure of the matched linear ensemble only; not a theorem test on new real observations or the historical estimator.",
+  "manifest": {
+    "config_absolute_path": "C:\\Users\\35702\\publication\\mode-resolved-calibration\\configs\\matched_ensemble_bridge_20260918.json",
+    "config_sha256": "bfb61839b002c02a896a64be5cebca03098db2c38aa0e682cb5bb0f8fb46368f",
+    "config_mtime_utc": "2026-09-17T18:27:32.892178+00:00",
+    "started_utc": "2026-09-17T18:39:21.219116+00:00",
+    "completed_utc": "2026-09-17T18:39:24.685764+00:00",
+    "source_sha256": {
+      "experiments/theory_ensemble.py": "c8add9d209d2fcd748e8543224750ab0282dcf45813f384b44fba5b270bc52a7",
+      "experiments/matched_ensemble_bridge.py": "b3669a08be89d84c81d96e294d5fa8c27a1d3772795f4d26b969a2c79feb479c",
+      "experiments/openillumination_validation.py": "9f20c05dcc7fee850e42fb08e57bbc26a8a23d4109f654999dec620f7982786b",
+      "src/calibinfo/information/schur.py": "378ebd070fe87e6adb6e1e74e4961a9976b4fa5efd5f8a2b7784bde69afa57d5",
+      "src/calibinfo/datasets/openillumination.py": "848e7dbbf8c77c20773e78250849a5c332c4fd8913c0f71d6c8fe5d4aead2c7e"
+    },
+    "git_head": "22ee2e24e1ac7d0e411cad65c8e18dc6aa94f5f2",
+    "git_branch": "theory/remaining-derivations-20260918",
+    "versions": {
+      "python": "3.14.2",
+      "numpy": "2.4.1",
+      "scipy": "1.17.0"
+    },
+    "historical_outputs_written": false,
+    "experimental_not_published": true
+  }
+}

@@ -1,0 +1,132 @@
+\section{联合反照率与法向的信息外推}
+\label{sec:joint-extension}
+
+本节给出命题 M17。结论是：联合场景参数化不破坏共享模型的精度价值上限与凸分配证书，但必须使用正确的内禀坐标，并在一个预先固定的可辨识商空间中工作。这里的数值验证是独立合成场景上的匹配系综检查，不是实物重建性能保证。
+
+\subsection{参数化与完整物理 Jacobian}
+
+固定名义点，考虑
+\begin{equation}
+ y_{kp}=\rho_p I_k[n_p^T\ell_k]_++\epsilon_{kp},
+ \qquad \rho_p,I_k>0,\quad \|n_p\|=\|\ell_k\|=1.
+\end{equation}
+假设所有参与线性化的 $n_p^T\ell_k\ne0$。在法向与灯向的正交切平面基 $T_p,E_k\in\mathbb R^{3\times2}$ 中取局部图
+\begin{align}
+ n_p(\eta_p)&=\frac{n_p+T_p\eta_p}{\sqrt{1+\|\eta_p\|^2}},&
+ \ell_k(\zeta_k)&=\frac{\ell_k+E_k\zeta_k}{\sqrt{1+\|\zeta_k\|^2}}.
+\end{align}
+场景坐标为 $x_p=(\delta\beta_p,\eta_p)$，其中 $\beta_p=\log\rho_p$；标定坐标为 $c_k=(\delta\iota_k,\zeta_k)$，其中 $\iota_k=\log I_k$。定义 $h_{kp}=\boldsymbol1_{\{n_p^T\ell_k>0\}}$、$s_{kp}=[n_p^T\ell_k]_+$。白化后各行的非零块为
+\begin{align}
+ A_{kp,p}&=\sqrt{w_{kp}}\rho_pI_k
+       [s_{kp},\ h_{kp}\ell_k^TT_p],\
+ B_{kp,k}&=\sqrt{w_{kp}}\rho_pI_k
+       [s_{kp},\ h_{kp}n_p^TE_k].
+\end{align}
+其他像素或灯的块为零。场景内禀维数是 $3P$；$4P$ 只是 $(\log\rho,n\in\mathbb R^3)$ 带 $P$ 条单位长度约束的环境表示。
+
+历史固定法向模型的 $A_k=\operatorname{diag}(\sqrt{w_k}s_k)$ 实际作用于加性反照率扰动。令 $D_\rho=\operatorname{diag}(\rho)$，则
+\begin{equation}
+ A_\beta=A_\rho D_\rho,\qquad
+ F_\beta=D_\rho F_\rho D_\rho,\qquad H_\beta=H_\rho D_\rho.
+\end{equation}
+信息与任务必须同时变换，不能把未加权全迹视为任意重新参数化下的不变量。历史上名为联合估计的实现仍固定法向，并不等同于本节的联合场景估计器。
+
+\subsection{共享信息与低秩结构}
+令 $D=A^TA=\operatorname{blockdiag}(D_1,\ldots,D_P)$，每个 $D_p$ 是 $3\times3$ 矩阵，并令 $U_k=A_k^TB_k$、$M_{0k}=B_k^TB_k$。独立逐灯惩罚给出
+\begin{equation}
+ F(t)=D-\sum_kU_k(M_{0k}+t_k\Lambda_{0k})^{-1}U_k^T.
+ \label{eq:joint-fisher}
+\end{equation}
+这些块必须来自同一 $A,B$。式~\eqref{eq:joint-fisher} 的普通逆要求 nuisance 块可逆；半正定惩罚若留下 nuisance 核，应使用变分定义或其支撑商上的广义逆，场景取商并不自动使 nuisance 块可逆。本轮数值 constructor、梯度与 Gaussian 系综限于有限正定先验；平坦先验另作固定商空间检查。为避免不同灯的精度尺度导致全局截断，数值装配采用逐灯正定消元后的残差平方与先验平方之和；低秩复用前作逐灯等价尺度归一，仍可能被阈值截断的输入明确拒绝。一般情况下不存在 $U_kU_k^T=DM_{0k}$ 这种矩阵恒等式；共同 Gram 半正定性才是结构约束。
+
+在固定正交基 $Q$ 上设 $D_Q=Q^TDQ\succ0$、$T=QD_Q^{-1/2}$，则
+\begin{equation}
+ R=T^TF(t)T=I-VV^T,\qquad
+ V=[T^TU_kK_k^{1/2}]_k,
+ \qquad K_k=(M_{0k}+t_k\Lambda_{0k})^{-1}.
+\end{equation}
+因而单位 retention 特征值的精确重数是 $\dim(Q)-\operatorname{rank}V$，而不是无条件的 $\dim(Q)-3L$。后者只有在 $V$ 满列秩时成立。任务风险在此坐标中为
+\begin{equation}
+ J_H=\operatorname{tr}\{H Q(Q^TFQ)^{-1}Q^TH^T\}
+     =\operatorname{tr}\{(HT)R^{-1}(HT)^T\}.
+\end{equation}
+因此既有低秩求逆机制可以复用，但必须保留变换后的任务 $HT$。
+
+\subsection{可辨识维数与规范群}
+
+若全部 $\Lambda_{0k}\succ0$，则
+\begin{equation}
+ F(t)=A^T(I+B\Lambda(t)^{-1}B^T)^{-1}A,
+ \qquad \ker F(t)=\ker A.
+\end{equation}
+由于 $[n_p,T_p]$ 可逆，在正反照率、正光强和正权重下，$\operatorname{rank}D_p$ 等于该像素亮灯方向张成的空间维数。因此每像素至少三条线性独立的亮灯方向是 $\operatorname{rank}A=3P$ 的充要条件；仅有三盏灯并不充分。平行灯只能给出一维，完全背光像素给出零维。
+
+尺度混淆仍满足 $Aa=B\bar c$，其中 $a_p=(1,0,0)$、$\bar c_k=(1,0,0)$；物理不变的联合方向为 $(a,-\bar c)$。这一关系与已有规范响应的定义一致。Proper 标定先验抬升该方向，而不是要求再人为删去它。
+
+更一般地，对于半正定惩罚，变分恒等式为
+\begin{equation}
+ x^TF(t)x=\min_c\left\{\|Ax-Bc\|^2+
+                          \sum_k t_kc_k^T\Lambda_{0k}c_k\right\}.
+ \label{eq:joint-variational}
+\end{equation}
+由各项非负，
+\begin{equation}
+ \ker F(t)=\{x:\exists c,\ Ax=Bc,\ \Lambda_0c=0\}.
+\end{equation}
+只要各 $t_k>0$，核空间不变。应在参考 $F(1)$ 上构造一次可辨识基 $Q$，以后始终使用同一 $Q$；不能随着分配改变投影再比较逆迹。对于完全平坦的先验，
+\begin{equation}
+ \operatorname{rank}F(0)=\operatorname{rank}[A\ B]-\operatorname{rank}B.
+\end{equation}
+
+在完整、全亮观测且无积分性约束时，写 $g_p=\rho_pn_p$、$v_k=I_k\ell_k$，图像模型就是 $g_p^Tv_k$。两边因子均满秩时，$g_p\mapsto Gg_p$、$v_k\mapsto G^{-T}v_k$ 产生九维 $GL(3)$ 规范，而不只是尺度和旋转。对任意 $E\in\mathbb R^{3\times3}$，其切向生成元为
+\begin{align}
+ \delta\beta_p&=n_p^TEn_p,& \eta_p&=T_p^TEn_p,\
+ \delta\iota_k&=-\ell_k^TE^T\ell_k,&
+ \zeta_k&=-E_k^TE^T\ell_k.
+\end{align}
+代入 Jacobian 逐行得到零。反过来，完整秩三分解的核方程
+$\delta G_sV_s^T+G_s\delta V_s^T=0$，左乘 $G_s$ 列空间的正交补并利用 $V_s$ 满列秩，可得 $\delta G_s=G_sE^T$，再代回即得 $\delta V_s=-V_sE$。故这些九个生成元张成全部一阶核，全 Jacobian 秩为 $3P+3L-9$，平坦标定先验下场景可辨识维数为 $3P-9$。缺失观测或退化几何时仍须使用一般秩公式，不能机械减九。
+
+奇异 proper 协方差的零方向表示硬已知，与平坦惩罚的零精度语义相反；二者不能通过伪逆精度互换。
+
+\subsection{保留下来的上限与分配证书}
+
+\paragraph{命题 M17-A.}
+在同一固定共享模型、同一可辨识商空间上，$1\le t_k\le\kappa$ 时，任意固定任务 $H$ 且 $J_H(1)>0$ 满足
+\begin{equation}
+ F(1)\preceq F(t)\preceq\kappa F(1),\qquad
+ 0\le1-\frac{J_H(t)}{J_H(1)}\le1-\frac1\kappa.
+\end{equation}
+\begin{proof}
+对每个固定 $c$，式~\eqref{eq:joint-variational} 的被最小化表达式位于其 $t=1$ 值与该值的 $\kappa$ 倍之间。分别取最小值得到信息的 Loewner 链，随后在固定正定商空间上使用逆反序，再对 $H^TH\succeq0$ 取迹即可。任务秩亏不影响该论证，但恒零任务的相对比值不定义。
+\end{proof}
+
+\paragraph{命题 M17-B.}
+固定线性化、权重、先验、任务与商空间时，$F(t)$ 关于 $t$ 算子凹且递增，$J_H(t)$ 凸。对正定逐灯先验，令 $H_Q=HQ$、$F_Q=Q^TFQ$、$Z=F_Q^{-1}H_Q^T$，其梯度为
+\begin{equation}
+ \partial_{t_k}J_H=-\operatorname{tr}\left\{
+ K_k\Lambda_{0k}K_k(U_k^TQZ)(U_k^TQZ)^T\right\}.
+\end{equation}
+设 $s^*$ 是盒约束与线性预算下梯度的线性极小点，则
+\begin{equation}
+ g(t)=\nabla J_H(t)^T(t-s^*)\ge0,\qquad
+ J_H(t)-g(t)\le J^*_{\rm relax}\le J^*_{\rm discrete}.
+\end{equation}
+\begin{proof}
+每一方向的式~\eqref{eq:joint-variational} 是仿射函数族的下确界，因而凹；逆二次迹在正定锥上凸且 Loewner 递减，所以组合凸。对式~\eqref{eq:joint-fisher} 求导及使用 $\partial F^{-1}=-F^{-1}(\partial F)F^{-1}$ 得梯度。凸函数的一阶切线全局下界再给出 Frank--Wolfe 证书。
+\end{proof}
+该结论不依赖旧的 $\gamma$ 候选式。若重新拟合法向、改变可见集、噪声权重或投影子空间，原证书不能跨模型直接沿用；它也不声称非线性重建的全局最优性。
+
+\subsection{匹配协方差与独立数值验证}
+
+若 $c\sim N(0,\sigma^2\Lambda^{-1})$ 与 $\epsilon\sim N(0,\sigma^2I)$ 独立，则联合惩罚最小二乘的场景剖面解等于边缘 GLS，在固定商空间上精确满足
+\begin{equation}
+ \operatorname{Cov}(\hat x-x)=\sigma^2QF_Q^{-1}Q^T.
+\end{equation}
+噪声和标定 nuisance 都必须按该系综重抽；固定 nuisance 只重抽传感器噪声时，协方差一般是夹心矩阵，不能直接使用此恒等式。平滑亮区、proper 先验和局部唯一极小点条件下，小噪声非线性剖面解的一阶影响函数为同一 GLS；这给出局部渐近对应，而不是任意扰动的精确方差公式。
+
+独立合成场景取六像素、十灯，场景内禀维数十八。完全平坦先验时可辨识九维，proper 先验时十八维。九个规范生成元的最大绝对残差为 $6.67\times10^{-16}$，规范响应与直接 Schur 二次型的差为 $1.51\times10^{-14}$；物理 Jacobian 的中央差分最大绝对误差为 $1.685\times10^{-10}$。
+
+在预先固定的精度倍率一和十下，各运行两万次匹配线性重抽，全部坐标方差的经验／预测比在 $[0.97527,1.01051]$。再在 $\sigma=0.002$ 下各运行一千次完整局部非线性剖面拟合，全部坐标比在 $[0.89094,1.10484]$，落于运行前设定的 $[0.8,1.25]$ 内；全部优化器报告成功、没有阴影翻转。数值终止状态不是严格最优性证明，验证记录另保留梯度最优性读数。
+
+三个任务的稠密与低秩风险相对差不超过 $1.25\times10^{-15}$。枚举四十五个两灯精化离散点，全部高于同一 Frank--Wolfe 下界，最小余量约为 $0.76861$。这些数值仅验证本合成场景的实现，不外推为真实物体平均表现；真实联合信息分配实验不在本轮结果之内。

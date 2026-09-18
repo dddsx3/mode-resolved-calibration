@@ -1,0 +1,219 @@
+{
+ "gate": "逐seed gauge修正的四臂幅值复算",
+ "paper_variant": "D",
+ "gauge_mode": "per_seed",
+ "machinery_check": {
+  "pred_deg_max_rel": 2.6907982953086743e-12,
+  "emp_deg_max_rel": 2.419872744017935e-13,
+  "pooled_spearman_abs_diff": 0.0,
+  "tolerance": 1e-07,
+  "pass_": true,
+  "status": "passed",
+  "comparison": "同次重算的A臂legacy gauge与冻结产物",
+  "note": "逐seed修正值不受历史emp相等约束；失败会原样记录，不冒充通过"
+ },
+ "protocol": {
+  "config_sha256": "f94c829b7a466708c3584fa501e772784a9e79d1ca94771cde03b05310054527",
+  "seed": 20260907,
+  "levels": [
+   0.1,
+   0.2,
+   0.35,
+   0.5,
+   0.75,
+   1.0
+  ],
+  "objects": [
+   "obj_03_pumpkin",
+   "obj_04_dolphin",
+   "obj_07_pumpkin2",
+   "obj_09_ball",
+   "obj_10_pumpkin3",
+   "obj_11_pine",
+   "obj_13_mushroom",
+   "obj_16_friends_cup",
+   "obj_17_pumpkin5",
+   "obj_18_fabric_hat",
+   "obj_19_cylinder"
+  ],
+  "seeds_per_level": 20,
+  "ctype": "joint",
+  "n_cells": 66,
+  "n_modes": 5,
+  "bootstrap": {
+   "reps": 10000,
+   "seed": 20260908,
+   "unit": "object"
+  }
+ },
+ "provenance_hashes": {
+  "protocol_sha256": "70dfdc51ff7f919307cf9647c967540b607de4ab6672427083b6443d7e648ca4",
+  "config_file_sha256": "f94c829b7a466708c3584fa501e772784a9e79d1ca94771cde03b05310054527",
+  "code_sha256": "2130087a6fcb19b5c494babeec556794481bd2468a82eaf35c435ae2882eedcb",
+  "environment_sha256": "fc8b430b07f5b057d019cf97d094c320b05a73b53e3dda2ce03af34332fc29f0",
+  "source_sha256": "48a1bd0abdda0f8a47307ced1bf55702eb434dbfa0ffa67dd4d297b4738a5d3c",
+  "frozen_reference_sha256": "6f294c9f03c1f2c60bb2b809efca5120231cf859270c68815b4272f4dad104b2"
+ },
+ "archive_index": "gauge_run_index.json",
+ "variants": {
+  "A": {
+   "noise_fit_convention": "legacy",
+   "mode_coordinate": "legacy",
+   "gauge_mode": "per_seed",
+   "prediction_field": "pred_deg",
+   "prediction_note": "统计仍以原始pred_deg为控制，不是匹配预测的验证",
+   "RA": 0.6499999999999999,
+   "RA_ci95": [
+    0.6,
+    0.7999999999999998
+   ],
+   "n_pos_cells": 61,
+   "n_pos_objects": 11,
+   "undefined_cells": 0,
+   "n_objects": 11,
+   "pooled_spearman": 0.8443168771526982,
+   "stratified_median_mode": 0.6000000000000001,
+   "stratified_valid_levels": 6,
+   "stratified_scalar_medians": {
+    "P_trace": 0.36363636363636365,
+    "P_logdet": 0.5681818181818182,
+    "P_emin": 0.6000000000000001
+   },
+   "best_scalar_name": "P_emin",
+   "delta_mode_vs_best_scalar": 0.0,
+   "delta_mode_ci95": [
+    -0.24766355140186913,
+    0.0
+   ]
+  },
+  "B": {
+   "noise_fit_convention": "corrected",
+   "mode_coordinate": "legacy",
+   "gauge_mode": "per_seed",
+   "prediction_field": "pred_deg",
+   "prediction_note": "统计仍以原始pred_deg为控制，不是匹配预测的验证",
+   "RA": 0.6,
+   "RA_ci95": [
+    -0.09999999999999999,
+    0.7
+   ],
+   "n_pos_cells": 48,
+   "n_pos_objects": 8,
+   "undefined_cells": 0,
+   "n_objects": 11,
+   "pooled_spearman": -0.17344744807431375,
+   "stratified_median_mode": -0.5636363636363637,
+   "stratified_valid_levels": 6,
+   "stratified_scalar_medians": {
+    "P_trace": -0.7454545454545454,
+    "P_logdet": -0.6318181818181818,
+    "P_emin": -0.5636363636363637
+   },
+   "best_scalar_name": "P_emin",
+   "delta_mode_vs_best_scalar": 0.0,
+   "delta_mode_ci95": [
+    -0.08133971291866027,
+    0.0
+   ]
+  },
+  "C": {
+   "noise_fit_convention": "legacy",
+   "mode_coordinate": "dual",
+   "gauge_mode": "per_seed",
+   "prediction_field": "pred_deg",
+   "prediction_note": "统计仍以原始pred_deg为控制，不是匹配预测的验证",
+   "RA": 0.7,
+   "RA_ci95": [
+    0.5499999999999999,
+    0.8999999999999998
+   ],
+   "n_pos_cells": 63,
+   "n_pos_objects": 11,
+   "undefined_cells": 0,
+   "n_objects": 11,
+   "pooled_spearman": 0.8398914518317505,
+   "stratified_median_mode": 0.6136363636363638,
+   "stratified_valid_levels": 6,
+   "stratified_scalar_medians": {
+    "P_trace": 0.31818181818181823,
+    "P_logdet": 0.5227272727272728,
+    "P_emin": 0.6136363636363638
+   },
+   "best_scalar_name": "P_emin",
+   "delta_mode_vs_best_scalar": 0.0,
+   "delta_mode_ci95": [
+    -0.19999999999999996,
+    0.0
+   ]
+  },
+  "D": {
+   "noise_fit_convention": "corrected",
+   "mode_coordinate": "dual",
+   "gauge_mode": "per_seed",
+   "prediction_field": "pred_deg",
+   "prediction_note": "统计仍以原始pred_deg为控制，不是匹配预测的验证",
+   "RA": 0.5499999999999999,
+   "RA_ci95": [
+    -0.09999999999999999,
+    0.7
+   ],
+   "n_pos_cells": 43,
+   "n_pos_objects": 7,
+   "undefined_cells": 0,
+   "n_objects": 11,
+   "pooled_spearman": -0.1260202484083081,
+   "stratified_median_mode": -0.5181818181818183,
+   "stratified_valid_levels": 6,
+   "stratified_scalar_medians": {
+    "P_trace": -0.7227272727272728,
+    "P_logdet": -0.6181818181818182,
+    "P_emin": -0.5181818181818183
+   },
+   "best_scalar_name": "P_emin",
+   "delta_mode_vs_best_scalar": 0.0,
+   "delta_mode_ci95": [
+    -0.08490566037735846,
+    0.0
+   ]
+  }
+ },
+ "display": {
+  "A": {
+   "RA": 0.65,
+   "RA_ci95": [
+    0.6,
+    0.8
+   ],
+   "stratified_median_mode": 0.6,
+   "delta_mode_vs_best_scalar": 0.0
+  },
+  "B": {
+   "RA": 0.6,
+   "RA_ci95": [
+    -0.1,
+    0.7
+   ],
+   "stratified_median_mode": -0.564,
+   "delta_mode_vs_best_scalar": 0.0
+  },
+  "C": {
+   "RA": 0.7,
+   "RA_ci95": [
+    0.55,
+    0.9
+   ],
+   "stratified_median_mode": 0.614,
+   "delta_mode_vs_best_scalar": 0.0
+  },
+  "D": {
+   "RA": 0.55,
+   "RA_ci95": [
+    -0.1,
+    0.7
+   ],
+   "stratified_median_mode": -0.518,
+   "delta_mode_vs_best_scalar": 0.0
+  }
+ },
+ "note": "pred_deg 保留未对齐的 1/rho_j，仅作历史控制；pred_deg_matched_linear 为diag(W^T P DF^-1 P W)/diag(W^T P Finf^-1 P W)，只匹配线性模型的投影坐标。经验分母仍是残差 bootstrap，非 Finf^-1 的匹配 GLS 系综；不得把该预测称为已匹配完整影像生成、估计或重抽样过程。 历史门仅约束legacy锚点；无论通过或失败均如实保存。"
+}

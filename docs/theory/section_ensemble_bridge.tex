@@ -1,0 +1,268 @@
+% status: experimental -- NOT part of the published results
+% Input-only body; requires the parent document's Chinese support and amsmath/amssymb.
+% C13 and M16 are provisional slots; the coordinator integrates registry numbering.
+\section{匹配系综与信息风险到重建排序的条件桥接}
+\label{sec:ensemble-bridge}
+
+\subsection{C13（预留）：同一统计系综中的幅值恒等式}
+这里把理论闭合与真实影像上的经验有效性分开。考虑固定设计、固定可辨识坐标空间上的模型
+\begin{equation}
+ y=A x+B\phi+\varepsilon,\qquad
+ \varepsilon\sim N(0,\sigma^2\Sigma),\quad
+ \phi\sim N(0,\Sigma_\phi),\quad \varepsilon\perp\phi,
+ \label{eq:eb-model}
+\end{equation}
+其中 $\sigma>0$、$\Sigma\succ0$，而 $\Sigma_\phi\succeq0$ 是物理单位下的
+\emph{proper} 协方差，允许奇异。取保留其支撑的因子
+$\Sigma_\phi=L_\phi L_\phi^{\mathsf T}$，取
+$W_y\Sigma W_y^{\mathsf T}=I$，定义
+\begin{equation}
+ \begin{aligned}
+ A_w&=W_y A,& B_w&=W_y B,& C&=B_w L_\phi/\sigma,\\
+ M&=(I+CC^{\mathsf T})^{-1},&
+ F_\infty&=A_w^{\mathsf T}A_w,&
+ \Delta F&=A_w^{\mathsf T}MA_w.
+ \end{aligned}
+ \label{eq:eb-information}
+\end{equation}
+假设 $F_\infty,\Delta F\succ0$。匹配边缘 GLS 的增益为
+$K=\Delta F^{-1}A_w^{\mathsf T}MW_y$，理想零 nuisance 基线为
+$K_0=F_\infty^{-1}A_w^{\mathsf T}W_y$。则
+\begin{equation}
+ KA=I,\qquad
+ \operatorname{Cov}(\widehat x-x)=\sigma^2\Delta F^{-1},\qquad
+ C_0:=\operatorname{Cov}(\widehat x_0-x)=\sigma^2 F_\infty^{-1}.
+ \label{eq:eb-covariance}
+\end{equation}
+\emph{证明.}
+白化后的边缘协方差为 $\sigma^2(I+CC^{\mathsf T})$，因此
+$M(I+CC^{\mathsf T})M=M$。左右乘相应 GLS 因子即得协方差公式；
+$KA=I$ 给出无偏性。基线由 $C=0$ 得到。该证明不需要把奇异协方差取伪逆。
+当 $\Sigma_\phi\succ0$ 时，白化仅吸收 $\Sigma$ 后的 profiling 精度是
+$\Lambda=\sigma^2\Sigma_\phi^{-1}$，而不是 $\Sigma_\phi^{-1}$。
+若白化已经吸收全部 $\sigma^2\Sigma$，外部 $\sigma^2$ 与精度的约定也必须一起改变。
+奇异 $\Sigma_\phi$ 的零方向是确定为零，不是零精度所表示的无惩罚方向。
+例如 $A=[1],B=[1,1],\sigma=1,\Sigma=1,\Sigma_\phi=\operatorname{diag}(1,0)$
+的正确 $\Delta F=1/2$；伪精度捷径却给出 $0$。
+
+对固定线性 gauge 投影 $P_\rho=I-\rho\rho^{\mathsf T}/(\rho^{\mathsf T}\rho)$，
+令 $U$ 为 $F_\infty^{-1/2}\Delta F F_\infty^{-1/2}$ 的特征向量，
+$W=F_\infty^{1/2}U$，并令 $q_j=P_\rho W_j$。同投影、同模式坐标的预测为
+\begin{equation}
+ d_j=\frac{q_j^{\mathsf T}\sigma^2\Delta F^{-1}q_j}
+ {q_j^{\mathsf T}\sigma^2F_\infty^{-1}q_j}
+ =\frac{v_j}{b_j}.
+ \label{eq:eb-projected-ratio}
+\end{equation}
+只有未额外投影且保持对应对偶坐标时，才能直接写成 $1/\rho_j$。
+投影完全消去的模式没有合法退化比；本实验不以分母下限伪造其有效性。
+这里的 $\rho$ 是名义线性反照率，场景 Jacobian 为 $A_k=\operatorname{diag}(s_k)$；
+$\log I$ 是灯强度参数，不可据此把场景参数误写成对数反照率。
+法向固定，也不把名称为 \texttt{joint\_map} 的固定法向、反照率与灯参数联合拟合
+说成法向的联合估计。
+
+\subsection{S1 到 S3：只改变一个统计环节}
+配置 \texttt{configs/matched\_ensemble\_bridge\_20260918.json} 在首次运行前落盘，
+阈值 $[0.8,1.25]$、全部 seed 与每臂 $8192$ 次重复没有按结果调整。
+S1 包括三个非对角测量协方差控制（含奇异及零 $\Sigma_\phi$、非单位 $\sigma$），
+以及两个 OpenIllumination 对象的名义设计：每对象 $24$ 灯、$96$ 像素，
+扰动水平 $0.1,0.35$，每条件五模式。真实缩略图只提供名义几何、权重和残差池；
+S1 的观测数据仍是合成的。共 $35$ 个模式的分子经验方差与预测方差之比落在
+$[0.9733,1.0240]$，独立理想基线归一后的退化比落在 $[0.9512,1.0563]$，
+均通过预注册门槛；最大解析协方差恒等式相对误差为 $9.41\times10^{-13}$ 以下。
+这是式~\eqref{eq:eb-covariance} 在匹配条件下的实现检查，不是对历史真实影像估计器的验证。
+
+S2 保留 S1 的同一分子样本、GLS、投影和模式，只把经验分母换为原始展平残差池的
+独立有放回重抽样。若有限残差池的总体方差为 $\tau^2$（分母为池大小，而非减一），
+则条件于该池的基线总体方差为
+\begin{equation}
+ b_{*,j}=\tau^2\|K_0^{\mathsf T}q_j\|^2.
+\end{equation}
+池均值不为零不会改变中心化方差，但会改变二阶矩；两者分开报告。
+记线性分子样本方差为 $\widehat v_{1,j}$，重抽样分母样本方差为 $\widehat b_{*,j}$，则
+\begin{equation}
+ R_{1,j}=\widehat v_{1,j}/v_j,\qquad
+ R_{2,j}=R_{1,j}
+ \underbrace{\frac{b_j}{b_{*,j}}}_{\text{残差池总体分母效应}}
+ \underbrace{\frac{b_{*,j}}{\widehat b_{*,j}}}_{\text{有限重抽样波动}}.
+ \label{eq:eb-s2}
+\end{equation}
+S3 只用有限物理前向扰动替换 $B\phi$：在球面指数映射下生成灯方向，强度为
+$\exp(\phi_I)$，保留 Lambertian 截断、同一测量噪声和同一 $\phi$ 样本；
+估计器仍是 S1 的固定名义边缘 GLS，分母仍是 S2 的原样本。因此
+\begin{equation}
+ R_{3,j}=R_{2,j}\frac{\widehat v_{3,j}}{\widehat v_{1,j}}.
+ \label{eq:eb-s3}
+\end{equation}
+这些是逐模式精确乘法分解；汇总可用对数均值/几何均值，不能把若干中位数相乘冒充归因。
+在本抽样中，dolphin 的 S2 比值为 $0.00285$--$0.01977$，ball 为
+$0.6119$--$1.1188$；S3/S2 的非线性因子分别约为
+$1.0006$--$1.1398$ 与 $1.0001$--$1.0184$。残差基线可以把比值向下或向上移动，
+不存在通用的膨胀方向。
+
+\paragraph{与历史估计器的非同构边界.}
+历史幅值实验固定真实影像、污染估计器所假定的灯方向与增益，并作逐像素 plug-in 拟合；
+本 S3 是观测侧合成、固定边缘 GLS，不与其完全同构。
+此外，历史的随机切向轴加单个高斯旋转角生成器，在小角度下每个切向坐标的协方差为
+$\sigma_{\rm rad}^2/2$；本实验则按每轴 $\sigma_{\rm rad}^2$ 的 $\Sigma_\phi$ 精确生成。
+历史真实影像半径的估计器与能量端点也不同，不能直接认证当前 S3 的半径。
+因此本分解没有、也不宣称解释掉归档同坐标幅值中位数 $53.744$。
+
+\subsection{M16（预留）：期望 quadratic risk 与可测排序条件}
+任务算子沿用原有定义
+$J_H=\operatorname{tr}(H\Delta F^{-1}H^{\mathsf T})$；$H$ 是算子而不是权重矩阵。
+对任意具有有限二阶矩的误差 $e$，记 $C_e=\operatorname{Cov}(e)$、$b=\mathbb E e$，则
+\begin{equation}
+ \mathbb E\|He\|^2=\operatorname{tr}(HC_eH^{\mathsf T})+\|Hb\|^2.
+ \label{eq:eb-risk}
+\end{equation}
+匹配无偏模型中 $p:=\sigma^2J_H$ 恰等于该端点的期望风险。
+此结论不是任意重建端点或单次重建误差的排序定理。
+
+\paragraph{命题（可测误差半径）.}
+设有限个候选方案 $i=1,\ldots,k$ 共用同一固定任务算子 $H$、同一损失单位、
+同一 gauge 与参数坐标，预测为 $p_i=\sigma_i^2J_{H,i}$。
+写实际误差为 $e_i=e_{\ell,i}+r_i$，其中
+$\mathbb E e_{\ell,i}=b_i$、$\operatorname{Cov}(e_{\ell,i})=\widetilde C_i$，
+预测协方差为 $C_i=\sigma_i^2\Delta F_i^{-1}$。若可检验的上界满足
+\begin{align}
+ c_i&\ge\|H(\widetilde C_i-C_i)H^{\mathsf T}\|_*,&
+ \beta_i&\ge\|Hb_i\|,\\
+ d_i^2&\ge\mathbb E\|Hr_i\|^2,&
+ \ell_i&\ge\left|\mathbb E L_i-\mathbb E\|He_i\|^2\right|,
+\end{align}
+则
+\begin{equation}
+ |\mathbb E L_i-p_i|\le
+ \eta_i^{\rm exp}:=c_i+\beta_i^2+
+ 2\sqrt{p_i+c_i+\beta_i^2}\,d_i+d_i^2+\ell_i.
+ \label{eq:eb-radius}
+\end{equation}
+若又在概率至少 $1-\alpha$ 的\emph{同时事件}上有
+$|\widehat L_i-\mathbb E L_i|\le s_i$，则同一事件上
+$|\widehat L_i-p_i|\le\eta_i:=\eta_i^{\rm exp}+s_i$。
+\emph{证明.}
+迹差的绝对值不超过核范数，故式~\eqref{eq:eb-risk} 给出线性风险与预测之差
+不超过 $c_i+\beta_i^2$。展开 $\|H(e_{\ell,i}+r_i)\|^2$，
+由 Cauchy--Schwarz 控制交叉项，再加端点差与经验均值半径即得结论。
+不要求 $r_i$ 与线性误差独立。
+
+\paragraph{何谓可测，而不是把未知量换一个名字.}
+在受控实验中，固定增益 $K_i$ 和真实输入协方差 $V_i$ 给出
+$\widetilde C_i=K_iV_iK_i^{\mathsf T}$，偏差由固定真值与平均模型计算，
+端点 $H$ 可以直接按数组及哈希核对。
+若实际线性端点是 $G$，可用
+$\|G^{\mathsf T}G-H^{\mathsf T}H\|_{\rm op}
+(\operatorname{tr}C_e+\|b\|^2)$ 控制该线性端点差。
+非线性余项需要解析/验证过的矩界，或带有效置信水平的独立估计；普通样本 RMS
+不能直接宣称是总体上界。有限扰动球内可用 Hessian 上界乘四阶矩，
+但高斯扰动无界，必须另计球外尾项；跨 Lambertian 阴影切换时还要计入非光滑余项。
+若这些量未获界，本命题的状态就是\emph{未认证}。
+
+匹配零均值高斯样本有显式可测经验均值半径。令
+$T_i=HC_iH^{\mathsf T}$，每方案 $N_i$ 次独立重复，
+$t=\log(2k/\alpha)$，则取
+\begin{equation}
+ s_i=2\|T_i\|_F\sqrt{t/N_i}+2\|T_i\|_{\rm op}t/N_i
+ \label{eq:eb-gaussian-radius}
+\end{equation}
+可使全部方案同时满足该界，概率至少 $1-\alpha$。
+证明由高斯二次型的加权卡方矩母函数集中界加 union bound；方案之间不要求独立。
+这不是对非高斯残差 bootstrap 或真实固定影像角度误差可直接套用的 SEM。
+
+\paragraph{配对可观测余项的经验版.}
+若同一批合成数据同时保存匹配线性误差与非线性误差，令
+$\widehat d_i^2=N_i^{-1}\sum_t\|H(e_{i,t}-e_{\ell,i,t})\|^2$。
+在匹配线性样本满足式~\eqref{eq:eb-gaussian-radius} 的事件上，
+非线性样本二次损失与 $p_i$ 的差不超过
+\begin{equation}
+ s_i+2\sqrt{p_i+s_i}\,\widehat d_i+\widehat d_i^2.
+ \label{eq:eb-paired-radius}
+\end{equation}
+这是样本 Cauchy--Schwarz 给出的\emph{经验均值}证书；
+即使余项与线性误差相关也成立，但它不把 $\widehat d_i$ 变成总体半径。
+
+\paragraph{命题（pairwise margin 排序）.}
+在上述同时误差事件上，若 $p_i<p_j$ 且
+\begin{equation}
+ p_j-p_i>\eta_i+\eta_j,
+ \label{eq:eb-margin}
+\end{equation}
+则 $\widehat L_i<\widehat L_j$。所有相邻预测对都满足该条件即可得到全部严格排序，
+从而 Spearman 为 $1$。若只有部分对被认证，记
+$a_i=p_i-\eta_i$、$b_i=p_i+\eta_i$，预测秩为 $r_i$，定义
+\begin{equation}
+ l_i=1+\#\{j:b_j<a_i\},\qquad
+ u_i=k-\#\{j:a_j>b_i\},\qquad
+ D_i=\max(r_i-l_i,u_i-r_i).
+\end{equation}
+当预测与实现排序均无 ties 时，实际秩属于 $[l_i,u_i]$，因此
+\begin{equation}
+ \operatorname{Spearman}(p,\widehat L)\ge
+ \max\left\{-1,1-\frac{6\sum_iD_i^2}{k(k^2-1)}\right\}.
+ \label{eq:eb-spearman}
+\end{equation}
+仅当此下界达到预先给定 $\rho_0$ 时才能声称 $\operatorname{Spearman}\ge\rho_0$。
+预测有 ties 时该无 ties 公式不适用；不能任意打破 ties 制造证书。
+
+\paragraph{为什么没有 margin 就不可能保证阈值.}
+取 $k\ge2$、$p_i=1+i\epsilon$、真实线性标量高斯风险
+$q_i=1+(k-1-i)\epsilon$（$i=0,\ldots,k-1$）。
+两者共用 $H=1$、无偏、精确线性，协方差误差至多 $(k-1)\epsilon\to0$，
+但期望风险 Spearman 恒为 $-1$。失效条件正是精确协方差匹配与充分 margin。
+更强地，即使协方差完全匹配，有限次独立高斯样本的平方均值在正半轴上有正密度，
+完全逆序的开集仍有正概率；近 ties 极限下该概率趋于 $1/k!$。
+因此精确期望恒等式并不能无条件保证有限样本 Spearman 阈值。
+另取两方案协方差 $\operatorname{diag}(1,4)$ 与 $\operatorname{diag}(2,1)$：
+任务 $H=[1,0]$ 的风险为 $1<2$，端点 $G=[0,1]$ 却为 $4>1$。
+这里噪声与估计器可以完全匹配，失败的只是端点对齐条件。
+
+\subsection{独立验证与适用边界}
+沿用既有 family 诊断的定义，在每个固定对象、候选方案集合与端点上计算
+\begin{align*}
+ S_{\rm pred}&=\operatorname{Spearman}(p_{\rm anchor},p_{\rm het}),\\
+ S_{\rm real}&=\operatorname{Spearman}(q_{\rm anchor},q_{\rm het}),
+\end{align*}
+以及各臂内拟合和交叉拟合；汇总为逐 cell 中位数，常数列单独计数。
+这保留预测器侧敏感性与真值端重排的既有分解，
+但仅靠高 $S_{\rm pred}$ 不能逻辑上排除协方差误设或端点误配。
+
+独立验证预注册于 DiLiGenT 的 ball 与 bear，各 $16$ 灯、$64$ 像素，
+采用原有灰度除以逐灯 R 通道强度的加载器；GT 法向只作绝对名义 sanity。
+比较四档全灯精度与四个同预算活跃灯子集，
+匹配合成高斯每方案 $4096$ 次，实际固定影像的历史估计器诊断每方案 $256$ 次。
+前者检验上述二次风险恒等式和可测 margin，后者保留实际 estimator-side 注入、
+固定法向 albedo 拟合与一步 normal refit，二者不得合并为同一个系综。
+实际运行共 $32$ 个匹配高斯方案风险，经验平方损失均值除以预测期望的范围为
+$[0.9940,1.0101]$，均在式~\eqref{eq:eb-gaussian-radius} 的
+$99\%$ 同时误差半径内。八个 family--cell 中，只有 ball 的两个精度阶梯
+得到达到预注册 $0.7$ 的 Spearman 下界，分别为 $0.7$、$0.8$，实测均为 $1$；
+其他六个 cell 因 margin 不足不予认证，没有按结果缩小半径。
+bear 的同预算 anchor 实测 Spearman 为 $-0.4$，与其未认证状态相容，
+没有重抽样改善该数值。独立标量高斯正对照的风险
+$[1,2,4,8,16,32]$ 则满足全部十五个严格成对 margin，实测 Spearman 为 $1$。
+
+固定真实 DiLiGenT 影像上的原估计器诊断单独报告：四个对象--方案 cell 的
+aligned-albedo MSE 臂内拟合中位数在 anchor、het 下分别为 $-0.8$、$-0.6$，
+而该端点的 $S_{\rm pred}=0.9$、$S_{\rm real}=0.8$。
+这是独立 real 端点上的不迁移现象，不是把匹配合成结果当作真实数据自证。
+该 fixed-image ensemble 的协方差、偏差及尾界未获匹配证明，故无 M16 排序证书。
+数据加载的逐灯归一化与原始像素直接核对误差为零；名义法向对 GT 的平均角误差
+为 ball $3.1270^\circ$、bear $7.1997^\circ$，仅用于绝对 sanity。
+
+另有五个 bear 方案的原 float64 Woodbury 风险对拍超过 $10^{-9}$，如实保留失败标记；
+用同一物理数组进行 $60$ 位 Schur 重算后，新 GLS 误差低于 $7.1\times10^{-14}$，
+原 Woodbury 误差为约 $1.30\times10^{-9}$--$5.28\times10^{-9}$。
+这是病态权重下的数值消去审计，不是更改实验阈值或修写历史接口。
+
+对齐 albedo MSE 使用 $H=P_\rho/\sqrt{P}$，未加权全迹是 $H=I$，
+对偶模式能量是另一个固定算子；平均角度则既不是这个二次型，
+也不是现有固定法向信息模型自动包含的端点。
+换场景后条件命题仍成立，但矩阵、半径与 margins 必须重算；
+换 $\Sigma_\phi$ 家族后 $S_{\rm pred}$ 与 $S_{\rm real}$ 都可能改变；
+换数据集不能继承经验 Spearman。未证明这些条件时不作真实重建排序保证。
+
+\paragraph{产物与理论/经验分离.}
+S1、S2/S3 与独立桥接分别保存为单独的阶段记录，包含配置、来源哈希、
+每条件的分子分母及数值审计。实现、运行入口和完整证据字段由配套研究索引给出。
+本文命题只依赖明确写出的条件；经验数值不扩大其范围。

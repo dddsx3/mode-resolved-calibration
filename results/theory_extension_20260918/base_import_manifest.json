@@ -1,0 +1,24 @@
+{
+  "baseline_git_sha": "22ee2e24e1ac7d0e411cad65c8e18dc6aa94f5f2",
+  "source_zip": "D:/论文_新实证与γ一般界_源码证据_20260917.zip",
+  "imports": [
+    {
+      "path": "src/calibinfo/allocation/alpha_bound.py",
+      "before_sha256": "d5e553664709e5e9ba062191d77c107f51a5ff4f06d79a7b75ee88794ace72b3",
+      "source_zip_member": "remote_repo/src/calibinfo/allocation/alpha_bound.py",
+      "imported_sha256": "2caf6878262d4bcd54a585f95550fb37308814fa51617a2a07d0901d139b001e"
+    },
+    {
+      "path": "docs/methods.md",
+      "before_sha256": "dbaf98b39c58f70bd860ac4df2b6f0bb9ea46f2dc23179fda741081a387d4a90",
+      "source_zip_member": "remote_repo/docs/methods.md",
+      "imported_sha256": "f2cf313c3de3103250988ed30f2b083da69cb54387c42181d010224349ddf0b7"
+    },
+    {
+      "path": "tests/test_gamma_general_bound.py",
+      "before_sha256": null,
+      "source_zip_member": "remote_repo/tests/test_gamma_general_bound.py",
+      "imported_sha256": "74e9835b3aab12b42c58338faba1e397db0f2a468cf5c8f43052d86717c1ba8d"
+    }
+  ]
+}

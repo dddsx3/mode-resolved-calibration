@@ -1,0 +1,3686 @@
+{
+  "status": "experimental — NOT part of the published results",
+  "date": "2026-09-18",
+  "reserved_claim_ids": [
+    "M13",
+    "M15"
+  ],
+  "objective": "unweighted full trace, fixed SPD space; S=T included",
+  "certificate_formula": "max{b2,4*bfull/(1+bfull)^2}; b2 omits two nonzero candidates",
+  "not_claimed": [
+    "full sharp fixed-kappa/m/chi/update-size infimum",
+    "Kantorovich leave-one substitution",
+    "arbitrary rank-deficient task certificate",
+    "diagonal homogeneous physical prior counterexample"
+  ],
+  "provenance": {
+    "core_sha256": "e1777b497e912dac2c71c8d76bfb47137699a7e4f0901352fc164c260528b168",
+    "runner_sha256": "ab8279f71310abfc04524420b7db9eec977cb5f162e2d4f1c7ee942826b7054b",
+    "blocks_sha256": "05893e04fced34ef39f6a3a52d1ed2a9f7d4de2324583b4ad2b7a166b21420d2",
+    "nominal_sha256": "9f20c05dcc7fee850e42fb08e57bbc26a8a23d4109f654999dec620f7982786b",
+    "no_git_commands": true
+  },
+  "mathematics": {
+    "physical_counterexample": {
+      "exact": {
+        "q": "1/100",
+        "epsilon": "200/10001",
+        "c": "9999/10001",
+        "kappa": "10",
+        "normals": [
+          [
+            "3/5",
+            "4/5",
+            "0"
+          ],
+          [
+            "-9999/10001",
+            "200/10001",
+            "0"
+          ]
+        ],
+        "light_directions": [
+          [
+            "1",
+            "0",
+            "0"
+          ],
+          [
+            "0",
+            "1",
+            "0"
+          ],
+          [
+            "0",
+            "1",
+            "0"
+          ]
+        ],
+        "rho": [
+          "1",
+          "1"
+        ],
+        "weights": [
+          [
+            [
+              "25/9",
+              "0"
+            ],
+            [
+              "0",
+              "1"
+            ]
+          ],
+          [
+            [
+              "25/16",
+              "0"
+            ],
+            [
+              "0",
+              "1"
+            ]
+          ],
+          [
+            [
+              "25/16",
+              "0"
+            ],
+            [
+              "0",
+              "1"
+            ]
+          ]
+        ],
+        "shading": [
+          [
+            "3/5",
+            "0"
+          ],
+          [
+            "4/5",
+            "200/10001"
+          ],
+          [
+            "4/5",
+            "200/10001"
+          ]
+        ],
+        "tangents": [
+          [
+            [
+              "0",
+              "0"
+            ],
+            [
+              "-1",
+              "0"
+            ],
+            [
+              "0",
+              "-1"
+            ]
+          ],
+          [
+            [
+              "1",
+              "0"
+            ],
+            [
+              "0",
+              "0"
+            ],
+            [
+              "0",
+              "-1"
+            ]
+          ],
+          [
+            [
+              "1",
+              "0"
+            ],
+            [
+              "0",
+              "0"
+            ],
+            [
+              "0",
+              "-1"
+            ]
+          ]
+        ],
+        "B_phi": [
+          [
+            [
+              "3/5",
+              "-4/5",
+              "0"
+            ],
+            [
+              "0",
+              "0",
+              "0"
+            ]
+          ],
+          [
+            [
+              "4/5",
+              "3/5",
+              "0"
+            ],
+            [
+              "200/10001",
+              "-9999/10001",
+              "0"
+            ]
+          ],
+          [
+            [
+              "4/5",
+              "3/5",
+              "0"
+            ],
+            [
+              "200/10001",
+              "-9999/10001",
+              "0"
+            ]
+          ]
+        ],
+        "Lambda0": [
+          [
+            [
+              "25/9",
+              "0",
+              "0"
+            ],
+            [
+              "0",
+              "25/9",
+              "0"
+            ],
+            [
+              "0",
+              "0",
+              "1"
+            ]
+          ],
+          [
+            [
+              "9710020501/2000400020",
+              "68504081307/8001600080",
+              "0"
+            ],
+            [
+              "68504081307/8001600080",
+              "490085860149/32006400320",
+              "0"
+            ],
+            [
+              "0",
+              "0",
+              "1"
+            ]
+          ],
+          [
+            [
+              "10502099701/2000400020",
+              "-9507799101/8001600080",
+              "0"
+            ],
+            [
+              "-9507799101/8001600080",
+              "14885864901/32006400320",
+              "0"
+            ],
+            [
+              "0",
+              "0",
+              "1"
+            ]
+          ]
+        ],
+        "u": [
+          [
+            [
+              "1",
+              "-4/3",
+              "0"
+            ],
+            [
+              "0",
+              "0",
+              "0"
+            ]
+          ],
+          [
+            [
+              "1",
+              "3/4",
+              "0"
+            ],
+            [
+              "40000/100020001",
+              "-1999800/100020001",
+              "0"
+            ]
+          ],
+          [
+            [
+              "1",
+              "3/4",
+              "0"
+            ],
+            [
+              "40000/100020001",
+              "-1999800/100020001",
+              "0"
+            ]
+          ]
+        ],
+        "M0": [
+          [
+            [
+              "1",
+              "-4/3",
+              "0"
+            ],
+            [
+              "-4/3",
+              "16/9",
+              "0"
+            ],
+            [
+              "0",
+              "0",
+              "0"
+            ]
+          ],
+          [
+            [
+              "100060001/100020001",
+              "292060803/400080004",
+              "0"
+            ],
+            [
+              "292060803/400080004",
+              "2499860025/1600320016",
+              "0"
+            ],
+            [
+              "0",
+              "0",
+              "0"
+            ]
+          ],
+          [
+            [
+              "100060001/100020001",
+              "292060803/400080004",
+              "0"
+            ],
+            [
+              "292060803/400080004",
+              "2499860025/1600320016",
+              "0"
+            ],
+            [
+              "0",
+              "0",
+              "0"
+            ]
+          ]
+        ],
+        "Finf": [
+          [
+            "3",
+            "0"
+          ],
+          [
+            "0",
+            "80000/100020001"
+          ]
+        ],
+        "baseline": [
+          [
+            "3/2",
+            "0"
+          ],
+          [
+            "0",
+            "40000/100020001"
+          ]
+        ],
+        "updates": [
+          [
+            [
+              "9/22",
+              "0"
+            ],
+            [
+              "0",
+              "0"
+            ]
+          ],
+          [
+            [
+              "99/404",
+              "36450/11111111"
+            ],
+            [
+              "36450/11111111",
+              "990000/10102020101"
+            ]
+          ],
+          [
+            [
+              "99/404",
+              "-36450/11111111"
+            ],
+            [
+              "-36450/11111111",
+              "990000/10102020101"
+            ]
+          ]
+        ],
+        "alpha_exact": "3*sqrt(172105)/8888 + 165/808",
+        "alpha": 0.344235619878634,
+        "historical_candidate": 0.7439172011304731,
+        "gamma_exact": "121016330240000/4187205554180957",
+        "gamma_decimal_60": "0.0289014543647527077010839874981057461776344592823717393148165",
+        "gamma": 0.028901454364752707,
+        "witness": {
+          "x": 0,
+          "S_mask": 0,
+          "T_mask": 2
+        },
+        "strict_witness_ratio_exact": "121016330240000/4187205554180957",
+        "witness_marginal_empty": "1/7",
+        "witness_marginal_refined": "598172222025851/121016330240000",
+        "asymptotic_upper_coefficient": "3025408256/40920957",
+        "exact_triples": 27,
+        "verified_prior_spd": true,
+        "verified_physical_membership": true,
+        "coupling_rank": 2,
+        "unaffected_retention_modes": 0
+      },
+      "lightblocks": {
+        "gamma": 0.0289014543647525,
+        "triples": 27,
+        "witness": {
+          "x": 0,
+          "S_mask": 0,
+          "T_mask": 4
+        }
+      },
+      "bounds": {
+        "lambda_min_baseline": 0.0003999200119984002,
+        "lambda_max_total": 2.3991899189918966,
+        "active_candidates": 3,
+        "leave_one_denominator": 2.154145410996806,
+        "leave_two_denominator": 1.9090909090909087,
+        "full_spectral": 0.00016668960169957724,
+        "leave_one_spectral": 0.00018565135387649704,
+        "leave_two_spectral": 0.00020948191104678112,
+        "kantorovich_full": 0.0006665361789779346,
+        "improved": 0.0006665361789779346
+      },
+      "gamma_over_leave_one": 155.675968751508,
+      "gamma_over_improved": 43.360668597269765
+    },
+    "physical_parameter_family": {
+      "fixed_kappa": 10,
+      "fixed_alpha_exact": "3*sqrt(172105)/8888 + 165/808",
+      "upper_ratio_formula": "3025408256*epsilon^2/[77*(30614089*epsilon^2+531441)]",
+      "upper_quadratic_coefficient_exact": "3025408256/40920957",
+      "new_bound_order": "Theta(epsilon^2)",
+      "upper_ratio_over_new_bound_limit_exact": "672018808864/15154394409",
+      "rows": [
+        {
+          "q": "1/10",
+          "epsilon_exact": "20/101",
+          "epsilon": 0.19801980198019803,
+          "alpha": 0.344235619878634,
+          "gamma": 0.8895979173601104,
+          "gamma_exact": "1210163302400/1360348623557",
+          "witness_upper_ratio": 0.8895979173601104,
+          "gamma_over_epsilon_squared": 22.686970887476214,
+          "bounds": {
+            "lambda_min_baseline": 0.039211841976276834,
+            "lambda_max_total": 2.3991899189918984,
+            "active_candidates": 3,
+            "leave_one_denominator": 2.154641489102195,
+            "leave_two_denominator": 1.9090909090909087,
+            "full_spectral": 0.016343784068896482,
+            "leave_one_spectral": 0.01819877792876614,
+            "leave_two_spectral": 0.02053953627328787,
+            "kantorovich_full": 0.06328945216286162,
+            "improved": 0.06328945216286162
+          },
+          "gamma_over_improved": 14.056021769171329
+        },
+        {
+          "q": "1/30",
+          "epsilon_exact": "60/901",
+          "epsilon": 0.06659267480577137,
+          "alpha": 0.344235619878634,
+          "gamma": 0.261149379547971,
+          "gamma_exact": "1210163302400/4633988809373",
+          "witness_upper_ratio": 0.261149379547971,
+          "gamma_over_epsilon_squared": 58.889257629561776,
+          "bounds": {
+            "lambda_min_baseline": 0.0044345843377872176,
+            "lambda_max_total": 2.3991899189918993,
+            "active_candidates": 3,
+            "leave_one_denominator": 2.1541959519101557,
+            "leave_two_denominator": 1.9090909090909096,
+            "full_spectral": 0.0018483673604507967,
+            "leave_one_spectral": 0.002058579830611514,
+            "leave_two_spectral": 0.0023228775102694943,
+            "kantorovich_full": 0.007366213338804845,
+            "improved": 0.007366213338804845
+          },
+          "gamma_over_improved": 35.45232367521167
+        },
+        {
+          "q": "1/100",
+          "epsilon_exact": "200/10001",
+          "epsilon": 0.019998000199980003,
+          "alpha": 0.344235619878634,
+          "gamma": 0.028901454364752707,
+          "gamma_exact": "121016330240000/4187205554180957",
+          "witness_upper_ratio": 0.028901454364752707,
+          "gamma_over_epsilon_squared": 72.2680873616005,
+          "bounds": {
+            "lambda_min_baseline": 0.0003999200119984002,
+            "lambda_max_total": 2.3991899189918966,
+            "active_candidates": 3,
+            "leave_one_denominator": 2.154145410996806,
+            "leave_two_denominator": 1.9090909090909087,
+            "full_spectral": 0.00016668960169957724,
+            "leave_one_spectral": 0.00018565135387649704,
+            "leave_two_spectral": 0.00020948191104678112,
+            "kantorovich_full": 0.0006665361789779346,
+            "improved": 0.0006665361789779346
+          },
+          "gamma_over_improved": 43.360668597269765
+        },
+        {
+          "q": "1/300",
+          "epsilon_exact": "600/90001",
+          "epsilon": 0.006666592593415629,
+          "alpha": 0.344235619878634,
+          "gamma": 0.0032774462382145907,
+          "gamma_exact": "9308948480000/2840305470600521",
+          "witness_upper_ratio": 0.0032774462382145907,
+          "gamma_over_epsilon_squared": 73.74417909205141,
+          "bounds": {
+            "lambda_min_baseline": 4.4443456806584056e-05,
+            "lambda_max_total": 2.3991899189918966,
+            "active_candidates": 3,
+            "leave_one_denominator": 2.1541409692444264,
+            "leave_two_denominator": 1.9090909090909083,
+            "full_spectral": 1.8524359599367825e-05,
+            "leave_one_spectral": 2.063163805949653e-05,
+            "leave_two_spectral": 2.3279905946305945e-05,
+            "kantorovich_full": 7.409469325856091e-05,
+            "improved": 7.409469325856091e-05
+          },
+          "gamma_over_improved": 44.23321150379301
+        },
+        {
+          "q": "1/1000",
+          "epsilon_exact": "2000/1000001",
+          "epsilon": 0.0019999980000020004,
+          "alpha": 0.344235619878634,
+          "gamma": 0.00029566319714470685,
+          "gamma_exact": "930894848000000/3148497537028224689",
+          "witness_upper_ratio": 0.00029566319714470685,
+          "gamma_over_epsilon_squared": 73.91594711784919,
+          "bounds": {
+            "lambda_min_baseline": 3.999992000012008e-06,
+            "lambda_max_total": 2.3991899189919015,
+            "active_candidates": 3,
+            "leave_one_denominator": 2.154140464009533,
+            "leave_two_denominator": 1.9090909090909105,
+            "full_spectral": 1.6672260784143076e-06,
+            "leave_one_spectral": 1.8568854106044528e-06,
+            "leave_two_spectral": 2.0952339047681933e-06,
+            "kantorovich_full": 6.668882076570471e-06,
+            "improved": 6.668882076570471e-06
+          },
+          "gamma_over_improved": 44.33474662619228
+        }
+      ]
+    },
+    "tightness_two_candidates": {
+      "scope": "dim=2, two nonzero candidates, fixed chi=1/a; update size unbounded",
+      "infimum_gamma_exact": "a=1/chi",
+      "family": "A=diag(1,a); W0=h^-4*diag(1,0); W1=h^-4*[[1,h],[h,h^2]]",
+      "gamma_expansion": "a+(2*a^2-a+1)*h^2+O(h^4), 0<a<1",
+      "new_bound_for_sufficiently_small_h": "a",
+      "old_leave_one_expansion": "a*h^4+O(h^6)",
+      "fixed_kappa_or_update_norm_infimum_solved": false,
+      "pairwise_kantorovich_sharpness_claimed": false,
+      "rows": [
+        {
+          "h_exact": "1/4",
+          "h": 0.25,
+          "a": 0.25,
+          "gamma_exact": "5444481/17928577",
+          "gamma": 0.30367613670622046,
+          "strict_ratios_exact": [
+            "5444481/17928577",
+            "4358977/10601025"
+          ],
+          "bounds": {
+            "lambda_min_baseline": 0.25,
+            "lambda_max_total": 521.1130906104609,
+            "active_candidates": 2,
+            "leave_one_denominator": 272.9559965671784,
+            "leave_two_denominator": 1.0,
+            "full_spectral": 0.00047974231410524747,
+            "leave_one_spectral": 0.0009158985446156755,
+            "leave_two_spectral": 0.25,
+            "kantorovich_full": 0.0019171293590382267,
+            "improved": 0.25
+          },
+          "scaled_gap": 0.8588181872995274,
+          "scaled_gap_limit": 0.875,
+          "gamma_over_improved": 1.2147045468248818,
+          "gamma_over_leave_one": 331.5608901132684
+        },
+        {
+          "h_exact": "1/8",
+          "h": 0.125,
+          "a": 0.25,
+          "gamma_exact": "4601229825/17454666241",
+          "gamma": 0.26361030119223805,
+          "strict_ratios_exact": [
+            "4601229825/17454666241",
+            "21653157125/73066902789"
+          ],
+          "bounds": {
+            "lambda_min_baseline": 0.25,
+            "lambda_max_total": 8225.122057319217,
+            "active_candidates": 2,
+            "leave_one_denominator": 4160.988463586351,
+            "leave_two_denominator": 1.0,
+            "full_spectral": 3.0394685727190482e-05,
+            "leave_one_spectral": 6.0081877704733e-05,
+            "leave_two_spectral": 0.25,
+            "kantorovich_full": 0.00012157135255034142,
+            "improved": 0.25
+          },
+          "scaled_gap": 0.8710592763032369,
+          "scaled_gap_limit": 0.875,
+          "gamma_over_improved": 1.0544412047689522,
+          "gamma_over_leave_one": 4387.517688573704
+        },
+        {
+          "h_exact": "1/16",
+          "h": 0.0625,
+          "a": 0.25,
+          "gamma_exact": "4475625605121/17661309290497",
+          "gamma": 0.2534141456618505,
+          "strict_ratios_exact": [
+            "4475625605121/17661309290497",
+            "74915104637969/285886043603985"
+          ],
+          "bounds": {
+            "lambda_min_baseline": 0.25,
+            "lambda_max_total": 131201.12426674925,
+            "active_candidates": 2,
+            "leave_one_denominator": 65792.9970817452,
+            "leave_two_denominator": 1.0,
+            "full_spectral": 1.9054714766903743e-06,
+            "leave_one_spectral": 3.799796499457e-06,
+            "leave_two_spectral": 0.25,
+            "kantorovich_full": 7.621856860272131e-06,
+            "improved": 0.25
+          },
+          "scaled_gap": 0.8740212894337241,
+          "scaled_gap_limit": 0.875,
+          "gamma_over_improved": 1.013656582647402,
+          "gamma_over_leave_one": 66691.50458401232
+        },
+        {
+          "h_exact": "1/32",
+          "h": 0.03125,
+          "a": 0.25,
+          "gamma_exact": "85347321442845/340226726097437",
+          "gamma": 0.25085425363791825,
+          "strict_ratios_exact": [
+            "85347321442845/340226726097437",
+            "5525990015871325/21838271913765213"
+          ],
+          "bounds": {
+            "lambda_min_baseline": 0.25,
+            "lambda_max_total": 2097665.1248168424,
+            "active_candidates": 2,
+            "leave_one_denominator": 1049600.9992682934,
+            "leave_two_denominator": 1.0,
+            "full_spectral": 1.1918012891682544e-07,
+            "leave_one_spectral": 2.3818574884578243e-07,
+            "leave_two_spectral": 0.25,
+            "kantorovich_full": 4.767204020360971e-07,
+            "improved": 0.25
+          },
+          "scaled_gap": 0.8747557252282833,
+          "scaled_gap_limit": 0.875,
+          "gamma_over_improved": 1.003417014551673,
+          "gamma_over_leave_one": 1053187.5011562437
+        },
+        {
+          "h_exact": "1/64",
+          "h": 0.015625,
+          "a": 0.25,
+          "gamma_exact": "4616753667838607361/18451249322889609217",
+          "gamma": 0.25021360814366733,
+          "strict_ratios_exact": [
+            "4616753667838607361/18451249322889609217",
+            "1185348126174051582209/4726979013867108057345"
+          ],
+          "bounds": {
+            "lambda_min_baseline": 0.25,
+            "lambda_max_total": 33556481.12495422,
+            "active_candidates": 2,
+            "leave_one_denominator": 16781312.99981694,
+            "leave_two_denominator": 1.0,
+            "full_spectral": 7.450125627567304e-09,
+            "leave_one_spectral": 1.4897523215419863e-08,
+            "leave_two_spectral": 0.25,
+            "kantorovich_full": 2.9800502066234248e-08,
+            "improved": 0.25
+          },
+          "scaled_gap": 0.8749389564612788,
+          "scaled_gap_limit": 0.875,
+          "gamma_over_improved": 1.0008544325746693,
+          "gamma_over_leave_one": 16795651.500289705
+        }
+      ]
+    },
+    "original_general_counterexample": {
+      "gamma_exact": "14/109",
+      "gamma": 0.12844036697247707,
+      "bounds": {
+        "lambda_min_baseline": 0.01,
+        "lambda_max_total": 2.501005629259474,
+        "active_candidates": 2,
+        "leave_one_denominator": 2.0,
+        "leave_two_denominator": 1.0,
+        "full_spectral": 0.003998391640150332,
+        "leave_one_spectral": 0.005,
+        "leave_two_spectral": 0.01,
+        "kantorovich_full": 0.015866432479819434,
+        "improved": 0.015866432479819434
+      }
+    }
+  },
+  "random_exhaustive": {
+    "purpose": "falsification and implementation testing, NOT tightness evidence",
+    "instances": 40,
+    "triples": 1839,
+    "violations": 0,
+    "rows": [
+      {
+        "seed": 20260918,
+        "dimension": 2,
+        "candidates": 2,
+        "gamma": 1.0,
+        "triples": 6,
+        "bounds": {
+          "lambda_min_baseline": 7.877145665479174,
+          "lambda_max_total": 18.537329154498586,
+          "active_candidates": 2,
+          "leave_one_denominator": 18.537117244322552,
+          "leave_two_denominator": 8.359356480567609,
+          "full_spectral": 0.42493422864898367,
+          "leave_one_spectral": 0.4249390863561454,
+          "leave_two_spectral": 0.9423148401184475,
+          "kantorovich_full": 0.83712838624054,
+          "improved": 0.9423148401184475
+        },
+        "lowrank_bounds": {
+          "active_candidates": 2,
+          "lambda_min_baseline": 7.8771456654791745,
+          "lambda_max_total": 18.537329154498583,
+          "leave_one_denominator_interval": [
+            18.537117244322026,
+            18.537117244323078
+          ],
+          "leave_two_denominator_interval": [
+            8.359356480567081,
+            8.359356480568136
+          ],
+          "leave_one_spectral_interval": [
+            0.42493908635612065,
+            0.42493908635617034
+          ],
+          "leave_two_spectral_interval": [
+            0.9423148401183596,
+            0.9423148401185354
+          ],
+          "full_spectral": 0.42493422864895897,
+          "kantorovich_full": 0.8371283862405202,
+          "improved": 0.9423148401183596,
+          "top_subspace_rank": 2,
+          "rounding_pad": 5.268625828449155e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260919,
+        "dimension": 3,
+        "candidates": 3,
+        "gamma": 1.0,
+        "triples": 27,
+        "bounds": {
+          "lambda_min_baseline": 0.002803920685657389,
+          "lambda_max_total": 19.041075654404725,
+          "active_candidates": 3,
+          "leave_one_denominator": 17.70930956049209,
+          "leave_two_denominator": 14.537520010079295,
+          "full_spectral": 0.00014725642272256636,
+          "leave_one_spectral": 0.0001583303220308876,
+          "leave_two_spectral": 0.00019287476018697464,
+          "kantorovich_full": 0.0005888522535685806,
+          "improved": 0.0005888522535685806
+        },
+        "lowrank_bounds": {
+          "active_candidates": 3,
+          "lambda_min_baseline": 0.0028039206856574415,
+          "lambda_max_total": 19.04107565440473,
+          "leave_one_denominator_interval": [
+            17.703327146434688,
+            17.70986785187932
+          ],
+          "leave_two_denominator_interval": [
+            14.476549823094869,
+            14.611520300821043
+          ],
+          "leave_one_spectral_interval": [
+            0.0001583253307731079,
+            0.000158383825962497
+          ],
+          "leave_two_spectral_interval": [
+            0.0001918979427102645,
+            0.00019368708152027233
+          ],
+          "full_spectral": 0.00014725642271937926,
+          "kantorovich_full": 0.0005888522535558397,
+          "improved": 0.0005888522535558397,
+          "top_subspace_rank": 2,
+          "rounding_pad": 8.117698792377466e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260920,
+        "dimension": 4,
+        "candidates": 4,
+        "gamma": 1.0,
+        "triples": 108,
+        "bounds": {
+          "lambda_min_baseline": 0.0026712974122938735,
+          "lambda_max_total": 14.502351069745647,
+          "active_candidates": 4,
+          "leave_one_denominator": 14.49298134368426,
+          "leave_two_denominator": 14.44176594183388,
+          "full_spectral": 0.0001841975414501343,
+          "leave_one_spectral": 0.00018431662533381852,
+          "leave_two_spectral": 0.0001849702746224303,
+          "kantorovich_full": 0.0007365188109029862,
+          "improved": 0.0007365188109029862
+        },
+        "lowrank_bounds": {
+          "active_candidates": 4,
+          "lambda_min_baseline": 0.0026712974122938974,
+          "lambda_max_total": 14.502351069745645,
+          "leave_one_denominator_interval": [
+            14.49290178591535,
+            14.49302754258382
+          ],
+          "leave_two_denominator_interval": [
+            14.441232365669578,
+            14.441847467119901
+          ],
+          "leave_one_spectral_interval": [
+            0.00018431603777948228,
+            0.00018431763714192058
+          ],
+          "leave_two_spectral_interval": [
+            0.00018496923043674038,
+            0.00018497710893844354
+          ],
+          "full_spectral": 0.00018419754143523544,
+          "kantorovich_full": 0.0007365188108434345,
+          "improved": 0.0007365188108434345,
+          "top_subspace_rank": 2,
+          "rounding_pad": 8.243632163240389e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260921,
+        "dimension": 2,
+        "candidates": 2,
+        "gamma": 1.0,
+        "triples": 6,
+        "bounds": {
+          "lambda_min_baseline": 0.19344365491713444,
+          "lambda_max_total": 9.238842202231126,
+          "active_candidates": 2,
+          "leave_one_denominator": 9.235394820369738,
+          "leave_two_denominator": 9.044429637448404,
+          "full_spectral": 0.02093808408919669,
+          "leave_one_spectral": 0.02094589984290352,
+          "leave_two_spectral": 0.02138815410937382,
+          "kantorovich_full": 0.08035226470329913,
+          "improved": 0.08035226470329913
+        },
+        "lowrank_bounds": {
+          "active_candidates": 2,
+          "lambda_min_baseline": 0.19344365491713467,
+          "lambda_max_total": 9.238842202231126,
+          "leave_one_denominator_interval": [
+            9.235394820369478,
+            9.235394820370004
+          ],
+          "leave_two_denominator_interval": [
+            9.044429637448143,
+            9.044429637448669
+          ],
+          "leave_one_spectral_interval": [
+            0.02094589984287789,
+            0.020945899842929175
+          ],
+          "leave_two_spectral_interval": [
+            0.02138815410934764,
+            0.021388154109400037
+          ],
+          "full_spectral": 0.02093808408917108,
+          "kantorovich_full": 0.08035226470320485,
+          "improved": 0.08035226470320485,
+          "top_subspace_rank": 2,
+          "rounding_pad": 2.625836885451669e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260922,
+        "dimension": 3,
+        "candidates": 3,
+        "gamma": 1.0,
+        "triples": 27,
+        "bounds": {
+          "lambda_min_baseline": 0.005333580303473742,
+          "lambda_max_total": 17.66782462049842,
+          "active_candidates": 3,
+          "leave_one_denominator": 17.66759430301035,
+          "leave_two_denominator": 16.889376616803098,
+          "full_spectral": 0.0003018809852394425,
+          "leave_one_spectral": 0.00030188492060659116,
+          "leave_two_spectral": 0.00031579497719101175,
+          "kantorovich_full": 0.0012067952139236296,
+          "improved": 0.0012067952139236296
+        },
+        "lowrank_bounds": {
+          "active_candidates": 3,
+          "lambda_min_baseline": 0.005333580303473669,
+          "lambda_max_total": 17.667824620498422,
+          "leave_one_denominator_interval": [
+            17.667594189848913,
+            17.667615406750624
+          ],
+          "leave_two_denominator_interval": [
+            16.871331450270855,
+            16.895129480521952
+          ],
+          "leave_one_spectral_interval": [
+            0.0003018845600061242,
+            0.0003018849225429609
+          ],
+          "leave_two_spectral_interval": [
+            0.00031568744765012355,
+            0.00031613274383494964
+          ],
+          "full_spectral": 0.00030188098523663303,
+          "kantorovich_full": 0.0012067952139124052,
+          "improved": 0.0012067952139124052,
+          "top_subspace_rank": 2,
+          "rounding_pad": 7.532246664467162e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260923,
+        "dimension": 4,
+        "candidates": 4,
+        "gamma": 0.9157885951166518,
+        "triples": 108,
+        "bounds": {
+          "lambda_min_baseline": 0.0019771536482886924,
+          "lambda_max_total": 7.770758256820262,
+          "active_candidates": 4,
+          "leave_one_denominator": 7.755633198623249,
+          "leave_two_denominator": 7.5982702109550395,
+          "full_spectral": 0.00025443509924573686,
+          "leave_one_spectral": 0.00025493129930895513,
+          "leave_two_spectral": 0.0002602110208502549,
+          "kantorovich_full": 0.0010172226968151398,
+          "improved": 0.0010172226968151398
+        },
+        "lowrank_bounds": {
+          "active_candidates": 4,
+          "lambda_min_baseline": 0.0019771536482891556,
+          "lambda_max_total": 7.770758256820258,
+          "leave_one_denominator_interval": [
+            7.755561151181148,
+            7.7707582568207
+          ],
+          "leave_two_denominator_interval": [
+            7.597561714590503,
+            7.7707582568207
+          ],
+          "leave_one_spectral_interval": [
+            0.00025443509922999907,
+            0.000254933667580029
+          ],
+          "leave_two_spectral_interval": [
+            0.00025443509922999907,
+            0.0002602352863570477
+          ],
+          "full_spectral": 0.00025443509922999907,
+          "kantorovich_full": 0.0010172226967522528,
+          "improved": 0.0010172226967522528,
+          "top_subspace_rank": 2,
+          "rounding_pad": 4.417164664585163e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260924,
+        "dimension": 2,
+        "candidates": 2,
+        "gamma": 1.0,
+        "triples": 6,
+        "bounds": {
+          "lambda_min_baseline": 0.0014690882153101242,
+          "lambda_max_total": 33.4096708309178,
+          "active_candidates": 2,
+          "leave_one_denominator": 33.40427831384425,
+          "leave_two_denominator": 0.322159402370913,
+          "full_spectral": 4.39719452114628e-05,
+          "leave_one_spectral": 4.3979043687385015e-05,
+          "leave_two_spectral": 0.004560128323117241,
+          "kantorovich_full": 0.00017587231361031988,
+          "improved": 0.004560128323117241
+        },
+        "lowrank_bounds": {
+          "active_candidates": 2,
+          "lambda_min_baseline": 0.0014690882153101297,
+          "lambda_max_total": 33.4096708309178,
+          "leave_one_denominator_interval": [
+            33.40427831384331,
+            33.40427831384521
+          ],
+          "leave_two_denominator_interval": [
+            0.3221594023699622,
+            0.32215940237186136
+          ],
+          "leave_one_spectral_interval": [
+            4.3979043686533076e-05,
+            4.3979043688237266e-05
+          ],
+          "leave_two_spectral_interval": [
+            0.004560128323015612,
+            0.0045601283232189396
+          ],
+          "full_spectral": 4.397194521061101e-05,
+          "kantorovich_full": 0.00017587231360691335,
+          "improved": 0.004560128323015612,
+          "top_subspace_rank": 2,
+          "rounding_pad": 9.4955995652179e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260925,
+        "dimension": 3,
+        "candidates": 3,
+        "gamma": 1.0,
+        "triples": 27,
+        "bounds": {
+          "lambda_min_baseline": 0.00109975597046803,
+          "lambda_max_total": 5.421047164207767,
+          "active_candidates": 3,
+          "leave_one_denominator": 5.416094580647501,
+          "leave_two_denominator": 4.719078102555112,
+          "full_spectral": 0.0002028678108039941,
+          "leave_one_spectral": 0.00020305331712588975,
+          "leave_two_spectral": 0.00023304466392971433,
+          "kantorovich_full": 0.0008111421005887457,
+          "improved": 0.0008111421005887457
+        },
+        "lowrank_bounds": {
+          "active_candidates": 3,
+          "lambda_min_baseline": 0.0010997559704680315,
+          "lambda_max_total": 5.421047164207766,
+          "leave_one_denominator_interval": [
+            5.4160640978642824,
+            5.416097083169131
+          ],
+          "leave_two_denominator_interval": [
+            4.715613548206293,
+            4.844690074537229
+          ],
+          "leave_one_spectral_interval": [
+            0.00020305322329670957,
+            0.00020305445996186253
+          ],
+          "leave_two_spectral_interval": [
+            0.00022700233730234002,
+            0.00023321588151111003
+          ],
+          "full_spectral": 0.00020286781079612148,
+          "kantorovich_full": 0.0008111421005572806,
+          "improved": 0.0008111421005572806,
+          "top_subspace_rank": 2,
+          "rounding_pad": 2.3111314096444314e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260926,
+        "dimension": 4,
+        "candidates": 4,
+        "gamma": 1.0,
+        "triples": 108,
+        "bounds": {
+          "lambda_min_baseline": 0.029360744660039545,
+          "lambda_max_total": 9.07828751440509,
+          "active_candidates": 4,
+          "leave_one_denominator": 9.072045457938993,
+          "leave_two_denominator": 9.043807963070817,
+          "full_spectral": 0.003234172151240088,
+          "leave_one_spectral": 0.0032363974360760956,
+          "leave_two_spectral": 0.0032465024445377686,
+          "kantorovich_full": 0.012853413853661016,
+          "improved": 0.012853413853661016
+        },
+        "lowrank_bounds": {
+          "active_candidates": 4,
+          "lambda_min_baseline": 0.02936074466003985,
+          "lambda_max_total": 9.078287514405092,
+          "leave_one_denominator_interval": [
+            9.072029907772153,
+            9.072061547338375
+          ],
+          "leave_two_denominator_interval": [
+            9.04380383814298,
+            9.043864638730513
+          ],
+          "leave_one_spectral_interval": [
+            0.0032363916962624317,
+            0.0032364029835415618
+          ],
+          "leave_two_spectral_interval": [
+            0.003246482099483191,
+            0.003246503925313013
+          ],
+          "full_spectral": 0.003234172151212154,
+          "kantorovich_full": 0.012853413853550716,
+          "improved": 0.012853413853550716,
+          "top_subspace_rank": 2,
+          "rounding_pad": 5.160408997201723e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260927,
+        "dimension": 2,
+        "candidates": 2,
+        "gamma": 1.0,
+        "triples": 6,
+        "bounds": {
+          "lambda_min_baseline": 0.0012573285921917976,
+          "lambda_max_total": 53.01161052299444,
+          "active_candidates": 2,
+          "leave_one_denominator": 45.89966842878521,
+          "leave_two_denominator": 4.033582659255259,
+          "full_spectral": 2.3717985169426533e-05,
+          "leave_one_spectral": 2.7392977666986476e-05,
+          "leave_two_spectral": 0.0003117150926129637,
+          "kantorovich_full": 9.486744049524568e-05,
+          "improved": 0.0003117150926129637
+        },
+        "lowrank_bounds": {
+          "active_candidates": 2,
+          "lambda_min_baseline": 0.0012573285921916224,
+          "lambda_max_total": 53.01161052299444,
+          "leave_one_denominator_interval": [
+            45.899668428783706,
+            45.89966842878672
+          ],
+          "leave_two_denominator_interval": [
+            4.0335826592537565,
+            4.033582659256769
+          ],
+          "leave_one_spectral_interval": [
+            2.739297766458352e-05,
+            2.7392977669381797e-05
+          ],
+          "leave_two_spectral_interval": [
+            0.0003117150925855131,
+            0.0003117150926403269
+          ],
+          "full_spectral": 2.3717985167346058e-05,
+          "kantorovich_full": 9.486744048692455e-05,
+          "improved": 0.0003117150925855131,
+          "top_subspace_rank": 2,
+          "rounding_pad": 1.5066805907222953e-12,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260928,
+        "dimension": 3,
+        "candidates": 3,
+        "gamma": 1.0,
+        "triples": 27,
+        "bounds": {
+          "lambda_min_baseline": 0.0010219862657717372,
+          "lambda_max_total": 26.87102295115774,
+          "active_candidates": 3,
+          "leave_one_denominator": 26.537588800654042,
+          "leave_two_denominator": 26.094726793234912,
+          "full_spectral": 3.803302418480145e-05,
+          "leave_one_spectral": 3.851089386638433e-05,
+          "leave_two_spectral": 3.9164474641546674e-05,
+          "kantorovich_full": 0.00015212052531192544,
+          "improved": 0.00015212052531192544
+        },
+        "lowrank_bounds": {
+          "active_candidates": 3,
+          "lambda_min_baseline": 0.0010219862657716277,
+          "lambda_max_total": 26.871022951157737,
+          "leave_one_denominator_interval": [
+            26.53283640107744,
+            26.543219164584734
+          ],
+          "leave_two_denominator_interval": [
+            26.093659490489628,
+            26.10257872615899
+          ],
+          "leave_one_spectral_interval": [
+            3.8502724910187174e-05,
+            3.85177917042047e-05
+          ],
+          "leave_two_spectral_interval": [
+            3.915269354979933e-05,
+            3.91660765785238e-05
+          ],
+          "full_spectral": 3.8033024183053604e-05,
+          "kantorovich_full": 0.00015212052530493508,
+          "improved": 0.00015212052530493508,
+          "top_subspace_rank": 2,
+          "rounding_pad": 1.1455806096232835e-12,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260929,
+        "dimension": 4,
+        "candidates": 4,
+        "gamma": 1.0,
+        "triples": 108,
+        "bounds": {
+          "lambda_min_baseline": 0.013977225382071176,
+          "lambda_max_total": 10.302648586800473,
+          "active_candidates": 4,
+          "leave_one_denominator": 10.254709342619508,
+          "leave_two_denominator": 9.683577016018077,
+          "full_spectral": 0.001356663314710985,
+          "leave_one_spectral": 0.001363005514352372,
+          "leave_two_spectral": 0.0014433948693701477,
+          "kantorovich_full": 0.005411958885780176,
+          "improved": 0.005411958885780176
+        },
+        "lowrank_bounds": {
+          "active_candidates": 4,
+          "lambda_min_baseline": 0.013977225382071082,
+          "lambda_max_total": 10.302648586800474,
+          "leave_one_denominator_interval": [
+            10.254705948068953,
+            10.25471586018002
+          ],
+          "leave_two_denominator_interval": [
+            9.640423069250827,
+            9.711404190959286
+          ],
+          "leave_one_spectral_interval": [
+            0.0013630046480473982,
+            0.0013630059655629085
+          ],
+          "leave_two_spectral_interval": [
+            0.0014392589482417663,
+            0.0014498560158519697
+          ],
+          "full_spectral": 0.0013566633146875706,
+          "kantorovich_full": 0.005411958885687026,
+          "improved": 0.005411958885687026,
+          "top_subspace_rank": 2,
+          "rounding_pad": 5.856377689952111e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260930,
+        "dimension": 2,
+        "candidates": 2,
+        "gamma": 1.0,
+        "triples": 6,
+        "bounds": {
+          "lambda_min_baseline": 0.004256363200791361,
+          "lambda_max_total": 7.102285922932969,
+          "active_candidates": 2,
+          "leave_one_denominator": 7.085744408503413,
+          "leave_two_denominator": 0.03546511340224979,
+          "full_spectral": 0.0005992948252122252,
+          "leave_one_spectral": 0.0006006938657967133,
+          "leave_two_spectral": 0.12001549670841745,
+          "kantorovich_full": 0.002394308647358039,
+          "improved": 0.12001549670841745
+        },
+        "lowrank_bounds": {
+          "active_candidates": 2,
+          "lambda_min_baseline": 0.004256363200791359,
+          "lambda_max_total": 7.102285922932969,
+          "leave_one_denominator_interval": [
+            7.085744408503213,
+            7.085744408503616
+          ],
+          "leave_two_denominator_interval": [
+            0.03546511340204762,
+            0.035465113402451336
+          ],
+          "leave_one_spectral_interval": [
+            0.0006006938657926847,
+            0.0006006938658007411
+          ],
+          "leave_two_spectral_interval": [
+            0.12001549670693396,
+            0.12001549670990296
+          ],
+          "full_spectral": 0.0005992948252082061,
+          "kantorovich_full": 0.0023943086473420016,
+          "improved": 0.12001549670693396,
+          "top_subspace_rank": 2,
+          "rounding_pad": 2.018591067932496e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260931,
+        "dimension": 3,
+        "candidates": 3,
+        "gamma": 1.0,
+        "triples": 27,
+        "bounds": {
+          "lambda_min_baseline": 0.12916377602666243,
+          "lambda_max_total": 6.439637568322401,
+          "active_candidates": 3,
+          "leave_one_denominator": 6.251838060611684,
+          "leave_two_denominator": 4.592928046743003,
+          "full_spectral": 0.02005761576739032,
+          "leave_one_spectral": 0.020660128233395886,
+          "leave_two_spectral": 0.028122316463950862,
+          "kantorovich_full": 0.07710630530002112,
+          "improved": 0.07710630530002112
+        },
+        "lowrank_bounds": {
+          "active_candidates": 3,
+          "lambda_min_baseline": 0.12916377602666246,
+          "lambda_max_total": 6.439637568322401,
+          "leave_one_denominator_interval": [
+            6.250531023942193,
+            6.255043717480526
+          ],
+          "leave_two_denominator_interval": [
+            4.582502400552082,
+            4.594779200030932
+          ],
+          "leave_one_spectral_interval": [
+            0.020649540092846193,
+            0.020664448433573544
+          ],
+          "leave_two_spectral_interval": [
+            0.028110986492180145,
+            0.028186297515336585
+          ],
+          "full_spectral": 0.020057615767382846,
+          "kantorovich_full": 0.07710630529999353,
+          "improved": 0.07710630529999353,
+          "top_subspace_rank": 2,
+          "rounding_pad": 2.745382617059591e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260932,
+        "dimension": 4,
+        "candidates": 4,
+        "gamma": 1.0,
+        "triples": 108,
+        "bounds": {
+          "lambda_min_baseline": 0.0018150059576287334,
+          "lambda_max_total": 98.66439603205141,
+          "active_candidates": 4,
+          "leave_one_denominator": 98.40532643730357,
+          "leave_two_denominator": 97.83101012469749,
+          "full_spectral": 1.8395753996599984e-05,
+          "leave_one_spectral": 1.844418410404967e-05,
+          "leave_two_spectral": 1.8552460567618472e-05,
+          "kantorovich_full": 7.35803088309796e-05,
+          "improved": 7.35803088309796e-05
+        },
+        "lowrank_bounds": {
+          "active_candidates": 4,
+          "lambda_min_baseline": 0.001815005957628808,
+          "lambda_max_total": 98.66439603205141,
+          "leave_one_denominator_interval": [
+            98.40470044741167,
+            98.40538763135434
+          ],
+          "leave_two_denominator_interval": [
+            97.82311558110204,
+            97.90794101863717
+          ],
+          "leave_one_spectral_interval": [
+            1.8444172633833107e-05,
+            1.844430143512917e-05
+          ],
+          "leave_two_spectral_interval": [
+            1.8537883022445246e-05,
+            1.8553957793144377e-05
+          ],
+          "full_spectral": 1.8395753996023565e-05,
+          "kantorovich_full": 7.358030882867407e-05,
+          "improved": 7.358030882867407e-05,
+          "top_subspace_rank": 2,
+          "rounding_pad": 5.608421590298543e-12,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260933,
+        "dimension": 2,
+        "candidates": 2,
+        "gamma": 1.0,
+        "triples": 6,
+        "bounds": {
+          "lambda_min_baseline": 0.01873223568814264,
+          "lambda_max_total": 35.73199828063772,
+          "active_candidates": 2,
+          "leave_one_denominator": 35.690778319108084,
+          "leave_two_denominator": 2.5805257201598186,
+          "full_spectral": 0.000524242600176469,
+          "leave_one_spectral": 0.000524848057967786,
+          "leave_two_spectral": 0.007259077304210129,
+          "kantorovich_full": 0.0020947734860004797,
+          "improved": 0.007259077304210129
+        },
+        "lowrank_bounds": {
+          "active_candidates": 2,
+          "lambda_min_baseline": 0.0187322356881427,
+          "lambda_max_total": 35.73199828063771,
+          "leave_one_denominator_interval": [
+            35.690778319107075,
+            35.69077831910911
+          ],
+          "leave_two_denominator_interval": [
+            2.5805257201587977,
+            2.580525720160829
+          ],
+          "leave_one_spectral_interval": [
+            0.0005248480579666428,
+            0.0005248480579689322
+          ],
+          "leave_two_spectral_interval": [
+            0.007259077304191685,
+            0.00725907730422865
+          ],
+          "full_spectral": 0.0005242426001753275,
+          "kantorovich_full": 0.002094773485995923,
+          "improved": 0.007259077304191685,
+          "top_subspace_rank": 2,
+          "rounding_pad": 1.0155644724999806e-12,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260934,
+        "dimension": 3,
+        "candidates": 3,
+        "gamma": 1.0,
+        "triples": 27,
+        "bounds": {
+          "lambda_min_baseline": 0.14568999108661715,
+          "lambda_max_total": 12.490950251523579,
+          "active_candidates": 3,
+          "leave_one_denominator": 12.370506241446044,
+          "leave_two_denominator": 11.27944202591441,
+          "full_spectral": 0.011663643530150692,
+          "leave_one_spectral": 0.011777205252805142,
+          "leave_two_spectral": 0.012916418272454948,
+          "kantorovich_full": 0.04558499836838459,
+          "improved": 0.04558499836838459
+        },
+        "lowrank_bounds": {
+          "active_candidates": 3,
+          "lambda_min_baseline": 0.14568999108661723,
+          "lambda_max_total": 12.490950251523579,
+          "leave_one_denominator_interval": [
+            12.370158245399548,
+            12.37168495286052
+          ],
+          "leave_two_denominator_interval": [
+            11.278970711034926,
+            11.309320807999331
+          ],
+          "leave_one_spectral_interval": [
+            0.011776083180398248,
+            0.011777536567961822
+          ],
+          "leave_two_spectral_interval": [
+            0.012882293601886077,
+            0.012916958011437154
+          ],
+          "full_spectral": 0.011663643530146168,
+          "kantorovich_full": 0.04558499836836731,
+          "improved": 0.04558499836836731,
+          "top_subspace_rank": 2,
+          "rounding_pad": 5.325212378376525e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260935,
+        "dimension": 4,
+        "candidates": 4,
+        "gamma": 1.0,
+        "triples": 108,
+        "bounds": {
+          "lambda_min_baseline": 0.001225551697397137,
+          "lambda_max_total": 6.509428213894932,
+          "active_candidates": 4,
+          "leave_one_denominator": 6.484699585581629,
+          "leave_two_denominator": 6.23993053068687,
+          "full_spectral": 0.00018827332557122176,
+          "leave_one_spectral": 0.00018899128343926423,
+          "leave_two_spectral": 0.00019640470216296345,
+          "kantorovich_full": 0.0007528098075881601,
+          "improved": 0.0007528098075881601
+        },
+        "lowrank_bounds": {
+          "active_candidates": 4,
+          "lambda_min_baseline": 0.0012255516973971362,
+          "lambda_max_total": 6.5094282138949335,
+          "leave_one_denominator_interval": [
+            6.484557670341756,
+            6.48505609383519
+          ],
+          "leave_two_denominator_interval": [
+            6.237320757110775,
+            6.241234089185432
+          ],
+          "leave_one_spectral_interval": [
+            0.0001889808938592411,
+            0.00018899541954253132
+          ],
+          "leave_two_spectral_interval": [
+            0.00019636368061628728,
+            0.00019648688037356512
+          ],
+          "full_spectral": 0.0001882733255624784,
+          "kantorovich_full": 0.0007528098075532129,
+          "improved": 0.0007528098075532129,
+          "top_subspace_rank": 2,
+          "rounding_pad": 3.700181545067911e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260936,
+        "dimension": 2,
+        "candidates": 2,
+        "gamma": 1.0,
+        "triples": 6,
+        "bounds": {
+          "lambda_min_baseline": 0.06227711512210099,
+          "lambda_max_total": 2.0817305481340527,
+          "active_candidates": 2,
+          "leave_one_denominator": 2.062847908596191,
+          "leave_two_denominator": 1.9789011461496622,
+          "full_spectral": 0.029916030764847414,
+          "leave_one_spectral": 0.030189872390777375,
+          "leave_two_spectral": 0.03147055386939022,
+          "kantorovich_full": 0.11281330599379939,
+          "improved": 0.11281330599379939
+        },
+        "lowrank_bounds": {
+          "active_candidates": 2,
+          "lambda_min_baseline": 0.062277115122100865,
+          "lambda_max_total": 2.0817305481340527,
+          "leave_one_denominator_interval": [
+            2.0628479085961318,
+            2.06284790859625
+          ],
+          "leave_two_denominator_interval": [
+            1.978901146149603,
+            1.9789011461497212
+          ],
+          "leave_one_spectral_interval": [
+            0.030189872390756895,
+            0.03018987239079773
+          ],
+          "leave_two_spectral_interval": [
+            0.03147055386936883,
+            0.03147055386941148
+          ],
+          "full_spectral": 0.02991603076482713,
+          "kantorovich_full": 0.11281330599372731,
+          "improved": 0.11281330599372731,
+          "top_subspace_rank": 2,
+          "rounding_pad": 5.916634075146171e-14,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260937,
+        "dimension": 3,
+        "candidates": 3,
+        "gamma": 1.0,
+        "triples": 27,
+        "bounds": {
+          "lambda_min_baseline": 0.003837730070882226,
+          "lambda_max_total": 8.421127040693861,
+          "active_candidates": 3,
+          "leave_one_denominator": 8.420264829544925,
+          "leave_two_denominator": 6.996689379213505,
+          "full_spectral": 0.0004557264190810753,
+          "leave_one_spectral": 0.00045577308416909224,
+          "leave_two_spectral": 0.0005485065668748645,
+          "kantorovich_full": 0.0018212453188612442,
+          "improved": 0.0018212453188612442
+        },
+        "lowrank_bounds": {
+          "active_candidates": 3,
+          "lambda_min_baseline": 0.003837730070882204,
+          "lambda_max_total": 8.42112704069386,
+          "leave_one_denominator_interval": [
+            8.420264153738033,
+            8.420274106229511
+          ],
+          "leave_two_denominator_interval": [
+            6.994442128931015,
+            7.046527437548216
+          ],
+          "leave_one_spectral_interval": [
+            0.00045577258203510627,
+            0.00045577312075431044
+          ],
+          "leave_two_spectral_interval": [
+            0.000544627137955895,
+            0.0005486827970240666
+          ],
+          "full_spectral": 0.0004557264190759908,
+          "kantorovich_full": 0.0018212453188409426,
+          "improved": 0.0018212453188409426,
+          "top_subspace_rank": 2,
+          "rounding_pad": 3.5901423874067825e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260938,
+        "dimension": 4,
+        "candidates": 4,
+        "gamma": 1.0,
+        "triples": 108,
+        "bounds": {
+          "lambda_min_baseline": 0.004238152433985121,
+          "lambda_max_total": 12.913421596385477,
+          "active_candidates": 4,
+          "leave_one_denominator": 12.892072207693069,
+          "leave_two_denominator": 12.830528109693493,
+          "full_spectral": 0.00032819748060974,
+          "leave_one_spectral": 0.00032874097861910004,
+          "leave_two_spectral": 0.000330317848006832,
+          "kantorovich_full": 0.0013119286377791038,
+          "improved": 0.0013119286377791038
+        },
+        "lowrank_bounds": {
+          "active_candidates": 4,
+          "lambda_min_baseline": 0.00423815243398475,
+          "lambda_max_total": 12.913421596385477,
+          "leave_one_denominator_interval": [
+            12.891958575022489,
+            12.892080271573796
+          ],
+          "leave_two_denominator_interval": [
+            12.829782734642974,
+            12.838648552792387
+          ],
+          "leave_one_spectral_interval": [
+            0.0003287407729839655,
+            0.0003287438762277908
+          ],
+          "leave_two_spectral_interval": [
+            0.0003301089220116326,
+            0.00033033703857487327
+          ],
+          "full_spectral": 0.00032819748059914177,
+          "kantorovich_full": 0.0013119286377367666,
+          "improved": 0.0013119286377367666,
+          "top_subspace_rank": 2,
+          "rounding_pad": 7.340430327295438e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260939,
+        "dimension": 2,
+        "candidates": 2,
+        "gamma": 0.888387206646182,
+        "triples": 6,
+        "bounds": {
+          "lambda_min_baseline": 0.1234768308333001,
+          "lambda_max_total": 10.24948410458788,
+          "active_candidates": 2,
+          "leave_one_denominator": 10.228402724029547,
+          "leave_two_denominator": 0.29387470948754335,
+          "full_spectral": 0.012047126428346704,
+          "leave_one_spectral": 0.012071956312711121,
+          "leave_two_spectral": 0.4201682786811364,
+          "kantorovich_full": 0.047048088920223746,
+          "improved": 0.4201682786811364
+        },
+        "lowrank_bounds": {
+          "active_candidates": 2,
+          "lambda_min_baseline": 0.1234768308333001,
+          "lambda_max_total": 10.249484104587882,
+          "leave_one_denominator_interval": [
+            10.228402724029259,
+            10.228402724029841
+          ],
+          "leave_two_denominator_interval": [
+            0.29387470948725275,
+            0.2938747094878354
+          ],
+          "leave_one_spectral_interval": [
+            0.012071956312707993,
+            0.012071956312714238
+          ],
+          "leave_two_spectral_interval": [
+            0.4201682786806221,
+            0.4201682786816486
+          ],
+          "full_spectral": 0.012047126428343586,
+          "kantorovich_full": 0.04704808892021185,
+          "improved": 0.4201682786806221,
+          "top_subspace_rank": 2,
+          "rounding_pad": 2.913078590321414e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260940,
+        "dimension": 3,
+        "candidates": 3,
+        "gamma": 1.0,
+        "triples": 27,
+        "bounds": {
+          "lambda_min_baseline": 0.001082799316543601,
+          "lambda_max_total": 5.840603831615394,
+          "active_candidates": 3,
+          "leave_one_denominator": 5.808710033946401,
+          "leave_two_denominator": 5.484027742981281,
+          "full_spectral": 0.00018539167314899363,
+          "leave_one_spectral": 0.0001864096004475462,
+          "leave_two_spectral": 0.00019744599540536952,
+          "kantorovich_full": 0.0007412918084603972,
+          "improved": 0.0007412918084603972
+        },
+        "lowrank_bounds": {
+          "active_candidates": 3,
+          "lambda_min_baseline": 0.0010827993165435953,
+          "lambda_max_total": 5.840603831615396,
+          "leave_one_denominator_interval": [
+            5.808705628378746,
+            5.813542014859902
+          ],
+          "leave_two_denominator_interval": [
+            5.480908529195534,
+            5.486189487757056
+          ],
+          "leave_one_spectral_interval": [
+            0.0001862546643222388,
+            0.00018640974183579782
+          ],
+          "leave_two_spectral_interval": [
+            0.00019736819497710216,
+            0.00019755836296453516
+          ],
+          "full_spectral": 0.00018539167314168538,
+          "kantorovich_full": 0.0007412918084311859,
+          "improved": 0.0007412918084311859,
+          "top_subspace_rank": 2,
+          "rounding_pad": 2.489999175004156e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260941,
+        "dimension": 4,
+        "candidates": 4,
+        "gamma": 1.0,
+        "triples": 108,
+        "bounds": {
+          "lambda_min_baseline": 0.0026951548358662325,
+          "lambda_max_total": 6.9068379849393216,
+          "active_candidates": 4,
+          "leave_one_denominator": 6.878979962270955,
+          "leave_two_denominator": 6.811675677881959,
+          "full_spectral": 0.0003902154418191279,
+          "leave_one_spectral": 0.00039179570963257786,
+          "leave_two_spectral": 0.00039566693473349154,
+          "kantorovich_full": 0.0015596443351857754,
+          "improved": 0.0015596443351857754
+        },
+        "lowrank_bounds": {
+          "active_candidates": 4,
+          "lambda_min_baseline": 0.002695154835866383,
+          "lambda_max_total": 6.906837984939322,
+          "leave_one_denominator_interval": [
+            6.878964213557767,
+            6.879024941670818
+          ],
+          "leave_two_denominator_interval": [
+            6.811552270899472,
+            6.812939304671121
+          ],
+          "leave_one_spectral_interval": [
+            0.00039179314780727286,
+            0.00039179660662849903
+          ],
+          "leave_two_spectral_interval": [
+            0.0003955935485722126,
+            0.00039567410317104077
+          ],
+          "full_spectral": 0.00039021544180111177,
+          "kantorovich_full": 0.0015596443351138232,
+          "improved": 0.0015596443351138232,
+          "top_subspace_rank": 2,
+          "rounding_pad": 3.926082845816451e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260942,
+        "dimension": 2,
+        "candidates": 2,
+        "gamma": 1.0,
+        "triples": 6,
+        "bounds": {
+          "lambda_min_baseline": 0.17342944571562202,
+          "lambda_max_total": 26.08258148635809,
+          "active_candidates": 2,
+          "leave_one_denominator": 26.082055229716424,
+          "leave_two_denominator": 7.843400444443982,
+          "full_spectral": 0.006649243895061936,
+          "leave_one_spectral": 0.006649378056604462,
+          "leave_two_spectral": 0.02211151234009402,
+          "kantorovich_full": 0.026246772759198723,
+          "improved": 0.026246772759198723
+        },
+        "lowrank_bounds": {
+          "active_candidates": 2,
+          "lambda_min_baseline": 0.17342944571562152,
+          "lambda_max_total": 26.08258148635809,
+          "leave_one_denominator_interval": [
+            26.082055229715678,
+            26.082055229717163
+          ],
+          "leave_two_denominator_interval": [
+            7.843400444443236,
+            7.843400444444719
+          ],
+          "leave_one_spectral_interval": [
+            0.00664937805659955,
+            0.006649378056609336
+          ],
+          "leave_two_spectral_interval": [
+            0.022111512340076234,
+            0.0221115123401117
+          ],
+          "full_spectral": 0.006649243895057024,
+          "kantorovich_full": 0.02624677275917959,
+          "improved": 0.02624677275917959,
+          "top_subspace_rank": 2,
+          "rounding_pad": 7.413115522001047e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260943,
+        "dimension": 3,
+        "candidates": 3,
+        "gamma": 1.0,
+        "triples": 27,
+        "bounds": {
+          "lambda_min_baseline": 0.7193553836563444,
+          "lambda_max_total": 6.380482837234165,
+          "active_candidates": 3,
+          "leave_one_denominator": 6.353787835452851,
+          "leave_two_denominator": 6.313755109362019,
+          "full_spectral": 0.11274309515550288,
+          "leave_one_spectral": 0.11321677750120752,
+          "leave_two_spectral": 0.11393463496702402,
+          "kantorovich_full": 0.36421692937587374,
+          "improved": 0.36421692937587374
+        },
+        "lowrank_bounds": {
+          "active_candidates": 3,
+          "lambda_min_baseline": 0.7193553836563444,
+          "lambda_max_total": 6.3804828372341635,
+          "leave_one_denominator_interval": [
+            6.353725974091686,
+            6.358697895584635
+          ],
+          "leave_two_denominator_interval": [
+            6.313285724066854,
+            6.318741460851371
+          ],
+          "leave_one_spectral_interval": [
+            0.11312935375584728,
+            0.11321787980624556
+          ],
+          "leave_two_spectral_interval": [
+            0.1138447249524325,
+            0.11394310587184119
+          ],
+          "full_spectral": 0.11274309515546854,
+          "kantorovich_full": 0.36421692937578537,
+          "improved": 0.36421692937578537,
+          "top_subspace_rank": 2,
+          "rounding_pad": 2.7201634383832374e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260944,
+        "dimension": 4,
+        "candidates": 4,
+        "gamma": 0.7167927748756736,
+        "triples": 108,
+        "bounds": {
+          "lambda_min_baseline": 0.004664608824200845,
+          "lambda_max_total": 18.159652514140486,
+          "active_candidates": 4,
+          "leave_one_denominator": 18.136197196132358,
+          "leave_two_denominator": 18.062103023348904,
+          "full_spectral": 0.0002568666344561729,
+          "leave_one_spectral": 0.00025719883687610096,
+          "leave_two_spectral": 0.00025825391529274856,
+          "kantorovich_full": 0.001026938897390053,
+          "improved": 0.001026938897390053
+        },
+        "lowrank_bounds": {
+          "active_candidates": 4,
+          "lambda_min_baseline": 0.004664608824200809,
+          "lambda_max_total": 18.159652514140493,
+          "leave_one_denominator_interval": [
+            18.135902120467783,
+            18.13708381999719
+          ],
+          "leave_two_denominator_interval": [
+            18.06129399569073,
+            18.063132754154225
+          ],
+          "leave_one_spectral_interval": [
+            0.0002571862638138642,
+            0.00025720302156865285
+          ],
+          "leave_two_spectral_interval": [
+            0.0002582391929257776,
+            0.0002582654833795734
+          ],
+          "full_spectral": 0.00025686663445302594,
+          "kantorovich_full": 0.0010269388973774781,
+          "improved": 0.0010269388973774781,
+          "top_subspace_rank": 2,
+          "rounding_pad": 1.0322567342280134e-12,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260945,
+        "dimension": 2,
+        "candidates": 2,
+        "gamma": 1.0,
+        "triples": 6,
+        "bounds": {
+          "lambda_min_baseline": 0.001826678351576544,
+          "lambda_max_total": 27.41009112454465,
+          "active_candidates": 2,
+          "leave_one_denominator": 27.409589249833715,
+          "leave_two_denominator": 0.2533685245075087,
+          "full_spectral": 6.664254939090026e-05,
+          "leave_one_spectral": 6.66437696284568e-05,
+          "leave_two_spectral": 0.007209570940696738,
+          "kantorovich_full": 0.0002665346712798691,
+          "improved": 0.007209570940696738
+        },
+        "lowrank_bounds": {
+          "active_candidates": 2,
+          "lambda_min_baseline": 0.0018266783515765322,
+          "lambda_max_total": 27.41009112454465,
+          "leave_one_denominator_interval": [
+            27.409589249832937,
+            27.409589249834493
+          ],
+          "leave_two_denominator_interval": [
+            0.2533685245067322,
+            0.2533685245082903
+          ],
+          "leave_one_spectral_interval": [
+            6.664376962741755e-05,
+            6.664376962949518e-05
+          ],
+          "leave_two_spectral_interval": [
+            0.007209570940562276,
+            0.007209570940830962
+          ],
+          "full_spectral": 6.664254938986104e-05,
+          "kantorovich_full": 0.00026653467127571337,
+          "improved": 0.007209570940562276,
+          "top_subspace_rank": 2,
+          "rounding_pad": 7.790416454027039e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260946,
+        "dimension": 3,
+        "candidates": 3,
+        "gamma": 1.0,
+        "triples": 27,
+        "bounds": {
+          "lambda_min_baseline": 0.0022676673856711427,
+          "lambda_max_total": 43.72978256139806,
+          "active_candidates": 3,
+          "leave_one_denominator": 43.7284470290453,
+          "leave_two_denominator": 43.7178996405155,
+          "full_spectral": 5.1856360879161996e-05,
+          "leave_one_spectral": 5.185794465019334e-05,
+          "leave_two_spectral": 5.187045590748338e-05,
+          "kantorovich_full": 0.00020740393253257546,
+          "improved": 0.00020740393253257546
+        },
+        "lowrank_bounds": {
+          "active_candidates": 3,
+          "lambda_min_baseline": 0.00226766738567114,
+          "lambda_max_total": 43.72978256139803,
+          "leave_one_denominator_interval": [
+            43.728446654812586,
+            43.72856047443101
+          ],
+          "leave_two_denominator_interval": [
+            43.71774900180381,
+            43.71885020745068
+          ],
+          "leave_one_spectral_interval": [
+            5.185781011370039e-05,
+            5.185794509497405e-05
+          ],
+          "leave_two_spectral_interval": [
+            5.186932810145235e-05,
+            5.1870634639038895e-05
+          ],
+          "full_spectral": 5.185636087818485e-05,
+          "kantorovich_full": 0.00020740393252866767,
+          "improved": 0.00020740393252866767,
+          "top_subspace_rank": 2,
+          "rounding_pad": 1.864312760122205e-12,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260947,
+        "dimension": 4,
+        "candidates": 4,
+        "gamma": 1.0,
+        "triples": 108,
+        "bounds": {
+          "lambda_min_baseline": 0.002650516879747376,
+          "lambda_max_total": 4.878298560929168,
+          "active_candidates": 4,
+          "leave_one_denominator": 4.7699121725390246,
+          "leave_two_denominator": 4.4147669196424975,
+          "full_spectral": 0.0005433281392360152,
+          "leave_one_spectral": 0.0005556741474207282,
+          "leave_two_spectral": 0.0006003752696330368,
+          "kantorovich_full": 0.002170952836536826,
+          "improved": 0.002170952836536826
+        },
+        "lowrank_bounds": {
+          "active_candidates": 4,
+          "lambda_min_baseline": 0.002650516879747335,
+          "lambda_max_total": 4.878298560929166,
+          "leave_one_denominator_interval": [
+            4.769167940073811,
+            4.769924229359162
+          ],
+          "leave_two_denominator_interval": [
+            4.403421311081893,
+            4.416455736028791
+          ],
+          "leave_one_spectral_interval": [
+            0.0005556727428449293,
+            0.0005557608608270476
+          ],
+          "leave_two_spectral_interval": [
+            0.0006001456910499449,
+            0.0006019221629176707
+          ],
+          "full_spectral": 0.000543328139224324,
+          "kantorovich_full": 0.0021709528364901617,
+          "improved": 0.0021709528364901617,
+          "top_subspace_rank": 2,
+          "rounding_pad": 2.7729916842697357e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260948,
+        "dimension": 2,
+        "candidates": 2,
+        "gamma": 1.0,
+        "triples": 6,
+        "bounds": {
+          "lambda_min_baseline": 0.0026024186671864233,
+          "lambda_max_total": 6.854866003789912,
+          "active_candidates": 2,
+          "leave_one_denominator": 6.792417141855793,
+          "leave_two_denominator": 0.013654632121915637,
+          "full_spectral": 0.0003796454468617768,
+          "leave_one_spectral": 0.00038313587237597164,
+          "leave_two_spectral": 0.1905887060120463,
+          "kantorovich_full": 0.0015174293984149133,
+          "improved": 0.1905887060120463
+        },
+        "lowrank_bounds": {
+          "active_candidates": 2,
+          "lambda_min_baseline": 0.0026024186671864246,
+          "lambda_max_total": 6.854866003789912,
+          "leave_one_denominator_interval": [
+            6.792417141855599,
+            6.792417141855988
+          ],
+          "leave_two_denominator_interval": [
+            0.013654632121719832,
+            0.013654632122109486
+          ],
+          "leave_one_spectral_interval": [
+            0.00038313587237177654,
+            0.0003831358723801671
+          ],
+          "leave_two_spectral_interval": [
+            0.19058870600725922,
+            0.19058870601686087
+          ],
+          "full_spectral": 0.00037964544685762004,
+          "kantorovich_full": 0.0015174293983983116,
+          "improved": 0.19058870600725922,
+          "top_subspace_rank": 2,
+          "rounding_pad": 1.9482700974407157e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260949,
+        "dimension": 3,
+        "candidates": 3,
+        "gamma": 1.0,
+        "triples": 27,
+        "bounds": {
+          "lambda_min_baseline": 0.002061459124343262,
+          "lambda_max_total": 9.362105337667039,
+          "active_candidates": 3,
+          "leave_one_denominator": 9.328103567682343,
+          "leave_two_denominator": 9.28409740940707,
+          "full_spectral": 0.00022019183185744426,
+          "leave_one_spectral": 0.0002209944507354405,
+          "leave_two_spectral": 0.00022204195340028404,
+          "kantorovich_full": 0.000880379579960181,
+          "improved": 0.000880379579960181
+        },
+        "lowrank_bounds": {
+          "active_candidates": 3,
+          "lambda_min_baseline": 0.0020614591243431893,
+          "lambda_max_total": 9.362105337667037,
+          "leave_one_denominator_interval": [
+            9.328051973902845,
+            9.330901106234375
+          ],
+          "leave_two_denominator_interval": [
+            9.283580227381469,
+            9.295571592295476
+          ],
+          "leave_one_spectral_interval": [
+            0.000220928193409063,
+            0.00022099567307029902
+          ],
+          "leave_two_spectral_interval": [
+            0.00022176787127190802,
+            0.00022205432321543547
+          ],
+          "full_spectral": 0.00022019183185056955,
+          "kantorovich_full": 0.0008803795799327064,
+          "improved": 0.0008803795799327064,
+          "top_subspace_rank": 2,
+          "rounding_pad": 3.9913055634601036e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260950,
+        "dimension": 4,
+        "candidates": 4,
+        "gamma": 1.0,
+        "triples": 108,
+        "bounds": {
+          "lambda_min_baseline": 0.002426377670758235,
+          "lambda_max_total": 16.553399455045735,
+          "active_candidates": 4,
+          "leave_one_denominator": 16.424158961364245,
+          "leave_two_denominator": 15.662111992313733,
+          "full_spectral": 0.00014657881466266658,
+          "leave_one_spectral": 0.00014773223252806926,
+          "leave_two_spectral": 0.0001549202094806239,
+          "kantorovich_full": 0.0005861434136435823,
+          "improved": 0.0005861434136435823
+        },
+        "lowrank_bounds": {
+          "active_candidates": 4,
+          "lambda_min_baseline": 0.0024263776707583702,
+          "lambda_max_total": 16.55339945504573,
+          "leave_one_denominator_interval": [
+            16.424133907720332,
+            16.427201987435023
+          ],
+          "leave_two_denominator_interval": [
+            15.661005841359977,
+            15.705516892679592
+          ],
+          "leave_one_spectral_interval": [
+            0.00014770486614470532,
+            0.00014773245788565263
+          ],
+          "leave_two_spectral_interval": [
+            0.0001544920608004358,
+            0.00015493115163923025
+          ],
+          "full_spectral": 0.0001465788146583022,
+          "kantorovich_full": 0.0005861434136261348,
+          "improved": 0.0005861434136261348,
+          "top_subspace_rank": 2,
+          "rounding_pad": 9.409518187934356e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260951,
+        "dimension": 2,
+        "candidates": 2,
+        "gamma": 1.0,
+        "triples": 6,
+        "bounds": {
+          "lambda_min_baseline": 0.005510343544801845,
+          "lambda_max_total": 2.882068743491291,
+          "active_candidates": 2,
+          "leave_one_denominator": 2.6890750867343622,
+          "leave_two_denominator": 0.06482685126477421,
+          "full_spectral": 0.0019119403578579132,
+          "leave_one_spectral": 0.0020491594199006386,
+          "leave_two_spectral": 0.08500094385728821,
+          "kantorovich_full": 0.0076186009602219355,
+          "improved": 0.08500094385728821
+        },
+        "lowrank_bounds": {
+          "active_candidates": 2,
+          "lambda_min_baseline": 0.005510343544801847,
+          "lambda_max_total": 2.882068743491291,
+          "leave_one_denominator_interval": [
+            2.6890750867342805,
+            2.689075086734444
+          ],
+          "leave_two_denominator_interval": [
+            0.06482685126469201,
+            0.06482685126485582
+          ],
+          "leave_one_spectral_interval": [
+            0.002049159419890008,
+            0.0020491594199112707
+          ],
+          "leave_two_spectral_interval": [
+            0.0850009438567428,
+            0.08500094385783444
+          ],
+          "full_spectral": 0.001911940357847998,
+          "kantorovich_full": 0.007618600960182577,
+          "improved": 0.0850009438567428,
+          "top_subspace_rank": 2,
+          "rounding_pad": 8.191332038595906e-14,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260952,
+        "dimension": 3,
+        "candidates": 3,
+        "gamma": 0.9847251114007072,
+        "triples": 27,
+        "bounds": {
+          "lambda_min_baseline": 0.0010648026889317926,
+          "lambda_max_total": 1.5698656631042065,
+          "active_candidates": 3,
+          "leave_one_denominator": 1.5671870419877352,
+          "leave_two_denominator": 1.553149847822612,
+          "full_spectral": 0.000678276309850795,
+          "leave_one_spectral": 0.0006794356132381331,
+          "leave_two_spectral": 0.0006855762761233619,
+          "kantorovich_full": 0.0027094285105629815,
+          "improved": 0.0027094285105629815
+        },
+        "lowrank_bounds": {
+          "active_candidates": 3,
+          "lambda_min_baseline": 0.001064802688931824,
+          "lambda_max_total": 1.569865663104206,
+          "leave_one_denominator_interval": [
+            1.5671500234235403,
+            1.5675116735700352
+          ],
+          "leave_two_denominator_interval": [
+            1.5531272492237738,
+            1.5563814668056184
+          ],
+          "leave_one_spectral_interval": [
+            0.0006792949021267814,
+            0.0006794516626156655
+          ],
+          "leave_two_spectral_interval": [
+            0.0006841527681936418,
+            0.0006855862515550311
+          ],
+          "full_spectral": 0.000678276309817994,
+          "kantorovich_full": 0.0027094285104321317,
+          "improved": 0.0027094285104321317,
+          "top_subspace_rank": 2,
+          "rounding_pad": 6.692739858227438e-14,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260953,
+        "dimension": 4,
+        "candidates": 4,
+        "gamma": 1.0,
+        "triples": 108,
+        "bounds": {
+          "lambda_min_baseline": 0.004813394619368212,
+          "lambda_max_total": 23.35126016550737,
+          "active_candidates": 4,
+          "leave_one_denominator": 23.332259451786847,
+          "leave_two_denominator": 23.161868785697816,
+          "full_spectral": 0.00020612997265467397,
+          "leave_one_spectral": 0.00020629783537743016,
+          "leave_two_spectral": 0.00020781546877341896,
+          "kantorovich_full": 0.0008241800791652808,
+          "improved": 0.0008241800791652808
+        },
+        "lowrank_bounds": {
+          "active_candidates": 4,
+          "lambda_min_baseline": 0.004813394619368188,
+          "lambda_max_total": 23.35126016550736,
+          "leave_one_denominator_interval": [
+            23.332241004161332,
+            23.332292857616117
+          ],
+          "leave_two_denominator_interval": [
+            23.16099137515846,
+            23.16218971070512
+          ],
+          "leave_one_spectral_interval": [
+            0.00020629754000966769,
+            0.00020629799848915316
+          ],
+          "leave_two_spectral_interval": [
+            0.00020781258937218212,
+            0.00020782334147352965
+          ],
+          "full_spectral": 0.00020612997265222706,
+          "kantorovich_full": 0.0008241800791555012,
+          "improved": 0.0008241800791555012,
+          "top_subspace_rank": 2,
+          "rounding_pad": 1.3273654625156359e-12,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260954,
+        "dimension": 2,
+        "candidates": 2,
+        "gamma": 1.0,
+        "triples": 6,
+        "bounds": {
+          "lambda_min_baseline": 1.8983479979115698,
+          "lambda_max_total": 6.509675815677273,
+          "active_candidates": 2,
+          "leave_one_denominator": 6.467418869427259,
+          "leave_two_denominator": 6.422787330855195,
+          "full_spectral": 0.29161943722908173,
+          "leave_one_spectral": 0.2935248259371955,
+          "leave_two_spectral": 0.2955645111884476,
+          "kantorovich_full": 0.6992094912640182,
+          "improved": 0.6992094912640182
+        },
+        "lowrank_bounds": {
+          "active_candidates": 2,
+          "lambda_min_baseline": 1.8983479979115696,
+          "lambda_max_total": 6.509675815677273,
+          "leave_one_denominator_interval": [
+            6.467418869427075,
+            6.467418869427444
+          ],
+          "leave_two_denominator_interval": [
+            6.4227873308550105,
+            6.42278733085538
+          ],
+          "leave_one_spectral_interval": [
+            0.29352482593715884,
+            0.29352482593723206
+          ],
+          "leave_two_spectral_interval": [
+            0.29556451118841065,
+            0.2955645111884845
+          ],
+          "full_spectral": 0.2916194372290454,
+          "kantorovich_full": 0.6992094912639705,
+          "improved": 0.6992094912639705,
+          "top_subspace_rank": 2,
+          "rounding_pad": 1.8501611451930765e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260955,
+        "dimension": 3,
+        "candidates": 3,
+        "gamma": 1.0,
+        "triples": 27,
+        "bounds": {
+          "lambda_min_baseline": 0.011509810641331976,
+          "lambda_max_total": 8.601388761390487,
+          "active_candidates": 3,
+          "leave_one_denominator": 8.597968115575473,
+          "leave_two_denominator": 8.594705915069532,
+          "full_spectral": 0.001338133987501725,
+          "leave_one_spectral": 0.0013386663554243257,
+          "leave_two_spectral": 0.001339174458680575,
+          "kantorovich_full": 0.005338239831038251,
+          "improved": 0.005338239831038251
+        },
+        "lowrank_bounds": {
+          "active_candidates": 3,
+          "lambda_min_baseline": 0.01150981064133215,
+          "lambda_max_total": 8.601388761390487,
+          "leave_one_denominator_interval": [
+            8.597964804098025,
+            8.601388761390853
+          ],
+          "leave_two_denominator_interval": [
+            8.59470588543143,
+            8.601388761390853
+          ],
+          "leave_one_spectral_interval": [
+            0.0013381339874668006,
+            0.0013386668710421265
+          ],
+          "leave_two_spectral_interval": [
+            0.0013381339874668006,
+            0.0013391744633335374
+          ],
+          "full_spectral": 0.0013381339874668006,
+          "kantorovich_full": 0.005338239830899301,
+          "improved": 0.005338239830899301,
+          "top_subspace_rank": 2,
+          "rounding_pad": 3.6669925811127454e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260956,
+        "dimension": 4,
+        "candidates": 4,
+        "gamma": 1.0,
+        "triples": 108,
+        "bounds": {
+          "lambda_min_baseline": 0.0010566074024782528,
+          "lambda_max_total": 10.031368722079906,
+          "active_candidates": 4,
+          "leave_one_denominator": 10.011808528478108,
+          "leave_two_denominator": 9.893539005371318,
+          "full_spectral": 0.00010533033245528788,
+          "leave_one_spectral": 0.00010553611762278352,
+          "leave_two_spectral": 0.00010679771939086794,
+          "kantorovich_full": 0.0004212325880107232,
+          "improved": 0.0004212325880107232
+        },
+        "lowrank_bounds": {
+          "active_candidates": 4,
+          "lambda_min_baseline": 0.0010566074024776055,
+          "lambda_max_total": 10.031368722079906,
+          "leave_one_denominator_interval": [
+            10.011754466516281,
+            10.011823348726116
+          ],
+          "leave_two_denominator_interval": [
+            9.89268133515259,
+            9.893555710699244
+          ],
+          "leave_one_spectral_interval": [
+            0.00010553596135933299,
+            0.00010553668754276231
+          ],
+          "leave_two_spectral_interval": [
+            0.00010679753902077635,
+            0.00010680697852189395
+          ],
+          "full_spectral": 0.00010533033241434774,
+          "kantorovich_full": 0.00042123258784703153,
+          "improved": 0.00042123258784703153,
+          "top_subspace_rank": 2,
+          "rounding_pad": 5.702172940163965e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      },
+      {
+        "seed": 20260957,
+        "dimension": 2,
+        "candidates": 2,
+        "gamma": 1.0,
+        "triples": 6,
+        "bounds": {
+          "lambda_min_baseline": 0.004452355536042939,
+          "lambda_max_total": 4.691950763460435,
+          "active_candidates": 2,
+          "leave_one_denominator": 4.510257793536512,
+          "leave_two_denominator": 0.04338512490209656,
+          "full_spectral": 0.0009489348376621096,
+          "leave_one_spectral": 0.0009871620957949342,
+          "leave_two_spectral": 0.10262401101967973,
+          "kantorovich_full": 0.0037885457730126924,
+          "improved": 0.10262401101967973
+        },
+        "lowrank_bounds": {
+          "active_candidates": 2,
+          "lambda_min_baseline": 0.004452355536042941,
+          "lambda_max_total": 4.691950763460434,
+          "leave_one_denominator_interval": [
+            4.510257793536377,
+            4.510257793536644
+          ],
+          "leave_two_denominator_interval": [
+            0.0433851249019637,
+            0.043385124902230406
+          ],
+          "leave_one_spectral_interval": [
+            0.0009871620957886042,
+            0.0009871620958012658
+          ],
+          "leave_two_spectral_interval": [
+            0.10262401101870808,
+            0.10262401102064914
+          ],
+          "full_spectral": 0.0009489348376560257,
+          "kantorovich_full": 0.0037885457729884484,
+          "improved": 0.10262401101870808,
+          "top_subspace_rank": 2,
+          "rounding_pad": 1.333532612608347e-13,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "violation": false
+      }
+    ]
+  },
+  "real_designs": {
+    "status": "complete",
+    "cohort_size": 11,
+    "rows": [
+      {
+        "object": "obj_03_pumpkin",
+        "level": 0.1,
+        "dimension": 1200,
+        "active_candidates": 48,
+        "alpha": 0.20864907619189074,
+        "archived_alpha": 0.208649,
+        "alpha_abs_difference_to_rounded_archive": 7.619189074103971e-08,
+        "historical_candidate_expression": 0.8273700114434501,
+        "historical_candidate_not_validated": true,
+        "bounds": {
+          "active_candidates": 48,
+          "lambda_min_baseline": 35.92282146315239,
+          "lambda_max_total": 19859.061385560683,
+          "leave_one_denominator_interval": [
+            19859.06138507522,
+            19859.06138589934
+          ],
+          "leave_two_denominator_interval": [
+            19859.061384891564,
+            19859.06138589934
+          ],
+          "leave_one_spectral_interval": [
+            0.001808888165783456,
+            0.0018088881999620348
+          ],
+          "leave_two_spectral_interval": [
+            0.001808888165783456,
+            0.0018088881999787632
+          ],
+          "full_spectral": 0.001808888165783456,
+          "kantorovich_full": 0.007209446906889338,
+          "improved": 0.007209446906889338,
+          "top_subspace_rank": 12,
+          "rounding_pad": 3.3865708335657726e-07,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "improvement_factor_vs_valid_leave_one_at_least": 3.985567989796523,
+        "leave_one_relative_bracket_width": 1.8894798918302488e-08,
+        "subset_lattice_not_enumerated": true
+      },
+      {
+        "object": "obj_03_pumpkin",
+        "level": 0.5,
+        "dimension": 1200,
+        "active_candidates": 48,
+        "alpha": 0.1913914643097337,
+        "archived_alpha": 0.191391,
+        "alpha_abs_difference_to_rounded_archive": 4.64309733688717e-07,
+        "historical_candidate_expression": 0.8393546789252668,
+        "historical_candidate_not_validated": true,
+        "bounds": {
+          "active_candidates": 48,
+          "lambda_min_baseline": 1.5622124229214212,
+          "lambda_max_total": 19858.362888811596,
+          "leave_one_denominator_interval": [
+            19858.36288798983,
+            19858.36288915024
+          ],
+          "leave_two_denominator_interval": [
+            19858.36288605237,
+            19858.36288915024
+          ],
+          "leave_one_spectral_interval": [
+            7.86677176278115e-05,
+            7.86677517346293e-05
+          ],
+          "leave_two_spectral_interval": [
+            7.86677176278115e-05,
+            7.866775174230443e-05
+          ],
+          "full_spectral": 7.86677176278115e-05,
+          "kantorovich_full": 0.00031462136747438475,
+          "improved": 0.00031462136747438475,
+          "top_subspace_rank": 12,
+          "rounding_pad": 3.386451718735929e-07,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "improvement_factor_vs_valid_leave_one_at_least": 3.9993689985662755,
+        "leave_one_relative_bracket_width": 4.3355526300361947e-07,
+        "subset_lattice_not_enumerated": true
+      },
+      {
+        "object": "obj_04_dolphin",
+        "level": 0.1,
+        "dimension": 1200,
+        "active_candidates": 48,
+        "alpha": 0.24370359717458676,
+        "archived_alpha": 0.243704,
+        "alpha_abs_difference_to_rounded_archive": 4.02825413248209e-07,
+        "historical_candidate_expression": 0.8040500986503326,
+        "historical_candidate_not_validated": true,
+        "bounds": {
+          "active_candidates": 48,
+          "lambda_min_baseline": 257.372284080237,
+          "lambda_max_total": 9225800.704556702,
+          "leave_one_denominator_interval": [
+            9225800.704008564,
+            9225800.70471403
+          ],
+          "leave_two_denominator_interval": [
+            9225800.697554957,
+            9225800.70471403
+          ],
+          "leave_one_spectral_interval": [
+            2.789699632296996e-05,
+            2.789703008789102e-05
+          ],
+          "leave_two_spectral_interval": [
+            2.789699632296996e-05,
+            2.7897030107405475e-05
+          ],
+          "full_spectral": 2.789699632296996e-05,
+          "kantorovich_full": 0.0001115817596131669,
+          "improved": 0.0001115817596131669,
+          "top_subspace_rank": 12,
+          "rounding_pad": 0.0001573278161326363,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "improvement_factor_vs_valid_leave_one_at_least": 3.9997719922738315,
+        "leave_one_relative_bracket_width": 1.210341063390515e-06,
+        "subset_lattice_not_enumerated": true
+      },
+      {
+        "object": "obj_04_dolphin",
+        "level": 0.5,
+        "dimension": 1200,
+        "active_candidates": 48,
+        "alpha": 0.1875841190008335,
+        "archived_alpha": 0.187584,
+        "alpha_abs_difference_to_rounded_archive": 1.1900083349281054e-07,
+        "historical_candidate_expression": 0.8420456151277468,
+        "historical_candidate_not_validated": true,
+        "bounds": {
+          "active_candidates": 48,
+          "lambda_min_baseline": 10.365151720061949,
+          "lambda_max_total": 9194185.052103868,
+          "leave_one_denominator_interval": [
+            9194185.051383032,
+            9194185.052260656
+          ],
+          "leave_two_denominator_interval": [
+            9194185.050792884,
+            9194185.052260656
+          ],
+          "leave_one_spectral_interval": [
+            1.1273426330974083e-06,
+            1.1273763358248202e-06
+          ],
+          "leave_two_spectral_interval": [
+            1.1273426330974083e-06,
+            1.127376335897183e-06
+          ],
+          "full_spectral": 1.1273426330974083e-06,
+          "kantorovich_full": 4.509360365195527e-06,
+          "improved": 4.509360365195527e-06,
+          "top_subspace_rank": 12,
+          "rounding_pad": 0.00015678867360015603,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "improvement_factor_vs_valid_leave_one_at_least": 3.9998714022113586,
+        "leave_one_relative_bracket_width": 2.9894833110178333e-05,
+        "subset_lattice_not_enumerated": true
+      },
+      {
+        "object": "obj_07_pumpkin2",
+        "level": 0.1,
+        "dimension": 1200,
+        "active_candidates": 48,
+        "alpha": 0.23151465797924456,
+        "archived_alpha": 0.231515,
+        "alpha_abs_difference_to_rounded_archive": 3.4202075543943167e-07,
+        "historical_candidate_expression": 0.8120081994321285,
+        "historical_candidate_not_validated": true,
+        "bounds": {
+          "active_candidates": 48,
+          "lambda_min_baseline": 102.135226104763,
+          "lambda_max_total": 11222227.03982698,
+          "leave_one_denominator_interval": [
+            11222227.039633993,
+            11222227.040016746
+          ],
+          "leave_two_denominator_interval": [
+            11222227.039632287,
+            11222227.040015057
+          ],
+          "leave_one_spectral_interval": [
+            9.101137839041389e-06,
+            9.101171870485276e-06
+          ],
+          "leave_two_spectral_interval": [
+            9.10113783904276e-06,
+            9.10117187048666e-06
+          ],
+          "full_spectral": 9.101137839040085e-06,
+          "kantorovich_full": 3.6403888719526746e-05,
+          "improved": 3.6403888719526746e-05,
+          "top_subspace_rank": 12,
+          "rounding_pad": 0.0001913729256527912,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "improvement_factor_vs_valid_leave_one_at_least": 3.999912235212594,
+        "leave_one_relative_bracket_width": 3.7392375807604912e-06,
+        "subset_lattice_not_enumerated": true
+      },
+      {
+        "object": "obj_07_pumpkin2",
+        "level": 0.5,
+        "dimension": 1200,
+        "active_candidates": 48,
+        "alpha": 0.18786011643870046,
+        "archived_alpha": 0.18786,
+        "alpha_abs_difference_to_rounded_archive": 1.1643870045929816e-07,
+        "historical_candidate_expression": 0.8418499671477143,
+        "historical_candidate_not_validated": true,
+        "bounds": {
+          "active_candidates": 48,
+          "lambda_min_baseline": 4.134044391300023,
+          "lambda_max_total": 11207032.592025904,
+          "leave_one_denominator_interval": [
+            11207032.591830546,
+            11207032.592212787
+          ],
+          "leave_two_denominator_interval": [
+            11207032.591821393,
+            11207032.592203878
+          ],
+          "leave_one_spectral_interval": [
+            3.6886246352832677e-07,
+            3.688965029697398e-07
+          ],
+          "leave_two_spectral_interval": [
+            3.6886246352862e-07,
+            3.688965029700411e-07
+          ],
+          "full_spectral": 3.6886246352818753e-07,
+          "kantorovich_full": 1.4754487656372166e-06,
+          "improved": 1.4754487656372166e-06,
+          "top_subspace_rank": 12,
+          "rounding_pad": 0.00019111381434457663,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "improvement_factor_vs_valid_leave_one_at_least": 3.999627954614268,
+        "leave_one_relative_bracket_width": 9.227368960942055e-05,
+        "subset_lattice_not_enumerated": true
+      },
+      {
+        "object": "obj_09_ball",
+        "level": 0.1,
+        "dimension": 1200,
+        "active_candidates": 48,
+        "alpha": 0.19574646956429295,
+        "archived_alpha": 0.195746,
+        "alpha_abs_difference_to_rounded_archive": 4.695642929486432e-07,
+        "historical_candidate_expression": 0.8362976813675066,
+        "historical_candidate_not_validated": true,
+        "bounds": {
+          "active_candidates": 48,
+          "lambda_min_baseline": 58.477244954600074,
+          "lambda_max_total": 73551.1701225934,
+          "leave_one_denominator_interval": [
+            73551.17012132447,
+            73551.17012384767
+          ],
+          "leave_two_denominator_interval": [
+            73551.17012120447,
+            73551.17012384767
+          ],
+          "leave_one_spectral_interval": [
+            0.000795055246602016,
+            0.0007950552807257581
+          ],
+          "leave_two_spectral_interval": [
+            0.000795055246602016,
+            0.0007950552807270551
+          ],
+          "full_spectral": 0.000795055246602016,
+          "kantorovich_full": 0.003175170108035757,
+          "improved": 0.003175170108035757,
+          "top_subspace_rank": 12,
+          "rounding_pad": 1.2542699912943373e-06,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "improvement_factor_vs_valid_leave_one_at_least": 3.9936469639410928,
+        "leave_one_relative_bracket_width": 4.2919961620484464e-08,
+        "subset_lattice_not_enumerated": true
+      },
+      {
+        "object": "obj_09_ball",
+        "level": 0.5,
+        "dimension": 1200,
+        "active_candidates": 48,
+        "alpha": 0.18829805631206104,
+        "archived_alpha": 0.188298,
+        "alpha_abs_difference_to_rounded_archive": 5.631206104195208e-08,
+        "historical_candidate_expression": 0.8415397085673497,
+        "historical_candidate_not_validated": true,
+        "bounds": {
+          "active_candidates": 48,
+          "lambda_min_baseline": 2.457386444705513,
+          "lambda_max_total": 73524.36954146843,
+          "leave_one_denominator_interval": [
+            73524.36954020339,
+            73524.36954272224
+          ],
+          "leave_two_denominator_interval": [
+            73524.36954017328,
+            73524.36954272224
+          ],
+          "leave_one_spectral_interval": [
+            3.342273054311058e-05,
+            3.3422764631648084e-05
+          ],
+          "leave_two_spectral_interval": [
+            3.342273054311058e-05,
+            3.342276463166177e-05
+          ],
+          "full_spectral": 3.342273054311058e-05,
+          "kantorovich_full": 0.00013368198598911663,
+          "improved": 0.00013368198598911663,
+          "top_subspace_rank": 12,
+          "rounding_pad": 1.2538129602967575e-06,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "improvement_factor_vs_valid_leave_one_at_least": 3.9997285521537282,
+        "leave_one_relative_bracket_width": 1.0199197426223382e-06,
+        "subset_lattice_not_enumerated": true
+      },
+      {
+        "object": "obj_10_pumpkin3",
+        "level": 0.1,
+        "dimension": 1200,
+        "active_candidates": 48,
+        "alpha": 0.5744469264169831,
+        "archived_alpha": 0.574447,
+        "alpha_abs_difference_to_rounded_archive": 7.358301690185698e-08,
+        "historical_candidate_expression": 0.6351436705940482,
+        "historical_candidate_not_validated": true,
+        "bounds": {
+          "active_candidates": 48,
+          "lambda_min_baseline": 28.13166841690999,
+          "lambda_max_total": 2080027.7076016099,
+          "leave_one_denominator_interval": [
+            2080027.707566139,
+            2080027.7076370807
+          ],
+          "leave_two_denominator_interval": [
+            2080027.7075660091,
+            2080027.7076370807
+          ],
+          "leave_one_spectral_interval": [
+            1.3524643613728405e-05,
+            1.3524677233393772e-05
+          ],
+          "leave_two_spectral_interval": [
+            1.3524643613728405e-05,
+            1.3524677233394618e-05
+          ],
+          "full_spectral": 1.3524643613728405e-05,
+          "kantorovich_full": 5.409711115672055e-05,
+          "improved": 5.409711115672055e-05,
+          "top_subspace_rank": 12,
+          "rounding_pad": 3.5470765867585385e-05,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "improvement_factor_vs_valid_leave_one_at_least": 3.9998818621082806,
+        "leave_one_relative_bracket_width": 2.4858016784552543e-06,
+        "subset_lattice_not_enumerated": true
+      },
+      {
+        "object": "obj_10_pumpkin3",
+        "level": 0.5,
+        "dimension": 1200,
+        "active_candidates": 48,
+        "alpha": 0.5145576492329329,
+        "archived_alpha": 0.514558,
+        "alpha_abs_difference_to_rounded_archive": 3.5076706705883254e-07,
+        "historical_candidate_expression": 0.6602587894270402,
+        "historical_candidate_not_validated": true,
+        "bounds": {
+          "active_candidates": 48,
+          "lambda_min_baseline": 1.1799936960686392,
+          "lambda_max_total": 2061934.8851681899,
+          "leave_one_denominator_interval": [
+            2061934.8851330248,
+            2061934.8852033522
+          ],
+          "leave_two_denominator_interval": [
+            2061934.8851330008,
+            2061934.8852033522
+          ],
+          "leave_one_spectral_interval": [
+            5.722582224038484e-07,
+            5.722916899687624e-07
+          ],
+          "leave_two_spectral_interval": [
+            5.722582224038484e-07,
+            5.722916899687691e-07
+          ],
+          "full_spectral": 5.722582224038484e-07,
+          "kantorovich_full": 2.289030269781858e-06,
+          "improved": 2.289030269781858e-06,
+          "top_subspace_rank": 12,
+          "rounding_pad": 3.516222850239825e-05,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "improvement_factor_vs_valid_leave_one_at_least": 3.9997615025771225,
+        "leave_one_relative_bracket_width": 5.847990718823404e-05,
+        "subset_lattice_not_enumerated": true
+      },
+      {
+        "object": "obj_11_pine",
+        "level": 0.1,
+        "dimension": 1200,
+        "active_candidates": 48,
+        "alpha": 0.20853365763737214,
+        "archived_alpha": 0.208534,
+        "alpha_abs_difference_to_rounded_archive": 3.423626278586944e-07,
+        "historical_candidate_expression": 0.8274490277374269,
+        "historical_candidate_not_validated": true,
+        "bounds": {
+          "active_candidates": 48,
+          "lambda_min_baseline": 155.84886987157626,
+          "lambda_max_total": 14747.099146547967,
+          "leave_one_denominator_interval": [
+            14747.099146289896,
+            14747.09914679945
+          ],
+          "leave_two_denominator_interval": [
+            14747.099146274555,
+            14747.09914679945
+          ],
+          "leave_one_spectral_interval": [
+            0.010568103466908294,
+            0.010568103501374347
+          ],
+          "leave_two_spectral_interval": [
+            0.010568103466908294,
+            0.010568103501385342
+          ],
+          "full_spectral": 0.010568103466908294,
+          "kantorovich_full": 0.04139290196762592,
+          "improved": 0.04139290196762592,
+          "top_subspace_rank": 12,
+          "rounding_pad": 2.5148266013072713e-07,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "improvement_factor_vs_valid_leave_one_at_least": 3.9167767388200643,
+        "leave_one_relative_bracket_width": 3.2613281343054268e-09,
+        "subset_lattice_not_enumerated": true
+      },
+      {
+        "object": "obj_11_pine",
+        "level": 0.5,
+        "dimension": 1200,
+        "active_candidates": 48,
+        "alpha": 0.1902782018912335,
+        "archived_alpha": 0.190278,
+        "alpha_abs_difference_to_rounded_archive": 2.018912335088885e-07,
+        "historical_candidate_expression": 0.8401397239830988,
+        "historical_candidate_not_validated": true,
+        "bounds": {
+          "active_candidates": 48,
+          "lambda_min_baseline": 7.5942765752615795,
+          "lambda_max_total": 14746.735541346568,
+          "leave_one_denominator_interval": [
+            14746.735541092272,
+            14746.735541598046
+          ],
+          "leave_two_denominator_interval": [
+            14746.73554101944,
+            14746.735541598046
+          ],
+          "leave_one_spectral_interval": [
+            0.0005149801664513924,
+            0.0005149802005694499
+          ],
+          "leave_two_spectral_interval": [
+            0.0005149801664513924,
+            0.0005149802005719932
+          ],
+          "full_spectral": 0.0005149801664513924,
+          "kantorovich_full": 0.002057800667007386,
+          "improved": 0.002057800667007386,
+          "top_subspace_rank": 12,
+          "rounding_pad": 2.5147645956189825e-07,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "improvement_factor_vs_valid_leave_one_at_least": 3.9958830742073794,
+        "leave_one_relative_bracket_width": 6.62512022954582e-08,
+        "subset_lattice_not_enumerated": true
+      },
+      {
+        "object": "obj_13_mushroom",
+        "level": 0.1,
+        "dimension": 1200,
+        "active_candidates": 48,
+        "alpha": 0.19513069492470753,
+        "archived_alpha": 0.195131,
+        "alpha_abs_difference_to_rounded_archive": 3.050752924727007e-07,
+        "historical_candidate_expression": 0.8367285722361932,
+        "historical_candidate_not_validated": true,
+        "bounds": {
+          "active_candidates": 48,
+          "lambda_min_baseline": 50.27308634108758,
+          "lambda_max_total": 19148.009442192506,
+          "leave_one_denominator_interval": [
+            19148.009397127047,
+            19148.009442519036
+          ],
+          "leave_two_denominator_interval": [
+            19148.009317473796,
+            19148.009442519036
+          ],
+          "leave_one_spectral_interval": [
+            0.002625499332765239,
+            0.0026254993730367537
+          ],
+          "leave_two_spectral_interval": [
+            0.002625499332765239,
+            0.002625499383958493
+          ],
+          "full_spectral": 0.002625499332765239,
+          "kantorovich_full": 0.010447067777884608,
+          "improved": 0.010447067777884608,
+          "top_subspace_rank": 12,
+          "rounding_pad": 3.265314963219766e-07,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "improvement_factor_vs_valid_leave_one_at_least": 3.9790783746412126,
+        "leave_one_relative_bracket_width": 1.5338611491999853e-08,
+        "subset_lattice_not_enumerated": true
+      },
+      {
+        "object": "obj_13_mushroom",
+        "level": 0.5,
+        "dimension": 1200,
+        "active_candidates": 48,
+        "alpha": 0.18815335394983168,
+        "archived_alpha": 0.188153,
+        "alpha_abs_difference_to_rounded_archive": 3.539498316940115e-07,
+        "historical_candidate_expression": 0.8416421976806739,
+        "historical_candidate_not_validated": true,
+        "bounds": {
+          "active_candidates": 48,
+          "lambda_min_baseline": 2.089176363580205,
+          "lambda_max_total": 19138.3682913015,
+          "leave_one_denominator_interval": [
+            19138.368126123343,
+            19138.368291627867
+          ],
+          "leave_two_denominator_interval": [
+            19138.36793933647,
+            19138.368291627867
+          ],
+          "leave_one_spectral_interval": [
+            0.00010916165925997035,
+            0.00010916169420245605
+          ],
+          "leave_two_spectral_interval": [
+            0.00010916165925997035,
+            0.00010916169526785367
+          ],
+          "full_spectral": 0.00010916165925997035,
+          "kantorovich_full": 0.0004365513225043856,
+          "improved": 0.0004365513225043856,
+          "top_subspace_rank": 12,
+          "rounding_pad": 3.2636708552845734e-07,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "improvement_factor_vs_valid_leave_one_at_least": 3.9991255695861443,
+        "leave_one_relative_bracket_width": 3.200984187255854e-07,
+        "subset_lattice_not_enumerated": true
+      },
+      {
+        "object": "obj_16_friends_cup",
+        "level": 0.1,
+        "dimension": 1200,
+        "active_candidates": 48,
+        "alpha": 0.20205403728358856,
+        "archived_alpha": 0.202054,
+        "alpha_abs_difference_to_rounded_archive": 3.728358854981906e-08,
+        "historical_candidate_expression": 0.8319093559718896,
+        "historical_candidate_not_validated": true,
+        "bounds": {
+          "active_candidates": 48,
+          "lambda_min_baseline": 21.9305939383552,
+          "lambda_max_total": 3681.088208029941,
+          "leave_one_denominator_interval": [
+            3681.0882078916675,
+            3681.088208092715
+          ],
+          "leave_two_denominator_interval": [
+            3681.088207279397,
+            3681.088208092715
+          ],
+          "leave_one_spectral_interval": [
+            0.005957638783932415,
+            0.005957638818348678
+          ],
+          "leave_two_spectral_interval": [
+            0.005957638783932415,
+            0.005957638819339604
+          ],
+          "full_spectral": 0.005957638783932415,
+          "kantorovich_full": 0.02354912493571913,
+          "improved": 0.02354912493571913,
+          "top_subspace_rank": 12,
+          "rounding_pad": 6.277369166178815e-08,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "improvement_factor_vs_valid_leave_one_at_least": 3.952761430114088,
+        "leave_one_relative_bracket_width": 5.776829427134652e-09,
+        "subset_lattice_not_enumerated": true
+      },
+      {
+        "object": "obj_16_friends_cup",
+        "level": 0.5,
+        "dimension": 1200,
+        "active_candidates": 48,
+        "alpha": 0.1898440874844088,
+        "archived_alpha": 0.189844,
+        "alpha_abs_difference_to_rounded_archive": 8.748440880057551e-08,
+        "historical_candidate_expression": 0.8404462488141781,
+        "historical_candidate_not_validated": true,
+        "bounds": {
+          "active_candidates": 48,
+          "lambda_min_baseline": 0.9616837377776019,
+          "lambda_max_total": 3680.990641967083,
+          "leave_one_denominator_interval": [
+            3680.9906417418647,
+            3680.990642029855
+          ],
+          "leave_two_denominator_interval": [
+            3680.9906410792573,
+            3680.990642029855
+          ],
+          "leave_one_spectral_interval": [
+            0.00026125675628288665,
+            0.00026125679038829325
+          ],
+          "leave_two_spectral_interval": [
+            0.00026125675628288665,
+            0.00026125679043532155
+          ],
+          "full_spectral": 0.00026125675628288665,
+          "kantorovich_full": 0.0010444811983006525,
+          "improved": 0.0010444811983006525,
+          "top_subspace_rank": 12,
+          "rounding_pad": 6.277202786521485e-08,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "improvement_factor_vs_valid_leave_one_at_least": 3.9979102428238935,
+        "leave_one_relative_bracket_width": 1.3054361781362212e-07,
+        "subset_lattice_not_enumerated": true
+      },
+      {
+        "object": "obj_17_pumpkin5",
+        "level": 0.1,
+        "dimension": 1200,
+        "active_candidates": 48,
+        "alpha": 0.19492980950451566,
+        "archived_alpha": 0.19493,
+        "alpha_abs_difference_to_rounded_archive": 1.9049548433125452e-07,
+        "historical_candidate_expression": 0.8368692387167541,
+        "historical_candidate_not_validated": true,
+        "bounds": {
+          "active_candidates": 48,
+          "lambda_min_baseline": 97.27011885264999,
+          "lambda_max_total": 120501.60379207077,
+          "leave_one_denominator_interval": [
+            120501.60378991684,
+            120501.6037941257
+          ],
+          "leave_two_denominator_interval": [
+            120501.60378770666,
+            120501.6037941257
+          ],
+          "leave_one_spectral_interval": [
+            0.0008072101427318799,
+            0.0008072101768604225
+          ],
+          "leave_two_spectral_interval": [
+            0.0008072101427318799,
+            0.0008072101768752279
+          ],
+          "full_spectral": 0.0008072101427318799,
+          "kantorovich_full": 0.003223634170048446,
+          "improved": 0.003223634170048446,
+          "top_subspace_rank": 12,
+          "rounding_pad": 2.054916941325543e-06,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "improvement_factor_vs_valid_leave_one_at_least": 3.9935499606639078,
+        "leave_one_relative_bracket_width": 4.227962386402549e-08,
+        "subset_lattice_not_enumerated": true
+      },
+      {
+        "object": "obj_17_pumpkin5",
+        "level": 0.5,
+        "dimension": 1200,
+        "active_candidates": 48,
+        "alpha": 0.18829137103250945,
+        "archived_alpha": 0.188291,
+        "alpha_abs_difference_to_rounded_archive": 3.7103250946635136e-07,
+        "historical_candidate_expression": 0.8415444430359681,
+        "historical_candidate_not_validated": true,
+        "bounds": {
+          "active_candidates": 48,
+          "lambda_min_baseline": 4.2182639882910635,
+          "lambda_max_total": 120487.73890640284,
+          "leave_one_denominator_interval": [
+            120487.73890408952,
+            120487.73890839986
+          ],
+          "leave_two_denominator_interval": [
+            120487.73890257406,
+            120487.73890688468
+          ],
+          "leave_one_spectral_interval": [
+            3.5009885424395935e-05,
+            3.5009919521457156e-05
+          ],
+          "leave_two_spectral_interval": [
+            3.5009885424836196e-05,
+            3.50099195218975e-05
+          ],
+          "full_spectral": 3.500988542437918e-05,
+          "kantorovich_full": 0.0001400297366758093,
+          "improved": 0.0001400297366758093,
+          "top_subspace_rank": 12,
+          "rounding_pad": 2.054680503074499e-06,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "improvement_factor_vs_valid_leave_one_at_least": 3.9997160401921743,
+        "leave_one_relative_bracket_width": 9.739257240963693e-07,
+        "subset_lattice_not_enumerated": true
+      },
+      {
+        "object": "obj_18_fabric_hat",
+        "level": 0.1,
+        "dimension": 1200,
+        "active_candidates": 48,
+        "alpha": 0.2030722980616503,
+        "archived_alpha": 0.203072,
+        "alpha_abs_difference_to_rounded_archive": 2.980616503056588e-07,
+        "historical_candidate_expression": 0.8312052414565329,
+        "historical_candidate_not_validated": true,
+        "bounds": {
+          "active_candidates": 48,
+          "lambda_min_baseline": 199.12132695571762,
+          "lambda_max_total": 31823.273207707178,
+          "leave_one_denominator_interval": [
+            31823.273207083344,
+            31823.273208249862
+          ],
+          "leave_two_denominator_interval": [
+            31823.273206244416,
+            31823.273208249862
+          ],
+          "leave_one_spectral_interval": [
+            0.006257097599925535,
+            0.006257097634255903
+          ],
+          "leave_two_spectral_interval": [
+            0.006257097599925535,
+            0.006257097634420853
+          ],
+          "full_spectral": 0.006257097599925535,
+          "kantorovich_full": 0.024718095581779898,
+          "improved": 0.024718095581779898,
+          "top_subspace_rank": 12,
+          "rounding_pad": 5.426830945402885e-07,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "improvement_factor_vs_valid_leave_one_at_least": 3.9504091236254757,
+        "leave_one_relative_bracket_width": 5.486628073989486e-09,
+        "subset_lattice_not_enumerated": true
+      },
+      {
+        "object": "obj_18_fabric_hat",
+        "level": 0.5,
+        "dimension": 1200,
+        "active_candidates": 48,
+        "alpha": 0.1900936743008878,
+        "archived_alpha": 0.190094,
+        "alpha_abs_difference_to_rounded_archive": 3.2569911220803327e-07,
+        "historical_candidate_expression": 0.8402699901648019,
+        "historical_candidate_not_validated": true,
+        "bounds": {
+          "active_candidates": 48,
+          "lambda_min_baseline": 9.307310708918813,
+          "lambda_max_total": 31823.147373552376,
+          "leave_one_denominator_interval": [
+            31823.14737284182,
+            31823.147374095057
+          ],
+          "leave_two_denominator_interval": [
+            31823.1473723549,
+            31823.147374095057
+          ],
+          "leave_one_spectral_interval": [
+            0.0002924698194342268,
+            0.00029246985354598217
+          ],
+          "leave_two_spectral_interval": [
+            0.0002924698194342268,
+            0.0002924698535504572
+          ],
+          "full_spectral": 0.0002924698194342268,
+          "kantorovich_full": 0.0011691952690671315,
+          "improved": 0.0011691952690671315,
+          "top_subspace_rank": 12,
+          "rounding_pad": 5.426809486872181e-07,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "improvement_factor_vs_valid_leave_one_at_least": 3.9976608012466843,
+        "leave_one_relative_bracket_width": 1.1663340663916087e-07,
+        "subset_lattice_not_enumerated": true
+      },
+      {
+        "object": "obj_19_cylinder",
+        "level": 0.1,
+        "dimension": 1200,
+        "active_candidates": 48,
+        "alpha": 0.43964540058461704,
+        "archived_alpha": 0.439645,
+        "alpha_abs_difference_to_rounded_archive": 4.005846170329619e-07,
+        "historical_candidate_expression": 0.6946154932276489,
+        "historical_candidate_not_validated": true,
+        "bounds": {
+          "active_candidates": 48,
+          "lambda_min_baseline": 372.3964060711217,
+          "lambda_max_total": 11377110.096088724,
+          "leave_one_denominator_interval": [
+            11377110.095892018,
+            11377110.09628274
+          ],
+          "leave_two_denominator_interval": [
+            11377110.09588694,
+            11377110.09628274
+          ],
+          "leave_one_spectral_interval": [
+            3.273205667984318e-05,
+            3.273209070485865e-05
+          ],
+          "leave_two_spectral_interval": [
+            3.273205667984318e-05,
+            3.273209070487326e-05
+          ],
+          "full_spectral": 3.273205667984318e-05,
+          "kantorovich_full": 0.00013091965603990305,
+          "improved": 0.00013091965603990305,
+          "top_subspace_rank": 12,
+          "rounding_pad": 0.00019401415038524972,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "improvement_factor_vs_valid_leave_one_at_least": 3.9997339986739604,
+        "leave_one_relative_bracket_width": 1.039500219254441e-06,
+        "subset_lattice_not_enumerated": true
+      },
+      {
+        "object": "obj_19_cylinder",
+        "level": 0.5,
+        "dimension": 1200,
+        "active_candidates": 48,
+        "alpha": 0.2207615150305418,
+        "archived_alpha": 0.220762,
+        "alpha_abs_difference_to_rounded_archive": 4.849694582031994e-07,
+        "historical_candidate_expression": 0.8191608169880596,
+        "historical_candidate_not_validated": true,
+        "bounds": {
+          "active_candidates": 48,
+          "lambda_min_baseline": 14.949695705188239,
+          "lambda_max_total": 11341635.901679566,
+          "leave_one_denominator_interval": [
+            11341635.901445314,
+            11341635.901872976
+          ],
+          "leave_two_denominator_interval": [
+            11341635.901398025,
+            11341635.901872976
+          ],
+          "leave_one_spectral_interval": [
+            1.3181081431361266e-06,
+            1.3181421887937286e-06
+          ],
+          "leave_two_spectral_interval": [
+            1.3181081431361266e-06,
+            1.3181421887992246e-06
+          ],
+          "full_spectral": 1.3181081431361266e-06,
+          "kantorovich_full": 5.272418673299372e-06,
+          "improved": 5.272418673299372e-06,
+          "top_subspace_rank": 12,
+          "rounding_pad": 0.00019340920803778488,
+          "spectral_enclosure_is_exact_arithmetic_theorem": true,
+          "floating_point_not_interval_arithmetic": true,
+          "gamma_exhaustively_evaluated": false
+        },
+        "improvement_factor_vs_valid_leave_one_at_least": 3.9998861413610625,
+        "leave_one_relative_bracket_width": 2.5828516749902912e-05,
+        "subset_lattice_not_enumerated": true
+      }
+    ],
+    "levels": [
+      0.1,
+      0.5
+    ],
+    "kappa": 10,
+    "noise_fit_convention": "corrected",
+    "scene_rng": "default_rng([20260910, object_index])",
+    "pixels": 1200,
+    "analysis_lights": 48,
+    "universe_lights": 142,
+    "inactive_placeholders_omitted": 94,
+    "omission_reason": "W=0 cannot occur as x or strict-inclusion witness y",
+    "data_root": "D:\\data\\OpenIllumination",
+    "data_meta": "D:/data/OpenIllumination_meta",
+    "source_config_sha256": "35de2dd60dfdecba9fe3da43fd3b1b9e1538f2741c076bd0a968c17b9622dfa3",
+    "historical_artifact_sha256_before": "55c3c71c1a655d1a18cd7ba6fd0520dc813d3e76b5cb3bb85aa05e67b01116d2",
+    "spectral_method": "one top-subspace solve of total plus one baseline smallest-eigenvalue solve",
+    "per_removal_dense_factorizations": 0,
+    "old_candidate_is_a_guarantee": false,
+    "exact_gamma_on_real_designs_computed": false,
+    "design_points": 22,
+    "historical_artifact_sha256_after": "55c3c71c1a655d1a18cd7ba6fd0520dc813d3e76b5cb3bb85aa05e67b01116d2",
+    "summary": {
+      "improvement_factor_min": 3.9167767388200643,
+      "improvement_factor_max": 3.999912235212594,
+      "leave_one_bracket_relative_width_max": 9.227368960942055e-05,
+      "alpha_archive_abs_difference_max": 4.849694582031994e-07,
+      "new_lower_bound_min": 1.4754487656372166e-06,
+      "new_lower_bound_max": 0.04139290196762592
+    },
+    "by_level": {
+      "0.1": {
+        "new_lower_bound_min": 3.6403888719526746e-05,
+        "worst_object": "obj_07_pumpkin2",
+        "valid_leave_one_lower_min": 9.101137839041389e-06,
+        "improvement_factor_min": 3.9167767388200643
+      },
+      "0.5": {
+        "new_lower_bound_min": 1.4754487656372166e-06,
+        "worst_object": "obj_07_pumpkin2",
+        "valid_leave_one_lower_min": 3.6886246352832677e-07,
+        "improvement_factor_min": 3.9958830742073794
+      }
+    }
+  },
+  "elapsed_seconds": 26.43388229998527
+}

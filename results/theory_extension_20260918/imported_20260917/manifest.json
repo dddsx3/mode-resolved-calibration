@@ -1,0 +1,30 @@
+{
+  "status": "imported_existing_evidence_not_new_measurement",
+  "source_zip_sha256": "112e5e774668c6b89d0ee3dd2dc41ce0a30c9c142b51739b0d28a16db5613c3f",
+  "files": [
+    {
+      "file": "mf0_factorial_summary.json",
+      "source_zip_member": "amplitude_rerun_20260917/factorial_real/mf0_factorial_summary.json",
+      "sha256": "ba21aa6473e3708d3a45bdc212818ed054765979bc3a4d5aae08774ffe015d7c",
+      "size_bytes": 5962
+    },
+    {
+      "file": "amplitude_comparison.json",
+      "source_zip_member": "amplitude_rerun_20260917/amplitude_comparison.json",
+      "sha256": "5d2950ef34547336382e435b61d2e56c43026ed2ed0267c9fd40202afef5d911",
+      "size_bytes": 59073
+    },
+    {
+      "file": "independent_result_review.json",
+      "source_zip_member": "amplitude_rerun_20260917/independent_result_review.json",
+      "sha256": "4d2df74e6eb893b427939c5289fa759f4b2df25963e8ff277b99176a74845884",
+      "size_bytes": 6627
+    },
+    {
+      "file": "gamma_exact_verification.json",
+      "source_zip_member": "verification_v5/gamma_exact_verification.json",
+      "sha256": "a12de642145128974de5c24073614d1bc63a9705694ec8b0f88816808cc67219",
+      "size_bytes": 13413
+    }
+  ]
+}

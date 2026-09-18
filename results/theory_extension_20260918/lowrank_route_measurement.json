@@ -1,0 +1,10 @@
+{
+  "what": "Dense vs nuisance-rank (low-rank) computation route at the full-resolution scale quoted in the module docstring",
+  "provenance": "Transcribed verbatim from the module docstring of src/calibinfo/information/lowrank.py (baseline 22ee2e2...); transcribed for registry traceability of claim C14, not a fresh measurement",
+  "P": 54600,
+  "dense_gb": 22,
+  "lowrank_ms": 455,
+  "dense_vs_lowrank_speedup_range": "15-46x",
+  "code": "src/calibinfo/information/lowrank.py",
+  "registered": "2026-09-19"
+}

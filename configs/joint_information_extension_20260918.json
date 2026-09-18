@@ -1,0 +1,18 @@
+{
+  "status": "registered_before_execution",
+  "experiment": "P-JOINT-INFORMATION",
+  "claim": "M17",
+  "seed": 20260918,
+  "linear_samples": 20000,
+  "nonlinear_samples": 1000,
+  "sigma": 0.002,
+  "uniform_precision_multipliers": [1.0, 10.0],
+  "variance_ratio_interval": [0.8, 1.25],
+  "jacobian_step": 0.000001,
+  "scope": "Independent synthetic local joint log-albedo/normal scene; calibration nuisance and sensor noise are both resampled. Nonlinear estimator is a new joint local profile estimator, not the historical fixed-normal joint_map. No real-data accuracy claim.",
+  "acceptance": {
+    "linear_variance_ratios": "Every identifiable coordinate empirical/predicted variance lies in the registered interval.",
+    "nonlinear_variance_ratios": "Same interval for the finite small-noise physical chart experiment; all optimizer outcomes retained.",
+    "finite_sample_note": "Monte Carlo acceptance is an implementation check, not a proof or a confidence statement over future runs."
+  }
+}

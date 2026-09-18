@@ -1,0 +1,115 @@
+\subsection{Diminishing Returns: Impossibility and a Valid General Bound}
+\label{sec:gamma-resolution}
+
+Let $\mathcal U$ be a finite candidate set and write
+\begin{equation}
+M(S)=M_b+\sum_{k\in S}W_k,\qquad M_b\succ0,\quad W_k\succeq0,
+\end{equation}
+where $M_b=\Delta F(\mathbf1)$ and $W_k=U_k[K_k(1)-K_k(\kappa)]U_k^T$ in the calibration model. All matrices act on the same fixed identifiable parameter space. Define $F(S)=\operatorname{tr}M(S)^{-1}$, $G(S)=F(\varnothing)-F(S)$, and $d_x(S)=G(S\cup\{x\})-G(S)$. With at least one nonzero update, the diminishing-returns coefficient is
+\begin{equation}
+\gamma=\inf_{\substack{S\subseteq T\subseteq\mathcal U\setminus\{x\}\\W_x\ne0}}
+\frac{d_x(S)}{d_x(T)}.
+\label{eq:gamma-definition}
+\end{equation}
+Every denominator in this full-trace problem is positive. Allowing $S=T$ gives $\gamma\leq1$; when all updates vanish, we explicitly set $\gamma=1$. This coefficient describes approximate submodularity of the increasing gain $G$, equivalently approximate supermodularity of the decreasing cost $F$.
+
+\textbf{The alpha-only candidate is false.} The archived candidate, motivated by approximate-supermodularity analyses~\cite{chamon2017}, was
+\begin{equation}
+\gamma\stackrel{?}{\geq}(1+\alpha)^{-1},\qquad
+\alpha=\max_x\lambda_{\max}(M_b^{-1/2}W_xM_b^{-1/2}).
+\label{eq:candidate-gamma}
+\end{equation}
+This particular formula is the repository's candidate; we do not attribute it as a theorem of the cited work. A two-dimensional counterexample is
+\begin{equation}
+M_b=\begin{bmatrix}1&0\\0&1/100\end{bmatrix},\quad
+W_1=\begin{bmatrix}1&0\\0&0\end{bmatrix},\quad
+W_2=\begin{bmatrix}1/2&1/20\\1/20&1/200\end{bmatrix}.
+\label{eq:gamma-counterexample}
+\end{equation}
+Both updates have rank one. Each whitened update has eigenvalues $\{1,0\}$, so $\alpha=1$. Exact inversion gives
+\begin{equation}
+d_1(\varnothing)=\frac12,\quad d_1(\{2\})=\frac{109}{28},\quad
+\frac{d_1(\varnothing)}{d_1(\{2\})}=\frac{14}{109}<\frac12.
+\end{equation}
+The other strictly nested ratio is $707/802$; the remaining ratios equal one. Thus the actual coefficient for this two-candidate instance is $\gamma=14/109$. This is an exact rational counterexample, independent of floating-point tolerances.
+
+\textbf{Proposition 2 (no positive alpha-only bound).} For every fixed $p>0$, the infimum of $\gamma$ over positive-definite baselines and positive-semidefinite updates with $\alpha=p$ is zero, even in dimension two with two candidates.
+
+\textbf{Proof.} For $\varepsilon>0$, take
+\begin{equation}
+M_b=\operatorname{diag}(1,\varepsilon^2),\quad
+W_1=p\begin{bmatrix}1&0\\0&0\end{bmatrix},\quad
+W_2=\frac p2\begin{bmatrix}1&\varepsilon\\\varepsilon&\varepsilon^2\end{bmatrix}.
+\end{equation}
+Whitening gives $\alpha=p$ for every $\varepsilon$. Rank-one inversion yields
+\begin{align}
+d_1(\varnothing)&=\frac{p}{1+p},\\
+d_1(\{2\})&=\frac{p[p^2+\varepsilon^2(p+2)^2]}
+{2\varepsilon^2(p+1)(p^2+4p+2)},\\
+\frac{d_1(\varnothing)}{d_1(\{2\})}
+&=\frac{2\varepsilon^2(p^2+4p+2)}{p^2+\varepsilon^2(p+2)^2}\longrightarrow0.
+\label{eq:gamma-impossibility-family}
+\end{align}
+All instances with $\varepsilon>0$ are positive definite and have positive marginals. Since $0\leq\gamma$ is bounded above by this ratio, the claim follows. No singular endpoint is used as an instance. In particular, nonorthogonal whitening cannot remove this obstruction: the objective becomes $\operatorname{tr}(M_b^{-1}\widetilde M^{-1})$, retaining a weight, rather than $\operatorname{tr}\widetilde M^{-1}$.
+
+\textbf{A shared-Jacobian realization.} The $p=1$ family also belongs to a general shared linear-Gaussian model with $\kappa=10$. Write $W_i=l_il_i^T$, with $l_1=(1,0)^T$ and $l_2=(1,\varepsilon)^T/\sqrt2$. Use independent scalar nuisances with baseline precision one, observation rows $A_i=(\sqrt{22}/3)l_i^T$, and nuisance coefficients $B_i=\sqrt{10}$. Each block contributes
+\begin{equation}
+F_i(t)=\frac{22t}{9(10+t)}W_i,
+\quad F_i(1)=\frac29W_i,\quad F_i(10)=\frac{11}{9}W_i.
+\end{equation}
+Add a nuisance-free observation block
+\begin{equation}
+A_0=\frac1{\sqrt{54}}\begin{bmatrix}6&-\varepsilon\\0&\sqrt{47}\varepsilon\end{bmatrix}.
+\end{equation}
+Then $A_0^TA_0=M_b-\frac29(W_1+W_2)\succ0$, with determinant $47\varepsilon^2/81$. Stacking these observations supplies common $A,B$ and proper independent nuisance priors; refining precisely $S$ gives $M_b+\sum_{i\in S}W_i$. Thus the common-Gram constraint that saves the structural ceiling does not save the alpha-only candidate. This construction is a \emph{general linear observation model}; it does not assert membership in the physical Lambertian subclass with diagonal per-light $A_k$ and constrained shading/direction Jacobians.
+
+\textbf{Proposition 3 (full-trace spectral bound).} For $0\prec M\preceq N$ and $0\ne W\succeq0$, define $d(M,W)=\operatorname{tr}[M^{-1}-(M+W)^{-1}]$. Then
+\begin{equation}
+\frac{d(M,W)}{d(N,W)}\geq\frac{\lambda_{\min}(N)}{\lambda_{\max}(M)}.
+\label{eq:gamma-pairwise-spectral}
+\end{equation}
+Consequently, when $\mathcal U_+=\{x:W_x\ne0\}$ is nonempty,
+\begin{align}
+\gamma&\geq
+\frac{\lambda_{\min}(M_b)}{\max_{x\in\mathcal U_+}\lambda_{\max}(M(\mathcal U\setminus\{x\}))}
+\notag\\
+&\geq\frac{\lambda_{\min}(M_b)}{\lambda_{\max}(M(\mathcal U))}>0.
+\label{eq:gamma-general-spectral}
+\end{align}
+
+\textbf{Proof.} Factor $W=LL^T$ and, for $P=M,N$, set
+\begin{equation}
+X_P=L^TP^{-1}L,\quad Y_P=L^TP^{-2}L,\quad
+f(X)=I-(I+X)^{-1}.
+\end{equation}
+Woodbury and trace cyclicity give the exact identity
+\begin{equation}
+d(P,W)=\operatorname{tr}[(I+X_P)^{-1}Y_P].
+\end{equation}
+The spectral decomposition of each individual $P$ gives
+\begin{equation}
+\frac{P^{-1}}{\lambda_{\max}(P)}\preceq P^{-2}
+\preceq\frac{P^{-1}}{\lambda_{\min}(P)}.
+\end{equation}
+Congruence by $L$ and taking the trace against the positive-definite weight $(I+X_P)^{-1}$ therefore imply
+\begin{align}
+d(M,W)&\geq\frac{\operatorname{tr}f(X_M)}{\lambda_{\max}(M)},\\
+d(N,W)&\leq\frac{\operatorname{tr}f(X_N)}{\lambda_{\min}(N)}.
+\end{align}
+No commutation of $X_P$ and $Y_P$ is required for these trace inequalities. Since $M\preceq N$, inverse order and congruence give $X_M\succeq X_N$. Inverse order applied to $I+X_P$ then proves $f(X_M)\succeq f(X_N)$. Moreover, $W\ne0$ implies $\operatorname{tr}f(X_N)>0$. Dividing the last two bounds proves~\eqref{eq:gamma-pairwise-spectral}. For each valid triple, $M(T)\succeq M_b$ and $M(S)\preceq M(\mathcal U\setminus\{x\})\preceq M(\mathcal U)$; taking the infimum proves~\eqref{eq:gamma-general-spectral}. The argument never compares $M^{-2}$ with $N^{-2}$.
+
+Two useful conservative consequences, for $m=|\mathcal U|$ and $\chi_b=\lambda_{\max}(M_b)/\lambda_{\min}(M_b)$, are
+\begin{equation}
+\gamma\geq\frac1{\chi_b[1+(m-1)\alpha]},\qquad
+\gamma\geq\frac1{\kappa\chi_b}\quad\text{in the shared model}.
+\end{equation}
+The first follows from $W_x\preceq\alpha M_b$; the second uses $M(\mathcal U)\preceq\kappa M_b$ from the structural ceiling. Baseline conditioning is essential. On~\eqref{eq:gamma-counterexample}, the leave-one-out bound is $1/200$, consistent with the exact $\gamma=14/109$ and more conservative than it. We do not substitute this example's bound for a newly measured real-design value.
+
+\textbf{Commuting case and task scope.} If $M_b$ and all $W_i$ are simultaneously orthogonally diagonalizable, write their diagonal entries as $b_j>0$ and $w_{ij}\geq0$. Then
+\begin{equation}
+d_x(S)=\sum_j\frac{w_{xj}}{m_j(S)[m_j(S)+w_{xj}]},\quad
+m_j(S)=b_j+\sum_{i\in S}w_{ij}.
+\end{equation}
+Every summand decreases as $S$ grows, so $\gamma=1$ under our convention. The general noncommuting spectral bound, however, is for the \emph{full trace}. For a task $Q=H^TH\succ0$, it applies after transforming $M$ to $Q^{-1/2}MQ^{-1/2}$, preserving $J_H=\operatorname{tr}(Q M^{-1})$. The original unweighted spectral constant cannot be reused for arbitrary $H$. For example, $M=I_2$, $N=I_2+\tfrac12\mathbf1\mathbf1^T$, $W=\operatorname{diag}(1,0)$, and $H=(0,1)$ give $d_H(M,W)=0$ and $d_H(N,W)=1/28$. For task objectives, define $\gamma_H$ by ratios with positive denominator, allowing a zero numerator, and set it to one for a constant objective. Thus rank-deficient tasks can have zero diminishing-returns coefficient. This limitation is independent of the valid task-uniform precision-refinement ceiling.
+
+\textbf{Disposition of the archived search.} The file \nolinkurl{results/submodularity/alpha_bound.json} retains zero candidate violations over \alphaTestTriples{} tested triples and \alphaMInvSqReversalTriples{} reversed inverse-square trace orderings. Those finite records remain unchanged, but~\eqref{eq:gamma-counterexample} supersedes their interpretation as support for a universal alpha-only bound. The archived real-design expressions $0.635144$ and $0.660259$ retain only historical candidate status. The replacement guarantee is~\eqref{eq:gamma-general-spectral}; convex certificates require neither the old candidate nor the new spectral estimate.

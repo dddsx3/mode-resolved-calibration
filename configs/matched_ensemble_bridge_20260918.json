@@ -1,0 +1,122 @@
+{
+  "status": "experimental — NOT part of the published results",
+  "protocol": "P-MATCHED-ENSEMBLE S1 -> S2 -> S3; information-risk ranking bridge",
+  "registered_date": "2026-09-18",
+  "registration_rule": "Written before the first ensemble run. Seeds, sample sizes, thresholds, objects and levels are frozen. No outcome-dependent tuning or exclusions.",
+  "provisional_claim_slots": {"matched_ensemble": "C13", "ranking_conditions": "M16", "integration": "coordinator assigns final registry numbering"},
+  "seeds": {
+    "scene": 2026091831,
+    "measurement_noise": 2026091832,
+    "nuisance": 2026091833,
+    "ideal_baseline": 2026091834,
+    "residual_bootstrap": 2026091835,
+    "dense_design": 2026091836,
+    "bridge_scene": 2026091861,
+    "bridge_gaussian": 2026091862,
+    "bridge_real": 2026091863,
+    "counterexample": 2026091864
+  },
+  "s1": {
+    "trials": 8192,
+    "batch_size": 256,
+    "variance_ddof": 1,
+    "gate_empirical_over_predicted": [0.8, 1.25],
+    "gate_applies_to": ["numerator_variance_ratio", "ideal_baseline_variance_ratio", "empirical_degradation_over_prediction"],
+    "require_all_selected_modes_valid": true,
+    "identity_relative_tolerance": 1e-9,
+    "n_modes": 5,
+    "mode_coordinate": "W = F_infinity^(1/2) U, with U retention eigenvectors",
+    "projection": "P_rho = I - rho rho^T/(rho^T rho), applied identically on both covariance sides and to every sample",
+    "primary_s1_denominator": "analytic ideal sigma^2 F_infinity^-1; separately verify an independent ideal Gaussian baseline ensemble",
+    "proper_nuisance_covariance": "support-preserving factor Sigma_phi = L L^T; never use pinv(Sigma_phi) as profiling precision"
+  },
+  "openillumination": {
+    "olat_root": "D:/data/OpenIllumination/OLAT",
+    "data_meta": "D:/data/OpenIllumination_meta",
+    "objects": ["obj_04_dolphin", "obj_09_ball"],
+    "camera": "A1",
+    "n_lights": 24,
+    "n_pixels": 96,
+    "noise_fit_convention": "corrected",
+    "sigma": 1.0,
+    "levels": [0.1, 0.35],
+    "level_units": "log-intensity SD = level; EACH tangent-coordinate SD = level degrees (converted to radians)",
+    "selection": "sorted uniform samples without replacement, RNG SeedSequence([scene_seed, object_index]); lights sampled first, then masked pixels; no resampling on failure",
+    "unidentifiable_pixels": "remove only exact/nonfinite F_infinity<=0 after nominal assembly, record original and retained indices; fail if fewer than n_modes+1 remain",
+    "scope": "Real thumbnails provide the nominal geometry, weights and residual pool. S1 and S3 observations are SYNTHETIC, not new real-data measurements. Canonical loader reads all 142 thumbnails; analysis uses only the frozen subset."
+  },
+  "dense_controls": {
+    "m": 36,
+    "n": 8,
+    "q": 5,
+    "noise_ar1_correlation": 0.65,
+    "nuisance_eigenvalues": [0.09, 0.025, 0.006, 0.0, 0.0],
+    "cases": [
+      {"name": "dense_noise_singular_phi_sigma_035", "sigma": 0.35, "zero_nuisance": false},
+      {"name": "dense_noise_singular_phi_sigma_170", "sigma": 1.7, "zero_nuisance": false},
+      {"name": "dense_noise_zero_phi_sigma_060", "sigma": 0.6, "zero_nuisance": true}
+    ]
+  },
+  "s2": {
+    "trials": 8192,
+    "numerator": "reuse exactly the S1 linear observation draws, matched GLS, modes and projection",
+    "baseline": "raw flattened nominal real residual pool, iid with replacement over observations, no recentering and no degrees-of-freedom correction; zero-nuisance ideal GLS",
+    "report": "R2 = R1 * (b_ideal / b_boot_population) * (b_boot_population / b_boot_empirical); report per-mode factors and geometric-mean closure, not a product of medians"
+  },
+  "s3": {
+    "trials": 8192,
+    "generator": "rho * relu(n dot sphere_exp(d, tangent_phi)) * exp(logI_phi) + the SAME Gaussian measurement noise as S1",
+    "paired_draws": "reuse exactly S1 nuisance and measurement seeds; no truncation of Gaussian draws",
+    "estimator": "same frozen nominal marginal GLS as S1/S2; only replace the observation-side first-order forward perturbation by the finite physical forward model",
+    "denominator": "reuse the exact S2 bootstrap baseline samples",
+    "report": "R3 = R2 * (v_nonlinear / v_linear); separate centered variance, mean and second moment; report RMS/max physical draws and shadow changes",
+    "historical_isomorphism": false,
+    "historical_boundary": "Historical amplitude uses fixed real images, estimator-side assumed-light corruption, plug-in per-pixel GLS, and random-axis/scalar-angle perturbations. S3 is not that estimator or ensemble and does not explain away the historical 53.744.",
+    "radius_scope": "Levels 0.1 and 0.35 lie below the first historical 2x radius crossings for the selected objects (read-only reference only). A historical radius for a different estimator/endpoint does not certify this S3 experiment."
+  },
+  "bridge": {
+    "diligent_root": "D:/data/DiLiGenT/pmsData",
+    "objects": ["ballPNG", "bearPNG"],
+    "n_lights": 16,
+    "n_pixels": 64,
+    "noise_fit_convention": "corrected",
+    "sigma": 1.0,
+    "sig_logI": 0.1,
+    "sig_dir_deg_per_tangent": 0.5,
+    "families": ["anchor", "het"],
+    "heterogeneity": "SD multipliers exp(linspace(-0.7,0.7,n_lights)), normalized to RMS 1; fixed active-light order, not fitted to errors",
+    "plan_cells": {
+      "precision_ladder": {"precision_multipliers": [1.0, 4.0, 16.0, 64.0], "equal_budget": false},
+      "equal_budget_subsets": {"n_plans": 4, "budget_k": 4, "precision_multiplier": 16.0, "construction": "partition the 16 selected active lights by local index modulo 4; fail rather than replace an all-dark light"}
+    },
+    "matched_trials_per_plan": 4096,
+    "fixed_real_trials_per_plan": 256,
+    "batch_size": 256,
+    "endpoint_H": "P_rho / sqrt(n_pixels) for gauge-aligned linear-albedo MSE; SAME H for every plan and both families within a scene",
+    "confidence_failure_probability": 0.01,
+    "spearman_target": 0.7,
+    "sampling_radius": "exact Gaussian quadratic-form concentration with a union bound over all matched plan risks; no plug-in SEM advertised as a certificate",
+    "ranking_rule": "strict pairwise gap > sum of error radii; all pairs gives Spearman=1; partial margins give a rank-displacement lower bound; no margin means no unconditional threshold",
+    "diagnostics": "reuse family_e_diag S_pred/S_real, fit_anc/fit_het and cross_ah/cross_ha definitions; do not infer causal exclusion from ranks alone",
+    "real_pipeline": "existing allocation_mode_tail.arm_metrics on FIXED independently loaded DiLiGenT images, with historical scalar-angle corruption; report albedo MSE, dual energy and angular drift separately",
+    "scope": "Independent DiLiGenT nominal-design synthetic Gaussian validation plus a separately labelled actual-image estimator-side diagnostic. This is not an OI holdout claim, full-cohort transfer claim, real recalibration, or proof that normal angular error is the same H endpoint. GT normals are used only for absolute nominal sanity."
+  },
+  "counterexamples": {
+    "n_policies": 6,
+    "epsilon_values": [0.01, 0.0001, 0.000001],
+    "gaussian_trials": 4096,
+    "separated_synthetic_risks": [1.0, 2.0, 4.0, 8.0, 16.0, 32.0],
+    "cases": ["arbitrarily_small_covariance_error_without_margin_reverses_all_ranks", "matched_covariance_but_wrong_endpoint_H_reverses_ranking", "finite_matched_Gaussian_samples_have_positive_reversal_probability_without_margin"]
+  },
+  "archive_reference": {
+    "path": "D:/论文_新实证与γ一般界_源码证据_20260917.zip",
+    "member": "amplitude_rerun_20260917/amplitude_comparison.json",
+    "mode": "read-only; no extraction over repository files or historical outputs"
+  },
+  "output": {
+    "directory": "results/theory_extension_20260918",
+    "main": "matched_ensemble_bridge.json",
+    "s1_checkpoint": "matched_ensemble_bridge_s1.json",
+    "allow_overwrite_historical": false
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "review_type": "独立只读复核；仅读取存档、源影像与代码，未启动实验或bootstrap，未修改实验代码或结果",
+  "archive_path": "/home/user/ClawsGO/渲染/amplitude_rerun_20260917/factorial_real",
+  "snapshot_index_sha256": "058a843e1d234003b5e935c3008e92a010ca51da1164e9e5a9f1b97dc3951f9a",
+  "status": {
+    "archive_status": "complete",
+    "completed_utc": "2026-09-17T14:47:58.147706+00:00",
+    "note": "复核期间四臂10000次bootstrap已完成；summary哈希与索引相符，A/B/C/D行文件均与索引逐项相同。未独立重跑置信区间。"
+  },
+  "integrity": {
+    "cells_expected_and_verified": 66,
+    "grid": "11对象×6level；每cell 20seed、5mode；四臂共用子集",
+    "npz_sha256_verified": 66,
+    "source_images_sha256_bytes_and_decode_verified": 1562,
+    "source_image_shape": [273, 200, 4],
+    "source_image_description": "11×142张真实OpenIllumination A1 com_masked_thumbnail；不是RAW或全分辨率影像",
+    "download_receipts_sha256_and_bytes_verified": 1562,
+    "upstream_revision_in_receipts": "006beced878d3fb7187ded8e20ee63d9c5020fcb",
+    "source_sha256": "48a1bd0abdda0f8a47307ced1bf55702eb434dbfa0ffa67dd4d297b4738a5d3c",
+    "source_canonical_hash_verified": true,
+    "light_positions_sha256_and_shape_verified": true,
+    "all_cells_pixel_coordinates_match_source_alpha_mask": true,
+    "all_cells_have_raw_E_E0_and_valid_selections": true,
+    "all_arrays_finite": true,
+    "current_code_hash_mismatches": [],
+    "conclusion": "66个实际NPZ均存在且哈希正确；源影像、下载凭据、灯位、像素选择及历史数值对拍组成可核查证据链，不是只有manifest或空壳结果。"
+  },
+  "projection_check": {
+    "formula": "逐seed E'=E-(E·rho)/(rho·rho) rho；E0同式；两个noise convention均核验",
+    "rows_checked_including_E_and_E0_both_conventions": 5280,
+    "max_absolute_formula_error": 0.0,
+    "max_absolute_dot_with_rho": 1.3888369621017915e-13,
+    "max_normalized_orthogonality_error": 1.577159068628877e-14,
+    "four_arm_projection_variance_ratio_and_index_max_error": 0.0,
+    "matched_linear_baseline_formula_max_relative_error": 3.42907906401969e-15,
+    "matched_linear_ratio_arithmetic_max_error": 0.0,
+    "all_matched_linear_modes_valid": true,
+    "scope_note": "同坐标理论分子读取已存档值并核验比值；未重新构造或求逆1200维信息矩阵。",
+    "legacy_note": "旧legacy公式只给所有seed减相同向量，不改变中心化样本方差；与raw方差最大相对差3.4783360217352253e-13。"
+  },
+  "historical_checks": {
+    "A_legacy_gate_independently_passed": true,
+    "tolerance": 1e-7,
+    "A_prediction_max_relative_error": 2.6907982953086743e-12,
+    "A_empirical_max_relative_error": 2.419872744017935e-13,
+    "A_recomputed_and_frozen_pooled_modepoint_spearman": 0.7278004890269466,
+    "A_spearman_absolute_difference": 0.0,
+    "D_reference": "/home/user/ClawsGO/渲染/remote_repo/results/openillumination/correctness/mf0_factorial_rows_D.json",
+    "D_legacy_prediction_max_relative_error": 1.0434952733213358e-10,
+    "D_legacy_empirical_max_relative_error": 6.641630069240145e-13,
+    "D_legacy_prediction_max_absolute_error": 2.2624502889811993e-5,
+    "D_legacy_empirical_max_absolute_error": 2.9494913178496063e-9,
+    "D_legacy_agrees_within_1e_minus_7_relative": true,
+    "interpretation": "A门与D对拍证明legacy复现，不证明修正后emp或幅值理论成立。D预测最大绝对差对应大数值，相对误差仍远低于1e-7。"
+  },
+  "D_amplitude_median_ratios": {
+    "definition": "以下均先对每cell-mode计算比值再取中位数；overall为330点，mode0为66点；不是中位数之比",
+    "old_emp_over_old_unprojected_prediction": {"overall": 15.975062209835711, "mode0": 1.089025174532495},
+    "new_projected_emp_over_old_unprojected_prediction_control_only": {"overall": 16.768833829304768, "mode0": 0.17725011682607827},
+    "new_projected_emp_over_same_coordinate_linear_prediction": {"overall": 53.74419400160423, "mode0": 41.460894358743},
+    "new_emp_over_old_emp": {"overall": 1.0000052190529582, "mode0": 0.1470500070742097},
+    "new_numerator_variance_over_old": {"overall": 1.000008584828422, "mode0": 0.02344610654069616},
+    "new_residual_bootstrap_denominator_over_old": {"overall": 0.9999964286448055, "mode0": 0.19940312701918567},
+    "residual_bootstrap_denominator_over_same_coordinate_linear_baseline": {"overall": 0.779534439438543, "mode0": 0.7990301129129719, "minimum": 0.2233223538719527, "maximum": 1002.9589485449695},
+    "same_coordinate_ratio_below_one_count": 29
+  },
+  "D_mode0_magnitudes_median": {
+    "old_emp": 567.4083611212391,
+    "new_projected_emp": 76.65678621585721,
+    "old_unprojected_prediction": 3156.161531617203,
+    "same_coordinate_linear_prediction": 2.027056751824307
+  },
+  "finished_D_bootstrap_control_statistics": {
+    "prediction_field": "pred_deg，即未投影1/rho；不能称为同坐标预测验证",
+    "RA": 0.55,
+    "RA_ci95": [-0.1, 0.7],
+    "positive_objects": 7,
+    "total_objects": 11,
+    "fixed_level_median_spearman": -0.5181818181818183,
+    "pooled_cellmax_spearman": -0.1260202484083081,
+    "note": "置信区间来自已完成summary，未重抽样；pooled为66个cell最大值指标，不是330个mode点相关。"
+  },
+  "blocking_interpretation_issues": [
+    "不得用已投影emp与旧未投影1/rho的ratio（特别mode0=0.17725）宣称修正后理论高估或幅值改善。这是坐标混用，只能标作历史控制。",
+    "同坐标线性预测只匹配P和W，不匹配经验数据生成/估计/重抽样。E0来自全局展平残差池有放回重抽并固定资产的GLS，不是协方差Finf^-1的理论系综；不能把剩余差异直接定性为信息理论失败，也不能声称完整过程已匹配。",
+    "四臂10000bootstrap的统计仍使用旧pred_deg，必须标注控制分析；D的CI跨零且正相关对象仅7/11，不支持稳健正排序结论。"
+  ],
+  "recommended_report_conclusion": "逐seed gauge修正已数值验证，主要削减mode0中的尺度方向污染，同时改变经验分子与残差bootstrap分母。修正后的同坐标比较仍存在显著描述性幅值不一致：D臂经验/线性预测中位数总体53.744、mode0为41.461；并非每一点均低估（29/330小于1）。因此修正不能被表述为幅值校准成功；亦不能借旧1/rho混用造成的mode0=0.177归因。当前阻断是结论口径与经验/理论基线不匹配，不是缺少真实影像产物、历史复现失败或投影计算错误。"
+}

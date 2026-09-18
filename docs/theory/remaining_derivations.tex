@@ -1,0 +1,41 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[fontset=windows,scheme=plain]{ctex}
+\usepackage{amsmath,amssymb,amsthm,bm}
+\usepackage[a4paper,left=24mm,right=24mm,top=22mm,bottom=22mm]{geometry}
+\usepackage{booktabs,tabularx,longtable,array,enumitem,needspace}
+\usepackage{etoolbox}
+\usepackage[hidelinks,unicode,bookmarksnumbered]{hyperref}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0.2em}
+\setlength{\emergencystretch}{2em}
+\setlist{nosep,leftmargin=2em}
+\widowpenalty=10000
+\clubpenalty=10000
+\allowdisplaybreaks[1]
+\pretocmd{\section}{\Needspace{0.25\textheight}}{}{}
+\pretocmd{\subsection}{\Needspace{5\baselineskip}}{}{}
+\newtheorem{theorem}{定理}[section]
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{proposition}[theorem]{命题}
+\newtheorem{corollary}[theorem]{推论}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{定义}
+\newtheorem{remark}[theorem]{说明}
+\hypersetup{pdftitle={Mode-Resolved Calibration：剩余推导与外推},
+ pdfauthor={研究补充材料},pdfsubject={物理反例、近似余项、匹配系综、谱界与联合场景信息},
+ pdfcreator={XeLaTeX}}
+\begin{document}
+\begin{center}
+{\LARGE\bfseries Mode-Resolved Calibration}\par\medskip
+{\Large\bfseries 剩余推导与外推}\par
+\end{center}
+\noindent 本材料衔接已有一般 $\gamma$ 否证及谱界证明，补充六项后续研究。
+解析定理、有限数值核验与外推限制分别陈述。历史实证与运行快照保持原样，
+新增结果只承担其明示条件下的证据作用。
+\input{section_extension_summary}
+\input{section_physical_gamma}
+\input{section_two_term_remainder}
+\input{section_ensemble_bridge}
+\input{section_joint_extension}
+\input{section_extension_evidence}
+\end{document}

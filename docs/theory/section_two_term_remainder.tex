@@ -1,0 +1,512 @@
+% status: experimental --- NOT part of the published results
+% Input-ready body; requires only amsmath, amssymb, and amsthm.
+% M14 is reserved for integration by the coordinating author.
+\section{M14: a controlled remainder for the gauge two-term law}
+\label{sec:two-term-remainder}
+
+\subsection{Setting and an exact nonnegative remainder}
+\label{subsec:m14-identity}
+
+All matrices below refer to the fixed, whitened linearization, not to a
+nonlinear reconstruction ensemble.  Let
+$A\in\mathbb{R}^{n\times p}$ have full column rank,
+$B\in\mathbb{R}^{n\times m}$, and $\Sigma_0\succ0$.  Write
+\begin{equation}
+ D=A^\top A,\quad U=A^\top B,\quad M=B^\top B,\quad
+ \Lambda_0=\Sigma_0^{-1},\qquad
+ F(t)=D-U(M+t\Lambda_0)^{-1}U^\top,\quad t>0.
+ \label{eq:m14-fisher}
+\end{equation}
+The precision multiplier $t$ is uniform on the nuisance coordinates included
+in this model; inactive lights with zero Jacobians can be omitted.  Fix a
+unit Euclidean task vector $a\in\mathbb{R}^p$ and a specified gauge vector
+$c\in\mathbb{R}^m$ satisfying
+\begin{equation}
+ \|a\|=1,\qquad Aa=Bc.
+ \label{eq:m14-gauge}
+\end{equation}
+In the fixed-normal albedo experiment, $a=\rho/\|\rho\|$ and
+$c_k=(1,0,0)^\top/\|\rho\|$ for each active light.  These are the coordinates
+of the actual Jacobians in \eqref{eq:m14-fisher}; no change to a log-albedo
+coordinate system is made here.  Define
+\begin{equation}
+ J_a(t)=a^\top F(t)^{-1}a,\qquad
+ q=c^\top\Lambda_0c>0,\qquad r=\frac{1}{\|Aa\|^2},\qquad
+ j_t=\frac{1}{tq}+r.
+ \label{eq:m14-main}
+\end{equation}
+The choice of $c$ matters if several nuisance vectors realize the same gauge;
+$c$ is not silently replaced by a least-squares or minimum-prior-norm gauge.
+
+Here are all ingredients of the remainder.  Put
+\begin{equation}
+ P_A=AD^{-1}A^\top,\quad T=B^\top(I-P_A)B=M-U^\top D^{-1}U,\quad
+ g=U^\top D^{-1}a.
+ \label{eq:m14-projection}
+\end{equation}
+Choose any nonsingular factor $C$ with $\Sigma_0=CC^\top$ (a Cholesky factor
+is sufficient), and set
+\begin{align}
+ S&=C^\top T C, & h&=C^{-1}c/\sqrt q, & v&=C^\top g,\\
+ e_0&=v-h/\sqrt q=C^\top g-C^{-1}c/q, &
+ Q^\top Q&=I_{m-1}, & QQ^\top&=I-hh^\top,\\
+ S_\perp&=Q^\top S Q, & e&=Q^\top e_0, &
+ \delta_D&=a^\top D^{-1}a-r.
+ \label{eq:m14-residual-definitions}
+\end{align}
+For $m=1$ the perpendicular matrices and vectors are empty, and their
+quadratic forms are zero.  Other null vectors of $T$, if present, are
+\emph{retained} in $S_\perp$; only the named gauge $h$ is removed.
+
+\paragraph{Proposition M14.1 (exact decomposition).}
+Under \eqref{eq:m14-fisher}--\eqref{eq:m14-gauge}, $F(t)\succ0$ and
+\begin{equation}
+ \boxed{\quad J_a(t)=j_t+\mathcal R_t,\qquad
+ \mathcal R_t=\delta_D+e^\top(tI+S_\perp)^{-1}e\geq0.\quad}
+ \label{eq:m14-exact-remainder}
+\end{equation}
+In particular, an exact gauge gives a one-sided approximation, not a
+small-error theorem.  Equality $J_a(t)=j_t$ at any finite $t>0$ holds if and
+only if both $Da=(a^\top Da)a$ and $g=\Lambda_0c/q$.
+
+\begin{proof}
+The joint quadratic form
+$\|Ax+By\|^2+t y^\top\Lambda_0y$ is positive for every nonzero pair
+$(x,y)$: if it were zero, positive definiteness of $\Lambda_0$ gives $y=0$,
+and the full column rank of $A$ then gives $x=0$.  Its two Schur complements
+are therefore positive definite.  Block elimination gives
+\begin{equation}
+ F(t)^{-1}=D^{-1}+D^{-1}U(t\Lambda_0+T)^{-1}U^\top D^{-1}.
+ \label{eq:m14-pushthrough}
+\end{equation}
+$P_A$ is an orthogonal projector, so $T\succeq0$.  The gauge implies
+$Tc=B^\top(I-P_A)Aa=0$ and
+$c^\top g=(Aa)^\top AD^{-1}a=a^\top a=1$.
+Consequently, $\|h\|=1$, $Sh=0$, and $h^\top v=1/\sqrt q$.
+Since $S$ is symmetric, $h^\perp$ is invariant under $S$, and
+\begin{equation}
+ (t\Lambda_0+T)^{-1}=C(tI+S)^{-1}C^\top,\qquad
+ v^\top(tI+S)^{-1}v=\frac{1}{tq}
+                   +e^\top(tI+S_\perp)^{-1}e.
+\end{equation}
+Contracting \eqref{eq:m14-pushthrough} with $a$ proves the identity.
+Cauchy--Schwarz applied to $D^{1/2}a$ and $D^{-1/2}a$ gives
+$(a^\top Da)(a^\top D^{-1}a)\geq1$, hence $\delta_D\geq0$.
+The other remainder term is nonnegative because $tI+S_\perp\succ0$.
+The equality condition for Cauchy--Schwarz is $Da=(a^\top Da)a$.
+The positive definite quadratic form vanishes exactly when $e=0$.
+As $e_0\perp h$, this is equivalent to $e_0=0$, or
+$C^\top g=C^{-1}c/q$, equivalently $g=\Lambda_0c/q$.
+\end{proof}
+
+The residual norm and the diagonal part have useful measurable forms:
+\begin{align}
+ \|e\|^2
+ &=g^\top\Sigma_0g-\frac1q
+   =\left(g-\frac{\Lambda_0c}{q}\right)^\top
+       \Sigma_0\left(g-\frac{\Lambda_0c}{q}\right),
+ \label{eq:m14-prior-residual}\\
+ \delta_D
+ &=\frac{a^\top(D-\mu I)D^{-1}(D-\mu I)a}{\mu^2},\qquad
+ \mu=a^\top Da.
+ \label{eq:m14-diagonal-residual}
+\end{align}
+These identities follow by expansion using $c^\top g=1$ and $a^\top a=1$.
+For diagonal $D=\operatorname{diag}(d_i)$, the last expression is the
+cancellation-free sum $\sum_i a_i^2(d_i-\mu)^2/(\mu^2d_i)$.
+Thus the two distinct error mechanisms are spatial information variation
+and a prior-weighted gauge residual.  Neither is controlled by $Aa=Bc$ alone.
+
+For clarity, the scalar information seen after eliminating $a^\perp$ is
+\begin{equation}
+ s_a(t)=a^\top F(t)a-f_\times^\top F_\perp(t)^{-1}f_\times
+       =\frac1{j_t+\mathcal R_t},\qquad
+ \frac1{j_t}-s_a(t)=\frac{\mathcal R_t}{j_t(j_t+\mathcal R_t)}.
+ \label{eq:m14-scalar-schur}
+\end{equation}
+Here $[a,Q_a]$ is orthogonal, $f_\times=Q_a^\top F(t)a$, and
+$F_\perp=Q_a^\top F(t)Q_a$.  This follows by the scalar block inverse formula.
+It is an effective-information expansion, not a claim that a scalar
+approximation controls every entry or every mode of $F(t)$.
+
+\subsection{A non-circular spectral certificate}
+\label{subsec:m14-certificate}
+
+Let $S_\perp z_i=\lambda_i z_i$ with orthonormal $z_i$, and
+$w_i=(z_i^\top e)^2\geq0$.  Then
+$\mathcal R_t=\delta_D+\sum_i w_i/(t+\lambda_i)$.
+Instead of evaluating these exact denominators and calling the answer a
+bound, partition the nonnegative spectrum into intervals
+$[\ell_b,u_b]$ and retain only their masses
+$m_b=\sum_{i\in b}w_i$.  The certificate takes
+$(q,r,\delta_D,\{\ell_b,u_b,m_b\})$, not $J_a$ or an observed error.
+
+\paragraph{Proposition M14.2 (endpoint interval and factor-two certificate).}
+For all $t>0$ define
+\begin{equation}
+ L_t=\delta_D+\sum_b\frac{m_b}{t+u_b},\qquad
+ U_t=\delta_D+\sum_b\frac{m_b}{t+\ell_b}.
+ \label{eq:m14-bins}
+\end{equation}
+Then $L_t\leq\mathcal R_t\leq U_t$.  With the fixed dyadic choice
+\begin{equation}
+ \ell_b=2^b-1,\quad u_b=2^{b+1}-1,\quad
+ b=\lfloor\log_2(1+\lambda_i)\rfloor,
+ \label{eq:m14-dyadic}
+\end{equation}
+we moreover have, uniformly over all admissible models,
+\begin{equation}
+ \mathcal R_t\leq U_t\leq2\mathcal R_t\qquad (t\geq1).
+ \label{eq:m14-factor-two}
+\end{equation}
+If $\mathcal R_t=0$, both sides are zero and a bound/error ratio is undefined,
+not assigned a favorable value.
+
+\begin{proof}
+For each eigenvalue in bin $b$,
+$1/(t+u_b)\leq1/(t+\lambda_i)\leq1/(t+\ell_b)$.
+Multiplication by $w_i\geq0$ and summation gives
+\eqref{eq:m14-bins}.  The dyadic bins satisfy
+$u_b=2\ell_b+1$.  For $t\geq1$,
+\[
+ \frac{t+\lambda_i}{t+\ell_b}
+ \leq\frac{t+u_b}{t+\ell_b}
+ =2+\frac{1-t}{t+\ell_b}\leq2.
+\]
+Apply this term by term to $U_t$ and use $\delta_D\geq0$.
+\end{proof}
+For a caller-supplied non-dyadic bin summary, a factor-two assertion instead
+requires $(t+u_b)/(t+\ell_b)\leq2$ in every positive-mass bin.  The public
+implementation checks these actual ratios; $t\geq1$ alone is not sufficient
+for arbitrary intervals such as $[0,100]$.
+
+This is an a posteriori certificate from the nominal design, with an
+$m-1$ dimensional spectral calculation.  It does not assert a computational
+speed advantage over an exact nuisance-space risk calculation.  Its
+non-circularity is substantive: moving eigenvalues inside their bins while
+holding the spectral masses fixed changes the true remainder but leaves the
+certificate unchanged.  The bin width is fixed by
+\eqref{eq:m14-factor-two}, not chosen after observing errors.
+
+The following are directly testable sufficient conditions:
+\begin{align}
+ U_t\leq\eta j_t&\quad\Longrightarrow\quad
+      0\leq\frac{J_a(t)-j_t}{j_t}\leq\eta,\\
+ \frac{J_a(t)-j_t}{J_a(t)}&\leq\frac{U_t}{j_t+U_t},\\
+ \mathcal R_t&\leq\delta_D+\frac{\|e\|^2}{t+\lambda_*}
+ \quad\hbox{if }S_\perp\succeq\lambda_*I,\quad\lambda_*\geq0.
+ \label{eq:m14-sufficient}
+\end{align}
+The first and last statements follow from the endpoint bound and spectral
+order; the middle statement follows because $x/(j_t+x)$ increases for
+$x\geq0$.  In particular $\lambda_*=0$ always works, although it can be much
+looser than the binned bound.  For diagonal $D$, if
+$|d_i/\mu-1|\leq\xi<1$ on the support of $a$, then
+\begin{equation}
+ \delta_D\leq r\frac{\xi^2}{1-\xi},\qquad
+ r\frac{\xi^2}{1-\xi}+\frac{\|e\|^2}{t+\lambda_*}\leq\eta j_t
+ \quad\Longrightarrow\quad\frac{J_a(t)-j_t}{j_t}\leq\eta.
+ \label{eq:m14-physical-sufficient}
+\end{equation}
+Indeed, substitute $d_i=\mu(1+z_i)$ in
+\eqref{eq:m14-diagonal-residual} and bound
+$z_i^2/(1+z_i)\leq\xi^2/(1-\xi)$.  Strongly nonuniform scenes need not meet
+this coarse condition; the exact positive sum and spectral-bin certificate
+remain valid without $\xi<1$.
+
+\subsection{A joint-endpoint certificate for calibration value}
+\label{subsec:m14-value}
+
+Let $\kappa>1$, $V=1-J_a(\kappa)/J_a(1)$, and
+\begin{equation}
+ \beta=\frac{j_\kappa}{j_1}
+       =\frac{1/\kappa+qr}{1+qr},\qquad
+ V_{\rm pred}=1-\beta=\frac{1-1/\kappa}{1+qr}.
+ \label{eq:m14-value-prediction}
+\end{equation}
+One must not presume that the endpoint errors are independent.  Their exact
+coupled correction is
+\begin{align}
+ V-V_{\rm pred}&=-\frac{N}{j_1+\mathcal R_1},\\
+ N&=(1-\beta)\delta_D+\sum_i w_i f(\lambda_i),\qquad
+ f(x)=\frac1{\kappa+x}-\frac{\beta}{1+x}
+     =\frac{(1-\beta)(x-\kappa qr)}{(1+x)(\kappa+x)}.
+ \label{eq:m14-value-correction}
+\end{align}
+This follows by substituting $J_a(t)=j_t+\mathcal R_t$ and collecting
+$\mathcal R_\kappa-\beta\mathcal R_1$.
+
+\paragraph{Proposition M14.3 (signed value interval).}
+For each spectral bin let
+\begin{align}
+ f_b^-&=\min\{f(\ell_b),f(u_b)\},\\
+ f_b^+&=\max\bigl(\{f(\ell_b),f(u_b)\}
+               \cup\{f(x_*):\ell_b\leq x_*\leq u_b\}\bigr),\qquad
+ x_* = \frac{\kappa\sqrt\beta-1}{1-\sqrt\beta},\\
+ N_-&=(1-\beta)\delta_D+\sum_b m_b f_b^-,\quad
+ N_+=(1-\beta)\delta_D+\sum_b m_b f_b^+,\\
+ D_-&=j_1+L_1>0,\qquad D_+=j_1+U_1,\qquad
+ \mathcal C=\{n/d:n\in\{N_-,N_+\},\ d\in\{D_-,D_+\}\}.
+ \label{eq:m14-value-interval}
+\end{align}
+Then
+\begin{equation}
+ -\max\mathcal C\ \leq V-V_{\rm pred}\leq-\min\mathcal C,
+ \qquad |V-V_{\rm pred}|\leq
+ B_V:=\max_{z\in\mathcal C}|z|.
+ \label{eq:m14-value-bound}
+\end{equation}
+Thus $B_V\leq\varepsilon$ certifies absolute accuracy $\varepsilon$;
+if the entire signed interval lies above $\varepsilon$ or below
+$-\varepsilon$, it instead certifies failure of that accuracy target.
+
+\begin{proof}
+Since $1/\kappa<\beta<1$, the derivative
+$f'(x)=\beta/(1+x)^2-1/(\kappa+x)^2$ has exactly one zero on
+$[0,\infty)$, namely $x_*>0$.  It is positive before $x_*$ and negative
+afterwards, so this is the unique maximum and an interval minimum is at an
+endpoint.  It follows that $f_b^-\leq f(\lambda_i)\leq f_b^+$ within bin $b$.
+Nonnegative masses give $N_-\leq N\leq N_+$.
+Proposition M14.2 gives $D_-\leq j_1+\mathcal R_1\leq D_+$.
+For a positive denominator, the extrema of $n/d$ on this rectangle occur
+among its four corners (monotonicity in $n$, and the sign-dependent
+monotonicity in $d$).  The negative sign in
+\eqref{eq:m14-value-correction} yields \eqref{eq:m14-value-bound}.
+\end{proof}
+
+There is \emph{no universal relative-tightness assertion for $B_V$}.
+For example, take
+\[
+ A=\begin{pmatrix}1\\0\end{pmatrix},\quad
+ B=\begin{pmatrix}1&1\\0&\sqrt{10}\end{pmatrix},\quad
+ a=1,\quad c=\begin{pmatrix}1\\0\end{pmatrix},\quad\Sigma_0=I_2.
+\]
+Then $q=r=1$, $\delta_D=0$, $S_\perp=10$, $e=1$, and
+$J_a(t)=1+1/t+1/(t+10)$.  At $\kappa=10$, the nonzero endpoint remainders
+cancel exactly in \eqref{eq:m14-value-correction}, giving
+$V=V_{\rm pred}=9/20$.  The dyadic bin $[7,15]$ nevertheless gives $B_V>0$.
+Perturbing the squared lower-right entry of $B$ from $10$ to $10+u$ makes
+$V-V_{\rm pred}=-9u/9200+O(u^2)$, while the bin certificate stays bounded
+away from zero.  Thus an arbitrarily large bound/observed ratio for value
+is possible, despite the uniform factor-two endpoint result.  The finite
+benchmark ratios below are numerical validation, not a proof eliminating
+this obstruction.
+
+\subsection{Physical interpretation, heterogeneity, and coupling}
+\label{subsec:m14-physical}
+
+For the per-light model let $R_\rho=\|\rho\|$, $L$ be the active-light count,
+and
+\[
+ d_p=\sum_k w_{kp}s_{kp}^2,\qquad
+ \ell_k=\sum_p a_p^2\frac{w_{kp}s_{kp}^2}{d_p},\qquad
+ g_k=(R_\rho\ell_k,g_{k1},g_{k2})^\top.
+\]
+The equality for the intensity coordinate follows from
+$B_{k0,p}=\rho_p s_{kp}$; $\ell_k\geq0$ and $\sum_k\ell_k=1$.
+Here $g_{k1},g_{k2}$ are computed from the physical normal--tangent
+Jacobians and weights, so they retain the effects of normals, shadows,
+texture, and noise precision.  Suppose first that the channels are uncoupled,
+with per-light standard deviations $s_{Ik}>0$ for log intensity and
+$s_{Dk}>0$ radians for each tangent coordinate.  Define
+\begin{equation}
+ \pi_k=\frac{s_{Ik}^{-2}}{\sum_j s_{Ij}^{-2}},\qquad
+ q=\frac{\sum_k s_{Ik}^{-2}}{R_\rho^2}.
+\end{equation}
+Equation \eqref{eq:m14-prior-residual} becomes the exact positive decomposition
+\begin{equation}
+ \|e\|^2=
+ R_\rho^2\sum_k s_{Ik}^2(\ell_k-\pi_k)^2
+ +\sum_k s_{Dk}^2(g_{k1}^2+g_{k2}^2).
+ \label{eq:m14-uncoupled-physical}
+\end{equation}
+To prove it, observe that $(\Lambda_0c/q)_{k0}=R_\rho\pi_k$ and its
+direction coordinates are zero, then use the block-diagonal covariance
+in \eqref{eq:m14-prior-residual}.  In particular, homogeneous channels give
+$R_\rho^2s_I^2\sum_k(\ell_k-1/L)^2+
+ s_D^2\sum_k(g_{k1}^2+g_{k2}^2)$.
+Even with no direction uncertainty, heterogeneous prior precision can
+mismatch the illumination leverages $\ell_k$.
+
+The C9 family uses $s_{Ik}=\bar s_I\exp(\tau z_k)$ and
+$s_{Dk}=\bar s_D\exp(\tau z_k)$ with a fixed-seed vector $z_k$, and blocks
+\begin{equation}
+ \Sigma_k=\begin{pmatrix}
+ s_{Ik}^2 & \varrho s_{Ik}s_{Dk}/\sqrt2 & \varrho s_{Ik}s_{Dk}/\sqrt2\\
+ \varrho s_{Ik}s_{Dk}/\sqrt2 &s_{Dk}^2&0\\
+ \varrho s_{Ik}s_{Dk}/\sqrt2 &0&s_{Dk}^2
+ \end{pmatrix},\qquad |\varrho|<1.
+ \label{eq:m14-coupled-family}
+\end{equation}
+Here $\tau$ is the heterogeneity parameter and $\varrho$ the correlation
+between log intensity and the normalized sum of the tangent coordinates.
+In particular,
+\begin{equation}
+ q=\frac1{R_\rho^2}\sum_k\frac1{s_{Ik}^2(1-\varrho^2)},\qquad
+ d_k^g=g_k-\frac{\Sigma_k^{-1}(1,0,0)^\top}{R_\rho q},\qquad
+ \|e\|^2=\sum_k(d_k^g)^\top\Sigma_k d_k^g.
+ \label{eq:m14-coupled-physical}
+\end{equation}
+The first formula follows by a scalar Schur complement of the direction
+block; the last follows from \eqref{eq:m14-prior-residual}.  The normalized
+correlation matrix in \eqref{eq:m14-coupled-family} has eigenvalues
+$1$, $1-\varrho$, $1+\varrho$.  Consequently
+\[
+ \|e\|^2\leq(1+|\varrho|)\sum_k
+ \left[s_{Ik}^2(d_{k0}^g)^2+s_{Dk}^2\{(d_{k1}^g)^2+(d_{k2}^g)^2\}\right]
+\]
+is a purely physical sufficient input to \eqref{eq:m14-sufficient}.
+
+A standard deviation reported as degrees in the C9 input is per tangent
+coordinate: $s_{Dk}=(\pi/180)\sigma_{\mathrm{dir},k}^{\mathrm{deg}}$.
+The two-coordinate first-order angular RMS is $\sqrt2$ times this per-axis
+standard deviation.  It is not identified here with any different radial
+rotation convention of a nonlinear corruption sampler.  The artifact
+reports both quantities.  Thus \eqref{eq:m14-sufficient} and
+\eqref{eq:m14-coupled-physical} are measurable conditions in degrees,
+log-intensity deviation, heterogeneity, coupling, and nominal Jacobians.
+They do not reduce to a geometry-free law in $s_D/s_I$: the $\delta_D$,
+illumination-leverage, and normal--tangent terms would then be missing.
+
+\subsection{Why direction-only refinement can invalidate the two-term law}
+\label{subsec:m14-direction}
+
+Keep $s_D>0$ and let the uncoupled intensity deviation $s_I$ tend to zero.
+For every $s_I>0$ the theorem applies, $q=L/(R_\rho^2s_I^2)$ diverges,
+$j_t\to r$, and $V_{\rm pred}\to0$.  By
+\eqref{eq:m14-uncoupled-physical}, the direction part of $\|e\|^2$ need not
+tend to zero.  Its contribution to $\mathcal R_t$ can remain strongly
+$t$-dependent, giving nonzero $V$.  Exactly at $s_I=0$, the full covariance
+is singular and $q$ is not defined by a finite precision inverse.
+\emph{Its Moore--Penrose inverse must not be substituted for the precision:}
+a known intensity coordinate means infinite precision, not zero precision.
+One must either take the positive-definite limit or remove the known
+coordinate and rederive the information model.  The reduced direction-only
+model need not have the specified intensity gauge at all.
+
+This mechanism occurs within a legal Lambertian block, even at a small
+angular standard deviation.  Take one pixel, one light, $\rho=1$,
+$n=(4/5,0,3/5)$, $d=(0,0,1)$, tangent vectors $(1,0,0)$ and $(0,1,0)$,
+and $w=10000$.  The pixel is unshadowed, with $n^\top d=3/5$, and
+\begin{equation}
+ A=[60],\quad B=[60,80,0],\quad a=1,\quad c=(1,0,0)^\top,\quad
+ \Sigma_0=\operatorname{diag}(\epsilon^2,1/10000,1/10000),\quad\epsilon>0.
+ \label{eq:m14-lambertian-counterexample}
+\end{equation}
+These are exactly $A=\sqrt w\,s$ and
+$B=\sqrt w\,\rho(s,n^\top t_1,n^\top t_2)$, not arbitrary Fisher entries.
+The gauge is exact; direct scalar inversion gives
+\begin{equation}
+ J_a(t)=\frac1{3600}+\frac{\epsilon^2}{t}+\frac4{22500t},\qquad
+ j_t=\frac1{3600}+\frac{\epsilon^2}{t},\qquad
+ \mathcal R_t=\frac4{22500t}.
+ \label{eq:m14-counterexample-risk}
+\end{equation}
+For example, this follows also from $T=0$, $q=\epsilon^{-2}$,
+$\delta_D=0$, and $\|e\|^2=4/22500$ in Proposition M14.1.
+At $\kappa=10$,
+\begin{equation}
+ \lim_{\epsilon\downarrow0}V=\frac{72}{205},\qquad
+ \lim_{\epsilon\downarrow0}V_{\rm pred}=0.
+ \label{eq:m14-counterexample-value}
+\end{equation}
+The direction standard deviation here is $1/100$ radian per axis.
+More generally, with fixed shading $s$ and tangent response $u$,
+$\mathcal R_1/j_1\to w u^2s_D^2$ as $s_I\downarrow0$.
+This can be arbitrarily large with increasing positive $w$, showing why
+small degrees and an exact gauge alone cannot certify small relative error.
+Conversely, when \emph{all} channel deviations tend to zero,
+$J_a(t)\to a^\top D^{-1}a$ and $j_t\to r$; the spatial residual
+$\delta_D$ still need not vanish.
+
+\subsection{Numerical validation and scope of the evidence}
+\label{subsec:m14-evidence}
+
+The mathematical results above are proved independently of this experiment.
+The new research runner reconstructs the unchanged nominal scenes using the
+original object-specific seeds, 48 active lights, 1200 sampled pixels, and
+the corrected noise-fit convention.  It reads the unrounded risk endpoints
+and value fields of all 44 frozen goal-oriented cells.  Exact observed risks
+are recomputed independently through the published low-rank function;
+certificate construction occurs before those risk evaluations.
+The implementation uses nuisance-space spectral bins, not $F(t)^{-1}$.
+It also evaluates \emph{all} 45 existing C9 grid points on all 11 objects,
+including all heterogeneous/coupled combinations and all 88 direction-only
+controls.  The combined 539 records include 11 repeated nominal-level-0.5/C9
+anchor conditions: there are 528 distinct object--parameter conditions, not
+539 independent samples.  Tags also overlap, so tag-specific counts must
+not be added together.
+No grid points, bin widths, or the requested tightness threshold of 10 are
+chosen by observed success.  A one-object exploratory calculation preceded
+implementation; this extension is not represented as a prospectively
+preregistered study.
+
+The ratios in the following table are certificate upper bound divided by
+observed absolute approximation error; medians, 95th percentiles, and maxima
+are across the indicated endpoints or cells, without denominator flooring.
+\begin{center}
+\begin{tabular}{lrrrr}
+\hline
+Set and quantity & Count & Median & 95th percentile & Maximum\\
+\hline
+Frozen nominal, risk endpoints & 88 & 1.353238 & 1.546959 & 1.652930\\
+Frozen nominal, value & 44 & 1.298290 & 1.435463 & 1.483561\\
+Full C9 family, risk endpoints & 990 & 1.317729 & 1.535014 & 1.724254\\
+Full C9 family, value & 495 & 1.317539 & 2.480009 & 4.146191\\
+\hline
+\end{tabular}
+\end{center}
+All these tested ratios are at most 10, with no bound violations.
+This is not solely a high-corruption observation: at nominal level $0.1$,
+all 22 endpoint ratios and all 11 value ratios satisfy the threshold;
+their maxima are 1.454136 and 1.305742, respectively.  The maximum observed
+value error there is 0.038539 and its largest certified upper bound is
+0.045102.  Endpoint relative errors themselves need not be tiny: a tight
+certificate is not an assertion that the approximation is uniformly accurate.
+
+The largest direction-only value error is at
+\texttt{obj\_19\_cylinder}, $s_I=10^{-6}$ and direction standard deviation
+$0.1$ degree.  Its observed $V-V_{\rm pred}=0.4641367354$ lies in the
+\emph{design-only signed interval}
+$[0.2566364348,0.9046182854]$, a bound/error ratio of 1.949034.
+The lower endpoint excludes 0.05 accuracy; this is stronger than merely
+failing to certify it.  On the full direction-only grid, 42 cells have
+observed error above 0.05 and the interval conclusively excludes 0.05
+accuracy for 32 of them; the other ten remain inconclusive rather than
+falsely certified.  These controls use C9's finite positive-definite
+$s_I=10^{-6}$ convention, not a pseudoinverse at $s_I=0$.
+
+This experiment evaluates exact-arithmetic certificates in double precision;
+it is not a directed-rounding computer-assisted proof.  The largest
+identity-to-independent-risk relative discrepancy is
+$5.72\mathbin{\times}10^{-9}$; the frozen nominal endpoint replay discrepancy
+is at most $4.82\mathbin{\times}10^{-10}$.  Twenty-five negative Gram
+eigenvalues attributed to roundoff are recorded, with largest magnitude
+$2.83\mathbin{\times}10^{-11}$ (largest relative magnitude
+$7.41\mathbin{\times}10^{-18}$); larger PSD violations raise an error rather
+than add a ridge.  The predeclared floating-point check tolerance is
+$2\mathbin{\times}10^{-11}+2\mathbin{\times}10^{-7}|J|$ and does not alter the
+certificate or tightness ratio.  The implementation reports this limitation
+rather than upgrading numerical verification into an exact proof.
+The prior-PSD guard propagates the parent-Gram tolerance, rather than scaling
+relative to a projection Gram that may be exactly zero: if the accepted
+$\widehat T\succeq-\tau\|M\|_F I$, then
+\[
+ Q^\top C^\top\widehat T C Q\succeq
+ -\tau\|M\|_F\|C\|_2^2 I
+ =-\tau\|M\|_F\lambda_{\max}(\Sigma_0)I.
+\]
+This follows by evaluating the quadratic form and using $\|Qx\|=\|x\|$.
+Both the actual projection-Gram scale and this propagated tolerance are
+reported.  It avoids falsely rejecting valid $B=AW$ models with $T=0$ after
+floating-point Gram cancellation; it does not add a prior or Fisher ridge.
+
+The companion evidence index identifies the machine-readable artifact,
+its nominal and family summaries, the low-level cases, the worst direction-only
+case, and the complete per-cell inputs and certificates.
+All 75 pre-existing result files retain their before/after SHA-256 hashes.
+The family-ranking diagnostics
+$S_{\rm pred}$ and $S_{\rm real}$ concern different reconstruction endpoints
+and are not redefined as remainder metrics here.  M14 establishes a
+conditional fixed-linearization risk certificate, not a nonlinear recovery,
+ranking-transfer, or geometry-free parameter-ratio theorem.

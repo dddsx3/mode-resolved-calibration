@@ -1,0 +1,325 @@
+{
+  "gate": "P-JOINT-INFORMATION",
+  "claim": "M17",
+  "status": "independent_synthetic_validation",
+  "config": {
+    "status": "registered_before_execution",
+    "experiment": "P-JOINT-INFORMATION",
+    "claim": "M17",
+    "seed": 20260918,
+    "linear_samples": 20000,
+    "nonlinear_samples": 1000,
+    "sigma": 0.002,
+    "uniform_precision_multipliers": [
+      1.0,
+      10.0
+    ],
+    "variance_ratio_interval": [
+      0.8,
+      1.25
+    ],
+    "jacobian_step": 1e-06,
+    "scope": "Independent synthetic local joint log-albedo/normal scene; calibration nuisance and sensor noise are both resampled. Nonlinear estimator is a new joint local profile estimator, not the historical fixed-normal joint_map. No real-data accuracy claim.",
+    "acceptance": {
+      "linear_variance_ratios": "Every identifiable coordinate empirical/predicted variance lies in the registered interval.",
+      "nonlinear_variance_ratios": "Same interval for the finite small-noise physical chart experiment; all optimizer outcomes retained.",
+      "finite_sample_note": "Monte Carlo acceptance is an implementation check, not a proof or a confidence statement over future runs."
+    }
+  },
+  "dimension_and_gauge": {
+    "P": 6,
+    "L": 10,
+    "intrinsic_scene_dimension": 18,
+    "ambient_rho_and_normal_dimension": 24,
+    "rank_A": 18,
+    "rank_B": 30,
+    "rank_full_unpenalized_jacobian": 39,
+    "uncalibrated_gl3_gauge_dimension": 9,
+    "uncalibrated_scene_gauge_dimension": 9,
+    "flat_prior_identifiable_scene_dimension": 9,
+    "proper_prior_identifiable_scene_dimension": 18,
+    "gauge_max_abs_residual": 6.661338147750939e-16,
+    "quotient_gauge_orthogonality_norm": 3.4659751898283486e-15,
+    "scale_alignment_residual": 0.0,
+    "existing_gauge_response_max_abs_error": 1.509903313490213e-14,
+    "jacobian_max_abs_error": 1.6847694940536062e-10,
+    "jacobian_relative_frobenius_error": 8.334495790379513e-11,
+    "minimum_lit_cosine": 0.5354760897853758
+  },
+  "rows": [
+    {
+      "precision_multiplier": 1.0,
+      "linear": {
+        "n_samples": 20000,
+        "variance_ratios": [
+          1.0068856557950996,
+          0.9828666913695695,
+          0.9904337362438767,
+          0.9752749068878428,
+          0.9894994303862247,
+          0.9808583299930949,
+          0.9979238379197864,
+          1.0036313027300847,
+          1.008071971847953,
+          1.0045693825059945,
+          1.000256874459573,
+          1.0061067049112806,
+          0.9952690579909205,
+          1.0057389856203474,
+          0.9914276598594972,
+          0.9825504636431914,
+          0.9799224160688444,
+          1.0105000528745012
+        ],
+        "min_ratio": 0.9752749068878428,
+        "max_ratio": 1.0105000528745012,
+        "median_ratio": 0.9965964479553535,
+        "full_covariance_relative_frobenius_error": 0.02572914592065013,
+        "mean_squared_bias_over_predicted_variance": [
+          1.4292087428959173e-06,
+          3.9169758724803727e-07,
+          2.671163670543401e-07,
+          9.492502771288518e-06,
+          4.5398156809469816e-05,
+          9.029079635035719e-06,
+          2.7697455868032578e-06,
+          4.569743754782803e-06,
+          2.9280819953558394e-05,
+          6.69021223961064e-07,
+          0.00012177993163573533,
+          7.16546076959599e-05,
+          0.00010262400561845943,
+          6.899300558049872e-07,
+          1.4945723676813392e-05,
+          0.00043125997272520916,
+          5.5523385333222826e-05,
+          0.00011311450879121047
+        ],
+        "within_preregistered_interval": true
+      },
+      "nonlinear": {
+        "n_samples": 1000,
+        "variance_ratios": [
+          0.9882330196277108,
+          1.0124972373791925,
+          0.9811353609703223,
+          0.9165250774453286,
+          0.997326816226636,
+          0.9921545391021155,
+          1.011519356498377,
+          0.9630585741707927,
+          1.0012277669477907,
+          1.0642673140024415,
+          1.022580328399345,
+          1.0182926330353261,
+          1.0046251249913514,
+          1.0014036958634063,
+          1.0525504664457217,
+          0.9636220332268315,
+          1.0012633246015914,
+          1.0312869537631548
+        ],
+        "min_ratio": 0.9165250774453286,
+        "max_ratio": 1.0642673140024415,
+        "median_ratio": 1.0013335102324987,
+        "full_covariance_relative_frobenius_error": 0.09011481803739294,
+        "mean_squared_bias_over_predicted_variance": [
+          0.0007400597529289672,
+          0.0005385429015725567,
+          0.0008214636323628853,
+          0.0011062526236648186,
+          0.0010874283433006929,
+          0.0003956219221272278,
+          8.289493000899071e-06,
+          6.916646394548986e-05,
+          0.0003127417193423282,
+          2.30731010369397e-05,
+          0.0011568496373602632,
+          3.900341795258782e-08,
+          4.74555620251635e-07,
+          0.0005033258616600105,
+          2.3088812622298937e-06,
+          0.0009041201277188285,
+          0.0005875008628234068,
+          0.00047034691569864854
+        ],
+        "within_preregistered_interval": true,
+        "optimizer_success_count": 1000,
+        "optimizer_failure_count": 0,
+        "max_nfev": 12,
+        "max_optimality": 0.0002883179504351574,
+        "shadow_visibility_flips": 0
+      },
+      "tasks": {
+        "all_intrinsic": {
+          "risk_dense": 18.52669511395549,
+          "risk_lowrank": 18.52669511395551,
+          "relative_difference": 9.588093442862268e-16
+        },
+        "log_albedo": {
+          "risk_dense": 2.1342643365833327,
+          "risk_lowrank": 2.1342643365833354,
+          "relative_difference": 1.2484560667709674e-15
+        },
+        "normal_tangent": {
+          "risk_dense": 16.392430777372162,
+          "risk_lowrank": 16.392430777372173,
+          "relative_difference": 6.501867344234159e-16
+        }
+      },
+      "smallest_information_eigenvalue": 0.26095441941881875
+    },
+    {
+      "precision_multiplier": 10.0,
+      "linear": {
+        "n_samples": 20000,
+        "variance_ratios": [
+          0.9967906867655478,
+          0.9991661127823038,
+          0.9964581958450061,
+          0.9752741818427018,
+          0.9847262246762665,
+          0.9912828686118796,
+          0.9883950186622521,
+          0.9833831373994448,
+          1.0002008900160455,
+          1.0015462503530663,
+          0.9980249774379402,
+          0.992863900748278,
+          0.99499131917206,
+          1.0044629877522688,
+          1.0067249679656962,
+          1.0088122382927194,
+          1.0016671898075675,
+          0.9963777279340685
+        ],
+        "min_ratio": 0.9752741818427018,
+        "max_ratio": 1.0088122382927194,
+        "median_ratio": 0.9966244413052769,
+        "full_covariance_relative_frobenius_error": 0.023831159296107532,
+        "mean_squared_bias_over_predicted_variance": [
+          2.2732257767859122e-05,
+          5.1482685594100534e-05,
+          2.8428470215823126e-06,
+          2.7972145563584697e-05,
+          2.0614378969382164e-05,
+          0.00015979935372501956,
+          0.00014268552910739145,
+          0.00010056794311390386,
+          1.2896722694506723e-05,
+          4.719624054642656e-05,
+          3.110213797991562e-05,
+          0.00024766424696942373,
+          9.325855299046577e-08,
+          1.3843233683422999e-05,
+          0.00037169962952802175,
+          1.2222741567083863e-05,
+          3.2645000723405775e-05,
+          4.5748949605405915e-05
+        ],
+        "within_preregistered_interval": true
+      },
+      "nonlinear": {
+        "n_samples": 1000,
+        "variance_ratios": [
+          0.9514302321053225,
+          1.0079086765402663,
+          0.9470234674524394,
+          0.890944103854613,
+          0.916934528526952,
+          0.8993404667259605,
+          0.9754850248584407,
+          1.018564117264606,
+          1.0745981710677048,
+          0.9771993440375326,
+          0.9556717866273479,
+          0.9663850376467982,
+          1.1048339310921678,
+          0.9641747128906303,
+          0.9612515429266835,
+          1.0721087843251784,
+          0.9647365196684986,
+          1.0194469872510838
+        ],
+        "min_ratio": 0.890944103854613,
+        "max_ratio": 1.1048339310921678,
+        "median_ratio": 0.9655607786576483,
+        "full_covariance_relative_frobenius_error": 0.10250791075078465,
+        "mean_squared_bias_over_predicted_variance": [
+          8.126235643548545e-05,
+          0.0002916029766549638,
+          0.0004825659857553824,
+          0.0036857196517817202,
+          2.8268373172450295e-05,
+          0.003989045798911964,
+          0.00038764193627501394,
+          0.0022750183074457023,
+          0.001443213430454832,
+          9.460722629512585e-05,
+          0.0036095500060859542,
+          7.609332845247295e-05,
+          0.003233219361861194,
+          0.0025735977566772985,
+          1.892392385300556e-07,
+          0.000289645118022482,
+          0.0002666850826856754,
+          0.0005746763361000079
+        ],
+        "within_preregistered_interval": true,
+        "optimizer_success_count": 1000,
+        "optimizer_failure_count": 0,
+        "max_nfev": 7,
+        "max_optimality": 4.7219256885000505e-05,
+        "shadow_visibility_flips": 0
+      },
+      "tasks": {
+        "all_intrinsic": {
+          "risk_dense": 14.077251791366331,
+          "risk_lowrank": 14.077251791366336,
+          "relative_difference": 3.785590111749727e-16
+        },
+        "log_albedo": {
+          "risk_dense": 1.5605151004285314,
+          "risk_lowrank": 1.5605151004285327,
+          "relative_difference": 8.537358140170097e-16
+        },
+        "normal_tangent": {
+          "risk_dense": 12.516736690937801,
+          "risk_lowrank": 12.516736690937806,
+          "relative_difference": 4.2575558228839575e-16
+        }
+      },
+      "smallest_information_eigenvalue": 0.4289382243389141
+    }
+  ],
+  "ceiling": {
+    "kappa": 10.0,
+    "ceiling": 0.9,
+    "task_values": {
+      "all_intrinsic": 0.24016389837589303,
+      "log_albedo": 0.2688276359775078,
+      "normal_tangent": 0.23643193246143246
+    },
+    "min_eigenvalue_kappa_F1_minus_Fk": 1.9636720963589027,
+    "all_task_values_below_ceiling": true
+  },
+  "certificate": {
+    "risk": 17.1434245900482,
+    "gap": 0.9162587590178907,
+    "lower_bound": 16.22716583103031,
+    "enumerated_discrete_count": 45,
+    "best_discrete_risk": 16.995778032087756,
+    "minimum_discrete_slack": 0.7686122010574472
+  },
+  "acceptance": {
+    "linear": true,
+    "nonlinear": true
+  },
+  "scope": "Independent synthetic local joint log-albedo/normal scene; calibration nuisance and sensor noise are both resampled. Nonlinear estimator is a new joint local profile estimator, not the historical fixed-normal joint_map. No real-data accuracy claim.",
+  "provenance": {
+    "config_sha256": "f7522da988fb1050d8ba85c9165e3c8aaf44aae9e85e05ed81f88337da30a298",
+    "implementation_sha256": "b71b9961854b03406c76121770a5304de8f2c86545f7811b0797083f859842ec",
+    "elapsed_s": 6.744139199989149,
+    "no_historical_results_modified": true
+  }
+}
