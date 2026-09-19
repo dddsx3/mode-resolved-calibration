@@ -20,7 +20,7 @@ binding, not the manuscript text.
 | §IV Convex Certified Allocation | convex relaxation; Frank–Wolfe lower bound; discrete suboptimality upper bound | M6 / M10 / B4 / B7 |
 | §V Evaluation (TABLE I) | full-resolution calibration value and allocation certificates | C3 (full-resolution headline) / C1 (P=1200 subsample cross-check) |
 | §V (absolute DiLiGenT ground-truth accuracy) | absolute normal accuracy improves with calibration precision under one fixed full-mask estimator and perturbation protocol; intermediate-budget policy differences change sign | B10 |
-| §V (corner-endpoint comparison) | allocation-cell relevance, endpoint dependence, active-set vs ordering | B5 / B8 / B9 / C8 / C12 |
+| §V (corner-endpoint comparison) | allocation-cell relevance, endpoint dependence, active-set vs ordering; object-cluster bootstrap of the decision-quality contrasts | B5 / B8 / B9 / B11 / C8 / C12 |
 | §VI From Information Risk to Reconstruction (A) | matched generation–estimation ensemble | C13 |
 | §VI (transfer bridge) | mean-square-error identity (covariance + bias); measurable risk radius and pairwise margin | M16 |
 | §VI (joint extension) | intrinsic joint log-albedo/unit-normal; `GL(3)` gauge; retention ceiling and convex certificate on the fixed quotient | M17 / M4 |

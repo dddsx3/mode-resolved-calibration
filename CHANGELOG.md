@@ -20,6 +20,19 @@ versioning: [semver](https://semver.org/).
   the repository loader byte-for-byte (`provenance.loader_sha256` =
   `src/calibinfo/datasets/diligent.py`).
 
+- Object-cluster bootstrap of the decision-quality policy contrasts
+  (manuscript provenance index S11):
+  `results/openillumination/object_cluster_bootstrap.json` — objects
+  resampled as clusters over the 44 object×level effects of the committed
+  `decision_quality.json` (B=10000, seed 20260910, budgets 14/28). The
+  mode-aware advantage survives resampling against both baselines
+  (−0.712° [−1.046, −0.424] vs active-set random; −1.790°
+  [−1.980, −1.460] vs universe-random). Registered as claim B11 in
+  `docs/claims.md`, mapped in `docs/paper_binding.md`, and gated by
+  `tests/test_object_cluster_bootstrap.py`, which regenerates every median
+  and interval from the committed `cluster_bootstrap` module, the stored
+  effects and the seed.
+
 ### Theory continuation
 
 - Imported the verified general-gamma correction from the supplied September
